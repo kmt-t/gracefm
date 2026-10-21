@@ -1,0 +1,5 @@
+numpy>=1.22
+scipy>=1.8
+soundfile>=0.12   # FLAC の読み書き (samples/)
+matplotlib>=3.5   # tools/spectrum.py の図だけで使う
+cryptography>=41  # 暗号化 (gracefm.crypto) を使うときだけ

@@ -1,0 +1,74 @@
+{
+ "FM": {
+  "occupied_99_kHz": 74.3,
+  "bw_minus30dB_kHz": 111.0
+ },
+ "B200MH": {
+  "occupied_99_kHz": 162.5,
+  "bw_minus30dB_kHz": 183.8,
+  "symbol_rate_ksps": 147.0,
+  "modulation": "qam16h"
+ },
+ "B200H": {
+  "occupied_99_kHz": 190.6,
+  "bw_minus30dB_kHz": 214.9,
+  "symbol_rate_ksps": 173.0,
+  "modulation": "qam16h"
+ },
+ "B200M": {
+  "occupied_99_kHz": 161.6,
+  "bw_minus30dB_kHz": 183.8,
+  "symbol_rate_ksps": 147.0,
+  "modulation": "qpsk"
+ },
+ "S50M": {
+  "occupied_99_kHz": 65.1,
+  "bw_minus30dB_kHz": 73.1,
+  "symbol_rate_ksps": 59.0,
+  "modulation": "qpsk"
+ },
+ "S100": {
+  "occupied_99_kHz": 104.3,
+  "bw_minus30dB_kHz": 117.0,
+  "symbol_rate_ksps": 94.5,
+  "modulation": "qpsk"
+ },
+ "S85M": {
+  "occupied_99_kHz": 90.9,
+  "bw_minus30dB_kHz": 102.6,
+  "symbol_rate_ksps": 82.5,
+  "modulation": "qpsk"
+ },
+ "M700": {
+  "occupied_99_kHz": 553.4,
+  "bw_minus30dB_kHz": 625.1,
+  "symbol_rate_ksps": 503.2,
+  "modulation": "qpsk"
+ },
+ "M700Q16": {
+  "occupied_99_kHz": 301.3,
+  "bw_minus30dB_kHz": 342.1,
+  "symbol_rate_ksps": 274.5,
+  "modulation": "qam16h"
+ },
+ "M700H": {
+  "occupied_99_kHz": 302.4,
+  "bw_minus30dB_kHz": 341.0,
+  "symbol_rate_ksps": 274.5,
+  "modulation": "qam16h"
+ },
+ "S100W": {
+  "occupied_99_kHz": 121.4,
+  "bw_minus30dB_kHz": 135.9,
+  "symbol_rate_ksps": 110.2,
+  "modulation": "qpsk"
+ },
+ "audio_error_snr_dB": {
+  "B200H": 59.6,
+  "B200": 32.5,
+  "S100": 29.6,
+  "M700H": 55.8,
+  "M700": 55.8,
+  "M700H基本層": 28.7
+ }
+}
