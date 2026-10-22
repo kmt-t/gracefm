@@ -47,6 +47,7 @@ FM帯で、処理時間を除く伝送遅延4ms以下を目標とし、受信電
 
 - 54・80dB-Hz では波形SNR・ViSQOLとも3素材で GraceFM が高い。中間の60・66dB-Hzでは素材や指標ごとに優劣が分かれる。全条件は[音質ベンチマーク](docs/QUALITY_BENCHMARK.md)を参照。
 - 同じ3素材でコーデックだけを比較した結果も掲載した。A4 は音声474kbps、MP3 は CBR 128・192・320kbps。無線総レートは A4 主系604kbps、副系を含め722kbps。
+- ステレオ主系 B200H と aptX・aptX HD の同一音源での波形SNR / ViSQOL 比較は[音質ベンチマーク](docs/QUALITY_BENCHMARK.md#aptx-benchmark)に掲載した。共通16kHz帯域と元音源帯域を分けて評価している。
 - A4 の1フレーム（2ms）では保護部132bit、仮数全量912bit（うち非保護848bit）。保護部：非保護仮数は **1：6.42**。内訳と量子化特性は[仕様書5.8節](docs/SPEC.md)に示す。
 - `B200MH-A4`（プロファイルID 14）は帯域ごとの指数4bitと固定オフセット、4係数ごとのアッテネータ8bitを使用する。
 - `B200H`（プロファイルID 10）は M/S ジョイントステレオで、最高域の M に4bit、S に8bitの区間アッテネータを使用する。音声536kbps、主系無線総レート716kbps。RRC ロールオフ0.10で99%占有帯域は約182kHz、−30dB幅は約197kHz。
@@ -69,6 +70,7 @@ python tools/make_samples.py --workers 3                            # ステレ�
 pip install -r requirements-eval.txt                                # 聴感指標を使う評価だけ追加
 python tools/fetch_lossless_benchmark_audio.py                      # 公開ライセンスの PCM WAV を Git 管理外へ取得
 python tools/eval_lossless_benchmark.py                             # MP3 と FM を同じ原音で比較
+python tools/eval_aptx_benchmark.py                                # B200H と aptX・aptX HD のステレオ比較
 python tools/eval_lossless_benchmark.py --channels rayleigh,fade10 --cn0 60,66 --skip-codec --json docs/results/lossless_impairments.json
 python tools/fig_lossless_benchmark.py
 python tools/fetch_exp_audio.py                                 # 公開ライセンス音源をGit管理外へ取得
@@ -84,6 +86,7 @@ python tests/test_gracefm.py                                        # テスト�
 | ツール | 内容 | SPEC の節 |
 |---|---|---|
 | `tools/eval_lossless_benchmark.py` | Git 管理外のロスレス音源で採用方式・FM・MP3 を比較 | [音質ベンチマーク](docs/QUALITY_BENCHMARK.md) |
+| `tools/eval_aptx_benchmark.py` | 同じ音源で B200H・aptX・aptX HD のステレオ符号化を比較 | [音質ベンチマーク](docs/QUALITY_BENCHMARK.md) |
 | `tools/eval_final.py` | 採用構成とアナログFMの比較 | 5.2 |
 | `tools/eval_am.py` | アナログAM との比較 | 5.2 |
 | `tools/eval_attn_layout.py`、`tools/validate_attn_headroom.py` | 指数幅・固定オフセット・区間アッテネータの感度分析 | [仕様書5.8節](docs/SPEC.md) |
