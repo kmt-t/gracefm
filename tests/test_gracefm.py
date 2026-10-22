@@ -140,7 +140,7 @@ def test_adopted_attenuator_profile_end_to_end():
 
 
 def test_broadcast_joint_stereo_attenuators():
-    p = PROFILES["B200H"]
+    p = PROFILES["B200H-A4"]
     assert p.pid == 10 and p.exp_bits == 4
     assert p.pulse_beta == 0.10 and p.pulse_span == 32
     from gracefm.channel import symbol_rate

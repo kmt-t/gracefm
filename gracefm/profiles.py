@@ -196,8 +196,9 @@ def make_layered(base: Profile, name: str, pid: int, modulation: str = "qam16h",
 PROFILES["B200MH"] = make_layered(PROFILES["B200M"], "B200MH", 9)
 # 放送ステレオ主系は M/S の最高域32係数に区間アッテネータを付ける。
 # M は8係数ごとに4bit、S は4係数ごとに8bit。指数幅と仮数幅は維持する。
-# 固定指数オフセットは旧 B200H の算出値と同じで、フレームには送らない。
-PROFILES["B200H"] = replace(make_layered(PROFILES["B200"], "B200H", 10),
+# A4 はステレオの S 側を4係数ごとに区切る構成を示す（M 側は8係数ごと）。
+# 固定指数オフセットはフレームには送らない。
+PROFILES["B200H-A4"] = replace(make_layered(PROFILES["B200"], "B200H-A4", 10),
                              exp_offset_m=(-25, -25, -26, -23, -21, -18, -19),
                              exp_offset_s=(-23, -21, -21, -18, -18, -18, -19),
                              attn_group_m=(0, 0, 0, 0, 0, 0, 8),

@@ -81,7 +81,7 @@ def main():
     x = x[: 4 * fs]
     x48 = wavio.resample(x, fs, 48000)
     groups = [
-        ("放送の主系（32kHz）とアナログFM", ["FM", "B200MH-A4", "B200H", "B200M"]),
+        ("放送の主系（32kHz）とアナログFM", ["FM", "B200MH-A4", "B200H-A4", "B200M"]),
         ("放送の副系（32kHz）", ["S50M", "S100", "S85M"]),
         ("モニター（48kHz）", ["M700", "M700Q16", "M700H", "S100W"]),
     ]
@@ -116,7 +116,7 @@ def main():
         ax.set_ylabel("電力スペクトル密度 [dB/Hz]\n（送信電力 = 1）", fontsize=9, color=INK2)
         ax.legend(fontsize=8.5, frameon=False, loc="upper right", labelcolor=INK)
     axs[-1].set_xlabel("搬送波からの周波数 [kHz]", fontsize=9, color=INK2)
-    fig.suptitle("送信スペクトル（B200H は RRC β=0.10、他は β=0.25。送信電力をそろえた比較）", fontsize=12, color=INK, x=0.02,
+    fig.suptitle("送信スペクトル（B200H-A4 は RRC β=0.10、他は β=0.25。送信電力をそろえた比較）", fontsize=12, color=INK, x=0.02,
                  ha="left")
     fig.tight_layout()
     fig.savefig(os.path.join(ROOT, "docs", "figures", "rf_spectrum.png"), dpi=130, facecolor=SURF)
@@ -125,7 +125,7 @@ def main():
     demo48 = make_demo(48000)
     demo32 = wavio.resample(demo48, 48000, 32000)
     demo32 *= 0.89 / np.abs(demo32).max()
-    agroups = [("放送（32kHz、demo の M）", demo32, 32000, ["B200H", "B200", "S100"]),
+    agroups = [("放送（32kHz、demo の M）", demo32, 32000, ["B200H-A4", "B200", "S100"]),
                ("モニター（48kHz、demo の M）", demo48, 48000, ["M700H", "M700", "M700H基本層"])]
     from dataclasses import replace
     mh = PROFILES["M700H"]

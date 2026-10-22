@@ -11,7 +11,7 @@
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
- "B200H": {
+ "B200H-A4": {
   "occupied_99_kHz": 181.4,
   "bw_minus30dB_kHz": 196.8,
   "symbol_rate_ksps": 179.0,
@@ -84,7 +84,7 @@
   "rrc_span_symbols": 16
  },
  "audio_error_snr_dB": {
-  "B200H": 61.1,
+  "B200H-A4": 61.1,
   "B200": 32.5,
   "S100": 29.3,
   "M700H": 55.8,
