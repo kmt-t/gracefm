@@ -1,7 +1,7 @@
 {
   "method": "Codec-only stereo comparison; no Bluetooth transport or radio channel",
   "ffmpeg_version": "ffmpeg version 7.0.2-static https://johnvansickle.com/ffmpeg/  Copyright (c) 2000-2024 the FFmpeg developers",
-  "gracefm_profile": "B200H",
+  "gracefm_profile": "B200H-A4",
   "source_seconds": 5.0,
   "source_offset_seconds": 1,
   "source_peak": 0.89,
@@ -59,7 +59,7 @@
     {
       "material": "piano",
       "view": "common_16khz",
-      "method": "B200H",
+      "method": "B200H-A4",
       "audio_kbps": 536.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 53.18,
@@ -92,7 +92,7 @@
     {
       "material": "piano",
       "view": "full_48khz",
-      "method": "B200H",
+      "method": "B200H-A4",
       "audio_kbps": 536.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 52.82,
@@ -125,7 +125,7 @@
     {
       "material": "percussion",
       "view": "common_16khz",
-      "method": "B200H",
+      "method": "B200H-A4",
       "audio_kbps": 536.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 55.35,
@@ -158,7 +158,7 @@
     {
       "material": "percussion",
       "view": "full_48khz",
-      "method": "B200H",
+      "method": "B200H-A4",
       "audio_kbps": 536.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 48.13,
@@ -191,7 +191,7 @@
     {
       "material": "guitar",
       "view": "common_16khz",
-      "method": "B200H",
+      "method": "B200H-A4",
       "audio_kbps": 536.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 58.69,
@@ -224,7 +224,7 @@
     {
       "material": "guitar",
       "view": "full_48khz",
-      "method": "B200H",
+      "method": "B200H-A4",
       "audio_kbps": 536.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 56.23,

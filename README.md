@@ -6,7 +6,7 @@ FM帯で、処理時間を除く伝送遅延4ms以下を目標とし、受信電
 
 | 項目 | 放送（FM放送の代替・災害時） | モニター（据え置き機・近距離） |
 |---|---|---|
-| 構成 | 主系 B200H / B200MH-A4 ＋ 副系 S100 / S50M | M700H |
+| 構成 | 主系 B200H-A4 / B200MH-A4 ＋ 副系 S100 / S50M | M700H |
 | 伝送込みの遅延（処理時間0） | 4.00ms | 2.67ms |
 | サンプリング / 音声帯域 | 32kHz / 16kHz | 48kHz / 24kHz |
 | 音声ビットレート | 主系 536 / 474kbps（基本層 206 / 198）＋ 副系 95 / 46kbps | 854kbps（基本層329） |
@@ -25,7 +25,7 @@ FM帯で、処理時間を除く伝送遅延4ms以下を目標とし、受信電
 
 | プロファイル | M 全幅 `k=0…6` | S 全幅 `k=0…6` | M 基本層 `k=0…6` | S 基本層 `k=0…6` |
 |---|---|---|---|---|
-| B200H（放送ステレオ主系） | 16, 16, 16, 13, 10, 7, 7 | 14, 12, 11, 8, 7, 7, 7 | 12, 11, 9, 7, 4, 2, 2 | 7, 6, 5, 3, 2, 2, 2 |
+| B200H-A4（放送ステレオ主系） | 16, 16, 16, 13, 10, 7, 7 | 14, 12, 11, 8, 7, 7, 7 | 12, 11, 9, 7, 4, 2, 2 | 7, 6, 5, 3, 2, 2, 2 |
 | B200MH-A4（放送モノラル主系） | 16, 16, 16, 16, 16, 15, 13 | — | 9, 9, 9, 9, 8, 6, 4 | — |
 | S100（放送ステレオ副系） | 10, 9, 8, 6, 4, 2, 0 | 6, 5, 4, 2, 0, 0, 0 | — | — |
 | S50M（放送モノラル副系） | 8, 7, 6, 5, 3, 0, 0 | — | — | — |
@@ -47,10 +47,10 @@ FM帯で、処理時間を除く伝送遅延4ms以下を目標とし、受信電
 
 - 54・80dB-Hz では波形SNR・ViSQOLとも3素材で GraceFM が高い。中間の60・66dB-Hzでは素材や指標ごとに優劣が分かれる。全条件は[音質ベンチマーク](docs/QUALITY_BENCHMARK.md)を参照。
 - 同じ3素材でコーデックだけを比較した結果も掲載した。A4 は音声474kbps、MP3 は CBR 128・192・320kbps。無線総レートは A4 主系604kbps、副系を含め722kbps。
-- ステレオ主系 B200H と aptX・aptX HD の同一音源での波形SNR / ViSQOL 比較は[音質ベンチマーク](docs/QUALITY_BENCHMARK.md#aptx-benchmark)に掲載した。共通16kHz帯域と元音源帯域を分けて評価している。
+- ステレオ主系 B200H-A4 と aptX・aptX HD の同一音源での波形SNR / ViSQOL 比較は[音質ベンチマーク](docs/QUALITY_BENCHMARK.md#aptx-benchmark)に掲載した。共通16kHz帯域と元音源帯域を分けて評価している。
 - A4 の1フレーム（2ms）では保護部132bit、仮数全量912bit（うち非保護848bit）。保護部：非保護仮数は **1：6.42**。内訳と量子化特性は[仕様書5.8節](docs/SPEC.md)に示す。
 - `B200MH-A4`（プロファイルID 14）は帯域ごとの指数4bitと固定オフセット、4係数ごとのアッテネータ8bitを使用する。
-- `B200H`（プロファイルID 10）は M/S ジョイントステレオで、最高域の M に4bit、S に8bitの区間アッテネータを使用する。音声536kbps、主系無線総レート716kbps。RRC ロールオフ0.10で99%占有帯域は約182kHz、−30dB幅は約197kHz。
+- `B200H-A4`（プロファイルID 10）は M/S ジョイントステレオで、最高域の M を8係数ごと（計4bit）、S を4係数ごと（計8bit）に区切る。`A4` は S 側の4係数区間を表す。音声536kbps、主系無線総レート716kbps。RRC ロールオフ0.10で99%占有帯域は約182kHz、−30dB幅は約197kHz。
 - ステレオ・モニターを含む音声サンプルと保存後の波形SNRは [samples/README.md](samples/README.md) に記録した。
 
 ## 制約
@@ -64,13 +64,13 @@ FM帯で、処理時間を除く伝送遅延4ms以下を目標とし、受信電
 ```sh
 pip install -r requirements.txt
 
-python tools/codec_wav.py 入力.wav 出力.wav --profile B200H         # コーデックだけ
+python tools/codec_wav.py 入力.wav 出力.wav --profile B200H-A4         # コーデックだけ
 python tools/sim_link.py 入力.wav 出力.wav --profile B200MH-A4 --snr 8 --single  # 主系1系統の簡易通信路
 python tools/make_samples.py --workers 3                            # ステレオ・モノラル・モニター音声を生成
 pip install -r requirements-eval.txt                                # 聴感指標を使う評価だけ追加
 python tools/fetch_lossless_benchmark_audio.py                      # 公開ライセンスの PCM WAV を Git 管理外へ取得
 python tools/eval_lossless_benchmark.py                             # MP3 と FM を同じ原音で比較
-python tools/eval_aptx_benchmark.py                                # B200H と aptX・aptX HD のステレオ比較
+python tools/eval_aptx_benchmark.py                                # B200H-A4 と aptX・aptX HD のステレオ比較
 python tools/eval_lossless_benchmark.py --channels rayleigh,fade10 --cn0 60,66 --skip-codec --json docs/results/lossless_impairments.json
 python tools/fig_lossless_benchmark.py
 python tools/fetch_exp_audio.py                                 # 公開ライセンス音源をGit管理外へ取得
@@ -86,7 +86,7 @@ python tests/test_gracefm.py                                        # テスト�
 | ツール | 内容 | SPEC の節 |
 |---|---|---|
 | `tools/eval_lossless_benchmark.py` | Git 管理外のロスレス音源で採用方式・FM・MP3 を比較 | [音質ベンチマーク](docs/QUALITY_BENCHMARK.md) |
-| `tools/eval_aptx_benchmark.py` | 同じ音源で B200H・aptX・aptX HD のステレオ符号化を比較 | [音質ベンチマーク](docs/QUALITY_BENCHMARK.md) |
+| `tools/eval_aptx_benchmark.py` | 同じ音源で B200H-A4・aptX・aptX HD のステレオ符号化を比較 | [音質ベンチマーク](docs/QUALITY_BENCHMARK.md) |
 | `tools/eval_final.py` | 採用構成とアナログFMの比較 | 5.2 |
 | `tools/eval_am.py` | アナログAM との比較 | 5.2 |
 | `tools/eval_attn_layout.py`、`tools/validate_attn_headroom.py` | 指数幅・固定オフセット・区間アッテネータの感度分析 | [仕様書5.8節](docs/SPEC.md) |

@@ -7,7 +7,7 @@ samples/ のサンプル FLAC と、その説明 (samples/README.md) を作る�
                                --vibeace Kevin_MacLeod_-_Vibe_Ace.ogg を48kHzに変換したwav   # 原音から作り直す
 
 試験信号 (demo) はこのスクリプトの中で合成する。放送用は32kHz、モニター用は48kHz、各10秒。
-通信路込みのサンプルは採用構成 (主系 = 階層16QAM の B200MH-A4 / B200H、副系 = S50M / S100、帯域ごとの融合、
+通信路込みのサンプルは採用構成 (主系 = 階層16QAM の B200MH-A4 / B200H-A4、副系 = S50M / S100、帯域ごとの融合、
 軟判定の復号、ポストフィルタ4回) で、同じ受信電力のアナログFM (モノラル) も並べる。
 """
 import argparse
@@ -185,7 +185,7 @@ def generate_source(task):
     global ROWS, MON_ROWS
     ROWS, MON_ROWS = [], []
     name, x, mono, adopted_only = task
-    main_p, base_p = ("B200MH-A4", "B200M") if mono else ("B200H", "B200")
+    main_p, base_p = ("B200MH-A4", "B200M") if mono else ("B200H-A4", "B200")
     sub = channel.DEFAULT_SUB[main_p]
     print(name, flush=True)
     save(f"{name}_orig.flac", x, mono, x, "原音（32kHzに変換したもの）")
@@ -198,7 +198,7 @@ def generate_source(task):
          f"コーデックだけ（通信路なし）。{main_p} の全ビット（基本層＋拡張層、約{PROFILES[main_p].audio_kbps():.0f}kbps）")
     if not adopted_only:
         base_desc = (f"コーデックだけ。基本層だけ（{base_p}、約{PROFILES[base_p].audio_kbps():.0f}kbps）＝拡張層が全部崩れたときの音"
-                     if mono else f"コーデックだけ。{base_p}（約{PROFILES[base_p].audio_kbps():.0f}kbps）。B200H の区間アッテネータは含まない")
+                     if mono else f"コーデックだけ。{base_p}（約{PROFILES[base_p].audio_kbps():.0f}kbps）。B200H-A4 の区間アッテネータは含まない")
         save(f"{name}_{base_p}.flac", codec(x, PROFILES[base_p]), mono, x,
              base_desc)
         save(f"{name}_{base_p}_nopf.flac", codec(x, PROFILES[base_p], postfilter=False), mono, x,
@@ -275,11 +275,6 @@ def update_readme_adopted_only():
         line = line.rstrip("\n")
         if "ここに掲載した既存のモノラル音声は" in line:
             continue
-        line = line.replace("このサンプルを生成した時点の構成（主系 B200MH / B200H",
-                            "この方式の放送の採用構成（主系 B200MH-A4 / B200H")
-        line = line.replace("この方式の放送の最終構成（主系 B200MH / B200H",
-                            "この方式の放送の採用構成（主系 B200MH-A4 / B200H")
-        line = line.replace("`*_B200MH`・`*_B200H`", "`*_B200MH-A4`・`*_B200H`")
         if line.startswith("| `"):
             name = line.split("`", 2)[1]
             if name.endswith("_B200MH.flac") or name.endswith("_B200MH-A4.flac"):
@@ -322,11 +317,11 @@ README_HEAD = """# サンプル音声（GraceFM）
 
 | ファイル | 内容 |
 |---|---|
-| `*_final_*` | この方式の放送の採用構成（主系 B200MH-A4 / B200H ＋ 副系 S50M / S100、送信電力 50:50） |
+| `*_final_*` | この方式の放送の採用構成（主系 B200MH-A4 / B200H-A4 ＋ 副系 S50M / S100、送信電力 50:50） |
 | `*_fm_*` | 同じ受信電力のアナログFM（モノラル、ゴーストなし） |
-| `*_B200MH-A4`・`*_B200H` | コーデックだけ、全ビット（拡張層まで届いたときの上限） |
+| `*_B200MH-A4`・`*_B200H-A4` | コーデックだけ、全ビット（拡張層まで届いたときの上限） |
 | `*_B200M` | B200M（QPSK、194kbps）の比較用音声。A4の基本層（198kbps）とは別プロファイル |
-| `*_B200` | B200（QPSK、200kbps）。B200H の基本層とは区間アッテネータの有無が異なる |
+| `*_B200` | B200（QPSK、200kbps）。B200H-A4 の基本層とは区間アッテネータの有無が異なる |
 
 - おすすめ：`fishin_final_cn0-57` と `fishin_fm_cn0-57`（FM がスレッショルドを割る強さ）、`*_rayleigh_cn0-60`（途切れ方）
 - demo（ステレオ）は FM ステレオのモデルがないため FM なし

@@ -24,7 +24,7 @@ from gracefm.profiles import PROFILES  # noqa: E402
 
 
 def profiles():
-    base = replace(PROFILES["B200H"], attn_group_m=None, attn_group_s=None)
+    base = replace(PROFILES["B200H-A4"], attn_group_m=None, attn_group_s=None)
     off4 = (0, 0, 0, 0, 0, 0, 4)
     off8 = (0, 0, 0, 0, 0, 0, 8)
     variants = {
