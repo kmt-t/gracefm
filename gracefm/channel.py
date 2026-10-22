@@ -1,5 +1,7 @@
 """
-評価用の通信路モデル (同期済みのシンボル列に直接かける。パルス成形・同期・等化は含まない)。
+評価用の通信路モデル。link は同期済みシンボルに直接雑音を加える。
+link_static_multipath は RRC 送受信フィルタと静的マルチパスの等価応答を使い、
+等化器も選択できる。どちらもシンボル時刻・搬送波位相の同期は理想とする。
 
 電波の強さは C/N0 [dB-Hz] (受信電力 ÷ 1Hz あたりの雑音) で与え、方式・系統ごとに
     Es/N0 [dB] = C/N0 + 10·log10(電力の割合) - 10·log10(シンボルレート [シンボル/秒])
@@ -78,3 +80,47 @@ def link(x, main, cn0, sub="auto", power_main=0.5, kind_main="awgn", kind_sub="a
         fb = through(fb, ess, fading_gains(len(fb), kind_sub, np.random.default_rng(seed + 200)), rng)
     y, st = receive(pm, fa, fb, len(x), off, profile_b=ps, cipher=cipher, **rx_kw)
     return y, st, {"esn0_main": esm, "esn0_sub": ess}
+
+
+def link_static_multipath(x, main, cn0, paths=(), sub="auto", power_main=0.5,
+                          frequency_spacing_hz=0.0, equalize=True, training_frames=100,
+                          equalizer_taps=11, max_lookahead=4, decision_passes=2, seed=1,
+                          cipher=None, **rx_kw):
+    """Static RRC multipath link with ideal synchronization and optional MMSE FIR.
+
+    ``paths`` contains (delay_s, relative_path_dB, phase_at_main_rad). The
+    secondary carrier sees the same physical paths with their phase shifted
+    by -2*pi*frequency_spacing_hz*delay_s. Calibration uses only the first
+    ``training_frames`` of each stream; benchmark callers should exclude
+    those frames when scoring steady-state audio.
+    """
+    from .equalizer import through_matched_channel, equalize_static
+
+    pm = main if isinstance(main, Profile) else PROFILES[main]
+    if sub == "auto":
+        sub = DEFAULT_SUB.get(pm.name)
+    ps = (sub if isinstance(sub, Profile) else PROFILES[sub]) if sub else None
+    if ps is not None and not (0.0 < power_main < 1.0):
+        raise ValueError("power_main must be between zero and one")
+    frac = power_main if ps else 1.0
+    off = pm.block // 2
+    esm = cn0 + 10 * np.log10(frac) - 10 * np.log10(symbol_rate(pm))
+    fa = Transmitter(pm, 0, 0, cipher=cipher).run(x)
+    fa, _ = through_matched_channel(fa, pm, esm, paths, seed=seed)
+    diagnostics = {}
+    if equalize:
+        fa, diagnostics["main"] = equalize_static(
+            fa, pm, 0, training_frames, equalizer_taps, max_lookahead,
+            decision_passes, encrypted=cipher is not None)
+    fb, ess = None, None
+    if ps:
+        ess = cn0 + 10 * np.log10(1 - frac) - 10 * np.log10(symbol_rate(ps))
+        fb = Transmitter(ps, 1, off, cipher=cipher).run(x)
+        fb, _ = through_matched_channel(fb, ps, ess, paths, frequency_spacing_hz, seed + 1)
+        if equalize:
+            fb, diagnostics["sub"] = equalize_static(
+                fb, ps, 1, training_frames, equalizer_taps, max_lookahead,
+                decision_passes, encrypted=cipher is not None)
+    y, st = receive(pm, list(fa), None if fb is None else list(fb), len(x), off,
+                    profile_b=ps, cipher=cipher, **rx_kw)
+    return y, st, {"esn0_main": esm, "esn0_sub": ess, "equalizer": diagnostics}

@@ -1,0 +1,166 @@
+{
+  "main_profile": "B200MH-A4",
+  "sub_profile": "S50M",
+  "source_type": "local untracked lossless PCM WAV",
+  "sources": [
+    {
+      "name": "piano",
+      "file": "lossless/Emotional_piano.wav",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Emotional_piano.wav",
+      "original_source_page": null,
+      "artist": "triangelx",
+      "license": "CC0 1.0",
+      "sha1": "e8c449fba4fe1eb5e67e0923b6b696f2105584c5",
+      "sha256": "9661f81d37c59f230b324b830ab68c0482336af3ec117c92e73108ffb4095f15",
+      "sample_rate_hz": 44100,
+      "channels": 2,
+      "subtype": "PCM_16",
+      "duration_s": 16.0
+    },
+    {
+      "name": "percussion",
+      "file": "lossless/Ceramic_Djembe.wav",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Ceramic_Djembe.wav",
+      "original_source_page": null,
+      "artist": "RutgerMuller",
+      "license": "CC0 1.0",
+      "sha1": "f4742b9a732408ac953de6e51a6a148709a768c8",
+      "sha256": "09c83e84846072281ff4d46d47383c56417c4284bd719db3b2127c4f366f8551",
+      "sample_rate_hz": 96000,
+      "channels": 2,
+      "subtype": "PCM_16",
+      "duration_s": 10.95
+    },
+    {
+      "name": "guitar",
+      "file": "lossless/344211_giomilko_c-major-9-bossa-nova-guitar.wav",
+      "source_page": "https://commons.wikimedia.org/wiki/File:344211_giomilko_c-major-9-bossa-nova-guitar.wav",
+      "original_source_page": "https://freesound.org/people/GioMilko/sounds/344211/",
+      "artist": "GioMilko",
+      "license": "CC BY 4.0",
+      "sha1": "719e420bd135ab650be11c0cc0125e4b1b3e7761",
+      "sha256": "f991d202484010cc4ade9fa80ce19997ba2746583e68f4466a2a9c7cec31c348",
+      "sample_rate_hz": 48000,
+      "channels": 1,
+      "subtype": "PCM_24",
+      "duration_s": 10.667
+    }
+  ],
+  "sample_rate_hz": 32000,
+  "seconds_scored": 5.0,
+  "training_frames": 100,
+  "calibration_seconds": 0.2,
+  "frequency_spacing_hz": 2100000.0,
+  "equalizer_taps": 21,
+  "max_lookahead": 4,
+  "decision_passes": 2,
+  "cn0_db_hz": [
+    80.0
+  ],
+  "scenarios": [
+    {
+      "name": "echo_5us_m10",
+      "path": {
+        "delay_us": 5.0,
+        "relative_db": -10.0,
+        "phase_rad": 1.0471975511965976
+      }
+    }
+  ],
+  "assumptions": "Ideal symbol timing/carrier recovery; static one-echo channel; calibration from preceding frames; same direct-path C/N0 and total RF power; secondary phase = main phase - 2*pi*frequency_spacing*delay.",
+  "rows": [
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "FM",
+      "snr_db": 53.37,
+      "visqol_moslqo": 4.38,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 71.64,
+      "visqol_moslqo": 4.73,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0030129,
+      "sub_residual_power": 0.0011959
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 50.3,
+      "visqol_moslqo": 4.389,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "FM",
+      "snr_db": 48.96,
+      "visqol_moslqo": 3.946,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 68.64,
+      "visqol_moslqo": 4.732,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0030146,
+      "sub_residual_power": 0.0011936
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 46.81,
+      "visqol_moslqo": 4.22,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "FM",
+      "snr_db": 50.4,
+      "visqol_moslqo": 4.264,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 70.66,
+      "visqol_moslqo": 4.724,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0030125,
+      "sub_residual_power": 0.0011942
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 48.08,
+      "visqol_moslqo": 4.084,
+      "plc_percent": 0.0
+    }
+  ]
+}

@@ -1,13 +1,13 @@
 # GraceFM
 
-FM帯で、処理時間を除く伝送遅延4ms以下を目標とし、受信電力の低下に応じて音質がなだらかに劣化する（graceful degradation）デジタル音声伝送方式。仕様書とリファレンス実装（Python パッケージ `gracefm`）。
+FM帯で、理想時刻モデルの伝送遅延4msを基準とし、受信電力の低下に応じて音質がなだらかに劣化する（graceful degradation）デジタル音声伝送方式。送受信フィルタと等化器を使う場合は、その遅延を加算する。仕様書とリファレンス実装（Python パッケージ `gracefm`）。
 
 ## 仕様
 
 | 項目 | 放送（FM放送の代替・災害時） | モニター（据え置き機・近距離） |
 |---|---|---|
 | 構成 | 主系 B200H-A4 / B200MH-A4 ＋ 副系 S100 / S50M | M700H |
-| 伝送込みの遅延（処理時間0） | 4.00ms | 2.67ms |
+| 伝送込みの遅延（処理時間・フィルタ遅延0） | 4.00ms | 2.67ms |
 | サンプリング / 音声帯域 | 32kHz / 16kHz | 48kHz / 24kHz |
 | 音声ビットレート | 主系 536 / 474kbps（基本層 206 / 198）＋ 副系 95 / 46kbps | 854kbps（基本層329） |
 | 変調 | 主系 階層16QAM、副系 QPSK | 階層16QAM |
@@ -46,6 +46,7 @@ FM帯で、処理時間を除く伝送遅延4ms以下を目標とし、受信電
 | ギター | 80dB-Hz | 72.45 / 4.731 | 45.14 / 4.310 |
 
 - 54・80dB-Hz では波形SNR・ViSQOLとも3素材で GraceFM が高い。中間の60・66dB-Hzでは素材や指標ごとに優劣が分かれる。全条件は[音質ベンチマーク](docs/QUALITY_BENCHMARK.md)を参照。
+- 静的な反射波1本と送受信 RRC を含む評価では、11タップの線形等化器により、80dB-Hz の反射波あり21条件すべてで同じ直接波 C/N0 の FM より波形SNRが9.37〜25.84dB高い。66dB-Hz では21条件中18条件で高い。反射波なしでは等化の効果はほぼなく、強い逆位相の反射を等化なしで受けると保護部にも失敗する条件がある。条件別の数値は[静的反射波の評価](docs/QUALITY_BENCHMARK.md)を参照。
 - 同じ3素材でコーデックだけを比較した結果も掲載した。A4 は音声474kbps、MP3 は CBR 128・192・320kbps。無線総レートは A4 主系604kbps、副系を含め722kbps。
 - ステレオ主系 B200H-A4 と aptX・aptX HD の同一音源での波形SNR / ViSQOL 比較は[音質ベンチマーク](docs/QUALITY_BENCHMARK.md#aptx-benchmark)に掲載した。共通16kHz帯域と元音源帯域を分けて評価している。
 - A4 の1フレーム（2ms）では保護部132bit、仮数全量912bit（うち非保護848bit）。保護部：非保護仮数は **1：6.42**。内訳と量子化特性は[仕様書5.8節](docs/SPEC.md)に示す。
@@ -55,9 +56,9 @@ FM帯で、処理時間を除く伝送遅延4ms以下を目標とし、受信電
 
 ## 制約
 
-- 通信路評価は同期済みのシンボル列に雑音を加えるモデル。パルス成形はスペクトル評価だけで使用し、同期・等化・実RF は未実装
-- 未評価：FMステレオとの比較、ゴーストのある通信路、実RF
-- 処理はオフラインの配列処理（実時間ではない）。遅延は時刻モデルの計算値
+- 白色雑音・フェージングの基準評価は同期済みシンボル列のモデル。静的な反射波1本の評価では送受信 RRC の等価応答と訓練済みの線形 MMSE 等化器を使う。どちらもシンボル時刻・搬送波位相の同期は理想
+- 未評価：FMステレオとの比較、複数反射波・移動受信、実RF
+- 処理はオフラインの配列処理（実時間ではない）。4.00ms はフィルタ遅延を0とした時刻モデル値。最大4シンボル先読みの静的等化器と送受信 RRC を含めると、モノラル放送の定常受信は4.339ms、ステレオ放送は4.212ms（処理時間と初期較正時間を除く）
 
 ## 使い方
 
@@ -72,6 +73,7 @@ python tools/fetch_lossless_benchmark_audio.py                      # 公開ラ�
 python tools/eval_lossless_benchmark.py                             # MP3 と FM を同じ原音で比較
 python tools/eval_aptx_benchmark.py                                # B200H-A4 と aptX・aptX HD のステレオ比較
 python tools/eval_lossless_benchmark.py --channels rayleigh,fade10 --cn0 60,66 --skip-codec --json docs/results/lossless_impairments.json
+python tools/eval_ghost.py --seconds 5 --cn0 66,80 --workers 3 --json docs/results/ghost_eval.json
 python tools/fig_lossless_benchmark.py
 python tools/fetch_exp_audio.py                                 # 公開ライセンス音源をGit管理外へ取得
 python tools/eval_attn_layout.py --seconds 3 --headroom-db 6 --skip-perceptual --skip-link --json docs/results/attn_layout_scan.json
@@ -87,6 +89,7 @@ python tests/test_gracefm.py                                        # テスト�
 |---|---|---|
 | `tools/eval_lossless_benchmark.py` | Git 管理外のロスレス音源で採用方式・FM・MP3 を比較 | [音質ベンチマーク](docs/QUALITY_BENCHMARK.md) |
 | `tools/eval_aptx_benchmark.py` | 同じ音源で B200H-A4・aptX・aptX HD のステレオ符号化を比較 | [音質ベンチマーク](docs/QUALITY_BENCHMARK.md) |
+| `tools/eval_ghost.py` | 静的な反射波1本で FM・等化なし・等化ありを比較 | [音質ベンチマーク](docs/QUALITY_BENCHMARK.md) |
 | `tools/eval_final.py` | 採用構成とアナログFMの比較 | 5.2 |
 | `tools/eval_am.py` | アナログAM との比較 | 5.2 |
 | `tools/eval_attn_layout.py`、`tools/validate_attn_headroom.py` | 指数幅・固定オフセット・区間アッテネータの感度分析 | [仕様書5.8節](docs/SPEC.md) |
@@ -112,7 +115,7 @@ docs/results/            評価結果（JSON）
 gracefm/                 リファレンス実装（対応は SPEC 付録E）
 tools/                   変換・評価ツール
 samples/                 サンプル音声（出力は24bit FLAC。放送用32kHz、monitor/ にモニター用48kHz）
-tests/test_gracefm.py    テスト
+tests/                  方式と静的マルチパス等化器のテスト
 ```
 
 ## サンプル音声
