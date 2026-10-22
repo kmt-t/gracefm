@@ -3,10 +3,10 @@
   "occupied_99_kHz": 74.3,
   "bw_minus30dB_kHz": 111.0
  },
- "B200MH": {
-  "occupied_99_kHz": 162.5,
-  "bw_minus30dB_kHz": 183.8,
-  "symbol_rate_ksps": 147.0,
+ "B200MH-A4": {
+  "occupied_99_kHz": 166.6,
+  "bw_minus30dB_kHz": 188.8,
+  "symbol_rate_ksps": 151.0,
   "modulation": "qam16h"
  },
  "B200H": {
@@ -66,7 +66,7 @@
  "audio_error_snr_dB": {
   "B200H": 59.6,
   "B200": 32.5,
-  "S100": 29.6,
+  "S100": 29.3,
   "M700H": 55.8,
   "M700": 55.8,
   "M700H基本層": 28.7

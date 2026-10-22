@@ -8,8 +8,8 @@
 THD  = 高調波 (15kHz まで) の電力の平方根 / 基本波の振幅 [%]
 THD+N = 20Hz〜15kHz の基本波以外の全電力の平方根 / 基本波の振幅 [%] (雑音も含む)
 FM はモノラル、偏移 ±75kHz (正弦波のピークで 100% 変調)。ゴーストは反射波 1本 (遅れ、強さ、位相 60°)。
-この方式の通信路は白色雑音のみ (室内5m では反射の遅れがシンボル長より十分短い。放送距離のゴーストは
-等化 (SPEC 10.2節) が前提で、未実装のため測っていない)。
+この方式の通信路は白色雑音のみ。室内5mでは反射の遅れがシンボル長より十分短い。
+放送距離のゴーストは等化が前提だが、等化が未実装のため測っていない（制約は SPEC 6節）。
 """
 import argparse
 import json
@@ -50,11 +50,11 @@ def main():
         for dly, rel in ((5e-6, -10), (10e-6, -10), (10e-6, -6), (20e-6, -6)):
             rows[f"FM C/N0 80dB-Hz ゴースト {dly * 1e6:.0f}µs {rel}dB"] = fm.receive(
                 80, np.random.default_rng(1), ghost=[(dly, rel, np.pi / 3)])
-        for name in ("B200M", "B200MH"):
+        for name in ("B200M", "B200MH-A4"):
             rows[f"{name} コーデックだけ"] = codec(x, PROFILES[name])[:, 0]
         for cn0 in (80, 66, 60):
-            y, st, es = channel.link(x, "B200MH", cn0, sub="S50M", power_main=0.5, seed=1)
-            rows[f"放送 B200MH+S50M C/N0 {cn0}dB-Hz"] = y[:, 0]
+            y, st, es = channel.link(x, "B200MH-A4", cn0, sub="S50M", power_main=0.5, seed=1)
+            rows[f"放送 B200MH-A4+S50M C/N0 {cn0}dB-Hz"] = y[:, 0]
         res = {}
         for k, y in rows.items():
             t, tn = metrics.thd(y, FS, f0)

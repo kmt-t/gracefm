@@ -1,0 +1,1539 @@
+{
+  "method": "訓練3素材×0/-20/-40 dB の正規化MSE平均を最小化。指数オフセットは帯域ごとに固定。6詳細帯域＋低域近似のまま最高域32係数のみ区間アッテネータを比較。保留2素材は選択に使わない。リンクはB200MH+S50M、電力50:50、AWGN、seed1。",
+  "seconds": 3.0,
+  "materials": {
+    "choice": {
+      "file": "choice.ogg",
+      "sha256": "57b4d95473b92a8441c1d3ab20f836a3e0cbf501bf3afe1ce7a5d0d98d7d4576",
+      "split": "train",
+      "title": "Choice",
+      "attribution": "Admiral Bob featuring Snowflake",
+      "license": "CC-BY-NC-4.0",
+      "source": "http://dig.ccmixter.org/files/admiralbob77/61638",
+      "media_url": "https://librosa.org/data/audio/admiralbob77_-_Choice_-_Drum-bass.hq.ogg",
+      "metadata_url": "https://librosa.org/data/audio/admiralbob77_-_Choice_-_Drum-bass.toml"
+    },
+    "brahms": {
+      "file": "brahms.ogg",
+      "sha256": "8e93ff0182a93168b15346c497b164cb49d2a97bf1e987a1149ea579e914532e",
+      "split": "train",
+      "title": "Hungarian Dance number 5",
+      "attribution": "Johannes Brahms (composer), US Army Strings (performer)",
+      "license": "CC-PDM-1.0",
+      "source": "https://musopen.org/music/43805-hungarian-dance-no-5-in-f-sharp-minor-woo-1-string-orch",
+      "media_url": "https://librosa.org/data/audio/Hungarian_Dance_number_5_-_Allegro_in_F_sharp_minor_%28string_orchestra%29.hq.ogg",
+      "metadata_url": "https://librosa.org/data/audio/Hungarian_Dance_number_5_-_Allegro_in_F_sharp_minor_%28string_orchestra%29.toml"
+    },
+    "libri1": {
+      "file": "libri1.ogg",
+      "sha256": "f09254a0daf4b14b292868d46dc2e3c8e158d19fafff739ad4c3931e2ce7b1b0",
+      "split": "train",
+      "title": "The Ashiel Mystery",
+      "attribution": "Marion Bryce (author), Garth Comira (reader)",
+      "license": "CC-BY-4.0",
+      "source": "https://www.openslr.org/12/",
+      "media_url": "https://librosa.org/data/audio/5703-47212-0000.hq.ogg",
+      "metadata_url": "https://librosa.org/data/audio/5703-47212-0000.toml"
+    },
+    "trumpet": {
+      "file": "trumpet.ogg",
+      "sha256": "beb954ae2c9c16919b5ca6973d6d5196cdcb196b46a3c2a201dd8861e7e324de",
+      "split": "holdout",
+      "title": "solo trumpet 06",
+      "attribution": "Mihai Sorohan",
+      "license": "CC-BY-4.0",
+      "source": "https://freesound.org/s/77711/",
+      "media_url": "https://librosa.org/data/audio/sorohanro_-_solo-trumpet-06.hq.ogg",
+      "metadata_url": "https://librosa.org/data/audio/sorohanro_-_solo-trumpet-06.toml"
+    },
+    "libri3": {
+      "file": "libri3.ogg",
+      "sha256": "6a8d2c16e56dcb27b7f5fe5aa99bfd26b4722a6dabca1968eff951b456936514",
+      "split": "holdout",
+      "title": "Sense and Sensibility, chapter 18",
+      "attribution": "Jane Austen (author), Heather Barnett (reader)",
+      "license": "CC-BY-4.0",
+      "source": "https://www.openslr.org/12/",
+      "media_url": "https://librosa.org/data/audio/198-209-0000.hq.ogg",
+      "metadata_url": "https://librosa.org/data/audio/198-209-0000.toml"
+    }
+  },
+  "widths": [
+    2,
+    3,
+    4
+  ],
+  "offset_shifts": [
+    -8,
+    -7,
+    -6,
+    -5,
+    -4,
+    -3,
+    -2,
+    -1,
+    0,
+    1
+  ],
+  "groups": [
+    0,
+    2,
+    4,
+    8,
+    16
+  ],
+  "headroom_db": 6.0,
+  "train_peak_per_band": [
+    4.516556094944511,
+    4.028676234497074,
+    2.1215995787119586,
+    1.4583380336691913,
+    0.8703302696332318,
+    0.9764087435405638,
+    0.5923486527484874
+  ],
+  "holdout_peak_per_band": [
+    0.96887928435167,
+    1.3511679318173537,
+    2.337329068996812,
+    1.9598301409603835,
+    1.6483412606250551,
+    0.7458054083235125,
+    0.2744420775384544
+  ],
+  "exponent_plus_attenuator_budget": 28,
+  "options": {
+    "0": {
+      "spec": [
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          -1,
+          -1,
+          -1,
+          -2,
+          -2,
+          -2,
+          -1
+        ],
+        0
+      ],
+      "train_normalized_mse": 8.196468997847288e-10,
+      "exp_and_attn_bits": 28
+    },
+    "2": null,
+    "4": {
+      "spec": [
+        [
+          3,
+          3,
+          3,
+          3,
+          2,
+          3,
+          3
+        ],
+        [
+          -1,
+          -1,
+          -1,
+          -2,
+          -2,
+          -2,
+          -1
+        ],
+        4
+      ],
+      "train_normalized_mse": 1.427394760397985e-07,
+      "exp_and_attn_bits": 28
+    },
+    "8": {
+      "spec": [
+        [
+          4,
+          4,
+          3,
+          3,
+          3,
+          3,
+          4
+        ],
+        [
+          -1,
+          -1,
+          -1,
+          -2,
+          -2,
+          -2,
+          -1
+        ],
+        8
+      ],
+      "train_normalized_mse": 6.751756630454291e-09,
+      "exp_and_attn_bits": 28
+    },
+    "16": {
+      "spec": [
+        [
+          4,
+          4,
+          4,
+          3,
+          3,
+          4,
+          4
+        ],
+        [
+          -1,
+          -1,
+          -1,
+          -2,
+          -2,
+          -2,
+          -1
+        ],
+        16
+      ],
+      "train_normalized_mse": 1.9174875535173583e-09,
+      "exp_and_attn_bits": 28
+    }
+  },
+  "extra_options": {
+    "2": {
+      "spec": [
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          -1,
+          -1,
+          -1,
+          -2,
+          -2,
+          -2,
+          -1
+        ],
+        2
+      ],
+      "train_normalized_mse": 4.587121456416588e-10,
+      "exp_and_attn_bits": 44
+    },
+    "4": {
+      "spec": [
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          -1,
+          -1,
+          -1,
+          -2,
+          -2,
+          -2,
+          -1
+        ],
+        4
+      ],
+      "train_normalized_mse": 5.055136257217789e-10,
+      "exp_and_attn_bits": 36
+    },
+    "8": {
+      "spec": [
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          -1,
+          -1,
+          -1,
+          -2,
+          -2,
+          -2,
+          -1
+        ],
+        8
+      ],
+      "train_normalized_mse": 5.795972458046213e-10,
+      "exp_and_attn_bits": 32
+    },
+    "16": {
+      "spec": [
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          -1,
+          -1,
+          -1,
+          -2,
+          -2,
+          -2,
+          -1
+        ],
+        16
+      ],
+      "train_normalized_mse": 6.913150950932251e-10,
+      "exp_and_attn_bits": 30
+    }
+  },
+  "specs": {
+    "baseline": [
+      [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      0
+    ],
+    "same_rate_best": [
+      [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      [
+        -1,
+        -1,
+        -1,
+        -2,
+        -2,
+        -2,
+        -1
+      ],
+      0
+    ],
+    "attn4_same_rate": [
+      [
+        3,
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      [
+        -1,
+        -1,
+        -1,
+        -2,
+        -2,
+        -2,
+        -1
+      ],
+      4
+    ],
+    "attn4_plus8": [
+      [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      [
+        -1,
+        -1,
+        -1,
+        -2,
+        -2,
+        -2,
+        -1
+      ],
+      4
+    ]
+  },
+  "layout": {
+    "baseline": {
+      "widths": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "offsets": [
+        -25,
+        -25,
+        -26,
+        -26,
+        -27,
+        -26,
+        -25
+      ],
+      "offset_shifts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attenuator_group": 0,
+      "attenuator_bits": 0,
+      "band_crc_bits": 0,
+      "protected_bits_including_crc": 124,
+      "audio_kbps": 470.0,
+      "symbol_rate_khz": 147.0
+    },
+    "same_rate_best": {
+      "widths": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "offsets": [
+        -26,
+        -26,
+        -27,
+        -28,
+        -29,
+        -28,
+        -26
+      ],
+      "offset_shifts": [
+        -1,
+        -1,
+        -1,
+        -2,
+        -2,
+        -2,
+        -1
+      ],
+      "attenuator_group": 0,
+      "attenuator_bits": 0,
+      "band_crc_bits": 0,
+      "protected_bits_including_crc": 124,
+      "audio_kbps": 470.0,
+      "symbol_rate_khz": 147.0
+    },
+    "attn4_same_rate": {
+      "widths": [
+        3,
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "offsets": [
+        -18,
+        -18,
+        -19,
+        -20,
+        -17,
+        -20,
+        -18
+      ],
+      "offset_shifts": [
+        -1,
+        -1,
+        -1,
+        -2,
+        -2,
+        -2,
+        -1
+      ],
+      "attenuator_group": 4,
+      "attenuator_bits": 8,
+      "band_crc_bits": 0,
+      "protected_bits_including_crc": 124,
+      "audio_kbps": 470.0,
+      "symbol_rate_khz": 147.0
+    },
+    "attn4_plus8": {
+      "widths": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "offsets": [
+        -26,
+        -26,
+        -27,
+        -28,
+        -29,
+        -28,
+        -26
+      ],
+      "offset_shifts": [
+        -1,
+        -1,
+        -1,
+        -2,
+        -2,
+        -2,
+        -1
+      ],
+      "attenuator_group": 4,
+      "attenuator_bits": 8,
+      "band_crc_bits": 0,
+      "protected_bits_including_crc": 132,
+      "audio_kbps": 474.0,
+      "symbol_rate_khz": 151.0
+    },
+    "attn4_band_crc8": {
+      "widths": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "offsets": [
+        -26,
+        -26,
+        -27,
+        -28,
+        -29,
+        -28,
+        -26
+      ],
+      "offset_shifts": [
+        -1,
+        -1,
+        -1,
+        -2,
+        -2,
+        -2,
+        -1
+      ],
+      "attenuator_group": 4,
+      "attenuator_bits": 8,
+      "band_crc_bits": 8,
+      "protected_bits_including_crc": 180,
+      "audio_kbps": 474.0,
+      "symbol_rate_khz": 175.0
+    }
+  },
+  "codec": [
+    {
+      "layout": "baseline",
+      "material": "choice",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 88.28405773858094,
+      "normalized_mse": 1.4845479381537723e-09
+    },
+    {
+      "layout": "baseline",
+      "material": "choice",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 88.28718268091464,
+      "normalized_mse": 1.483480123971781e-09
+    },
+    {
+      "layout": "baseline",
+      "material": "choice",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 88.31493602143092,
+      "normalized_mse": 1.4740302556526361e-09
+    },
+    {
+      "layout": "baseline",
+      "material": "brahms",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 91.85250195913002,
+      "normalized_mse": 6.527543942098973e-10
+    },
+    {
+      "layout": "baseline",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 91.7956057536118,
+      "normalized_mse": 6.613622842895534e-10
+    },
+    {
+      "layout": "baseline",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 91.84109457075581,
+      "normalized_mse": 6.544712041327581e-10
+    },
+    {
+      "layout": "baseline",
+      "material": "libri1",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 94.81525924252156,
+      "normalized_mse": 3.2996971050814274e-10
+    },
+    {
+      "layout": "baseline",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 94.79562305708926,
+      "normalized_mse": 3.3146501303878705e-10
+    },
+    {
+      "layout": "baseline",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 94.79715919824258,
+      "normalized_mse": 3.313477914233062e-10
+    },
+    {
+      "layout": "baseline",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 84.82792539533037,
+      "normalized_mse": 3.2900875930707785e-09
+    },
+    {
+      "layout": "baseline",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 84.70822798738612,
+      "normalized_mse": 3.3820280189727898e-09
+    },
+    {
+      "layout": "baseline",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 84.5489225211549,
+      "normalized_mse": 3.5083890582273284e-09
+    },
+    {
+      "layout": "baseline",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 88.90152614264642,
+      "normalized_mse": 1.287796930888638e-09
+    },
+    {
+      "layout": "baseline",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 88.94342198653072,
+      "normalized_mse": 1.275433445815088e-09
+    },
+    {
+      "layout": "baseline",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 88.50533443907725,
+      "normalized_mse": 1.4108035898972811e-09
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "choice",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 88.28405776918225,
+      "normalized_mse": 1.4845479276933337e-09
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "choice",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 88.28719072767434,
+      "normalized_mse": 1.4834773753305866e-09
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "choice",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 88.36883419772374,
+      "normalized_mse": 1.4558498304851408e-09
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "brahms",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 91.85250211639996,
+      "normalized_mse": 6.527543705718747e-10
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 91.7956259376831,
+      "normalized_mse": 6.613592105796564e-10
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 91.84569718069821,
+      "normalized_mse": 6.537779694336426e-10
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "libri1",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 94.81526013314527,
+      "normalized_mse": 3.299696428400453e-10
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 94.79593104037663,
+      "normalized_mse": 3.3144150777474126e-10
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 94.89932086517156,
+      "normalized_mse": 3.236442633535383e-10
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 84.82792539600625,
+      "normalized_mse": 3.2900875925587418e-09
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 84.70822873143075,
+      "normalized_mse": 3.382027439554987e-09
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 84.55183245046364,
+      "normalized_mse": 3.5060390986763073e-09
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 88.90152615196187,
+      "normalized_mse": 1.287796928126355e-09
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 88.94356252371772,
+      "normalized_mse": 1.275392173605565e-09
+    },
+    {
+      "layout": "same_rate_best",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 88.62187113506567,
+      "normalized_mse": 1.3734501037240338e-09
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "choice",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 90.83106034577477,
+      "normalized_mse": 8.25836294025594e-10
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "choice",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 81.22682699492384,
+      "normalized_mse": 7.539061750279831e-09
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "choice",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 61.595842567962094,
+      "normalized_mse": 6.924935668054037e-07
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "brahms",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 93.31533238835436,
+      "normalized_mse": 4.660867545718896e-10
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 87.141587033465,
+      "normalized_mse": 1.931262450755813e-09
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 67.67227797590311,
+      "normalized_mse": 1.7091186073457938e-07
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "libri1",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 95.30026465519235,
+      "normalized_mse": 2.951029388082146e-10
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 83.57906022284668,
+      "normalized_mse": 4.386256024401345e-09
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 63.91681267843555,
+      "normalized_mse": 4.058062506053607e-07
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 87.29310530777526,
+      "normalized_mse": 1.8650456624102426e-09
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 82.74660771611502,
+      "normalized_mse": 5.312992812484685e-09
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 63.78322368714088,
+      "normalized_mse": 4.1848281779122076e-07
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 90.24623694841955,
+      "normalized_mse": 9.448792355933594e-10
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 77.50429645765162,
+      "normalized_mse": 1.7765210353686907e-08
+    },
+    {
+      "layout": "attn4_same_rate",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 57.54367114194483,
+      "normalized_mse": 1.760487256828702e-06
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "choice",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 91.13898013572293,
+      "normalized_mse": 7.693110782644462e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "choice",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 91.02056257583543,
+      "normalized_mse": 7.905762118054737e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "choice",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 91.07298331453718,
+      "normalized_mse": 7.81091062593564e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "brahms",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 93.33328301942433,
+      "normalized_mse": 4.641642607685599e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 93.25331336360509,
+      "normalized_mse": 4.727904152604344e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 93.28165538617307,
+      "normalized_mse": 4.697150347244802e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "libri1",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 95.7347283180884,
+      "normalized_mse": 2.670097795405092e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 95.6341660996202,
+      "normalized_mse": 2.732646096148204e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 95.82195980434024,
+      "normalized_mse": 2.6170017892372337e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 87.31422178904224,
+      "normalized_mse": 1.8559993555968132e-09
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 87.27389201203833,
+      "normalized_mse": 1.873314949016831e-09
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 87.15874575254736,
+      "normalized_mse": 1.9236472002171118e-09
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 90.87408970778576,
+      "normalized_mse": 8.17694410798792e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 90.94411427311272,
+      "normalized_mse": 8.046158301226273e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 90.7322180389164,
+      "normalized_mse": 8.448472525965834e-10
+    }
+  ],
+  "extra_codec": [
+    {
+      "layout": "attn2_plus16",
+      "material": "choice",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 91.75496280672469,
+      "normalized_mse": 6.6758061814572e-10
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "choice",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 91.57145761329406,
+      "normalized_mse": 6.963927460734025e-10
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "choice",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 91.69594299796688,
+      "normalized_mse": 6.767148396356624e-10
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "brahms",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 93.63736254508541,
+      "normalized_mse": 4.327765749171759e-10
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 93.5466538020517,
+      "normalized_mse": 4.4191080431484847e-10
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 93.59099640522649,
+      "normalized_mse": 4.3742173563384576e-10
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "libri1",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 95.87631184932947,
+      "normalized_mse": 2.584454049898231e-10
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 95.77125113175974,
+      "normalized_mse": 2.6477372586893654e-10
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 95.97922933054053,
+      "normalized_mse": 2.5239286119551495e-10
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 87.5897073160806,
+      "normalized_mse": 1.7419242628733069e-09
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 87.5941704815247,
+      "normalized_mse": 1.7401350385073567e-09
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 87.47986061539109,
+      "normalized_mse": 1.7865449121838086e-09
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 91.27165376361418,
+      "normalized_mse": 7.461645699520608e-10
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 91.32639489139207,
+      "normalized_mse": 7.368184818332542e-10
+    },
+    {
+      "layout": "attn2_plus16",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 91.15929414897278,
+      "normalized_mse": 7.657210480661009e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "choice",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 91.13898013572293,
+      "normalized_mse": 7.693110782644462e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "choice",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 91.02056257583543,
+      "normalized_mse": 7.905762118054737e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "choice",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 91.07298331453718,
+      "normalized_mse": 7.81091062593564e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "brahms",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 93.33328301942433,
+      "normalized_mse": 4.641642607685599e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 93.25331336360509,
+      "normalized_mse": 4.727904152604344e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 93.28165538617307,
+      "normalized_mse": 4.697150347244802e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "libri1",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 95.7347283180884,
+      "normalized_mse": 2.670097795405092e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 95.6341660996202,
+      "normalized_mse": 2.732646096148204e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 95.82195980434024,
+      "normalized_mse": 2.6170017892372337e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 87.31422178904224,
+      "normalized_mse": 1.8559993555968132e-09
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 87.27389201203833,
+      "normalized_mse": 1.873314949016831e-09
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 87.15874575254736,
+      "normalized_mse": 1.9236472002171118e-09
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 90.87408970778576,
+      "normalized_mse": 8.17694410798792e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 90.94411427311272,
+      "normalized_mse": 8.046158301226273e-10
+    },
+    {
+      "layout": "attn4_plus8",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 90.7322180389164,
+      "normalized_mse": 8.448472525965834e-10
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "choice",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 90.27537737841098,
+      "normalized_mse": 9.385604773004568e-10
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "choice",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 90.24396610219675,
+      "normalized_mse": 9.453734248123202e-10
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "choice",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 90.28121572434338,
+      "normalized_mse": 9.37299591103747e-10
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "brahms",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 92.89941894800938,
+      "normalized_mse": 5.129300054167709e-10
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 92.83208726052686,
+      "normalized_mse": 5.209442801614747e-10
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 92.8483370950342,
+      "normalized_mse": 5.189987244716044e-10
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "libri1",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 95.51325180861348,
+      "normalized_mse": 2.8097961891131214e-10
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 95.43931153005201,
+      "normalized_mse": 2.858043581864344e-10
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 95.59902465941454,
+      "normalized_mse": 2.754847318774709e-10
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 86.8293069921599,
+      "normalized_mse": 2.07524463979866e-09
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 86.75224535967111,
+      "normalized_mse": 2.1123966205888063e-09
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 86.62980787965157,
+      "normalized_mse": 2.1727972955214053e-09
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 90.35190583853935,
+      "normalized_mse": 9.221666588432385e-10
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 90.40274868819361,
+      "normalized_mse": 9.11433802253249e-10
+    },
+    {
+      "layout": "attn8_plus4",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 90.18317552799797,
+      "normalized_mse": 9.586993815258074e-10
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "choice",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 89.13221969814579,
+      "normalized_mse": 1.2211753525563387e-09
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "choice",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 89.33392522848466,
+      "normalized_mse": 1.1657555108219334e-09
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "choice",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 89.26412977922902,
+      "normalized_mse": 1.184641716674449e-09
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "brahms",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 92.37066440617879,
+      "normalized_mse": 5.793400592058693e-10
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 92.30107726554976,
+      "normalized_mse": 5.886976110600609e-10
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "brahms",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 92.3463667556029,
+      "normalized_mse": 5.825904006033523e-10
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "libri1",
+      "split": "train",
+      "input_db": 0,
+      "snr_db": 95.21368052087561,
+      "normalized_mse": 3.0104536698799614e-10
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -20,
+      "snr_db": 95.16632028856878,
+      "normalized_mse": 3.043462613367624e-10
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "libri1",
+      "split": "train",
+      "input_db": -40,
+      "snr_db": 95.3129300913358,
+      "normalized_mse": 2.942435765922646e-10
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 85.99849845043734,
+      "normalized_mse": 2.5127550527403836e-09
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 85.90781260915188,
+      "normalized_mse": 2.565776003615007e-09
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "trumpet",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 85.7711525753954,
+      "normalized_mse": 2.647797345641829e-09
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": 0,
+      "snr_db": 89.76173456505167,
+      "normalized_mse": 1.0563955023104466e-09
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -20,
+      "snr_db": 89.78141537769609,
+      "normalized_mse": 1.051619092406552e-09
+    },
+    {
+      "layout": "attn16_plus2",
+      "material": "libri3",
+      "split": "holdout",
+      "input_db": -40,
+      "snr_db": 89.54093077839008,
+      "normalized_mse": 1.1114934868636356e-09
+    }
+  ],
+  "perceptual": [],
+  "link": []
+}

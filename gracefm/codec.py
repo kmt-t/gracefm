@@ -41,15 +41,22 @@ def qmax_of(b):
     return 2 ** (b - 1) - 1
 
 
-def exp_range(k, b, profile: Profile):
-    """帯域 k を b bit で量子化するときの指数の範囲 [emin, emax]"""
+def exp_range(k, b, profile: Profile, ch="M"):
+    """帯域 k・仮数幅 b・プロファイルで固定する指数範囲 [emin, emax]。
+
+    送受信で同じ値を計算する。フレームにはオフセット emin を送らず、
+    eidx = e - emin だけを格納する。
+    """
     lev = band_level(k, profile.levels)
     gain = 2.0 ** (lev / 2)                     # その帯域で取りうる最大振幅 (入力 |x|<=1)
     emax = int(np.ceil(np.log2(gain * 2.0 / qmax_of(b))))
-    return emax - (2 ** profile.exp_bits - 1), emax
+    width = profile.exponent_bits(ch, k)
+    offset = profile.exponent_offset(ch, k)
+    emin = emax - (2 ** width - 1) if offset is None else offset
+    return emin, emin + (2 ** width - 1)
 
 
-def quantize(c, k, b, profile: Profile, clip_opt=True):
+def quantize(c, k, b, profile: Profile, clip_opt=True, ch="M"):
     """
     c: (..., ncoef) → (仮数 m (..., ncoef) int, 指数インデックス eidx (...) int)
     指数 e はブロックごとに共有。m = clip(round(c / 2^e), -qmax, qmax)。
@@ -57,7 +64,7 @@ def quantize(c, k, b, profile: Profile, clip_opt=True):
               (エンコーダ側だけの選択。デコーダは変わらない)。
     """
     qmax = qmax_of(b)
-    emin, emax = exp_range(k, b, profile)
+    emin, emax = exp_range(k, b, profile, ch)
     peak = np.abs(c).max(axis=-1)
     e = np.ceil(np.log2(np.maximum(peak, 1e-300) / qmax))
     e = np.clip(e, emin, emax)
@@ -76,18 +83,63 @@ def quantize(c, k, b, profile: Profile, clip_opt=True):
     return m.astype(np.int64), (e - emin).astype(np.int64)
 
 
+def quantize_attenuated(c, k, b, profile: Profile, clip_opt=True, ch="M"):
+    """共有指数に加え、各区間で量子化刻みを 1 または 1/2 にする。"""
+    group = profile.attenuator_group(ch, k)
+    if not group:
+        m, e = quantize(c, k, b, profile, clip_opt, ch)
+        return m, e, np.zeros(np.shape(c)[:-1] + (0,), np.int64)
+    c = np.asarray(c)
+    qmax = qmax_of(b)
+    emin, emax = exp_range(k, b, profile, ch)
+    peak = np.max(np.abs(c), axis=-1)
+    e0 = np.clip(np.ceil(np.log2(np.maximum(peak, 1e-300) / qmax)), emin, emax)
+    cg = c.reshape(c.shape[:-1] + (-1, group))
+
+    def candidate(e):
+        st = np.exp2(e)[..., None, None]
+        m0 = np.clip(np.round(cg / st), -qmax, qmax)
+        m1 = np.clip(np.round(cg / (st * 0.5)), -qmax, qmax)
+        err0 = np.sum((cg - m0 * st) ** 2, axis=-1)
+        err1 = np.sum((cg - m1 * st * 0.5) ** 2, axis=-1)
+        attn = (err1 < err0).astype(np.int64)
+        chosen = np.where(attn[..., None], m1, m0)
+        total = np.sum(np.minimum(err0, err1), axis=-1)
+        return chosen.reshape(c.shape).astype(np.int64), attn, total
+
+    m, a, err = candidate(e0)
+    if clip_opt:
+        e1 = np.maximum(e0 - 1, emin)
+        m1, a1, err1 = candidate(e1)
+        better = err1 < err
+        e0 = np.where(better, e1, e0)
+        m = np.where(better[..., None], m1, m)
+        a = np.where(better[..., None], a1, a)
+    return m, (e0 - emin).astype(np.int64), a
+
+
+def attenuator_expanded(attn, group, n):
+    """係数ごとの 0/1 減衰量。従来フレームは全係数 0。"""
+    if not group:
+        return np.zeros(n, np.int64)
+    return np.repeat(np.asarray(attn, np.int64), group, axis=-1)
+
+
 def _step(m, eidx, emin):
     """量子化ステップ。eidx はブロックで1つ (スカラー/(...)) か、係数ごと (m と同じ形)"""
     st = np.exp2(np.asarray(eidx, dtype=float) + emin)
     return st if st.shape == np.shape(m) else st[..., None]
 
 
-def dequantize(m, eidx, k, b, profile: Profile):
-    emin, _ = exp_range(k, b, profile)
-    return m * _step(m, eidx, emin)
+def dequantize(m, eidx, k, b, profile: Profile, ch="M", attn=None):
+    emin, _ = exp_range(k, b, profile, ch)
+    step = _step(m, eidx, emin)
+    if attn is not None:
+        step = step * np.exp2(-attenuator_expanded(attn, profile.attenuator_group(ch, k), np.shape(m)[-1]))
+    return m * step
 
 
-def cells(m, eidx, k, b, profile: Profile):
+def cells(m, eidx, k, b, profile: Profile, ch="M", attn=None):
     """
     各係数について、元の係数が取り得る区間 [lo, hi] (量子化器の逆像。ポストフィルタの射影に使う)。
 
@@ -100,13 +152,15 @@ def cells(m, eidx, k, b, profile: Profile):
     指数は emax で頭打ちにならないよう emax を決めているので、合法な入力ではこの区間は必ず元の係数を含む
     (tests/test_gracefm.py::test_cells_contain_original)。
     """
-    emin, _ = exp_range(k, b, profile)
+    emin, _ = exp_range(k, b, profile, ch)
     qmax = qmax_of(b)
     gain = 2.0 ** (band_level(k, profile.levels) / 2)
     step = _step(m, eidx, emin)
+    if attn is not None:
+        step = step * np.exp2(-attenuator_expanded(attn, profile.attenuator_group(ch, k), np.shape(m)[-1]))
     lo = (m - 0.5) * step
     hi = (m + 0.5) * step
-    top = np.minimum(2 * qmax * step, gain)
+    top = np.minimum((4 if attn is not None else 2) * qmax * step, gain)
     hi = np.where(m == qmax, top, hi)
     lo = np.where(m == -qmax, -top, lo)
     return lo, hi
@@ -117,27 +171,30 @@ def cells(m, eidx, k, b, profile: Profile):
 class BlockData:
     """1ブロックぶんの量子化結果。mant[ch][k], eidx[ch][k] (0bit の帯域は None)"""
 
-    def __init__(self, mant, eidx):
+    def __init__(self, mant, eidx, attn=None):
         self.mant = mant
         self.eidx = eidx
+        self.attn = attn if attn is not None else {ch: [None] * len(eidx[ch]) for ch in ("M", "S")}
 
 
 def encode_block(x, profile: Profile, clip_opt=True) -> BlockData:
     """x: (block, 2) L/R, 振幅は ±1 以内"""
     ms = {"M": (x[:, 0] + x[:, 1]) / 2, "S": (x[:, 0] - x[:, 1]) / 2}
-    mant, eidx = {}, {}
+    mant, eidx, attn = {}, {}, {}
     for ch, bits in (("M", profile.bits_m), ("S", profile.bits_s)):
         bands = haar_forward(ms[ch], profile.levels)
-        mant[ch], eidx[ch] = [], []
+        mant[ch], eidx[ch], attn[ch] = [], [], []
         for k, (c, b) in enumerate(zip(bands, bits)):
             if b == 0:
                 mant[ch].append(None)
                 eidx[ch].append(None)
+                attn[ch].append(None)
                 continue
-            m, e = quantize(c, k, b, profile, clip_opt)
+            m, e, a = quantize_attenuated(c, k, b, profile, clip_opt, ch)
             mant[ch].append(m)
             eidx[ch].append(int(e))
-    return BlockData(mant, eidx)
+            attn[ch].append(a)
+    return BlockData(mant, eidx, attn)
 
 
 def decode_coeffs(bd: BlockData, profile: Profile):
@@ -153,8 +210,9 @@ def decode_coeffs(bd: BlockData, profile: Profile):
                 continue
             m = bd.mant[ch][k]
             e = np.int64(bd.eidx[ch][k])
-            coefs[ch].append(dequantize(m, e, k, b, profile))
-            cell[ch].append(cells(m, e, k, b, profile))
+            a = bd.attn[ch][k]
+            coefs[ch].append(dequantize(m, e, k, b, profile, ch, a))
+            cell[ch].append(cells(m, e, k, b, profile, ch, a))
     return coefs, cell
 
 

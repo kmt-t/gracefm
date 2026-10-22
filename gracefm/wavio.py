@@ -55,6 +55,13 @@ def write_flac16(path, x, fs, seed=0):
     sf.write(path, q, fs, subtype="PCM_16", format="FLAC")
 
 
+def write_flac24(path, x, fs):
+    """24bit の FLAC で書き出す。"""
+    import soundfile as sf
+    x = np.atleast_2d(np.asarray(x, float).T).T
+    sf.write(path, np.clip(x, -1.0, 1.0), fs, subtype="PCM_24", format="FLAC")
+
+
 def resample(x, fs_in, fs_out):
     if fs_in == fs_out:
         return x

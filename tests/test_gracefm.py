@@ -1,6 +1,7 @@
 """python -m pytest tests/  (pytest が無ければ python tests/test_gracefm.py でも動く)"""
 import os
 import sys
+from dataclasses import replace
 
 import numpy as np
 
@@ -55,6 +56,87 @@ def test_frame_roundtrip_bit_exact():
         bd2, hdr = lay.unpack(1.0 - 2.0 * bits[: lay.n_coded], bits[lay.n_coded:])
         assert hdr == {"pid": p.pid, "stream": 1, "encrypted": False, "counter": 5}
         assert np.allclose(decode_block(bd2, p), decode_block(bd, p)), name
+
+
+def test_band_exponents_use_fixed_offsets_and_variable_widths():
+    from gracefm.codec import exp_range
+
+    base = PROFILES["B200M"]
+    widths = (4, 3, 4, 3, 4, 3, 4)
+    offsets = tuple(exp_range(k, b, base)[1] - (2 ** widths[k] - 1)
+                    for k, b in enumerate(base.bits_m))
+    p = replace(base, exp_bits_m=widths, exp_offset_m=offsets)
+    x = _signal(p.block, p.fs)
+    bd = encode_block(x, p)
+    lay = Layout(p)
+    assert lay.n_prot == Layout(base).n_prot - 3
+    for k, b in enumerate(p.bits_m):
+        assert exp_range(k, b, p) == (offsets[k], offsets[k] + 2 ** widths[k] - 1)
+    frame = lay.pack(bd, 1, 5)
+    decoded, header = lay.unpack(1.0 - 2.0 * frame[:lay.n_coded], frame[lay.n_coded:])
+    assert header["pid"] == p.pid
+    assert np.allclose(decode_block(decoded, p), decode_block(bd, p))
+
+
+def test_attenuator_roundtrip():
+    from gracefm.codec import cells, dequantize, quantize, quantize_attenuated
+    base = PROFILES["B200MH"]
+    groups = (0, 0, 0, 0, 0, 0, 4)
+    p = replace(base, attn_group_m=groups)
+    x = _signal(p.block, p.fs)
+    bd = encode_block(x, p)
+    assert len(bd.attn["M"][6]) == 8
+    lay = Layout(p)
+    assert lay.n_prot == Layout(base).n_prot + 8
+    frame = lay.pack(bd, 1, 5)
+    recovered, hdr = lay.unpack(1.0 - 2.0 * frame[:lay.n_coded], frame[lay.n_coded:])
+    assert hdr["pid"] == p.pid
+    assert np.array_equal(recovered.attn["M"][6], bd.attn["M"][6])
+    assert np.allclose(decode_block(recovered, p), decode_block(bd, p))
+    wrong_layout = Layout(replace(p, pid=15))
+    wrong, _ = wrong_layout.unpack(1.0 - 2.0 * frame[:lay.n_coded], frame[lay.n_coded:])
+    assert wrong is None
+    body = fec.viterbi_decode(1.0 - 2.0 * frame[:lay.n_coded], lay.n_prot_crc)
+    body[16 + 7 * 4] ^= 1  # 最初のアッテネータbitを壊す
+    damaged = np.concatenate([fec.conv_encode(body), frame[lay.n_coded:]])
+    rejected, _ = lay.unpack(1.0 - 2.0 * damaged[:lay.n_coded], damaged[lay.n_coded:])
+    assert rejected is None
+
+    rng = np.random.default_rng(123)
+    for _ in range(50):
+        x = rng.uniform(-1, 1, (p.block, 2))
+        bd = encode_block(x, p)
+        c = haar_forward((x[:, 0] + x[:, 1]) / 2, p.levels)[6]
+        m, e, a = bd.mant["M"][6], bd.eidx["M"][6], bd.attn["M"][6]
+        lo, hi = cells(m, e, 6, p.bits_m[6], p, "M", a)
+        assert np.all(c >= lo - 1e-12) and np.all(c <= hi + 1e-12)
+        m0, e0 = quantize(c, 6, p.bits_m[6], base)
+        m1, e1, a1 = quantize_attenuated(c, 6, p.bits_m[6], p)
+        err0 = np.sum((c - dequantize(m0, e0, 6, p.bits_m[6], base)) ** 2)
+        err1 = np.sum((c - dequantize(m1, e1, 6, p.bits_m[6], p, attn=a1)) ** 2)
+        assert err1 <= err0 + 1e-20
+
+    # 指数幅を帯域ごとに減らした同レート案でも、区間ビットの位置が一致する。
+    narrow = replace(p, exp_bits_m=(3, 3, 3, 3, 2, 3, 3),
+                     exp_offset_m=(-18, -18, -19, -20, -17, -20, -18))
+    assert Layout(narrow).n_prot_crc == Layout(base).n_prot_crc
+    bd = encode_block(_signal(narrow.block, narrow.fs) * 0.01, narrow)
+    lay = Layout(narrow)
+    frame = lay.pack(bd, 0, 1)
+    recovered, _ = lay.unpack(1.0 - 2.0 * frame[:lay.n_coded], frame[lay.n_coded:])
+    assert np.allclose(decode_block(recovered, narrow), decode_block(bd, narrow))
+
+
+def test_adopted_attenuator_profile_end_to_end():
+    p = PROFILES["B200MH-A4"]
+    assert p.pid == 14 and p.exp_bits == 4 and p.attn_group_m[-1] == 4
+    assert Layout(p).n_prot_crc == 132
+    x = _signal(p.block * 12, p.fs)
+    frames = Transmitter(p).run(x)
+    y, valid = StreamDecoder(p, postfilter=False).run(frames, len(x))
+    expected = np.concatenate([decode_block(encode_block(x[i:i + p.block], p), p)
+                               for i in range(0, len(x), p.block)])
+    assert valid.all() and np.allclose(y, expected)
 
 
 def test_modem_noiseless():
