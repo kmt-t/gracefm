@@ -1,0 +1,1614 @@
+{
+  "main_profile": "B200MH-A4",
+  "sub_profile": "S50M",
+  "source_type": "local untracked lossless PCM WAV",
+  "sources": [
+    {
+      "name": "piano",
+      "file": "lossless/Emotional_piano.wav",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Emotional_piano.wav",
+      "original_source_page": null,
+      "artist": "triangelx",
+      "license": "CC0 1.0",
+      "sha1": "e8c449fba4fe1eb5e67e0923b6b696f2105584c5",
+      "sha256": "9661f81d37c59f230b324b830ab68c0482336af3ec117c92e73108ffb4095f15",
+      "sample_rate_hz": 44100,
+      "channels": 2,
+      "subtype": "PCM_16",
+      "duration_s": 16.0
+    },
+    {
+      "name": "percussion",
+      "file": "lossless/Ceramic_Djembe.wav",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Ceramic_Djembe.wav",
+      "original_source_page": null,
+      "artist": "RutgerMuller",
+      "license": "CC0 1.0",
+      "sha1": "f4742b9a732408ac953de6e51a6a148709a768c8",
+      "sha256": "09c83e84846072281ff4d46d47383c56417c4284bd719db3b2127c4f366f8551",
+      "sample_rate_hz": 96000,
+      "channels": 2,
+      "subtype": "PCM_16",
+      "duration_s": 10.95
+    },
+    {
+      "name": "guitar",
+      "file": "lossless/344211_giomilko_c-major-9-bossa-nova-guitar.wav",
+      "source_page": "https://commons.wikimedia.org/wiki/File:344211_giomilko_c-major-9-bossa-nova-guitar.wav",
+      "original_source_page": "https://freesound.org/people/GioMilko/sounds/344211/",
+      "artist": "GioMilko",
+      "license": "CC BY 4.0",
+      "sha1": "719e420bd135ab650be11c0cc0125e4b1b3e7761",
+      "sha256": "f991d202484010cc4ade9fa80ce19997ba2746583e68f4466a2a9c7cec31c348",
+      "sample_rate_hz": 48000,
+      "channels": 1,
+      "subtype": "PCM_24",
+      "duration_s": 10.667
+    }
+  ],
+  "sample_rate_hz": 32000,
+  "seconds_scored": 5.0,
+  "training_frames": 100,
+  "calibration_seconds": 0.2,
+  "frequency_spacing_hz": 2100000.0,
+  "equalizer_taps": 11,
+  "max_lookahead": 4,
+  "decision_passes": 2,
+  "cn0_db_hz": [
+    66.0,
+    80.0
+  ],
+  "scenarios": [
+    {
+      "name": "none",
+      "path": null
+    },
+    {
+      "name": "echo_1us_m10",
+      "path": {
+        "delay_us": 1.0,
+        "relative_db": -10.0,
+        "phase_rad": 1.0471975511965976
+      }
+    },
+    {
+      "name": "echo_2us_m10",
+      "path": {
+        "delay_us": 2.0,
+        "relative_db": -10.0,
+        "phase_rad": 1.0471975511965976
+      }
+    },
+    {
+      "name": "echo_5us_m10",
+      "path": {
+        "delay_us": 5.0,
+        "relative_db": -10.0,
+        "phase_rad": 1.0471975511965976
+      }
+    },
+    {
+      "name": "echo_5us_m20",
+      "path": {
+        "delay_us": 5.0,
+        "relative_db": -20.0,
+        "phase_rad": 1.0471975511965976
+      }
+    },
+    {
+      "name": "echo_10us_m10",
+      "path": {
+        "delay_us": 10.0,
+        "relative_db": -10.0,
+        "phase_rad": 1.0471975511965976
+      }
+    },
+    {
+      "name": "echo_5us_m3_pi",
+      "path": {
+        "delay_us": 5.0,
+        "relative_db": -3.0,
+        "phase_rad": 3.141592653589793
+      }
+    },
+    {
+      "name": "echo_1us_m3_pi",
+      "path": {
+        "delay_us": 1.0,
+        "relative_db": -3.0,
+        "phase_rad": 3.141592653589793
+      }
+    }
+  ],
+  "assumptions": "Ideal symbol timing/carrier recovery; static one-echo channel; calibration from preceding frames; same direct-path C/N0 and total RF power; secondary phase = main phase - 2*pi*frequency_spacing*delay.",
+  "rows": [
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_10us_m10",
+      "method": "FM",
+      "snr_db": 41.23,
+      "visqol_moslqo": 3.4,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_10us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 42.91,
+      "visqol_moslqo": 3.835,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 3,
+      "main_residual_power": 0.0473165,
+      "sub_residual_power": 0.0298799
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_10us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 35.96,
+      "visqol_moslqo": 3.218,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m10",
+      "method": "FM",
+      "snr_db": 42.79,
+      "visqol_moslqo": 3.445,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 46.79,
+      "visqol_moslqo": 4.392,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.045439,
+      "sub_residual_power": 0.0298828
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 43.01,
+      "visqol_moslqo": 3.688,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "FM",
+      "snr_db": 10.23,
+      "visqol_moslqo": 2.105,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "GraceFM equalized",
+      "snr_db": 28.63,
+      "visqol_moslqo": 2.532,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0371486,
+      "sub_residual_power": 0.0298626
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "GraceFM unequalized",
+      "snr_db": 7.22,
+      "visqol_moslqo": 2.296,
+      "plc_percent": 18.44
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_2us_m10",
+      "method": "FM",
+      "snr_db": 42.74,
+      "visqol_moslqo": 3.444,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_2us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 47.23,
+      "visqol_moslqo": 4.347,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0456997,
+      "sub_residual_power": 0.0298833
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_2us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 42.32,
+      "visqol_moslqo": 3.618,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m10",
+      "method": "FM",
+      "snr_db": 42.39,
+      "visqol_moslqo": 3.433,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 45.87,
+      "visqol_moslqo": 4.111,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0477078,
+      "sub_residual_power": 0.0298897
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 36.35,
+      "visqol_moslqo": 3.308,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m20",
+      "method": "FM",
+      "snr_db": 41.66,
+      "visqol_moslqo": 3.376,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m20",
+      "method": "GraceFM equalized",
+      "snr_db": 45.09,
+      "visqol_moslqo": 4.153,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 3,
+      "main_residual_power": 0.0449655,
+      "sub_residual_power": 0.0298835
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m20",
+      "method": "GraceFM unequalized",
+      "snr_db": 44.15,
+      "visqol_moslqo": 3.953,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "FM",
+      "snr_db": 14.2,
+      "visqol_moslqo": 2.28,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "GraceFM equalized",
+      "snr_db": 36.21,
+      "visqol_moslqo": 3.208,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0641257,
+      "sub_residual_power": 0.029897
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "GraceFM unequalized",
+      "snr_db": 26.36,
+      "visqol_moslqo": 2.36,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "none",
+      "method": "FM",
+      "snr_db": 41.28,
+      "visqol_moslqo": 3.35,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "none",
+      "method": "GraceFM equalized",
+      "snr_db": 44.41,
+      "visqol_moslqo": 4.121,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0446333,
+      "sub_residual_power": 0.0298819
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 66.0,
+      "scenario": "none",
+      "method": "GraceFM unequalized",
+      "snr_db": 44.83,
+      "visqol_moslqo": 4.133,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_10us_m10",
+      "method": "FM",
+      "snr_db": 48.39,
+      "visqol_moslqo": 4.354,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_10us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 68.56,
+      "visqol_moslqo": 4.728,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 2,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0030178,
+      "sub_residual_power": 0.0011935
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_10us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 48.28,
+      "visqol_moslqo": 4.13,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m10",
+      "method": "FM",
+      "snr_db": 56.38,
+      "visqol_moslqo": 4.389,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 78.54,
+      "visqol_moslqo": 4.732,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0029919,
+      "sub_residual_power": 0.0011915
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 50.81,
+      "visqol_moslqo": 4.387,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "FM",
+      "snr_db": 43.21,
+      "visqol_moslqo": 3.596,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "GraceFM equalized",
+      "snr_db": 53.24,
+      "visqol_moslqo": 4.561,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0021604,
+      "sub_residual_power": 0.0011917
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "GraceFM unequalized",
+      "snr_db": 15.78,
+      "visqol_moslqo": 1.962,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_2us_m10",
+      "method": "FM",
+      "snr_db": 55.85,
+      "visqol_moslqo": 4.388,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_2us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 77.74,
+      "visqol_moslqo": 4.732,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0029939,
+      "sub_residual_power": 0.0011921
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_2us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 50.87,
+      "visqol_moslqo": 4.395,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "FM",
+      "snr_db": 53.37,
+      "visqol_moslqo": 4.38,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 71.43,
+      "visqol_moslqo": 4.73,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0030179,
+      "sub_residual_power": 0.0011959
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 50.3,
+      "visqol_moslqo": 4.389,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m20",
+      "method": "FM",
+      "snr_db": 55.19,
+      "visqol_moslqo": 4.342,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m20",
+      "method": "GraceFM equalized",
+      "snr_db": 72.12,
+      "visqol_moslqo": 4.731,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0029808,
+      "sub_residual_power": 0.0011915
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m20",
+      "method": "GraceFM unequalized",
+      "snr_db": 56.08,
+      "visqol_moslqo": 4.64,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "FM",
+      "snr_db": 37.75,
+      "visqol_moslqo": 3.713,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "GraceFM equalized",
+      "snr_db": 58.82,
+      "visqol_moslqo": 4.697,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.004789,
+      "sub_residual_power": 0.0012092
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "GraceFM unequalized",
+      "snr_db": 29.22,
+      "visqol_moslqo": 2.262,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "none",
+      "method": "FM",
+      "snr_db": 55.16,
+      "visqol_moslqo": 4.322,
+      "plc_percent": null
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "none",
+      "method": "GraceFM equalized",
+      "snr_db": 71.76,
+      "visqol_moslqo": 4.731,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 0,
+      "sub_lookahead_symbols": 0,
+      "main_residual_power": 0.0029775,
+      "sub_residual_power": 0.0011908
+    },
+    {
+      "material": "guitar",
+      "cn0_db_hz": 80.0,
+      "scenario": "none",
+      "method": "GraceFM unequalized",
+      "snr_db": 71.67,
+      "visqol_moslqo": 4.731,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_10us_m10",
+      "method": "FM",
+      "snr_db": 37.72,
+      "visqol_moslqo": 2.896,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_10us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 40.63,
+      "visqol_moslqo": 4.253,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 3,
+      "main_residual_power": 0.0470002,
+      "sub_residual_power": 0.0298655
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_10us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 34.42,
+      "visqol_moslqo": 4.128,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m10",
+      "method": "FM",
+      "snr_db": 38.44,
+      "visqol_moslqo": 2.919,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 47.15,
+      "visqol_moslqo": 4.333,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0453091,
+      "sub_residual_power": 0.0298625
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 41.96,
+      "visqol_moslqo": 4.278,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "FM",
+      "snr_db": 6.2,
+      "visqol_moslqo": 1.719,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "GraceFM equalized",
+      "snr_db": 28.7,
+      "visqol_moslqo": 3.283,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0373476,
+      "sub_residual_power": 0.0298435
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "GraceFM unequalized",
+      "snr_db": 7.97,
+      "visqol_moslqo": 2.649,
+      "plc_percent": 17.64
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_2us_m10",
+      "method": "FM",
+      "snr_db": 38.42,
+      "visqol_moslqo": 2.918,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_2us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 46.92,
+      "visqol_moslqo": 4.325,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0455501,
+      "sub_residual_power": 0.0298656
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_2us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 41.3,
+      "visqol_moslqo": 4.274,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m10",
+      "method": "FM",
+      "snr_db": 38.26,
+      "visqol_moslqo": 2.914,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 42.24,
+      "visqol_moslqo": 4.266,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 2,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0476077,
+      "sub_residual_power": 0.0298638
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 37.05,
+      "visqol_moslqo": 4.222,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m20",
+      "method": "FM",
+      "snr_db": 37.36,
+      "visqol_moslqo": 2.845,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m20",
+      "method": "GraceFM equalized",
+      "snr_db": 43.12,
+      "visqol_moslqo": 4.276,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 3,
+      "main_residual_power": 0.0448064,
+      "sub_residual_power": 0.0298606
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m20",
+      "method": "GraceFM unequalized",
+      "snr_db": 42.54,
+      "visqol_moslqo": 4.271,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "FM",
+      "snr_db": 8.02,
+      "visqol_moslqo": 1.822,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "GraceFM equalized",
+      "snr_db": 34.22,
+      "visqol_moslqo": 4.188,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0644433,
+      "sub_residual_power": 0.0298993
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "GraceFM unequalized",
+      "snr_db": 25.83,
+      "visqol_moslqo": 3.075,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "none",
+      "method": "FM",
+      "snr_db": 36.94,
+      "visqol_moslqo": 2.817,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "none",
+      "method": "GraceFM equalized",
+      "snr_db": 43.63,
+      "visqol_moslqo": 4.304,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 0,
+      "main_residual_power": 0.0445082,
+      "sub_residual_power": 0.0298605
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 66.0,
+      "scenario": "none",
+      "method": "GraceFM unequalized",
+      "snr_db": 44.14,
+      "visqol_moslqo": 4.306,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_10us_m10",
+      "method": "FM",
+      "snr_db": 46.06,
+      "visqol_moslqo": 3.938,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_10us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 64.83,
+      "visqol_moslqo": 4.731,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 2,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0030166,
+      "sub_residual_power": 0.0011935
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_10us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 45.9,
+      "visqol_moslqo": 4.29,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m10",
+      "method": "FM",
+      "snr_db": 50.25,
+      "visqol_moslqo": 3.948,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 76.09,
+      "visqol_moslqo": 4.732,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0029916,
+      "sub_residual_power": 0.0011904
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 47.02,
+      "visqol_moslqo": 4.202,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "FM",
+      "snr_db": 39.51,
+      "visqol_moslqo": 3.065,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "GraceFM equalized",
+      "snr_db": 49.68,
+      "visqol_moslqo": 4.463,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0021583,
+      "sub_residual_power": 0.0011899
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "GraceFM unequalized",
+      "snr_db": 16.36,
+      "visqol_moslqo": 2.788,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_2us_m10",
+      "method": "FM",
+      "snr_db": 50.06,
+      "visqol_moslqo": 3.948,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_2us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 72.53,
+      "visqol_moslqo": 4.732,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0029939,
+      "sub_residual_power": 0.0011915
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_2us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 47.07,
+      "visqol_moslqo": 4.211,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "FM",
+      "snr_db": 48.96,
+      "visqol_moslqo": 3.946,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 68.42,
+      "visqol_moslqo": 4.732,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0030174,
+      "sub_residual_power": 0.0011936
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 46.81,
+      "visqol_moslqo": 4.22,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m20",
+      "method": "FM",
+      "snr_db": 49.5,
+      "visqol_moslqo": 3.87,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m20",
+      "method": "GraceFM equalized",
+      "snr_db": 69.24,
+      "visqol_moslqo": 4.732,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0029824,
+      "sub_residual_power": 0.0011898
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m20",
+      "method": "GraceFM unequalized",
+      "snr_db": 52.2,
+      "visqol_moslqo": 4.584,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "FM",
+      "snr_db": 35.91,
+      "visqol_moslqo": 3.166,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "GraceFM equalized",
+      "snr_db": 55.0,
+      "visqol_moslqo": 4.675,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0048963,
+      "sub_residual_power": 0.0012127
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "GraceFM unequalized",
+      "snr_db": 29.02,
+      "visqol_moslqo": 3.11,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "none",
+      "method": "FM",
+      "snr_db": 49.36,
+      "visqol_moslqo": 3.841,
+      "plc_percent": null
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "none",
+      "method": "GraceFM equalized",
+      "snr_db": 69.34,
+      "visqol_moslqo": 4.732,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 1,
+      "sub_lookahead_symbols": 0,
+      "main_residual_power": 0.0029791,
+      "sub_residual_power": 0.0011894
+    },
+    {
+      "material": "percussion",
+      "cn0_db_hz": 80.0,
+      "scenario": "none",
+      "method": "GraceFM unequalized",
+      "snr_db": 69.31,
+      "visqol_moslqo": 4.732,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_10us_m10",
+      "method": "FM",
+      "snr_db": 40.47,
+      "visqol_moslqo": 2.99,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_10us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 38.14,
+      "visqol_moslqo": 2.826,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 3,
+      "main_residual_power": 0.0475712,
+      "sub_residual_power": 0.0298732
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_10us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 31.88,
+      "visqol_moslqo": 2.427,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m10",
+      "method": "FM",
+      "snr_db": 44.22,
+      "visqol_moslqo": 3.073,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 46.05,
+      "visqol_moslqo": 3.841,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0455622,
+      "sub_residual_power": 0.0298758
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 38.65,
+      "visqol_moslqo": 2.69,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "FM",
+      "snr_db": 11.6,
+      "visqol_moslqo": 2.018,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "GraceFM equalized",
+      "snr_db": 24.63,
+      "visqol_moslqo": 1.819,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0372002,
+      "sub_residual_power": 0.0298598
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "GraceFM unequalized",
+      "snr_db": 6.67,
+      "visqol_moslqo": 1.876,
+      "plc_percent": 16.66
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_2us_m10",
+      "method": "FM",
+      "snr_db": 44.09,
+      "visqol_moslqo": 3.069,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_2us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 45.09,
+      "visqol_moslqo": 3.739,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0458825,
+      "sub_residual_power": 0.0298794
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_2us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 37.48,
+      "visqol_moslqo": 2.634,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m10",
+      "method": "FM",
+      "snr_db": 43.22,
+      "visqol_moslqo": 3.047,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 40.83,
+      "visqol_moslqo": 3.086,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0479554,
+      "sub_residual_power": 0.029879
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 32.97,
+      "visqol_moslqo": 2.486,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m20",
+      "method": "FM",
+      "snr_db": 43.06,
+      "visqol_moslqo": 2.997,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m20",
+      "method": "GraceFM equalized",
+      "snr_db": 41.77,
+      "visqol_moslqo": 3.1,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0451281,
+      "sub_residual_power": 0.0298744
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m20",
+      "method": "GraceFM unequalized",
+      "snr_db": 39.64,
+      "visqol_moslqo": 2.909,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "FM",
+      "snr_db": 17.2,
+      "visqol_moslqo": 2.238,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "GraceFM equalized",
+      "snr_db": 31.37,
+      "visqol_moslqo": 2.426,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0635996,
+      "sub_residual_power": 0.0299156
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "GraceFM unequalized",
+      "snr_db": 23.17,
+      "visqol_moslqo": 1.667,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "none",
+      "method": "FM",
+      "snr_db": 42.74,
+      "visqol_moslqo": 2.975,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "none",
+      "method": "GraceFM equalized",
+      "snr_db": 41.01,
+      "visqol_moslqo": 3.048,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 0,
+      "main_residual_power": 0.0447835,
+      "sub_residual_power": 0.0298735
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 66.0,
+      "scenario": "none",
+      "method": "GraceFM unequalized",
+      "snr_db": 41.31,
+      "visqol_moslqo": 3.069,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_10us_m10",
+      "method": "FM",
+      "snr_db": 44.16,
+      "visqol_moslqo": 4.202,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_10us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 67.76,
+      "visqol_moslqo": 4.719,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 2,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0030211,
+      "sub_residual_power": 0.0011926
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_10us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 44.78,
+      "visqol_moslqo": 3.225,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m10",
+      "method": "FM",
+      "snr_db": 56.92,
+      "visqol_moslqo": 4.288,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 78.33,
+      "visqol_moslqo": 4.731,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.002993,
+      "sub_residual_power": 0.0011905
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 48.98,
+      "visqol_moslqo": 4.315,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "FM",
+      "snr_db": 41.77,
+      "visqol_moslqo": 3.234,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "GraceFM equalized",
+      "snr_db": 51.14,
+      "visqol_moslqo": 4.269,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0021628,
+      "sub_residual_power": 0.0011901
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_1us_m3_pi",
+      "method": "GraceFM unequalized",
+      "snr_db": 15.47,
+      "visqol_moslqo": 1.552,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_2us_m10",
+      "method": "FM",
+      "snr_db": 55.33,
+      "visqol_moslqo": 4.284,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_2us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 77.27,
+      "visqol_moslqo": 4.731,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0029945,
+      "sub_residual_power": 0.0011917
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_2us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 49.03,
+      "visqol_moslqo": 4.281,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "FM",
+      "snr_db": 50.4,
+      "visqol_moslqo": 4.264,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM equalized",
+      "snr_db": 70.65,
+      "visqol_moslqo": 4.725,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0030124,
+      "sub_residual_power": 0.0011942
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m10",
+      "method": "GraceFM unequalized",
+      "snr_db": 48.08,
+      "visqol_moslqo": 4.084,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m20",
+      "method": "FM",
+      "snr_db": 55.31,
+      "visqol_moslqo": 4.185,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m20",
+      "method": "GraceFM equalized",
+      "snr_db": 71.02,
+      "visqol_moslqo": 4.726,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 4,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.002984,
+      "sub_residual_power": 0.0011901
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m20",
+      "method": "GraceFM unequalized",
+      "snr_db": 54.26,
+      "visqol_moslqo": 4.491,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "FM",
+      "snr_db": 34.21,
+      "visqol_moslqo": 3.424,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "GraceFM equalized",
+      "snr_db": 57.04,
+      "visqol_moslqo": 4.539,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 3,
+      "sub_lookahead_symbols": 4,
+      "main_residual_power": 0.0048525,
+      "sub_residual_power": 0.0012134
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "echo_5us_m3_pi",
+      "method": "GraceFM unequalized",
+      "snr_db": 25.32,
+      "visqol_moslqo": 1.552,
+      "plc_percent": 0.0
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "none",
+      "method": "FM",
+      "snr_db": 56.32,
+      "visqol_moslqo": 4.148,
+      "plc_percent": null
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "none",
+      "method": "GraceFM equalized",
+      "snr_db": 70.74,
+      "visqol_moslqo": 4.726,
+      "plc_percent": 0.0,
+      "main_lookahead_symbols": 1,
+      "sub_lookahead_symbols": 0,
+      "main_residual_power": 0.0029806,
+      "sub_residual_power": 0.0011895
+    },
+    {
+      "material": "piano",
+      "cn0_db_hz": 80.0,
+      "scenario": "none",
+      "method": "GraceFM unequalized",
+      "snr_db": 70.8,
+      "visqol_moslqo": 4.727,
+      "plc_percent": 0.0
+    }
+  ]
+}
