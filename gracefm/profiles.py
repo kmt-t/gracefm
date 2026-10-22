@@ -22,6 +22,8 @@ class Profile:
     protect_k: int = 2          # FEC で保護する仮数の上位ビット数
     modulation: str = "qpsk"    # "qpsk" | "qam16h" | "qam64h"
     alpha: float = 1.0          # 階層 QAM の象限間距離パラメータ (1 = 通常の QAM)
+    pulse_beta: float = 0.25    # スペクトル評価用 RRC パルスのロールオフ
+    pulse_span: int = 16        # 同パルスの長さ [シンボル]
     pf_iters: int = 4           # 受信側ポストフィルタの繰り返し回数 (全プロファイル共通。SPEC 3.6.3節)
     base_m: Optional[Tuple[int, ...]] = None   # 階層化したときの基本層の仮数ビット数 (None = 階層化なし)
     base_s: Optional[Tuple[int, ...]] = None   # 同 S。基本層を超えるビット (拡張層) は変調の弱い位置に入る
@@ -33,6 +35,8 @@ class Profile:
     attn_group_s: Optional[Tuple[int, ...]] = None
 
     def __post_init__(self):
+        if not 0 < self.pulse_beta <= 1 or self.pulse_span < 2 or self.pulse_span % 2:
+            raise ValueError("RRC パルスのロールオフは (0, 1]、長さは正の偶数にしてください")
         if len(self.bits_m) != self.nbands or len(self.bits_s) != self.nbands:
             raise ValueError("仮数ビット割当の長さが帯域数と一致しません")
         for field in ("exp_bits_m", "exp_bits_s", "exp_offset_m", "exp_offset_s", "attn_group_m", "attn_group_s"):
@@ -95,7 +99,7 @@ class Profile:
         return self.block >> band_level(k, self.levels)
 
     def payload_bits(self) -> int:
-        """音声データ (指数 + 仮数) の 1ブロックあたりのビット数"""
+        """音声データ (指数 + 区間アッテネータ + 仮数) の 1ブロックあたりのビット数"""
         tot = 0
         for ch, bits in (("M", self.bits_m), ("S", self.bits_s)):
             for k, b in enumerate(bits):
@@ -190,7 +194,15 @@ def make_layered(base: Profile, name: str, pid: int, modulation: str = "qam16h",
 
 # 階層 16QAM の層付きプロファイル: B200M / B200 と同じ帯域幅・同じ基本層に、電波が強いときだけ効く拡張層を足す
 PROFILES["B200MH"] = make_layered(PROFILES["B200M"], "B200MH", 9)
-PROFILES["B200H"] = make_layered(PROFILES["B200"], "B200H", 10)
+# 放送ステレオ主系は M/S の最高域32係数に区間アッテネータを付ける。
+# M は8係数ごとに4bit、S は4係数ごとに8bit。指数幅と仮数幅は維持する。
+# 固定指数オフセットは旧 B200H の算出値と同じで、フレームには送らない。
+PROFILES["B200H"] = replace(make_layered(PROFILES["B200"], "B200H", 10),
+                             exp_offset_m=(-25, -25, -26, -23, -21, -18, -19),
+                             exp_offset_s=(-23, -21, -21, -18, -18, -18, -19),
+                             attn_group_m=(0, 0, 0, 0, 0, 0, 8),
+                             attn_group_s=(0, 0, 0, 0, 0, 0, 4),
+                             pulse_beta=0.10, pulse_span=32)
 
 # モノラル主系: B200MH の6詳細帯域＋低域近似を維持し、最高域32係数を4係数ずつ8区間に分ける。
 # 受信側がフレームごとにオフセットを受け取らずに復元できるよう、指数オフセットは固定値。

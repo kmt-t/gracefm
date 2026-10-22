@@ -133,10 +133,14 @@ def main():
     ap.add_argument("--vibeace", help="Vibe Ace (48kHz wav)")
     ap.add_argument("--adopted-only", action="store_true",
                     help="既存のステレオ・モニター・FM・基本層音声を保ち、採用したモノラル主系だけ再生成")
+    ap.add_argument("--stereo-only", action="store_true",
+                    help="既存のモノラル・モニター・基本層音声を保ち、ステレオ主系の音声だけ再生成")
     ap.add_argument("--workers", type=int, default=3, help="並列に処理する素材数")
     args = ap.parse_args()
     if args.workers < 1:
         ap.error("workers は 1 以上にしてください")
+    if args.adopted_only and args.stereo_only:
+        ap.error("--adopted-only と --stereo-only は同時に指定できません")
     os.makedirs(OUT, exist_ok=True)
 
     sources = []
@@ -161,15 +165,17 @@ def main():
             x = np.repeat(x[:, :1], 2, axis=1)
         sources.append((name, x, mono))
 
-    tasks = [(name, x, mono, args.adopted_only) for name, x, mono in sources
-             if not args.adopted_only or mono]
+    tasks = [(name, x, mono, args.adopted_only or args.stereo_only) for name, x, mono in sources
+             if (not args.adopted_only or mono) and (not args.stereo_only or not mono)]
     if not tasks:
         ap.error("入力音源がありません")
     with ProcessPoolExecutor(max_workers=min(args.workers, len(tasks))) as executor:
         for rows, mon_rows in executor.map(generate_source, tasks):
             ROWS.extend(rows)
             MON_ROWS.extend(mon_rows)
-    if args.adopted_only:
+    if args.stereo_only:
+        update_readme_stereo_only()
+    elif args.adopted_only:
         update_readme_adopted_only()
     else:
         write_readme()
@@ -191,8 +197,10 @@ def generate_source(task):
     save(f"{name}_{main_p}.flac", codec(x, PROFILES[main_p]), mono, x,
          f"コーデックだけ（通信路なし）。{main_p} の全ビット（基本層＋拡張層、約{PROFILES[main_p].audio_kbps():.0f}kbps）")
     if not adopted_only:
+        base_desc = (f"コーデックだけ。基本層だけ（{base_p}、約{PROFILES[base_p].audio_kbps():.0f}kbps）＝拡張層が全部崩れたときの音"
+                     if mono else f"コーデックだけ。{base_p}（約{PROFILES[base_p].audio_kbps():.0f}kbps）。B200H の区間アッテネータは含まない")
         save(f"{name}_{base_p}.flac", codec(x, PROFILES[base_p]), mono, x,
-             f"コーデックだけ。基本層だけ（{base_p}、約{PROFILES[base_p].audio_kbps():.0f}kbps）＝拡張層が全部崩れたときの音")
+             base_desc)
         save(f"{name}_{base_p}_nopf.flac", codec(x, PROFILES[base_p], postfilter=False), mono, x,
              f"同上、ポストフィルタなし")
     fm = AnalogFM(x[:, 0], 32000) if mono and not adopted_only else None
@@ -288,6 +296,23 @@ def update_readme_adopted_only():
         f.write("\n".join(lines) + "\n")
 
 
+def update_readme_stereo_only():
+    """採用ステレオ主系を再符号化した行だけ更新し、ほかの音声例の行を保つ。"""
+    path = os.path.join(OUT, "README.md")
+    measurements = {name: (desc, snr) for name, desc, snr in ROWS}
+    lines = []
+    for line in open(path, encoding="utf-8"):
+        line = line.rstrip("\n")
+        if line.startswith("| `"):
+            name = line.split("`", 2)[1]
+            if name in measurements:
+                desc, snr = measurements[name]
+                line = f"| `{name}` | {desc} | {'—' if not np.isfinite(snr) else f'{snr:.1f}dB'} |"
+        lines.append(line)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+
 README_HEAD = """# サンプル音声（GraceFM）
 
 - 劣化音は24bit FLAC、原音は既存の16bit FLAC。各10秒。放送用は32kHz（このフォルダ）、モニター用は48kHz（`monitor/`）
@@ -301,7 +326,7 @@ README_HEAD = """# サンプル音声（GraceFM）
 | `*_fm_*` | 同じ受信電力のアナログFM（モノラル、ゴーストなし） |
 | `*_B200MH-A4`・`*_B200H` | コーデックだけ、全ビット（拡張層まで届いたときの上限） |
 | `*_B200M` | B200M（QPSK、194kbps）の比較用音声。A4の基本層（198kbps）とは別プロファイル |
-| `*_B200` | B200Hの基本層に相当するQPSK音声 |
+| `*_B200` | B200（QPSK、200kbps）。B200H の基本層とは区間アッテネータの有無が異なる |
 
 - おすすめ：`fishin_final_cn0-57` と `fishin_fm_cn0-57`（FM がスレッショルドを割る強さ）、`*_rayleigh_cn0-60`（途切れ方）
 - demo（ステレオ）は FM ステレオのモデルがないため FM なし

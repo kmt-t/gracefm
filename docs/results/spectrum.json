@@ -7,64 +7,84 @@
   "occupied_99_kHz": 166.6,
   "bw_minus30dB_kHz": 188.8,
   "symbol_rate_ksps": 151.0,
-  "modulation": "qam16h"
+  "modulation": "qam16h",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
  },
  "B200H": {
-  "occupied_99_kHz": 190.6,
-  "bw_minus30dB_kHz": 214.9,
-  "symbol_rate_ksps": 173.0,
-  "modulation": "qam16h"
+  "occupied_99_kHz": 181.4,
+  "bw_minus30dB_kHz": 196.8,
+  "symbol_rate_ksps": 179.0,
+  "modulation": "qam16h",
+  "rrc_beta": 0.1,
+  "rrc_span_symbols": 32
  },
  "B200M": {
   "occupied_99_kHz": 161.6,
   "bw_minus30dB_kHz": 183.8,
   "symbol_rate_ksps": 147.0,
-  "modulation": "qpsk"
+  "modulation": "qpsk",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
  },
  "S50M": {
   "occupied_99_kHz": 65.1,
   "bw_minus30dB_kHz": 73.1,
   "symbol_rate_ksps": 59.0,
-  "modulation": "qpsk"
+  "modulation": "qpsk",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
  },
  "S100": {
   "occupied_99_kHz": 104.3,
   "bw_minus30dB_kHz": 117.0,
   "symbol_rate_ksps": 94.5,
-  "modulation": "qpsk"
+  "modulation": "qpsk",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
  },
  "S85M": {
   "occupied_99_kHz": 90.9,
   "bw_minus30dB_kHz": 102.6,
   "symbol_rate_ksps": 82.5,
-  "modulation": "qpsk"
+  "modulation": "qpsk",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
  },
  "M700": {
   "occupied_99_kHz": 553.4,
   "bw_minus30dB_kHz": 625.1,
   "symbol_rate_ksps": 503.2,
-  "modulation": "qpsk"
+  "modulation": "qpsk",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
  },
  "M700Q16": {
   "occupied_99_kHz": 301.3,
   "bw_minus30dB_kHz": 342.1,
   "symbol_rate_ksps": 274.5,
-  "modulation": "qam16h"
+  "modulation": "qam16h",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
  },
  "M700H": {
   "occupied_99_kHz": 302.4,
   "bw_minus30dB_kHz": 341.0,
   "symbol_rate_ksps": 274.5,
-  "modulation": "qam16h"
+  "modulation": "qam16h",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
  },
  "S100W": {
   "occupied_99_kHz": 121.4,
   "bw_minus30dB_kHz": 135.9,
   "symbol_rate_ksps": 110.2,
-  "modulation": "qpsk"
+  "modulation": "qpsk",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
  },
  "audio_error_snr_dB": {
-  "B200H": 59.6,
+  "B200H": 61.1,
   "B200": 32.5,
   "S100": 29.3,
   "M700H": 55.8,
