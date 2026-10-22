@@ -354,6 +354,8 @@ FM帯で音声を伝送遅延4.0ms（処理時間を除く）で送り、受信�
 
 B200MH-A4は波形SNRでMP3を上回る一方、音声ビットレートも高い。ViSQOLは高品質域で上限付近に集まるため、この値だけから聴感上の優劣は決まらない。ステレオとモニターの音声例は[サンプル一覧](../samples/README.md)に示す。
 
+ステレオ `B200H` のコーデック単体については、同じ公開ライセンス音源を使って aptX と aptX HD を比較した。[音質ベンチマーク](QUALITY_BENCHMARK.md)には共通16kHz帯域と元音源帯域の両条件で、左右の波形SNRと ViSQOL を示す。共通帯域でも ViSQOL は aptX系の方が3素材とも高く、本評価は GraceFM が aptX と同等の聴感品質に達したことを示さない。
+
 ### 5.2 アナログFMとの比較
 
 [音質ベンチマーク](QUALITY_BENCHMARK.md)の公開ライセンスのロスレス PCM WAV 3素材を、モノラル放送構成 `B200MH-A4`＋`S50M` とアナログ FM に同じ受信電力で入力した。各5秒、乱数 seed 1、白色雑音。表は **波形SNR [dB] / ViSQOL Audio MOS-LQO**。ViSQOL は聴感の予測値で、主観聴取試験ではない。
@@ -689,6 +691,7 @@ FM帯で伝送遅延4ms、受信電力に応じてなだらかに劣化するデ
 |---|---|
 | 表9 | `python tools/fetch_lossless_benchmark_audio.py`、`python tools/eval_lossless_benchmark.py` |
 | 表2・表10 | `python tools/eval_lossless_benchmark.py`、`python tools/eval_lossless_benchmark.py --channels rayleigh,fade10 --cn0 60,66 --skip-codec --json docs/results/lossless_impairments.json`（要 `requirements-eval.txt`） |
+| aptX 比較 | `python tools/eval_aptx_benchmark.py --seconds 5 --workers 3 --json docs/results/aptx_benchmark.json`（要 `requirements-eval.txt`） |
 | 表11 | `python tools/eval_distortion.py` |
 | 表12 | `python tools/eval_asym.py 5` |
 | 表13 | `python tools/eval_softdec.py single`、`iq` |
