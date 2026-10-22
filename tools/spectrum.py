@@ -4,7 +4,7 @@
 
   python tools/spectrum.py
 
-1. 送信スペクトル (RF、複素ベースバンド): 各プロファイルのフレームを連続で送り、ルートレイズドコサイン (β = 0.25) で
+1. 送信スペクトル (RF、複素ベースバンド): 各プロファイルのフレームを連続で送り、プロファイルで定めたルートレイズドコサインで
    パルス成形した波形の電力スペクトル密度。送信電力を 1 にそろえ、搬送波からの周波数 [kHz] に対する dB/Hz。
    占有帯域 (電力の 99% が入る帯域) と、−30dB 帯域 (ピークから 30dB 下がるところの幅) も求める。
    比較用にアナログFM (モノラル、±75kHz 偏移、50µs プリエンファシス) も同じ素材で。
@@ -49,7 +49,7 @@ SPS = 8
 def rf_psd(p, x):
     syms = np.concatenate(Transmitter(p).run(x))
     rs = channel.symbol_rate(p)
-    w = shape(syms, sps=SPS)
+    w = shape(syms, beta=p.pulse_beta, span=p.pulse_span, sps=SPS)
     w = w / np.sqrt(np.mean(np.abs(w) ** 2))
     f, P = welch(w, fs=SPS * rs, nperseg=4096, return_onesided=False, scaling="density")
     i = np.argsort(f)
@@ -105,6 +105,8 @@ def main():
             if n != "FM":
                 res[n]["symbol_rate_ksps"] = round(channel.symbol_rate(PROFILES[n]) / 1e3, 1)
                 res[n]["modulation"] = PROFILES[n].modulation
+                res[n]["rrc_beta"] = PROFILES[n].pulse_beta
+                res[n]["rrc_span_symbols"] = PROFILES[n].pulse_span
             ax.plot(f / 1e3, 10 * np.log10(P + 1e-30), color=COL[j], ls=LS[j], lw=1.6,
                     label=f"{label}  99%帯域 {obw / 1e3:.0f}kHz")
         lim = 450 if "モニター" in title else 200
@@ -114,7 +116,7 @@ def main():
         ax.set_ylabel("電力スペクトル密度 [dB/Hz]\n（送信電力 = 1）", fontsize=9, color=INK2)
         ax.legend(fontsize=8.5, frameon=False, loc="upper right", labelcolor=INK)
     axs[-1].set_xlabel("搬送波からの周波数 [kHz]", fontsize=9, color=INK2)
-    fig.suptitle("送信スペクトル（ルートレイズドコサイン β=0.25、送信電力をそろえた比較）", fontsize=12, color=INK, x=0.02,
+    fig.suptitle("送信スペクトル（B200H は RRC β=0.10、他は β=0.25。送信電力をそろえた比較）", fontsize=12, color=INK, x=0.02,
                  ha="left")
     fig.tight_layout()
     fig.savefig(os.path.join(ROOT, "docs", "figures", "rf_spectrum.png"), dpi=130, facecolor=SURF)

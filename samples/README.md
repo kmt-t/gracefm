@@ -11,7 +11,7 @@
 | `*_fm_*` | 同じ受信電力のアナログFM（モノラル、ゴーストなし） |
 | `*_B200MH-A4`・`*_B200H` | コーデックだけ、全ビット（拡張層まで届いたときの上限） |
 | `*_B200M` | B200M（QPSK、194kbps）の比較用音声。A4の基本層（198kbps）とは別プロファイル |
-| `*_B200` | B200Hの基本層に相当するQPSK音声 |
+| `*_B200` | B200（QPSK、200kbps）。B200H の基本層とは区間アッテネータの有無が異なる |
 
 - おすすめ：`fishin_final_cn0-57` と `fishin_fm_cn0-57`（FM がスレッショルドを割る強さ）、`*_rayleigh_cn0-60`（途切れ方）
 - demo（ステレオ）は FM ステレオのモデルがないため FM なし
@@ -36,16 +36,16 @@
 | ファイル | 内容 | 波形SNR |
 |---|---|---|
 | `demo_orig.flac` | 原音（32kHzに変換したもの） | — |
-| `demo_B200H.flac` | コーデックだけ（通信路なし）。B200H の全ビット（基本層＋拡張層、約530kbps） | 56.3dB |
-| `demo_B200.flac` | コーデックだけ。基本層だけ（B200、約200kbps）＝拡張層が全部崩れたときの音 | 29.4dB |
+| `demo_B200H.flac` | コーデックだけ（通信路なし）。B200H の全ビット（基本層＋拡張層、約536kbps） | 57.8dB |
+| `demo_B200.flac` | コーデックだけ。B200（約200kbps）。B200H の区間アッテネータは含まない | 29.4dB |
 | `demo_B200_nopf.flac` | 同上、ポストフィルタなし | 31.9dB |
-| `demo_final_cn0-80.flac` | 白色雑音のみ。C/N0 80dB-Hz（C/N 27.4dB）。主系 B200H Es/N0 24.6dB、副系 S100 Es/N0 27.2dB（電力 50:50） | 47.3dB |
-| `demo_final_cn0-66.flac` | 白色雑音のみ。C/N0 66dB-Hz（C/N 13.4dB）。主系 B200H Es/N0 10.6dB、副系 S100 Es/N0 13.2dB（電力 50:50） | 29.9dB |
-| `demo_final_cn0-60.flac` | 白色雑音のみ。C/N0 60dB-Hz（C/N 7.4dB）。主系 B200H Es/N0 4.6dB、副系 S100 Es/N0 7.2dB（電力 50:50） | 23.8dB |
-| `demo_final_cn0-57.flac` | 白色雑音のみ。C/N0 57dB-Hz（C/N 4.4dB）。主系 B200H Es/N0 1.6dB、副系 S100 Es/N0 4.2dB（電力 50:50） | 16.3dB |
-| `demo_final_cn0-54.flac` | 白色雑音のみ。C/N0 54dB-Hz（C/N 1.4dB）。主系 B200H Es/N0 -1.4dB、副系 S100 Es/N0 1.2dB（電力 50:50） | 9.3dB |
-| `demo_final_rayleigh_cn0-60.flac` | 系統ごとに独立なフェージング（時定数約100ms）。C/N0 60dB-Hz（C/N 7.4dB）。平均の 主系 B200H Es/N0 4.6dB、副系 S100 Es/N0 7.2dB（電力 50:50）。欠けて予測で埋めた時間 8.0% | 10.7dB |
-| `demo_final_fade10_cn0-66.flac` | 主系の周波数だけ10dB落ちている。C/N0 66dB-Hz（C/N 13.4dB）。主系 B200H Es/N0 0.6dB、副系 S100 Es/N0 13.2dB（電力 50:50）。欠けて予測で埋めた時間 0.0% | 26.4dB |
+| `demo_final_cn0-80.flac` | 白色雑音のみ。C/N0 80dB-Hz（C/N 27.4dB）。主系 B200H Es/N0 24.5dB、副系 S100 Es/N0 27.2dB（電力 50:50） | 48.4dB |
+| `demo_final_cn0-66.flac` | 白色雑音のみ。C/N0 66dB-Hz（C/N 13.4dB）。主系 B200H Es/N0 10.5dB、副系 S100 Es/N0 13.2dB（電力 50:50） | 31.2dB |
+| `demo_final_cn0-60.flac` | 白色雑音のみ。C/N0 60dB-Hz（C/N 7.4dB）。主系 B200H Es/N0 4.5dB、副系 S100 Es/N0 7.2dB（電力 50:50） | 23.5dB |
+| `demo_final_cn0-57.flac` | 白色雑音のみ。C/N0 57dB-Hz（C/N 4.4dB）。主系 B200H Es/N0 1.5dB、副系 S100 Es/N0 4.2dB（電力 50:50） | 16.1dB |
+| `demo_final_cn0-54.flac` | 白色雑音のみ。C/N0 54dB-Hz（C/N 1.4dB）。主系 B200H Es/N0 -1.5dB、副系 S100 Es/N0 1.2dB（電力 50:50） | 8.8dB |
+| `demo_final_rayleigh_cn0-60.flac` | 系統ごとに独立なフェージング（時定数約100ms）。C/N0 60dB-Hz（C/N 7.4dB）。平均の 主系 B200H Es/N0 4.5dB、副系 S100 Es/N0 7.2dB（電力 50:50）。欠けて予測で埋めた時間 8.4% | 11.2dB |
+| `demo_final_fade10_cn0-66.flac` | 主系の周波数だけ10dB落ちている。C/N0 66dB-Hz（C/N 13.4dB）。主系 B200H Es/N0 0.5dB、副系 S100 Es/N0 13.2dB（電力 50:50）。欠けて予測で埋めた時間 0.0% | 26.2dB |
 | `fishin_orig.flac` | 原音（32kHzに変換したもの） | — |
 | `fishin_B200MH-A4.flac` | コーデックだけ（通信路なし）。B200MH-A4 の全ビット（基本層＋拡張層、約474kbps） | 83.9dB |
 | `fishin_B200M.flac` | コーデックだけ。B200M（QPSK、約194kbps）の比較用音声。A4の基本層（198kbps）とは別プロファイル | 32.7dB |

@@ -139,6 +139,26 @@ def test_adopted_attenuator_profile_end_to_end():
     assert valid.all() and np.allclose(y, expected)
 
 
+def test_broadcast_joint_stereo_attenuators():
+    p = PROFILES["B200H"]
+    assert p.pid == 10 and p.exp_bits == 4
+    assert p.pulse_beta == 0.10 and p.pulse_span == 32
+    from gracefm.channel import symbol_rate
+    assert (1 + p.pulse_beta) * symbol_rate(p) < 200000
+    assert p.attn_group_m[-1] == 8 and p.attn_group_s[-1] == 4
+    assert p.attenuator_bits("M", 6) == 4 and p.attenuator_bits("S", 6) == 8
+    assert Layout(p).n_prot_crc == 228
+    assert p.audio_kbps() == 536
+    x = _signal(p.block * 8, p.fs)
+    bd = encode_block(x[:p.block], p)
+    assert len(bd.attn["M"][6]) == 4 and len(bd.attn["S"][6]) == 8
+    frames = Transmitter(p).run(x)
+    y, valid = StreamDecoder(p, postfilter=False).run(frames, len(x))
+    expected = np.concatenate([decode_block(encode_block(x[i:i + p.block], p), p)
+                               for i in range(0, len(x), p.block)])
+    assert valid.all() and np.allclose(y, expected)
+
+
 def test_modem_noiseless():
     for mod in ("qpsk", "qam16h", "qam64h"):
         bits = np.random.default_rng(4).integers(0, 2, 600)
@@ -195,8 +215,8 @@ def test_cells_contain_original():
                     if b == 0:
                         continue
                     for clip_opt in (True, False):
-                        m, e = quantize(c, k, b, p, clip_opt)
-                        lo, hi = cells(m, e, k, b, p)
+                        m, e = quantize(c, k, b, p, clip_opt, ch)
+                        lo, hi = cells(m, e, k, b, p, ch)
                         assert np.all(c >= lo - 1e-12) and np.all(c <= hi + 1e-12), (p.name, ch, k, kind)
 
 
