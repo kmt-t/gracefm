@@ -23,7 +23,7 @@ from gracefm import channel, metrics, plc, txrx, wavio  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 
 VARS = {"なし": dict(postfilter=False), "区間を広げない": dict(eps=0.5), "既定": dict()}
-MATS = (("fishin", "B200MH"), ("vibeace", "B200MH"), ("demo", "B200H"))
+MATS = (("fishin", "B200MH-A4"), ("vibeace", "B200MH-A4"), ("demo", "B200H"))
 CN0S = (None, 57.0, 63.0, 70.0, 80.0)
 
 
@@ -48,11 +48,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--seconds", type=float, default=3)
     ap.add_argument("--seeds", type=int, default=2)
+    ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--json")
     a = ap.parse_args()
+    if a.workers < 1:
+        ap.error("workers は 1 以上にしてください")
     jobs = [(m, p, c, s, a.seconds) for m, p in MATS for c in CN0S for s in range(a.seeds if c else 1)]
     res = {}
-    with ProcessPoolExecutor() as ex:
+    with ProcessPoolExecutor(max_workers=a.workers) as ex:
         for j, o in ex.map(job, jobs):
             res.setdefault(f"{j[0]}|{'codec' if j[2] is None else int(j[2])}", []).append(o)
     table = {k: {v: [float(np.mean([o[v][i] for o in L])) for i in (0, 1)] for v in VARS} for k, L in res.items()}

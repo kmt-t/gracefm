@@ -8,9 +8,9 @@
   random p%      : 各系統のフレームを独立に p% 落とす
   burst L ms     : 1秒ごとに L ms の遮断。main = 主系だけ、both = 両系統が同時
 構成:
-  1系統・無音     : B200MH のみ (全電力)。欠落は 0 (無音) で埋める
-  1系統・PLC      : B200MH のみ。欠落は PLC (32次 LPC の外挿、10ms 保持・20ms で減衰)
-  2系統・PLC      : B200MH＋S50M (50:50)。帯域ごとに融合し、両方欠けた区間だけ PLC
+  1系統・無音     : B200MH-A4 のみ (全電力)。欠落は 0 (無音) で埋める
+  1系統・PLC      : B200MH-A4 のみ。欠落は PLC (32次 LPC の外挿、10ms 保持・20ms で減衰)
+  2系統・PLC      : B200MH-A4＋S50M (50:50)。帯域ごとに融合し、両方欠けた区間だけ PLC
 数値: 波形SNR [dB] / 両系統とも欠けた時間 (PLC で埋めた時間) [%] / 無音になった時間 [%] / 最長の欠け [ms]
 """
 import argparse
@@ -64,7 +64,7 @@ def job(a):
     mat, kind, val, seed, sec = a
     x, fs = wavio.read(os.path.join(ROOT, "samples", f"{mat}_orig.flac"))
     x = x[: int(sec * fs)]
-    pm, ps = PROFILES["B200MH"], PROFILES["S50M"]
+    pm, ps = PROFILES["B200MH-A4"], PROFILES["S50M"]
     off = pm.block // 2
     block_ms = 1000 * pm.block / pm.fs
     rng = np.random.default_rng(seed)
@@ -101,11 +101,25 @@ def main():
     ap.add_argument("--seconds", type=float, default=5)
     ap.add_argument("--seeds", type=int, default=2)
     ap.add_argument("--materials", default="fishin,vibeace")
+    ap.add_argument("--patterns", default="all", help="all または none:0,random:20,main:200,both:100 の形式")
+    ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--json")
     a = ap.parse_args()
-    jobs = [(m, k, v, s, a.seconds) for m in a.materials.split(",") for k, v in PATTERNS for s in range(a.seeds)]
+    if a.workers < 1:
+        ap.error("workers は 1 以上にしてください")
+    if a.patterns == "all":
+        patterns = PATTERNS
+    else:
+        try:
+            patterns = [(kind, int(value)) for kind, value in
+                        (part.split(":", 1) for part in a.patterns.split(","))]
+        except (ValueError, TypeError):
+            ap.error("patterns は kind:value をカンマで並べてください")
+    if any(pattern not in PATTERNS for pattern in patterns):
+        ap.error("patterns に未定義の欠落条件があります")
+    jobs = [(m, k, v, s, a.seconds) for m in a.materials.split(",") for k, v in patterns for s in range(a.seeds)]
     res = {}
-    with ProcessPoolExecutor() as ex:
+    with ProcessPoolExecutor(max_workers=a.workers) as ex:
         for j, o in ex.map(job, jobs):
             res.setdefault(f"{j[0]}|{j[1]}|{j[2]}", []).append(o)
     table = {}
@@ -117,7 +131,9 @@ def main():
                               for c in CONFIGS), flush=True)
     if a.json:
         with open(a.json, "w") as f:
-            json.dump(dict(cn0=CN0, configs=CONFIGS, patterns=PATTERNS, table=table), f, ensure_ascii=False, indent=1)
+            json.dump(dict(cn0=CN0, configs=CONFIGS, patterns=patterns, seconds=a.seconds,
+                           seeds=a.seeds, main_profile="B200MH-A4", sub_profile="S50M", table=table),
+                      f, ensure_ascii=False, indent=1)
 
 
 if __name__ == "__main__":

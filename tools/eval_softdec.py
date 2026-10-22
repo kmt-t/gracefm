@@ -1,4 +1,4 @@
-"""軟判定の復号の評価 (SPEC 12.4節)。python tools/eval_softdec.py single|iq"""
+"""軟判定の復号の評価 (SPEC 5.5節)。python tools/eval_softdec.py single|iq"""
 import sys; import os; sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 import numpy as np
 from gracefm import metrics, modem, wavio, txrx

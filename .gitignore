@@ -4,3 +4,4 @@ __pycache__/
 *.wav
 !samples/*.wav
 .venv/
+eval_audio/

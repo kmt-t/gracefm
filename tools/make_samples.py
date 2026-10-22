@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """
-samples/ のサンプル wav と、その説明 (samples/README.md) を作る。
+samples/ のサンプル FLAC と、その説明 (samples/README.md) を作る。
 
   python tools/make_samples.py                     # samples/*_orig.flac を入力に使う
   python tools/make_samples.py --fishin Karissa_Hobbs_-_Lets_Go_Fishin.ogg を48kHzに変換したwav \
                                --vibeace Kevin_MacLeod_-_Vibe_Ace.ogg を48kHzに変換したwav   # 原音から作り直す
 
-試験信号 (demo) はこのスクリプトの中で合成する。出力はすべて 32kHz・24bit PCM、各10秒。
-通信路込みのサンプルは最終構成 (主系 = 階層16QAM の B200MH / B200H、副系 = S50M / S100、帯域ごとの融合、
+試験信号 (demo) はこのスクリプトの中で合成する。放送用は32kHz、モニター用は48kHz、各10秒。
+通信路込みのサンプルは採用構成 (主系 = 階層16QAM の B200MH-A4 / B200H、副系 = S50M / S100、帯域ごとの融合、
 軟判定の復号、ポストフィルタ4回) で、同じ受信電力のアナログFM (モノラル) も並べる。
 """
 import argparse
 import os
 import sys
+from concurrent.futures import ProcessPoolExecutor
 
 import numpy as np
 
@@ -90,7 +91,7 @@ def codec(x, p, postfilter=True):
 
 
 POWER_MAIN = 0.5                     # 主系に回す電力の割合 (送信電力の合計は固定)
-CN0_LIST = (80, 66, 60, 57, 54)      # C/N0 [dB-Hz]。66 は 5m・室内の保守的な見積もり (SPEC 9.3節)
+CN0_LIST = (80, 66, 60, 57, 54)      # C/N0 [dB-Hz]。66 は 5m・室内の保守的な見積もり (SPEC 付録D)
 BN = 180e3                           # C/N を表示する雑音帯域 [Hz] (FM放送 1波ぶん)
 ROWS = []
 MON_ROWS = []
@@ -104,8 +105,15 @@ def cn(c):
 def save(name, y, mono, x, desc, fs=32000, rows=None, sub=""):
     path = os.path.join(OUT, sub, name)
     if not (y is x and os.path.exists(path)):          # 原音のファイルはそのまま使う (書き直さない)
-        wavio.write_flac16(path, y[:, :1] if mono else y, fs)
-    snr = metrics.snr_db(x, y) if y is not x else float("inf")
+        wavio.write_flac24(path, y[:, :1] if mono else y, fs)
+    if y is x:
+        snr = float("inf")
+    else:
+        source = name.split("_", 1)[0]
+        reference = os.path.join(OUT, sub, f"{source}_orig48.flac" if sub else f"{source}_orig.flac")
+        stored_ref, _ = wavio.read(reference)
+        stored_y, _ = wavio.read(path)
+        snr = metrics.snr_db(stored_ref, stored_y)
     (ROWS if rows is None else rows).append((os.path.join(sub, name) if sub else name, desc, snr))
     print(f"  {name:40s} {snr:6.1f}dB  {desc}")
 
@@ -123,7 +131,12 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--fishin", help="Let's Go Fishin' (48kHz wav)")
     ap.add_argument("--vibeace", help="Vibe Ace (48kHz wav)")
+    ap.add_argument("--adopted-only", action="store_true",
+                    help="既存のステレオ・モニター・FM・基本層音声を保ち、採用したモノラル主系だけ再生成")
+    ap.add_argument("--workers", type=int, default=3, help="並列に処理する素材数")
     args = ap.parse_args()
+    if args.workers < 1:
+        ap.error("workers は 1 以上にしてください")
     os.makedirs(OUT, exist_ok=True)
 
     sources = []
@@ -148,42 +161,61 @@ def main():
             x = np.repeat(x[:, :1], 2, axis=1)
         sources.append((name, x, mono))
 
-    for name, x, mono in sources:
-        main_p, base_p = ("B200MH", "B200M") if mono else ("B200H", "B200")
-        sub = channel.DEFAULT_SUB[main_p]
-        print(name)
-        save(f"{name}_orig.flac", x, mono, x, "原音（32kHzに変換したもの）")
+    tasks = [(name, x, mono, args.adopted_only) for name, x, mono in sources
+             if not args.adopted_only or mono]
+    if not tasks:
+        ap.error("入力音源がありません")
+    with ProcessPoolExecutor(max_workers=min(args.workers, len(tasks))) as executor:
+        for rows, mon_rows in executor.map(generate_source, tasks):
+            ROWS.extend(rows)
+            MON_ROWS.extend(mon_rows)
+    if args.adopted_only:
+        update_readme_adopted_only()
+    else:
+        write_readme()
+
+
+def generate_source(task):
+    global ROWS, MON_ROWS
+    ROWS, MON_ROWS = [], []
+    name, x, mono, adopted_only = task
+    main_p, base_p = ("B200MH-A4", "B200M") if mono else ("B200H", "B200")
+    sub = channel.DEFAULT_SUB[main_p]
+    print(name, flush=True)
+    save(f"{name}_orig.flac", x, mono, x, "原音（32kHzに変換したもの）")
+    if not adopted_only:
         if name == "demo":
             demo48 = make_demo(48000)
             demo48 = demo48 * (0.89 / np.abs(demo48).max())
         monitor(name, demo48 if name == "demo" else wavio.resample(x, 32000, 48000), mono)
-        save(f"{name}_{main_p}.flac", codec(x, PROFILES[main_p]), mono, x,
-             f"コーデックだけ（通信路なし）。{main_p} の全ビット（基本層＋拡張層、約{PROFILES[main_p].audio_kbps():.0f}kbps）")
+    save(f"{name}_{main_p}.flac", codec(x, PROFILES[main_p]), mono, x,
+         f"コーデックだけ（通信路なし）。{main_p} の全ビット（基本層＋拡張層、約{PROFILES[main_p].audio_kbps():.0f}kbps）")
+    if not adopted_only:
         save(f"{name}_{base_p}.flac", codec(x, PROFILES[base_p]), mono, x,
              f"コーデックだけ。基本層だけ（{base_p}、約{PROFILES[base_p].audio_kbps():.0f}kbps）＝拡張層が全部崩れたときの音")
         save(f"{name}_{base_p}_nopf.flac", codec(x, PROFILES[base_p], postfilter=False), mono, x,
              f"同上、ポストフィルタなし")
-        fm = AnalogFM(x[:, 0], 32000) if mono else None
-        for cn0 in CN0_LIST:
-            y, st, es = channel.link(x, main_p, cn0, sub=sub, power_main=POWER_MAIN, seed=1)
-            save(f"{name}_final_cn0-{cn0}.flac", y, mono, x, link_desc(main_p, sub, cn0, es, "awgn"))
-            if fm is not None:
-                y1 = fm.receive(cn0, np.random.default_rng(1))
-                save(f"{name}_fm_cn0-{cn0}.flac", np.stack([y1, y1], 1), mono, x,
-                     f"アナログFMモノラル。白色雑音のみ。C/N0 {cn0}dB-Hz（C/N {cn(cn0):.1f}dB）。ゴーストなし")
-        for kind, cn0 in (("rayleigh", 60), ("fade10", 66)):
-            y, st, es = channel.link(x, main_p, cn0, sub=sub, power_main=POWER_MAIN, kind_main=kind,
-                                     kind_sub="awgn" if kind == "fade10" else kind, seed=1)
-            plc = st["plc_samples"] / len(x) * 100
-            save(f"{name}_final_{kind}_cn0-{cn0}.flac", y, mono, x,
-                 link_desc(main_p, sub, cn0, es, kind) + f"。欠けて予測で埋めた時間 {plc:.1f}%")
-            if fm is not None:
-                g = channel.fading_gains(int(np.ceil(len(x) / 64)), kind, np.random.default_rng(101))
-                y1 = fm.receive(cn0, np.random.default_rng(1), g)
-                what = "フェージング（同じモデル）" if kind == "rayleigh" else "その周波数が10dB落ちている"
-                save(f"{name}_fm_{kind}_cn0-{cn0}.flac", np.stack([y1, y1], 1), mono, x,
-                     f"アナログFMモノラル。{what}。C/N0 {cn0}dB-Hz（C/N {cn(cn0):.1f}dB）")
-    write_readme()
+    fm = AnalogFM(x[:, 0], 32000) if mono and not adopted_only else None
+    for cn0 in CN0_LIST:
+        y, st, es = channel.link(x, main_p, cn0, sub=sub, power_main=POWER_MAIN, seed=1)
+        save(f"{name}_final_cn0-{cn0}.flac", y, mono, x, link_desc(main_p, sub, cn0, es, "awgn"))
+        if fm is not None:
+            y1 = fm.receive(cn0, np.random.default_rng(1))
+            save(f"{name}_fm_cn0-{cn0}.flac", np.stack([y1, y1], 1), mono, x,
+                 f"アナログFMモノラル。白色雑音のみ。C/N0 {cn0}dB-Hz（C/N {cn(cn0):.1f}dB）。ゴーストなし")
+    for kind, cn0 in (("rayleigh", 60), ("fade10", 66)):
+        y, st, es = channel.link(x, main_p, cn0, sub=sub, power_main=POWER_MAIN, kind_main=kind,
+                                 kind_sub="awgn" if kind == "fade10" else kind, seed=1)
+        plc = st["plc_samples"] / len(x) * 100
+        save(f"{name}_final_{kind}_cn0-{cn0}.flac", y, mono, x,
+             link_desc(main_p, sub, cn0, es, kind) + f"。欠けて予測で埋めた時間 {plc:.1f}%")
+        if fm is not None:
+            g = channel.fading_gains(int(np.ceil(len(x) / 64)), kind, np.random.default_rng(101))
+            y1 = fm.receive(cn0, np.random.default_rng(1), g)
+            what = "フェージング（同じモデル）" if kind == "rayleigh" else "その周波数が10dB落ちている"
+            save(f"{name}_fm_{kind}_cn0-{cn0}.flac", np.stack([y1, y1], 1), mono, x,
+                 f"アナログFMモノラル。{what}。C/N0 {cn0}dB-Hz（C/N {cn(cn0):.1f}dB）")
+    return ROWS, MON_ROWS
 
 
 def monitor(name, x, mono):
@@ -196,7 +228,7 @@ def monitor(name, x, mono):
     kw = dict(fs=48000, rows=MON_ROWS, sub="monitor")
     src = "原音（合成試験信号を48kHzで作ったもの、全帯域）" if name == "demo" else "原音（32kHz の原音を48kHzに変換したもの。元の音源の帯域は約11kHz）"
     save(f"{name}_orig48.flac", x, mono, x, src, **kw)
-    save(f"{name}_M700.flac", codec(x, PROFILES["M700"]), mono, x, "コーデックだけ。M700（701kbps）", **kw)
+    save(f"{name}_M700.flac", codec(x, PROFILES["M700"]), mono, x, "コーデックだけ。M700（約691kbps）", **kw)
     save(f"{name}_M700H.flac", codec(x, mh), mono, x, f"コーデックだけ。M700H の全ビット（約{mh.audio_kbps():.0f}kbps）", **kw)
     save(f"{name}_M700H-base.flac", codec(x, base), mono, x,
          f"コーデックだけ。M700H の基本層だけ（約{base.audio_kbps():.0f}kbps）＝拡張層が全部崩れたときの音", **kw)
@@ -207,14 +239,14 @@ def monitor(name, x, mono):
             y, st, es = channel.link(x, prof, cn0, sub=None, seed=1)
             mod = "階層16QAM" if p.modulation != "qpsk" else "QPSK"
             save(f"{name}_{prof}_cn0-{cn0}.flac", y, mono, x,
-                 f"{prof}（{mod}、占有帯域 約{bw:.0f}kHz）1系統。白色雑音のみ。C/N0 {cn0}dB-Hz（C/N {cn(cn0):.1f}dB）、"
+                 f"{prof}（{mod}、1.25×Rs 約{bw:.0f}kHz）1系統。白色雑音のみ。C/N0 {cn0}dB-Hz（C/N {cn(cn0):.1f}dB）、"
                  f"Es/N0 {es['esn0_main']:.1f}dB", **kw)
 
 
 def write_readme():
     lines = [l for l in README_HEAD.splitlines()]
     lines += ["", "## ファイル一覧", "",
-              "波形SNR：原音との差から求めた値（大きいほど良い。聴感の評価点ではない）。", "",
+              "波形SNR：保存したFLACを読み戻し、原音FLACとの差から求めた値（大きいほど良い。聴感の評価点ではない）。", "",
               "| ファイル | 内容 | 波形SNR |", "|---|---|---|"]
     for name, desc, snr in ROWS:
         lines.append(f"| `{name}` | {desc} | {'—' if not np.isfinite(snr) else f'{snr:.1f}dB'} |")
@@ -226,19 +258,50 @@ def write_readme():
         f.write("\n".join(lines) + "\n")
 
 
+def update_readme_adopted_only():
+    """既存の別方式の測定行を保ち、モノラル主系の測定行だけ置き換える。"""
+    path = os.path.join(OUT, "README.md")
+    measurements = {name: (desc, snr) for name, desc, snr in ROWS}
+    lines = []
+    for line in open(path, encoding="utf-8"):
+        line = line.rstrip("\n")
+        if "ここに掲載した既存のモノラル音声は" in line:
+            continue
+        line = line.replace("このサンプルを生成した時点の構成（主系 B200MH / B200H",
+                            "この方式の放送の採用構成（主系 B200MH-A4 / B200H")
+        line = line.replace("この方式の放送の最終構成（主系 B200MH / B200H",
+                            "この方式の放送の採用構成（主系 B200MH-A4 / B200H")
+        line = line.replace("`*_B200MH`・`*_B200H`", "`*_B200MH-A4`・`*_B200H`")
+        if line.startswith("| `"):
+            name = line.split("`", 2)[1]
+            if name.endswith("_B200MH.flac") or name.endswith("_B200MH-A4.flac"):
+                continue
+            if name in measurements:
+                desc, snr = measurements[name]
+                line = f"| `{name}` | {desc} | {'—' if not np.isfinite(snr) else f'{snr:.1f}dB'} |"
+        lines.append(line)
+        if line.startswith("| `fishin_orig.flac`") or line.startswith("| `vibeace_orig.flac`"):
+            name = line.split("`", 2)[1].replace("_orig.flac", "_B200MH-A4.flac")
+            desc, snr = measurements[name]
+            lines.append(f"| `{name}` | {desc} | {snr:.1f}dB |")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+
 README_HEAD = """# サンプル音声（GraceFM）
 
-- 16bit FLAC（TPDF ディザ）、各10秒。放送用は32kHz（このフォルダ）、モニター用は48kHz（`monitor/`）
+- 劣化音は24bit FLAC、原音は既存の16bit FLAC。各10秒。放送用は32kHz（このフォルダ）、モニター用は48kHz（`monitor/`）
 - `tools/make_samples.py` で生成（このファイルも同じスクリプトが書く）
 
 ## 聴き比べ
 
 | ファイル | 内容 |
 |---|---|
-| `*_final_*` | この方式の放送の最終構成（主系 B200MH / B200H ＋ 副系 S50M / S100、送信電力 50:50） |
+| `*_final_*` | この方式の放送の採用構成（主系 B200MH-A4 / B200H ＋ 副系 S50M / S100、送信電力 50:50） |
 | `*_fm_*` | 同じ受信電力のアナログFM（モノラル、ゴーストなし） |
-| `*_B200MH`・`*_B200H` | コーデックだけ、全ビット（拡張層まで届いたときの上限） |
-| `*_B200M`・`*_B200` | コーデックだけ、基本層だけ（拡張層が全部崩れたときの音） |
+| `*_B200MH-A4`・`*_B200H` | コーデックだけ、全ビット（拡張層まで届いたときの上限） |
+| `*_B200M` | B200M（QPSK、194kbps）の比較用音声。A4の基本層（198kbps）とは別プロファイル |
+| `*_B200` | B200Hの基本層に相当するQPSK音声 |
 
 - おすすめ：`fishin_final_cn0-57` と `fishin_fm_cn0-57`（FM がスレッショルドを割る強さ）、`*_rayleigh_cn0-60`（途切れ方）
 - demo（ステレオ）は FM ステレオのモデルがないため FM なし
@@ -260,8 +323,8 @@ MONITOR_HEAD = """## モニター用（48kHz、`monitor/`）
 
 | ファイル | 内容 |
 |---|---|
-| `*_M700H*` | 階層16QAM、占有帯域 約356kHz（推奨） |
-| `*_M700*` | QPSK、占有帯域 約642kHz（比較用） |
+| `*_M700H*` | 階層16QAM、1.25×Rs 約343kHz（推奨） |
+| `*_M700*` | QPSK、1.25×Rs 約629kHz（比較用） |
 | `*_M700H-base` | M700H の基本層だけ（約329kbps） |
 
 - 1系統・全電力、白色雑音のみ。近距離（1m 程度）は C/N0 約80dB-Hz の見込み

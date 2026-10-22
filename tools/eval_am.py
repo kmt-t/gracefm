@@ -5,7 +5,7 @@
   python tools/eval_am.py --json docs/results/am_eval.json
 
 素材は samples/fishin_orig.flac・vibeace_orig.flac の先頭5秒 (tools/eval_final.py と同じ)。
-FM と最終構成の値は docs/results/final_eval.json を参照 (SPEC 12.12節)。
+FM と放送構成の値は docs/results/final_eval.json を参照 (SPEC 5.2節)。
 """
 import argparse
 import json

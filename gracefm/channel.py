@@ -8,11 +8,13 @@
 import numpy as np
 
 from . import modem
-from .profiles import PROFILES
+from .profiles import PROFILES, Profile
 from .txrx import Transmitter, receive
 
 # 主系に組み合わせる副系 (主系より低いビットレートで、別の周波数で送る受け皿)
-DEFAULT_SUB = {"M700Q16": "S100W", "M700H": "S100W", "M700": "S100W", "B200MH": "S50M", "B200H": "S100", "B200M": "S50M", "B150M": "S50M", "B200": "S100", "B150": "S100"}
+DEFAULT_SUB = {"M700Q16": "S100W", "M700H": "S100W", "M700": "S100W", "B200MH": "S50M",
+               "B200MH-A4": "S50M", "B200H": "S100", "B200M": "S50M", "B150M": "S50M",
+               "B200": "S100", "B150": "S100"}
 
 
 def symbol_rate(p):
@@ -54,15 +56,15 @@ def link(x, main, cn0, sub="auto", power_main=0.5, kind_main="awgn", kind_sub="a
          **rx_kw):
     """
     送信 → 通信路 → 受信。送信電力の合計を C/N0 で与える。
-    main, sub: プロファイル名。sub="auto" なら DEFAULT_SUB、None なら 1系統 (全電力を主系に)。
+    main, sub: プロファイル名または Profile。sub="auto" なら DEFAULT_SUB、None なら 1系統 (全電力を主系に)。
     power_main: 主系に回す電力の割合 (2系統のとき。既定は等分)。
     cipher: 暗号化するとき gracefm.crypto.StreamCipher (送受信で同じもの)。
     返り値: (音声, 受信の統計, {"esn0_main": .., "esn0_sub": ..})
     """
-    pm = PROFILES[main]
+    pm = main if isinstance(main, Profile) else PROFILES[main]
     if sub == "auto":
-        sub = DEFAULT_SUB.get(main)
-    ps = PROFILES[sub] if sub else None
+        sub = DEFAULT_SUB.get(pm.name)
+    ps = (sub if isinstance(sub, Profile) else PROFILES[sub]) if sub else None
     frac = power_main if ps else 1.0
     rng = np.random.default_rng(seed)
     off = pm.block // 2

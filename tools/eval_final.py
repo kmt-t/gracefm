@@ -23,9 +23,10 @@ sys.path.insert(0, ROOT)
 from gracefm import channel, metrics, wavio  # noqa: E402
 from gracefm.analog_fm import AnalogFM  # noqa: E402
 
-MONO = [("FM", None), ("B200M", dict(main="B200M", sub=None)), ("B200MH", dict(main="B200MH", sub=None)),
-        ("B200MH+S50M 50:50", dict(main="B200MH", sub="S50M", power_main=0.5)),
-        ("B200MH+S50M 75:25", dict(main="B200MH", sub="S50M", power_main=0.75))]
+MONO = [("FM", None), ("B200M", dict(main="B200M", sub=None)),
+        ("B200MH-A4", dict(main="B200MH-A4", sub=None)),
+        ("B200MH-A4+S50M 50:50", dict(main="B200MH-A4", sub="S50M", power_main=0.5)),
+        ("B200MH-A4+S50M 75:25", dict(main="B200MH-A4", sub="S50M", power_main=0.75))]
 STEREO = [("B200", dict(main="B200", sub=None)), ("B200H", dict(main="B200H", sub=None)),
           ("B200H+S100 50:50", dict(main="B200H", sub="S100", power_main=0.5)),
           ("B200H+S100 75:25", dict(main="B200H", sub="S100", power_main=0.75))]
@@ -61,8 +62,11 @@ def main():
     ap.add_argument("--seconds", type=float, default=5.0)
     ap.add_argument("--materials", default="fishin,vibeace,demo")
     ap.add_argument("--cn0", default="54,57,60,63,66,70,75,80")
+    ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--json")
     args = ap.parse_args()
+    if args.workers < 1:
+        ap.error("workers は 1 以上にしてください")
     jobs = []
     for m in args.materials.split(","):
         for c in map(float, args.cn0.split(",")):
@@ -72,7 +76,7 @@ def main():
                 jobs.append((m, "rayleigh", c, s, args.seconds))
             jobs.append((m, "fade10", c, 1, args.seconds))
     res = {}
-    with ProcessPoolExecutor() as ex:
+    with ProcessPoolExecutor(max_workers=args.workers) as ex:
         for a, o in ex.map(job, jobs):
             res.setdefault(f"{a[0]}|{a[1]}|{a[2]:g}", []).append(o)
     summ = {k: {n: [round(float(v), 2) for v in np.mean([o[n] for o in L], axis=0)] for n in L[0]}

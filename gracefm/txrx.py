@@ -11,7 +11,8 @@
 import numpy as np
 
 from . import fusion, modem, plc
-from .codec import cells, decode_coeffs, encode_block, exp_range, haar_inverse, ms_to_lr, qmax_of
+from .codec import (attenuator_expanded, cells, decode_coeffs, encode_block, exp_range,
+                    haar_inverse, ms_to_lr, qmax_of)
 from .framing import Layout
 from .crypto import unwrap_counter
 from .kalman import StreamBandKalman
@@ -98,9 +99,10 @@ class StreamDecoder:
             bits = p.bits_m if ch == "M" else p.bits_s
             for k, b in enumerate(bits):
                 if b > 0:
-                    emin = exp_range(k, b, p)[0]
+                    emin = exp_range(k, b, p, ch)[0]
                     o, n = lay.coef_offset[(ch, k)], p.ncoef(k)
-                    steps[o:o + n] = 2.0 ** (bd.eidx[ch][k] + emin)
+                    a = attenuator_expanded(bd.attn[ch][k], p.attenuator_group(ch, k), n)
+                    steps[o:o + n] = 2.0 ** (bd.eidx[ch][k] + emin - a)
                     qn[ci] += np.sum(steps[o:o + n] ** 2) / 12
         tot = qn.copy()
         if p.modulation == "qpsk" and lay.n_unp:
@@ -145,11 +147,12 @@ class StreamDecoder:
                 qmax = qmax_of(b)
                 m = bd.mant[ch][k].astype(float)
                 e = np.int64(bd.eidx[ch][k])
-                step = 2.0 ** (e + exp_range(k, b, p)[0])
+                a = attenuator_expanded(bd.attn[ch][k], p.attenuator_group(ch, k), n)
+                step = 2.0 ** (e + exp_range(k, b, p, ch)[0] - a)
                 z = np.clip(m + du[o:o + n], -qmax, qmax) * step
                 rv = (var[o:o + n] + 1.0 / 12) * step ** 2       # 係数ごとの観測の分散
-                lo, _ = cells(np.clip(np.round(m - dn[o:o + n]), -qmax, qmax).astype(np.int64), e, k, b, p)
-                _, hi = cells(np.clip(np.round(m + up[o:o + n]), -qmax, qmax).astype(np.int64), e, k, b, p)
+                lo, _ = cells(np.clip(np.round(m - dn[o:o + n]), -qmax, qmax).astype(np.int64), e, k, b, p, ch, bd.attn[ch][k])
+                _, hi = cells(np.clip(np.round(m + up[o:o + n]), -qmax, qmax).astype(np.int64), e, k, b, p, ch, bd.attn[ch][k])
                 if self.kf is not None:
                     z, rv = self.kf.update(ch, k, z, rv, scale=qmax * step)
                     lo, hi = np.minimum(lo, z), np.maximum(hi, z)   # 区間は予測で動いた値も含める
