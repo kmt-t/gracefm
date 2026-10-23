@@ -143,3 +143,76 @@ def awgn(sym, snr_db, rng):
     n0 = 10 ** (-snr_db / 10)
     return sym + (rng.normal(0, np.sqrt(n0 / 2), sym.shape)
                   + 1j * rng.normal(0, np.sqrt(n0 / 2), sym.shape))
+
+
+def hybrid_scale(amplitude, lower_bits=4):
+    """全点の平均シンボルエネルギーを1にする半径の倍率。"""
+    levels = 1 << lower_bits
+    radii = 1 + amplitude * (np.arange(levels) - (levels - 1) / 2)
+    return float(np.sqrt(np.mean(radii ** 2)))
+
+
+def hybrid_modulate(u, amplitude=0.08, scramble=None, lower_bits=4):
+    """上位2bit+半径方向の仮数を1係数/複素シンボルにする。"""
+    u = np.asarray(u, np.int64)
+    levels = 1 << lower_bits
+    if np.any((u < 0) | (u >= 4 * levels)):
+        raise ValueError("ハイブリッド仮数が範囲外です")
+    H, L = u // levels, u % levels
+    if scramble is not None:
+        mask = np.asarray(scramble, np.int64).reshape(-1, 3)
+        if len(mask) != len(u):
+            raise ValueError("スクランブル長が係数数と一致しません")
+        H = H ^ (2 * mask[:, 0] + mask[:, 1])
+        L = np.where(mask[:, 2] != 0, levels - 1 - L, L)
+    theta = np.pi / 4 + H * np.pi / 2
+    radius = (1 + amplitude * (L - (levels - 1) / 2)) / hybrid_scale(amplitude, lower_bits)
+    return radius * np.exp(1j * theta)
+
+
+def hybrid_demodulate(symbols, protected_top, amplitude=0.08, scramble=None,
+                      preamble=None, lower_bits=4, phase_only=False,
+                      protected_second=None):
+    """FECで確定した位相bitを拘束に使い、仮数の連続推定値と分散を返す。"""
+    y = np.asarray(symbols, complex)
+    top = np.asarray(protected_top, np.int64)
+    if len(y) != len(top):
+        raise ValueError("高域シンボル数が一致しません")
+    mask = np.zeros((len(y), 3), np.int64) if scramble is None else np.asarray(scramble, np.int64).reshape(-1, 3)
+    if len(mask) != len(y):
+        raise ValueError("スクランブル長が係数数と一致しません")
+    levels = 1 << lower_bits
+    center = (levels - 1) / 2
+    if protected_second is None:
+        h = 2 * top[:, None] + np.array([0, 1])[None, :]
+    else:
+        second = np.asarray(protected_second, np.int64)
+        if second.shape != top.shape or np.any((second < 0) | (second > 1)):
+            raise ValueError("FEC保護済み位相第2bitの数または値が不正です")
+        h = (2 * top + second)[:, None]
+    sent_h = h ^ (2 * mask[:, :1] + mask[:, 1:2])
+    unit = np.exp(1j * (np.pi / 4 + sent_h * np.pi / 2))
+    rotated = y[:, None] * np.conj(unit)
+    proj = rotated.real
+    tangent = rotated.imag
+    scale = hybrid_scale(amplitude, lower_bits)
+    rmin, rmax = (1 - center * amplitude) / scale, (1 + center * amplitude) / scale
+    nearest = np.clip(proj, rmin, rmax)
+    err2 = (proj - nearest) ** 2 + tangent ** 2
+    best = np.argmin(err2, axis=1)
+    # 既知プリアンブルと位相方向の残差を使い、複素雑音の1軸分散を推定する。
+    pilot_var = 0.0 if preamble is None else float(np.mean(np.abs(np.asarray(preamble) - PREAMBLE) ** 2) / 2)
+    tangent_var = float(np.median(tangent[np.arange(len(y)), best] ** 2)) / 0.455 if len(y) else 0.0
+    sigma2 = max(1e-10, (pilot_var + tangent_var) / 2)
+    weights = np.exp(-np.clip((err2 - np.min(err2, axis=1, keepdims=True)) / (2 * sigma2), 0, 700))
+    weights /= weights.sum(axis=1, keepdims=True)
+    obs_l = (proj * scale - 1) / amplitude + center
+    obs_l = np.where(mask[:, 2:3] != 0, levels - 1 - obs_l, obs_l)
+    noise_l = sigma2 * scale ** 2 / amplitude ** 2
+    prior_var = (levels ** 2 - 1) / 12
+    gain = 0.0 if phase_only else prior_var / (prior_var + noise_l)
+    l_est = np.clip(center + gain * (obs_l - center), 0, levels - 1)
+    candidates = levels * h + l_est
+    mean = np.sum(weights * candidates, axis=1)
+    var = np.sum(weights * ((candidates - mean[:, None]) ** 2 + gain * noise_l), axis=1)
+    return np.clip(mean, 0, 4 * levels - 1), var, sigma2

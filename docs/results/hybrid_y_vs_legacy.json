@@ -1,0 +1,677 @@
+{
+  "description": "Stored 10s FLACs, exact matched source and channel case",
+  "comparison": [
+    {
+      "source": "fishin",
+      "case": "codec",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/fishin_B200MH-A4.flac",
+      "y_file": "samples/hybrid_y/fishin_B200MHY-A4.flac",
+      "baseline_sha256": "96bb95e927f3a3da5d2a5f768518dbd57eab810ef1912e2a076b9af3be9a97f8",
+      "y_sha256": "84acd4788314bf8ea2d89a5b21aee8c8cb66c9ca3a69cda2aa5756376aff2d20",
+      "baseline": {
+        "snr_db": 83.89050798878526,
+        "low_0_4khz": 87.93852789398045,
+        "high_4_16khz": 71.77471205401193,
+        "visqol_moslqo": 4.731903724881901
+      },
+      "y": {
+        "snr_db": 52.223548149659685,
+        "low_0_4khz": 87.91687755496612,
+        "high_4_16khz": 38.04188543607508,
+        "visqol_moslqo": 4.722757512848856
+      },
+      "y_minus_baseline": {
+        "snr_db": -31.666959839125575,
+        "low_0_4khz": -0.02165033901432878,
+        "high_4_16khz": -33.73282661793685,
+        "visqol_moslqo": -0.009146212033044776
+      }
+    },
+    {
+      "source": "fishin",
+      "case": "awgn80",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/fishin_final_cn0-80.flac",
+      "y_file": "samples/hybrid_y/fishin_final_cn0-80.flac",
+      "baseline_sha256": "ff6d902f280a9f410e217524f21323aceb3ea740f73694105e01a2172c103e56",
+      "y_sha256": "841ef29d0ca8720ac373f79cce03b1d831a8179d126312ec472058b0d5b66d4e",
+      "baseline": {
+        "snr_db": 56.60930963555696,
+        "low_0_4khz": 70.65601120661648,
+        "high_4_16khz": 42.59423549924329,
+        "visqol_moslqo": 4.704218823976639
+      },
+      "y": {
+        "snr_db": 35.395025086683646,
+        "low_0_4khz": 73.51970599917703,
+        "high_4_16khz": 21.2128795468668,
+        "visqol_moslqo": 4.309275878001561
+      },
+      "y_minus_baseline": {
+        "snr_db": -21.214284548873316,
+        "low_0_4khz": 2.863694792560551,
+        "high_4_16khz": -21.381355952376488,
+        "visqol_moslqo": -0.3949429459750782
+      }
+    },
+    {
+      "source": "fishin",
+      "case": "awgn66",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/fishin_final_cn0-66.flac",
+      "y_file": "samples/hybrid_y/fishin_final_cn0-66.flac",
+      "baseline_sha256": "e53770f3436ea171df1ddd85d770ea2618a001897c3aafdcdf19002ea7d99213",
+      "y_sha256": "d22dbbbad6054be324bf5f3c48420ed50cf51986ab1b8a1a0d0a61bf185af4ab",
+      "baseline": {
+        "snr_db": 33.230697093712045,
+        "low_0_4khz": 39.55239467370184,
+        "high_4_16khz": 20.151257550182812,
+        "visqol_moslqo": 3.9779934209334464
+      },
+      "y": {
+        "snr_db": 25.679702385269504,
+        "low_0_4khz": 43.216104850838306,
+        "high_4_16khz": 11.571207166416436,
+        "visqol_moslqo": 3.683534518291272
+      },
+      "y_minus_baseline": {
+        "snr_db": -7.550994708442541,
+        "low_0_4khz": 3.6637101771364655,
+        "high_4_16khz": -8.580050383766377,
+        "visqol_moslqo": -0.29445890264217445
+      }
+    },
+    {
+      "source": "fishin",
+      "case": "awgn60",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/fishin_final_cn0-60.flac",
+      "y_file": "samples/hybrid_y/fishin_final_cn0-60.flac",
+      "baseline_sha256": "7df550c43eda0e8d918c1f80e081c36306e28362a89e9e8c8bf38ab5e1c6b6ed",
+      "y_sha256": "731983ec5780357be8220ddf546d8bde35baf79ecabd28a64ef464ec0d0bd4ce",
+      "baseline": {
+        "snr_db": 22.696070406721958,
+        "low_0_4khz": 26.340677022163646,
+        "high_4_16khz": 10.84591036362526,
+        "visqol_moslqo": 3.2759317626221813
+      },
+      "y": {
+        "snr_db": 21.076174789522028,
+        "low_0_4khz": 27.369600740894555,
+        "high_4_16khz": 8.004947062539715,
+        "visqol_moslqo": 2.9478100511407828
+      },
+      "y_minus_baseline": {
+        "snr_db": -1.61989561719993,
+        "low_0_4khz": 1.0289237187309084,
+        "high_4_16khz": -2.8409633010855444,
+        "visqol_moslqo": -0.32812171148139857
+      }
+    },
+    {
+      "source": "fishin",
+      "case": "awgn57",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/fishin_final_cn0-57.flac",
+      "y_file": "samples/hybrid_y/fishin_final_cn0-57.flac",
+      "baseline_sha256": "4e2a5764e72451fefe6438be92b29ed15ab0ed9170451f053cd71047cc2b7a61",
+      "y_sha256": "606083349ad58dc4ea62050b803665bf84a3561fc4601db8fb68c3ace7daf58c",
+      "baseline": {
+        "snr_db": 17.141383832234997,
+        "low_0_4khz": 19.819639521771496,
+        "high_4_16khz": 6.138282097956839,
+        "visqol_moslqo": 2.8979199168201104
+      },
+      "y": {
+        "snr_db": 17.542242629803518,
+        "low_0_4khz": 20.81069666984368,
+        "high_4_16khz": 5.980862499431582,
+        "visqol_moslqo": 2.5454345723976175
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.40085879756852094,
+        "low_0_4khz": 0.9910571480721835,
+        "high_4_16khz": -0.1574195985252569,
+        "visqol_moslqo": -0.3524853444224929
+      }
+    },
+    {
+      "source": "fishin",
+      "case": "awgn54",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/fishin_final_cn0-54.flac",
+      "y_file": "samples/hybrid_y/fishin_final_cn0-54.flac",
+      "baseline_sha256": "8e9e673a858e9be8a710e0753ec4d4c5750d509437c455ba3897cc9a3e3deaf3",
+      "y_sha256": "e0f7be995b8d1efed77be8de91f82ef0672fc63653a9b8f5f6c077de80878927",
+      "baseline": {
+        "snr_db": 11.094150078079565,
+        "low_0_4khz": 12.979830305254152,
+        "high_4_16khz": 1.1486466457527718,
+        "visqol_moslqo": 2.742598739860933
+      },
+      "y": {
+        "snr_db": 11.25614775472496,
+        "low_0_4khz": 13.171243525798014,
+        "high_4_16khz": 1.2624546352319062,
+        "visqol_moslqo": 2.555949050941638
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.16199767664539522,
+        "low_0_4khz": 0.19141322054386123,
+        "high_4_16khz": 0.1138079894791344,
+        "visqol_moslqo": -0.186649688919295
+      }
+    },
+    {
+      "source": "fishin",
+      "case": "rayleigh60",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/fishin_final_rayleigh_cn0-60.flac",
+      "y_file": "samples/hybrid_y/fishin_final_rayleigh_cn0-60.flac",
+      "baseline_sha256": "d89e078631f1fa45cb1e6f201b2948ccaf877c83e12795e7d6716416fc74ef7e",
+      "y_sha256": "8618fa4833a545bdd42b90a9b79d703b9c0823aaeca2bd5d261450d07459397e",
+      "baseline": {
+        "snr_db": 12.818893354705967,
+        "low_0_4khz": 13.778317962538019,
+        "high_4_16khz": 5.04116943020607,
+        "visqol_moslqo": 2.94757507642584
+      },
+      "y": {
+        "snr_db": 13.401115321323903,
+        "low_0_4khz": 14.684654999104241,
+        "high_4_16khz": 4.680894569020327,
+        "visqol_moslqo": 2.7062474049822347
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.5822219666179365,
+        "low_0_4khz": 0.9063370365662227,
+        "high_4_16khz": -0.3602748611857427,
+        "visqol_moslqo": -0.24132767144360523
+      }
+    },
+    {
+      "source": "fishin",
+      "case": "main_minus10db66",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/fishin_final_fade10_cn0-66.flac",
+      "y_file": "samples/hybrid_y/fishin_final_fade10_cn0-66.flac",
+      "baseline_sha256": "71bdb50f6d656944ea421e2ce7a60d7086374757a81cca9094f6bb4655838cc5",
+      "y_sha256": "e5056902d07a1665a55b567eaaf13a94b39ec18f132c97eb24801f19ae13de6e",
+      "baseline": {
+        "snr_db": 17.21788567771963,
+        "low_0_4khz": 26.051473704964295,
+        "high_4_16khz": 3.619073556552336,
+        "visqol_moslqo": 2.746913454030407
+      },
+      "y": {
+        "snr_db": 17.827004157676782,
+        "low_0_4khz": 26.268662142496026,
+        "high_4_16khz": 4.28762920671017,
+        "visqol_moslqo": 2.397597930111104
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.6091184799571536,
+        "low_0_4khz": 0.2171884375317319,
+        "high_4_16khz": 0.6685556501578338,
+        "visqol_moslqo": -0.3493155239193033
+      }
+    },
+    {
+      "source": "vibeace",
+      "case": "codec",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/vibeace_B200MH-A4.flac",
+      "y_file": "samples/hybrid_y/vibeace_B200MHY-A4.flac",
+      "baseline_sha256": "42fdc67c79be2b710d18ea07b82e165ac25a095b0466953ee7d210d47704c518",
+      "y_sha256": "4f8d0a3f6738278b1fbacd547ab95a843472441a7b4fccd6a83c982c2504bc85",
+      "baseline": {
+        "snr_db": 90.88384278512629,
+        "low_0_4khz": 91.90068176892593,
+        "high_4_16khz": 72.77186159621105,
+        "visqol_moslqo": 4.731217566587792
+      },
+      "y": {
+        "snr_db": 66.99524428694536,
+        "low_0_4khz": 91.77023428104498,
+        "high_4_16khz": 42.14728194831709,
+        "visqol_moslqo": 4.627191421012918
+      },
+      "y_minus_baseline": {
+        "snr_db": -23.888598498180926,
+        "low_0_4khz": -0.13044748788095717,
+        "high_4_16khz": -30.624579647893967,
+        "visqol_moslqo": -0.10402614557487411
+      }
+    },
+    {
+      "source": "vibeace",
+      "case": "awgn80",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/vibeace_final_cn0-80.flac",
+      "y_file": "samples/hybrid_y/vibeace_final_cn0-80.flac",
+      "baseline_sha256": "ea40ff30881df00f8237bca3a56e77129391f320acf4daf68bd735d3cadda6f9",
+      "y_sha256": "3c621a226ed28ca48535020ba9925bc599720b0c7247fa499803cb462e7e2dbe",
+      "baseline": {
+        "snr_db": 69.266047177513,
+        "low_0_4khz": 75.1894418692892,
+        "high_4_16khz": 45.68105665934346,
+        "visqol_moslqo": 4.722567627642061
+      },
+      "y": {
+        "snr_db": 49.514316731915585,
+        "low_0_4khz": 78.08382002016172,
+        "high_4_16khz": 24.65793537104677,
+        "visqol_moslqo": 4.324707842817031
+      },
+      "y_minus_baseline": {
+        "snr_db": -19.751730445597417,
+        "low_0_4khz": 2.8943781508725266,
+        "high_4_16khz": -21.023121288296693,
+        "visqol_moslqo": -0.3978597848250294
+      }
+    },
+    {
+      "source": "vibeace",
+      "case": "awgn66",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/vibeace_final_cn0-66.flac",
+      "y_file": "samples/hybrid_y/vibeace_final_cn0-66.flac",
+      "baseline_sha256": "1d8a4b5556fa366096ef67b63da413d934c69356d45e34a3579ec1e3772fb7d5",
+      "y_sha256": "1d2d77f8ef5bc9bc56a8a5da210a2e97d179a279e5119344fc78379a689710c1",
+      "baseline": {
+        "snr_db": 44.1017040695793,
+        "low_0_4khz": 46.14405225592628,
+        "high_4_16khz": 23.473529580775818,
+        "visqol_moslqo": 3.825852206329005
+      },
+      "y": {
+        "snr_db": 38.82476952714906,
+        "low_0_4khz": 49.74497312386754,
+        "high_4_16khz": 14.327518578030707,
+        "visqol_moslqo": 3.3379173089612593
+      },
+      "y_minus_baseline": {
+        "snr_db": -5.27693454243024,
+        "low_0_4khz": 3.600920867941255,
+        "high_4_16khz": -9.14601100274511,
+        "visqol_moslqo": -0.48793489736774553
+      }
+    },
+    {
+      "source": "vibeace",
+      "case": "awgn60",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/vibeace_final_cn0-60.flac",
+      "y_file": "samples/hybrid_y/vibeace_final_cn0-60.flac",
+      "baseline_sha256": "342da4cebf7d4036daca50d7a70c8ddc8b8b5b734c9d0463cd1ebe7194472036",
+      "y_sha256": "fb1f779a43877b435a2f9dc3ac71140ed5ba1d183dd9c52610048719107dafc4",
+      "baseline": {
+        "snr_db": 30.850736277495024,
+        "low_0_4khz": 32.03328705509741,
+        "high_4_16khz": 12.17078604280119,
+        "visqol_moslqo": 2.25243197595674
+      },
+      "y": {
+        "snr_db": 30.293520260102124,
+        "low_0_4khz": 32.38541649853532,
+        "high_4_16khz": 9.584755256969954,
+        "visqol_moslqo": 2.168890635869552
+      },
+      "y_minus_baseline": {
+        "snr_db": -0.5572160173928999,
+        "low_0_4khz": 0.3521294434379101,
+        "high_4_16khz": -2.5860307858312357,
+        "visqol_moslqo": -0.08354134008718805
+      }
+    },
+    {
+      "source": "vibeace",
+      "case": "awgn57",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/vibeace_final_cn0-57.flac",
+      "y_file": "samples/hybrid_y/vibeace_final_cn0-57.flac",
+      "baseline_sha256": "284fc945a4d5dbcb9d115c8e1a45a5d27692f9af28911ab035e6b386083d9724",
+      "y_sha256": "d2a0e49d6c493386a557a92e456162a498621b1e972a552f2cd05df549a4d764",
+      "baseline": {
+        "snr_db": 21.424946250149258,
+        "low_0_4khz": 21.801693813134833,
+        "high_4_16khz": 7.213220776533253,
+        "visqol_moslqo": 2.025326448100692
+      },
+      "y": {
+        "snr_db": 22.20892112215362,
+        "low_0_4khz": 22.693169842217635,
+        "high_4_16khz": 6.995006630927922,
+        "visqol_moslqo": 1.9780896010533058
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.7839748720043609,
+        "low_0_4khz": 0.8914760290828028,
+        "high_4_16khz": -0.21821414560533103,
+        "visqol_moslqo": -0.047236847047386066
+      }
+    },
+    {
+      "source": "vibeace",
+      "case": "awgn54",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/vibeace_final_cn0-54.flac",
+      "y_file": "samples/hybrid_y/vibeace_final_cn0-54.flac",
+      "baseline_sha256": "f8cc492418043c8ce87b542c3fdc7684d8e2dcd95af157f636f62cc0bafe67ac",
+      "y_sha256": "40934693b9ebbfc6beff51a60623aebf74db70263146d41790b60d6ce9254992",
+      "baseline": {
+        "snr_db": 13.96836853524446,
+        "low_0_4khz": 14.149127185835109,
+        "high_4_16khz": 2.6815228378914457,
+        "visqol_moslqo": 2.0655766373928888
+      },
+      "y": {
+        "snr_db": 14.05782208283863,
+        "low_0_4khz": 14.234882370465607,
+        "high_4_16khz": 2.852318451103626,
+        "visqol_moslqo": 2.010074518964964
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.08945354759416979,
+        "low_0_4khz": 0.08575518463049825,
+        "high_4_16khz": 0.17079561321218018,
+        "visqol_moslqo": -0.05550211842792496
+      }
+    },
+    {
+      "source": "vibeace",
+      "case": "rayleigh60",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/vibeace_final_rayleigh_cn0-60.flac",
+      "y_file": "samples/hybrid_y/vibeace_final_rayleigh_cn0-60.flac",
+      "baseline_sha256": "792da2730b89bb8c0bad4e703600cea37c17f1a898cd98c6d7d19784608da490",
+      "y_sha256": "7153807fc675b7d0a7039c3f705efb6f02cd050929b608bee7549a3e978fdbe7",
+      "baseline": {
+        "snr_db": 15.352818175341167,
+        "low_0_4khz": 15.438635104026153,
+        "high_4_16khz": 6.917484168127325,
+        "visqol_moslqo": 2.1141420985703605
+      },
+      "y": {
+        "snr_db": 16.074243305192045,
+        "low_0_4khz": 16.191711907568916,
+        "high_4_16khz": 6.460565862094788,
+        "visqol_moslqo": 2.0873893448278635
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.7214251298508785,
+        "low_0_4khz": 0.7530768035427631,
+        "high_4_16khz": -0.456918306032537,
+        "visqol_moslqo": -0.02675275374249697
+      }
+    },
+    {
+      "source": "vibeace",
+      "case": "main_minus10db66",
+      "baseline_profile": "B200MH-A4",
+      "y_profile": "B200MHY-A4",
+      "baseline_file": "samples/vibeace_final_fade10_cn0-66.flac",
+      "y_file": "samples/hybrid_y/vibeace_final_fade10_cn0-66.flac",
+      "baseline_sha256": "97a70367d06cac404b4d24bf27b05257028e99777dea10e95f6f89bdd3ad94c9",
+      "y_sha256": "123ebac3565f11a78e9915f390d4dc26b96a7aa7903aa6670e2774874c7d7870",
+      "baseline": {
+        "snr_db": 29.172809066500797,
+        "low_0_4khz": 35.063834801096604,
+        "high_4_16khz": 5.598943193493312,
+        "visqol_moslqo": 2.0870497738642686
+      },
+      "y": {
+        "snr_db": 29.224738362456,
+        "low_0_4khz": 34.87217328555236,
+        "high_4_16khz": 5.738288725467269,
+        "visqol_moslqo": 1.9963292824122578
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.05192929595520468,
+        "low_0_4khz": -0.19166151554424715,
+        "high_4_16khz": 0.13934553197395694,
+        "visqol_moslqo": -0.09072049145201078
+      }
+    },
+    {
+      "source": "demo",
+      "case": "codec",
+      "baseline_profile": "B200H-A4",
+      "y_profile": "B200HY-A4",
+      "baseline_file": "samples/demo_B200H-A4.flac",
+      "y_file": "samples/hybrid_y/demo_B200HY-A4.flac",
+      "baseline_sha256": "9f13610fbb44deabbbd992049ee5403c1bb96e813424867d85d9f3188b257737",
+      "y_sha256": "4e739fd5b5a5bbe4c06ab57194bed4e886dbcf11400d2eaeaba5b7d05e333cb1",
+      "baseline": {
+        "snr_db": 60.25554892231295,
+        "low_0_4khz": 78.83366873316079,
+        "high_4_16khz": 34.50948265242601,
+        "visqol_moslqo": 4.729853518400283
+      },
+      "y": {
+        "snr_db": 64.94886354096397,
+        "low_0_4khz": 78.91884282699985,
+        "high_4_16khz": 39.3194881072709,
+        "visqol_moslqo": 4.731584251635415
+      },
+      "y_minus_baseline": {
+        "snr_db": 4.693314618651023,
+        "low_0_4khz": 0.08517409383905772,
+        "high_4_16khz": 4.810005454844891,
+        "visqol_moslqo": 0.0017307332351323979
+      }
+    },
+    {
+      "source": "demo",
+      "case": "awgn80",
+      "baseline_profile": "B200H-A4",
+      "y_profile": "B200HY-A4",
+      "baseline_file": "samples/demo_final_cn0-80.flac",
+      "y_file": "samples/hybrid_y/demo_final_cn0-80.flac",
+      "baseline_sha256": "9507f3957c336f2f380ebb39b431ceb3ffb84bceff8cfb5c1b756f7ab6adadd3",
+      "y_sha256": "91445919a2d70869d300fec420f0cd0891650a0f89f8438aa59d98fdd44b1924",
+      "baseline": {
+        "snr_db": 50.1371573364539,
+        "low_0_4khz": 66.79578533921307,
+        "high_4_16khz": 24.425091638611917,
+        "visqol_moslqo": 4.687477925164822
+      },
+      "y": {
+        "snr_db": 47.851933006176786,
+        "low_0_4khz": 57.92192886169271,
+        "high_4_16khz": 22.49397532720469,
+        "visqol_moslqo": 4.54356163268209
+      },
+      "y_minus_baseline": {
+        "snr_db": -2.285224330277117,
+        "low_0_4khz": -8.873856477520356,
+        "high_4_16khz": -1.9311163114072265,
+        "visqol_moslqo": -0.1439162924827322
+      }
+    },
+    {
+      "source": "demo",
+      "case": "awgn66",
+      "baseline_profile": "B200H-A4",
+      "y_profile": "B200HY-A4",
+      "baseline_file": "samples/demo_final_cn0-66.flac",
+      "y_file": "samples/hybrid_y/demo_final_cn0-66.flac",
+      "baseline_sha256": "7ed23e45e9507c7b1d7afdc6e16868a8068a7a5a683998fa2d561aa67955b024",
+      "y_sha256": "69235e319221f7eca1e66fa8032740aba58b6a96d15ccce8fae49dbc24c6ad32",
+      "baseline": {
+        "snr_db": 32.813776058766166,
+        "low_0_4khz": 49.071626021158025,
+        "high_4_16khz": 7.110957464284555,
+        "visqol_moslqo": 3.116124163065545
+      },
+      "y": {
+        "snr_db": 33.56160971172023,
+        "low_0_4khz": 41.43584262316529,
+        "high_4_16khz": 8.526310488282691,
+        "visqol_moslqo": 2.7402072064859366
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.7478336529540641,
+        "low_0_4khz": -7.635783397992732,
+        "high_4_16khz": 1.4153530239981365,
+        "visqol_moslqo": -0.37591695657960855
+      }
+    },
+    {
+      "source": "demo",
+      "case": "awgn60",
+      "baseline_profile": "B200H-A4",
+      "y_profile": "B200HY-A4",
+      "baseline_file": "samples/demo_final_cn0-60.flac",
+      "y_file": "samples/hybrid_y/demo_final_cn0-60.flac",
+      "baseline_sha256": "43b4d87b6ba951923f8f39e7add09dd530ebcbfaa5e825f66f3269f99957621d",
+      "y_sha256": "b563a6d8096a1e422cdab620e68e6b2c156f3ee6f93b93192e5e260333eaa158",
+      "baseline": {
+        "snr_db": 23.797824217753213,
+        "low_0_4khz": 24.659958840909795,
+        "high_4_16khz": 5.385641740213853,
+        "visqol_moslqo": 2.3891670181180187
+      },
+      "y": {
+        "snr_db": 24.824564689487897,
+        "low_0_4khz": 26.048527686371212,
+        "high_4_16khz": 5.080868441203185,
+        "visqol_moslqo": 2.39296957553675
+      },
+      "y_minus_baseline": {
+        "snr_db": 1.0267404717346835,
+        "low_0_4khz": 1.3885688454614176,
+        "high_4_16khz": -0.30477329901066774,
+        "visqol_moslqo": 0.003802557418731478
+      }
+    },
+    {
+      "source": "demo",
+      "case": "awgn57",
+      "baseline_profile": "B200H-A4",
+      "y_profile": "B200HY-A4",
+      "baseline_file": "samples/demo_final_cn0-57.flac",
+      "y_file": "samples/hybrid_y/demo_final_cn0-57.flac",
+      "baseline_sha256": "57d6d73b434f65c08506f89cd860bbadd8f1ac298f9ff7185be169d6c333d4d0",
+      "y_sha256": "b14746e9ce928df002d3e4b7003ebe84419b436632f64f8d6634ec12e8861f6b",
+      "baseline": {
+        "snr_db": 16.174958538452362,
+        "low_0_4khz": 16.47360240563262,
+        "high_4_16khz": 1.985808801672604,
+        "visqol_moslqo": 2.33385810655257
+      },
+      "y": {
+        "snr_db": 16.311685832883832,
+        "low_0_4khz": 16.65311757559573,
+        "high_4_16khz": 1.582248242502311,
+        "visqol_moslqo": 2.3086399288594954
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.13672729443146991,
+        "low_0_4khz": 0.17951516996311057,
+        "high_4_16khz": -0.4035605591702931,
+        "visqol_moslqo": -0.02521817769307466
+      }
+    },
+    {
+      "source": "demo",
+      "case": "awgn54",
+      "baseline_profile": "B200H-A4",
+      "y_profile": "B200HY-A4",
+      "baseline_file": "samples/demo_final_cn0-54.flac",
+      "y_file": "samples/hybrid_y/demo_final_cn0-54.flac",
+      "baseline_sha256": "212ac0e9c8ed6ed55fc72b57b3e62c8a28e317c0dbd4e6674df66be7ad0b1440",
+      "y_sha256": "6b5740092ea7b5eb0772883254396784dbab81242d79c5af53149c1d38beb5c4",
+      "baseline": {
+        "snr_db": 8.78756070380394,
+        "low_0_4khz": 8.863933035743823,
+        "high_4_16khz": -0.03195970727201984,
+        "visqol_moslqo": 2.795639273663837
+      },
+      "y": {
+        "snr_db": 8.736408608857086,
+        "low_0_4khz": 8.81187861704264,
+        "high_4_16khz": -0.03869440486699682,
+        "visqol_moslqo": 2.7662344764251676
+      },
+      "y_minus_baseline": {
+        "snr_db": -0.05115209494685402,
+        "low_0_4khz": -0.05205441870118399,
+        "high_4_16khz": -0.006734697594976982,
+        "visqol_moslqo": -0.02940479723866929
+      }
+    },
+    {
+      "source": "demo",
+      "case": "rayleigh60",
+      "baseline_profile": "B200H-A4",
+      "y_profile": "B200HY-A4",
+      "baseline_file": "samples/demo_final_rayleigh_cn0-60.flac",
+      "y_file": "samples/hybrid_y/demo_final_rayleigh_cn0-60.flac",
+      "baseline_sha256": "4b0caf246a1bd59ae6d04fdbe50d1e43f75e877a3867155014b9c1c29ce2de3c",
+      "y_sha256": "ed62c1e9b9d0cdcba23471aab99438511cd71da51ec9aa70df1324ca65b55bb0",
+      "baseline": {
+        "snr_db": 11.191271091523646,
+        "low_0_4khz": 11.252644000156732,
+        "high_4_16khz": 3.177940848018059,
+        "visqol_moslqo": 2.3994923531666994
+      },
+      "y": {
+        "snr_db": 11.030159293836476,
+        "low_0_4khz": 11.086483708804113,
+        "high_4_16khz": 3.3264637342753858,
+        "visqol_moslqo": 2.429081327238337
+      },
+      "y_minus_baseline": {
+        "snr_db": -0.16111179768716966,
+        "low_0_4khz": -0.16616029135261812,
+        "high_4_16khz": 0.1485228862573269,
+        "visqol_moslqo": 0.02958897407163752
+      }
+    },
+    {
+      "source": "demo",
+      "case": "main_minus10db66",
+      "baseline_profile": "B200H-A4",
+      "y_profile": "B200HY-A4",
+      "baseline_file": "samples/demo_final_fade10_cn0-66.flac",
+      "y_file": "samples/hybrid_y/demo_final_fade10_cn0-66.flac",
+      "baseline_sha256": "57800c5f02dc8f543ae5f47b4dcf403f32981f529b158ccd750bd70d60a59104",
+      "y_sha256": "e1971f4c5c26fa1d26f9777262612a5b524a13f3f9e1cf1bab630266cff95ee0",
+      "baseline": {
+        "snr_db": 26.323347830441786,
+        "low_0_4khz": 41.49396234138494,
+        "high_4_16khz": 0.6505046947448012,
+        "visqol_moslqo": 2.271914734000186
+      },
+      "y": {
+        "snr_db": 26.320264922327084,
+        "low_0_4khz": 41.45858970203457,
+        "high_4_16khz": 0.6484354662904561,
+        "visqol_moslqo": 2.22759341543272
+      },
+      "y_minus_baseline": {
+        "snr_db": -0.003082908114702576,
+        "low_0_4khz": -0.035372639350370605,
+        "high_4_16khz": -0.0020692284543450956,
+        "visqol_moslqo": -0.04432131856746624
+      }
+    }
+  ]
+}

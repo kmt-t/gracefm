@@ -41,6 +41,19 @@ def qmax_of(b):
     return 2 ** (b - 1) - 1
 
 
+def hybrid_band(profile: Profile, ch: str, k: int) -> bool:
+    return profile.hybrid and ch in profile.hybrid_channels and k >= profile.hybrid_start_k
+
+
+def qmin_of(b, profile: Profile, ch: str, k: int):
+    """実験高域だけ負側に1値多い2の補数範囲を使い、全2^b点を利用する。"""
+    return -(1 << (b - 1)) if hybrid_band(profile, ch, k) else -qmax_of(b)
+
+
+def offset_of(b, profile: Profile, ch: str, k: int):
+    return -qmin_of(b, profile, ch, k)
+
+
 def exp_range(k, b, profile: Profile, ch="M"):
     """帯域 k・仮数幅 b・プロファイルで固定する指数範囲 [emin, emax]。
 
@@ -59,18 +72,20 @@ def exp_range(k, b, profile: Profile, ch="M"):
 def quantize(c, k, b, profile: Profile, clip_opt=True, ch="M"):
     """
     c: (..., ncoef) → (仮数 m (..., ncoef) int, 指数インデックス eidx (...) int)
-    指数 e はブロックごとに共有。m = clip(round(c / 2^e), -qmax, qmax)。
+    指数 e はブロックごとに共有。通常は m = clip(round(c / 2^e), -qmax, qmax)。
+    実験用ハイブリッド高域だけ負端を -2^(b-1) として全2^b値を使う。
     clip_opt: 指数を 1 つ下げて少しクリップした方が誤差が小さければそちらを選ぶ
               (エンコーダ側だけの選択。デコーダは変わらない)。
     """
     qmax = qmax_of(b)
+    qmin = qmin_of(b, profile, ch, k)
     emin, emax = exp_range(k, b, profile, ch)
     peak = np.abs(c).max(axis=-1)
     e = np.ceil(np.log2(np.maximum(peak, 1e-300) / qmax))
     e = np.clip(e, emin, emax)
 
     def q(ev):
-        m = np.clip(np.round(c / np.exp2(ev)[..., None]), -qmax, qmax)
+        m = np.clip(np.round(c / np.exp2(ev)[..., None]), qmin, qmax)
         return m, ((c - m * np.exp2(ev)[..., None]) ** 2).sum(axis=-1)
 
     m, err = q(e)
@@ -91,6 +106,7 @@ def quantize_attenuated(c, k, b, profile: Profile, clip_opt=True, ch="M"):
         return m, e, np.zeros(np.shape(c)[:-1] + (0,), np.int64)
     c = np.asarray(c)
     qmax = qmax_of(b)
+    qmin = qmin_of(b, profile, ch, k)
     emin, emax = exp_range(k, b, profile, ch)
     peak = np.max(np.abs(c), axis=-1)
     e0 = np.clip(np.ceil(np.log2(np.maximum(peak, 1e-300) / qmax)), emin, emax)
@@ -98,8 +114,8 @@ def quantize_attenuated(c, k, b, profile: Profile, clip_opt=True, ch="M"):
 
     def candidate(e):
         st = np.exp2(e)[..., None, None]
-        m0 = np.clip(np.round(cg / st), -qmax, qmax)
-        m1 = np.clip(np.round(cg / (st * 0.5)), -qmax, qmax)
+        m0 = np.clip(np.round(cg / st), qmin, qmax)
+        m1 = np.clip(np.round(cg / (st * 0.5)), qmin, qmax)
         err0 = np.sum((cg - m0 * st) ** 2, axis=-1)
         err1 = np.sum((cg - m1 * st * 0.5) ** 2, axis=-1)
         attn = (err1 < err0).astype(np.int64)
@@ -144,7 +160,7 @@ def cells(m, eidx, k, b, profile: Profile, ch="M", attn=None):
     各係数について、元の係数が取り得る区間 [lo, hi] (量子化器の逆像。ポストフィルタの射影に使う)。
 
     飽和していない値 (|m| < qmax): 丸めの区間 [(m - 0.5)·step, (m + 0.5)·step]。
-    飽和した値 (m = ±qmax): エンコーダは指数として e0 = ceil(log2(peak / qmax)) か、クリップを許す
+    飽和した値 (通常 m = ±qmax、実験高域の負端は qmin): エンコーダは指数として e0 = ceil(log2(peak / qmax)) か、クリップを許す
       e0 - 1 のどちらかを選ぶ (quantize)。デコーダはどちらか区別できないので両方を含める。
       e0 のとき |c| <= qmax·step、e0 - 1 のとき |c| <= 2·qmax·step。さらに入力 |x| <= 1 から
       |c| <= 2^(lev/2) (exp_range の gain)。よって m = +qmax の区間は
@@ -154,6 +170,7 @@ def cells(m, eidx, k, b, profile: Profile, ch="M", attn=None):
     """
     emin, _ = exp_range(k, b, profile, ch)
     qmax = qmax_of(b)
+    qmin = qmin_of(b, profile, ch, k)
     gain = 2.0 ** (band_level(k, profile.levels) / 2)
     step = _step(m, eidx, emin)
     if attn is not None:
@@ -161,8 +178,9 @@ def cells(m, eidx, k, b, profile: Profile, ch="M", attn=None):
     lo = (m - 0.5) * step
     hi = (m + 0.5) * step
     top = np.minimum((4 if attn is not None else 2) * qmax * step, gain)
+    bottom = np.minimum((4 if attn is not None else 2) * -qmin * step, gain)
     hi = np.where(m == qmax, top, hi)
-    lo = np.where(m == -qmax, -top, lo)
+    lo = np.where(m == qmin, -bottom, lo)
     return lo, hi
 
 

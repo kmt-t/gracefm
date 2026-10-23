@@ -24,13 +24,13 @@ from gracefm.profiles import PROFILES  # noqa: E402
 
 
 def run(blocks, p, iters):
-    pf = PostFilter(p.levels, iters) if iters > 0 else None
+    pf = PostFilter(p.levels, iters, p.block) if iters > 0 else None
     out = []
     for coefs, cell in blocks:
         if pf is None:
             M, S = haar_inverse(coefs["M"]), haar_inverse(coefs["S"])
         else:
-            M, S = pf.process("M", coefs["M"], cell["M"]), pf.process("S", coefs["S"], cell["S"])
+            M, S = pf.process("M", coefs["M"], cell["M"]), haar_inverse(coefs["S"])
         out.append(ms_to_lr(M, S))
     return np.concatenate(out)
 

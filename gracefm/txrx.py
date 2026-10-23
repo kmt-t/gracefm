@@ -12,8 +12,8 @@ import numpy as np
 
 from . import fusion, modem, plc
 from .codec import (attenuator_expanded, cells, decode_coeffs, encode_block, exp_range,
-                    haar_inverse, ms_to_lr, qmax_of)
-from .framing import Layout
+                    haar_inverse, ms_to_lr, offset_of, qmax_of, qmin_of)
+from .framing import HybridLayout, Layout
 from .crypto import unwrap_counter
 from .kalman import StreamBandKalman
 from .postfilter import PAD, PostFilter
@@ -23,14 +23,17 @@ from .profiles import Profile
 class Transmitter:
     def __init__(self, profile: Profile, stream_id=0, offset=0, clip_opt=True, cipher=None):
         """cipher: gracefm.crypto.StreamCipher (暗号化するとき)"""
+        if profile.hybrid and cipher is not None:
+            raise ValueError("実験用ハイブリッドプロファイルはAES-CTR暗号化に未対応です")
         self.p = profile
         self.sid = stream_id
         self.offset = offset
         self.clip_opt = clip_opt
         self.cipher = cipher
-        self.layout = Layout(profile, encrypted=cipher is not None)
+        self.layout = HybridLayout(profile) if profile.hybrid else Layout(profile, encrypted=cipher is not None)
         self.frame_no = 0
-        self.nsym = modem.n_symbols(self.layout.n_tx, self.layout.n_strong, profile.modulation)
+        self.digital_nsym = modem.n_symbols(self.layout.n_tx, self.layout.n_strong, profile.modulation)
+        self.nsym = self.digital_nsym + (self.layout.n_hybrid if profile.hybrid else 0)
         self.counter = 0
 
     def frame(self, xblock):
@@ -41,11 +44,17 @@ class Transmitter:
             ks = self.cipher.keystream(self.sid, self.frame_no, self.layout.n_keystream)
         bits = self.layout.pack(bd, self.sid, self.frame_no, ks)
         self.frame_no += 1
-        self.counter = self.frame_no & 0xFF
-        buf = np.zeros(self.nsym * modem.bits_per_symbol(self.p.modulation), np.int64)
+        self.counter = self.frame_no & (0xFFFF if self.p.experimental_tag else 0xFF)
+        buf = np.zeros(self.digital_nsym * modem.bits_per_symbol(self.p.modulation), np.int64)
         buf[: len(bits)] = bits
         buf ^= modem.prbs(len(buf))                      # スクランブル (詰め物も含む)
-        return modem.modulate(buf, self.nsym, self.p.modulation, self.p.alpha)
+        digital = modem.modulate(buf, self.digital_nsym, self.p.modulation, self.p.alpha)
+        if not self.p.hybrid:
+            return digital
+        mask = modem.prbs(len(buf) + 3 * self.layout.n_hybrid)[len(buf):]
+        high = modem.hybrid_modulate(self.layout.hybrid_u(bd), self.p.hybrid_amplitude,
+                                     mask, self.p.hybrid_bits - 2)
+        return np.concatenate([digital, high])
 
     def run(self, x):
         """x: (n, 2) → フレームのリスト (系統のずらしを含む)"""
@@ -61,13 +70,16 @@ class Transmitter:
 
 class StreamDecoder:
     def __init__(self, profile: Profile, postfilter=True, pf_iters=None, soft_decode=True, eps=0.02,
-                 kalman_bands=None, kalman_order=2, cipher=None):
+                 kalman_bands=None, kalman_order=2, cipher=None, hybrid_phase_only=False):
         """
         soft_decode=True: 非保護ビットを硬判定せず、事後確率で重み付けした仮数の期待値で復号する
                           (modem.bit_probs。保護部は CRC が通った確定値)。False なら硬判定 (比較用)。
         eps: ポストフィルタの量子化区間を広げるとき、事後確率が eps〜1-eps のビットを「どちらもあり得る」とみなす
         """
+        if profile.hybrid and cipher is not None:
+            raise ValueError("実験用ハイブリッドプロファイルはAES-CTR暗号化に未対応です")
         self.p = profile
+        self.hybrid_phase_only = hybrid_phase_only
         self.soft_decode = soft_decode
         self.eps = eps
         # 系統ごとの帯域カルマン (軟判定のときだけ)。kalman_bands = 帯域番号のリスト / "all" / None
@@ -76,12 +88,40 @@ class StreamDecoder:
                    if (kalman_bands is not None and soft_decode) else None)
         self.cipher = cipher
         self.last_frame_no = -1
-        self.layout = Layout(profile, encrypted=cipher is not None)
+        self.layout = HybridLayout(profile) if profile.hybrid else Layout(profile, encrypted=cipher is not None)
+        self.digital_nsym = modem.n_symbols(self.layout.n_tx, self.layout.n_strong, profile.modulation)
         iters = profile.pf_iters if pf_iters is None else pf_iters
         self.pf = PostFilter(profile.levels, iters, profile.block) if postfilter else None
         self.last_ok = False
         self.stats = {"frames": 0, "lost": 0, "crc_fail": 0}
         self.last_r = (np.nan, np.nan)          # 直前フレームの誤差分散の見積もり (M, S)
+        self.hybrid_variance = {}
+
+    def _recover_hybrid(self, sym, bd):
+        lay, p = self.layout, self.p
+        start = len(modem.PREAMBLE) + self.digital_nsym
+        if len(sym) != start + lay.n_hybrid:
+            raise ValueError("ハイブリッドフレームのシンボル数が一致しません")
+        b = p.hybrid_bits
+        protected_u = np.array([int(bd.mant[ch][k][j]) + offset_of(b, p, ch, k)
+                                for ch, k, j in lay.hybrid_items], np.int64)
+        top = protected_u >> (b - 1)
+        second = (protected_u >> (b - 2)) & 1 if p.protect_k >= 2 else None
+        digital_bits = self.digital_nsym * modem.bits_per_symbol(p.modulation)
+        mask = modem.prbs(digital_bits + 3 * lay.n_hybrid)[digital_bits:]
+        u, var, sigma2 = modem.hybrid_demodulate(sym[start:], top, p.hybrid_amplitude,
+                                                 mask, sym[:len(modem.PREAMBLE)], b - 2,
+                                                 self.hybrid_phase_only,
+                                                 protected_second=second)
+        self.hybrid_variance = {}
+        for i, (ch, k, j) in enumerate(lay.hybrid_items):
+            if (ch, k) not in self.hybrid_variance:
+                self.hybrid_variance[(ch, k)] = np.zeros(p.ncoef(k))
+                bd.mant[ch][k] = bd.mant[ch][k].astype(float)
+            bd.mant[ch][k][j] = u[i] - offset_of(b, p, ch, k)
+            self.hybrid_variance[(ch, k)][j] = var[i]
+        self.stats["hybrid_axis_noise_variance_sum"] = self.stats.get("hybrid_axis_noise_variance_sum", 0.0) + sigma2
+        self.stats["hybrid_frames"] = self.stats.get("hybrid_frames", 0) + 1
 
     def error_variance(self, bd, soft_unp):
         """
@@ -120,8 +160,6 @@ class StreamDecoder:
           期待値   E[u] = 硬判定の u + Σ (p1 - 硬判定ビット)·2^pos
           事後分散 Σ p1 (1 - p1)·4^pos
           区間     事後確率が eps〜1-eps のビットは 0 と 1 のどちらもあり得るとして、量子化区間をその範囲まで広げる
-        (仮数に 0 付近へ集まる事前分布を入れる案は、指数でブロックのピークを正規化しているため仮数が 0 付近に
-        集まらず、かえって悪化したので採らない。不確かなビットの組み合わせを列挙しても結果はほぼ同じだった)
         返り値: (帯域係数, 量子化区間, 誤差分散 (M, S) / 1サンプル)
         """
         p, lay = self.p, self.layout
@@ -145,14 +183,17 @@ class StreamDecoder:
                     continue
                 o = lay.coef_offset[(ch, k)]
                 qmax = qmax_of(b)
+                qmin = qmin_of(b, p, ch, k)
                 m = bd.mant[ch][k].astype(float)
                 e = np.int64(bd.eidx[ch][k])
                 a = attenuator_expanded(bd.attn[ch][k], p.attenuator_group(ch, k), n)
                 step = 2.0 ** (e + exp_range(k, b, p, ch)[0] - a)
-                z = np.clip(m + du[o:o + n], -qmax, qmax) * step
-                rv = (var[o:o + n] + 1.0 / 12) * step ** 2       # 係数ごとの観測の分散
-                lo, _ = cells(np.clip(np.round(m - dn[o:o + n]), -qmax, qmax).astype(np.int64), e, k, b, p, ch, bd.attn[ch][k])
-                _, hi = cells(np.clip(np.round(m + up[o:o + n]), -qmax, qmax).astype(np.int64), e, k, b, p, ch, bd.attn[ch][k])
+                z = np.clip(m + du[o:o + n], qmin, qmax) * step
+                extra = self.hybrid_variance.get((ch, k), 0)
+                rv = (var[o:o + n] + extra + 1.0 / 12) * step ** 2
+                spread = 2 * np.sqrt(extra)
+                lo, _ = cells(np.clip(np.round(m - dn[o:o + n] - spread), qmin, qmax).astype(np.int64), e, k, b, p, ch, bd.attn[ch][k])
+                _, hi = cells(np.clip(np.round(m + up[o:o + n] + spread), qmin, qmax).astype(np.int64), e, k, b, p, ch, bd.attn[ch][k])
                 if self.kf is not None:
                     z, rv = self.kf.update(ch, k, z, rv, scale=qmax * step)
                     lo, hi = np.minimum(lo, z), np.maximum(hi, z)   # 区間は予測で動いた値も含める
@@ -172,10 +213,15 @@ class StreamDecoder:
         lay = self.layout
         self.stats["frames"] += 1
         bd = None
+        self.hybrid_variance = {}
+        expected_symbols = len(modem.PREAMBLE) + self.digital_nsym + (lay.n_hybrid if p.hybrid else 0)
+        if sym is not None and len(sym) != expected_symbols:
+            sym = None
+        digital_sym = sym[:len(modem.PREAMBLE) + self.digital_nsym] if sym is not None and p.hybrid else sym
         if sym is None:
             self.stats["lost"] += 1
         elif self.soft_decode:
-            p1, llr = modem.bit_probs(sym, lay.n_tx, p.modulation, p.alpha)
+            p1, llr = modem.bit_probs(digital_sym, lay.n_tx, p.modulation, p.alpha)
             s = modem.prbs(lay.n_tx).astype(bool)        # スクランブルを戻す
             p1, llr = np.where(s, 1 - p1, p1), np.where(s, -llr, llr)
             bd, hdr = lay.unpack(llr[: lay.n_coded], (p1[lay.n_coded:] > 0.5).astype(np.int64), self._ks_for)
@@ -186,12 +232,13 @@ class StreamDecoder:
             if bd is None:
                 self.stats["crc_fail"] += 1
         else:
-            soft, hard = modem.demodulate(sym, lay.n_tx, p.modulation, p.alpha)
+            soft, hard = modem.demodulate(digital_sym, lay.n_tx, p.modulation, p.alpha)
             sc = modem.prbs(len(soft))                   # スクランブルを戻す (軟値は強い位置の分だけ)
             soft = soft * (1 - 2 * sc)
             hard = hard ^ modem.prbs(len(hard))
             self._axis = soft
             bd, _ = lay.unpack(soft[: lay.n_coded], hard[lay.n_coded:], self._ks_for)
+            p1 = hard.astype(float)
             if bd is None:
                 self.stats["crc_fail"] += 1
         if bd is None:
@@ -204,7 +251,9 @@ class StreamDecoder:
                         if b > 0:
                             self.kf.predict_only(ch, k, p.ncoef(k))
             return np.zeros((p.block, 2)), False
-        if self.soft_decode:
+        if p.hybrid:
+            self._recover_hybrid(sym, bd)
+        if self.soft_decode or p.hybrid:
             coefs, cell, R = self.soft_coeffs(bd, p1[lay.n_coded:lay.n_tx])
             self.last_r = tuple(R)
         else:
@@ -213,7 +262,7 @@ class StreamDecoder:
             coefs, cell = decode_coeffs(bd, p)
         out = {}
         for ch in ("M", "S"):
-            if self.pf is None:
+            if self.pf is None or ch == "S":
                 out[ch] = haar_inverse(coefs[ch])
             else:
                 if not self.last_ok:
@@ -255,7 +304,7 @@ class StreamDecoder:
 
 def receive(profile: Profile, framesA, framesB, n, offset_b, postfilter=True, plc_order=32,
             return_streams=False, soft_decode=True, profile_b=None,
-            kalman_bands=None, kalman_order=2, cipher=None):
+            kalman_bands=None, kalman_order=2, cipher=None, hybrid_phase_only=False):
     """
     2系統 (framesB=None なら 1系統) を受信して (n, 2) の音声を返す。
     return_streams=True なら stats に各系統の時刻合わせ済み出力と重みの推移も入れる (評価用)。
@@ -266,12 +315,14 @@ def receive(profile: Profile, framesA, framesB, n, offset_b, postfilter=True, pl
     pb = profile if profile_b is None else profile_b
     assert pb.fs == profile.fs and pb.block == profile.block
     dA = StreamDecoder(profile, postfilter, soft_decode=soft_decode, kalman_bands=kalman_bands,
-                       kalman_order=kalman_order, cipher=cipher)
+                       kalman_order=kalman_order, cipher=cipher,
+                       hybrid_phase_only=hybrid_phase_only)
     yA, vA = dA.run(framesA, n, 0)
     stats = {"A": dA.stats}
     if framesB is not None:
         dB = StreamDecoder(pb, postfilter, soft_decode=soft_decode, kalman_bands=kalman_bands,
-                           kalman_order=kalman_order, cipher=cipher)
+                           kalman_order=kalman_order, cipher=cipher,
+                           hybrid_phase_only=hybrid_phase_only)
         yB, vB = dB.run(framesB, n, offset_b)
         stats["B"] = dB.stats
         y, v, tr = fusion.fuse_band(yA, vA, yB, vB, profile.block // 2, dA.rb_trace, dB.rb_trace)

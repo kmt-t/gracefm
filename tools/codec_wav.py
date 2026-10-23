@@ -48,7 +48,7 @@ def main():
         if pf is None:
             M, S = haar_inverse(coefs["M"]), haar_inverse(coefs["S"])
         else:
-            M, S = pf.process("M", coefs["M"], cell["M"]), pf.process("S", coefs["S"], cell["S"])
+            M, S = pf.process("M", coefs["M"], cell["M"]), haar_inverse(coefs["S"])
         out[i * p.block:(i + 1) * p.block] = ms_to_lr(M, S)
     y = out[:n]
     wavio.write(args.output, y, p.fs)

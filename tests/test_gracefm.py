@@ -316,6 +316,45 @@ def test_layered_profile():
     assert metrics.snr_db(x, y) > metrics.snr_db(x, yb) + 20
 
 
+def test_b200h_soft_postfilter_preserves_high_side_signal():
+    """弱いQAM位置の不確実さで高域Sが過剰に平滑化されない。"""
+    from gracefm import channel, wavio
+    from gracefm.codec import haar_forward
+
+    p = PROFILES["B200H-A4"]
+    path = os.path.join(os.path.dirname(__file__), "..", "samples", "demo_orig.flac")
+    x, fs = wavio.read(path)
+    assert fs == p.fs
+    x = x[:fs]
+    x = x * (0.89 / np.max(np.abs(x)))
+    s_ref = (x[:, 0] - x[:, 1]) / 2
+    ref = haar_forward(s_ref.reshape(-1, p.block), p.levels)
+    power_ref = sum(np.sum(a * a) for a in ref[5:])
+    for name in ("B200H-A4", "B200HY-A4"):
+        current = PROFILES[name]
+        y, _, _ = channel.link(x, current, 66, sub="S100", power_main=0.5, seed=1)
+        s_out = (y[:, 0] - y[:, 1]) / 2
+        out = haar_forward(s_out.reshape(-1, current.block), current.levels)
+        power_out = sum(np.sum(a * a) for a in out[5:])
+        error = sum(np.sum((a - b) ** 2) for a, b in zip(ref[5:], out[5:]))
+        level_change_db = 10 * np.log10(power_out / power_ref)
+        snr_db = 10 * np.log10(power_ref / error)
+        assert abs(level_change_db) < 1.0
+        assert snr_db > 8.0
+
+
+def test_side_component_bypasses_optional_postfilter():
+    p = PROFILES["B200H-A4"]
+    x = _signal(p.block * 12, p.fs)
+    frames = Transmitter(p).run(x)
+    filtered, _ = receive(p, frames, None, len(x), 0, postfilter=True)
+    plain, _ = receive(p, frames, None, len(x), 0, postfilter=False)
+    side_filtered = (filtered[:, 0] - filtered[:, 1]) / 2
+    side_plain = (plain[:, 0] - plain[:, 1]) / 2
+    assert np.allclose(side_filtered, side_plain, atol=1e-12)
+    assert not np.allclose(filtered, plain)  # M の任意フィルタは動作している
+
+
 def test_encryption():
     """暗号化: 正しい鍵なら暗号化なしと同じ音、違う鍵なら復号できない。24bit のフレーム番号の周回も復元できる"""
     from gracefm import metrics

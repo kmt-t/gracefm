@@ -1,0 +1,677 @@
+{
+  "description": "Stored 48 kHz FLACs; paired material, C/N0, one carrier and seed",
+  "comparison": [
+    {
+      "source": "fishin",
+      "profile": "M700Y",
+      "case": "codec",
+      "baseline_profile": "M700",
+      "baseline_file": "samples/monitor/fishin_M700.flac",
+      "y_file": "samples/monitor_y/fishin_M700Y.flac",
+      "baseline_sha256": "79c42f3b2cb6adb33befcdda4e737b0dfad5342fe91ce8c9f8e430164f3d4f24",
+      "y_sha256": "080efc6d7d83f05068682f158910be444accb80150bbaee915444340fe5990e1",
+      "baseline": {
+        "snr_db": 52.012681302276405,
+        "low_0_6khz": 68.90763065323189,
+        "high_6_24khz": 35.69467266578286,
+        "visqol_moslqo": 4.494049941972675
+      },
+      "y": {
+        "snr_db": 52.76526147416443,
+        "low_0_6khz": 68.89227270969404,
+        "high_6_24khz": 36.46440669381174,
+        "visqol_moslqo": 4.623398376471366
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.7525801718880274,
+        "low_0_6khz": -0.01535794353785036,
+        "high_6_24khz": 0.7697340280288785,
+        "visqol_moslqo": 0.1293484344986906
+      }
+    },
+    {
+      "source": "fishin",
+      "profile": "M700HY",
+      "case": "codec",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/fishin_M700H.flac",
+      "y_file": "samples/monitor_y/fishin_M700HY.flac",
+      "baseline_sha256": "28724ea8167e25dd504e425b6f01b9b9e743bc71a72a525fdf565c0c248d8524",
+      "y_sha256": "2268c796efb228eb998bebb0477fa473a7c5f48bab063299f33593a7d849abac",
+      "baseline": {
+        "snr_db": 52.0829338323213,
+        "low_0_6khz": 75.20557311802212,
+        "high_6_24khz": 35.69802902269143,
+        "visqol_moslqo": 4.4908505434895885
+      },
+      "y": {
+        "snr_db": 52.844984872368684,
+        "low_0_6khz": 75.14392327572276,
+        "high_6_24khz": 36.46442095811762,
+        "visqol_moslqo": 4.6232119734906005
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.7620510400473819,
+        "low_0_6khz": -0.0616498422993601,
+        "high_6_24khz": 0.7663919354261921,
+        "visqol_moslqo": 0.13236143000101208
+      }
+    },
+    {
+      "source": "vibeace",
+      "profile": "M700Y",
+      "case": "codec",
+      "baseline_profile": "M700",
+      "baseline_file": "samples/monitor/vibeace_M700.flac",
+      "y_file": "samples/monitor_y/vibeace_M700Y.flac",
+      "baseline_sha256": "314a328a4cfe986bd154125144b22869e271d6872c44d63844cdaf860c6b64cc",
+      "y_sha256": "30251ce69aa43fce20cc833766187c555c7c7c409452043ced38dfb236e678a8",
+      "baseline": {
+        "snr_db": 65.58330430375528,
+        "low_0_6khz": 77.55501627546194,
+        "high_6_24khz": 38.127428510764155,
+        "visqol_moslqo": 4.4808858245041705
+      },
+      "y": {
+        "snr_db": 66.25443600587741,
+        "low_0_6khz": 77.55141442278234,
+        "high_6_24khz": 38.84825742729412,
+        "visqol_moslqo": 4.516396063271955
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.6711317021221248,
+        "low_0_6khz": -0.0036018526795942307,
+        "high_6_24khz": 0.7208289165299675,
+        "visqol_moslqo": 0.035510238767784585
+      }
+    },
+    {
+      "source": "vibeace",
+      "profile": "M700HY",
+      "case": "codec",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/vibeace_M700H.flac",
+      "y_file": "samples/monitor_y/vibeace_M700HY.flac",
+      "baseline_sha256": "b423c6145987b3f795f894f03b777529e3b5f2519a9cc21da5eba47dcc2270f5",
+      "y_sha256": "5113373cf1319309a6238dccb2feed4e6fcd4684be723f518237e35c048b46f6",
+      "baseline": {
+        "snr_db": 65.73359398904682,
+        "low_0_6khz": 80.93441618908915,
+        "high_6_24khz": 38.1261771169851,
+        "visqol_moslqo": 4.48771725620427
+      },
+      "y": {
+        "snr_db": 66.42646461508578,
+        "low_0_6khz": 80.93842506078056,
+        "high_6_24khz": 38.84231106449748,
+        "visqol_moslqo": 4.524672309352818
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.6928706260389532,
+        "low_0_6khz": 0.0040088716914112865,
+        "high_6_24khz": 0.7161339475123825,
+        "visqol_moslqo": 0.036955053148547634
+      }
+    },
+    {
+      "source": "demo",
+      "profile": "M700Y",
+      "case": "codec",
+      "baseline_profile": "M700",
+      "baseline_file": "samples/monitor/demo_M700.flac",
+      "y_file": "samples/monitor_y/demo_M700Y.flac",
+      "baseline_sha256": "a1c4d099c0f6858fd54274a6ae4706f8791e3b9411b31f95be13cefd8a8f9b62",
+      "y_sha256": "3d0ad8965fc1a463e086716a5875834f90e87841d51c1b3e52d76baa74854e2a",
+      "baseline": {
+        "snr_db": 38.31274739128732,
+        "low_0_6khz": 75.17169038440038,
+        "high_6_24khz": 16.758379911919587,
+        "visqol_moslqo": 4.7290061098903315
+      },
+      "y": {
+        "snr_db": 38.36640772486474,
+        "low_0_6khz": 75.16781177265125,
+        "high_6_24khz": 16.812052102934764,
+        "visqol_moslqo": 4.729039320300648
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.053660333577425945,
+        "low_0_6khz": -0.0038786117491298455,
+        "high_6_24khz": 0.05367219101517762,
+        "visqol_moslqo": 3.321041031689731e-05
+      }
+    },
+    {
+      "source": "demo",
+      "profile": "M700Y",
+      "case": "awgn70",
+      "baseline_profile": "M700",
+      "baseline_file": "samples/monitor/demo_M700_cn0-70.flac",
+      "y_file": "samples/monitor_y/demo_M700Y_cn0-70.flac",
+      "baseline_sha256": "7a7d12856ff54f7481bb135e21b19921c51408422923c1ece9c4e4605239713e",
+      "y_sha256": "be1df86a3065e663d2003ea66e6b87090a51d378733ade7697126fc5b53c6075",
+      "baseline": {
+        "snr_db": 38.31248616082458,
+        "low_0_6khz": 74.44713072472067,
+        "high_6_24khz": 16.75828004000236,
+        "visqol_moslqo": 4.728794351422317
+      },
+      "y": {
+        "snr_db": 31.76155163552307,
+        "low_0_6khz": 67.49900062502155,
+        "high_6_24khz": 10.207446118591974,
+        "visqol_moslqo": 4.205426023875569
+      },
+      "y_minus_baseline": {
+        "snr_db": -6.550934525301507,
+        "low_0_6khz": -6.948130099699114,
+        "high_6_24khz": -6.550833921410387,
+        "visqol_moslqo": -0.5233683275467476
+      }
+    },
+    {
+      "source": "demo",
+      "profile": "M700Y",
+      "case": "awgn65",
+      "baseline_profile": "M700",
+      "baseline_file": "samples/monitor/demo_M700_cn0-65.flac",
+      "y_file": "samples/monitor_y/demo_M700Y_cn0-65.flac",
+      "baseline_sha256": "ddbbe0f9236e78474d1a7a1e65e3d496519a159b55c89d71897838297d345371",
+      "y_sha256": "0a34c62d4b535ef359a0d1decb560391f7d5d663519d670537618d9a1de1b49f",
+      "baseline": {
+        "snr_db": 30.27884117633626,
+        "low_0_6khz": 31.3147706707842,
+        "high_6_24khz": 15.34454632836195,
+        "visqol_moslqo": 3.088141749695919
+      },
+      "y": {
+        "snr_db": 27.821572888055325,
+        "low_0_6khz": 33.01184861957111,
+        "high_6_24khz": 7.818789810328433,
+        "visqol_moslqo": 3.011042602606946
+      },
+      "y_minus_baseline": {
+        "snr_db": -2.457268288280936,
+        "low_0_6khz": 1.6970779487869123,
+        "high_6_24khz": -7.525756518033518,
+        "visqol_moslqo": -0.07709914708897303
+      }
+    },
+    {
+      "source": "demo",
+      "profile": "M700HY",
+      "case": "codec",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/demo_M700H.flac",
+      "y_file": "samples/monitor_y/demo_M700HY.flac",
+      "baseline_sha256": "1eaa4236e9933f79d684de906a126289ee8de59f0fed6ac00d515bc67e38a3d1",
+      "y_sha256": "d6a682de9905521fab69d709ff1ed0230ff247370de3f321e688c8624245bbc3",
+      "baseline": {
+        "snr_db": 54.62371609594734,
+        "low_0_6khz": 83.60822592758153,
+        "high_6_24khz": 33.07391169094664,
+        "visqol_moslqo": 4.729250356856645
+      },
+      "y": {
+        "snr_db": 57.858228980704965,
+        "low_0_6khz": 83.62216221405865,
+        "high_6_24khz": 36.31442547366693,
+        "visqol_moslqo": 4.729277819973907
+      },
+      "y_minus_baseline": {
+        "snr_db": 3.2345128847576277,
+        "low_0_6khz": 0.013936286477118642,
+        "high_6_24khz": 3.240513782720292,
+        "visqol_moslqo": 2.7463117262094272e-05
+      }
+    },
+    {
+      "source": "demo",
+      "profile": "M700HY",
+      "case": "awgn80",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/demo_M700H_cn0-80.flac",
+      "y_file": "samples/monitor_y/demo_M700HY_cn0-80.flac",
+      "baseline_sha256": "dfff086421a2dddb0ee9f6c017f6f7339b60592a0de62b844d1c17d243a3a6a2",
+      "y_sha256": "91c97ba9026db4ab64ed29dae186d13ea4d1e906e730391c5c637fcfd24d5380",
+      "baseline": {
+        "snr_db": 48.300627021856016,
+        "low_0_6khz": 78.60103057283966,
+        "high_6_24khz": 26.74939680335633,
+        "visqol_moslqo": 4.729049698398526
+      },
+      "y": {
+        "snr_db": 42.4533951891744,
+        "low_0_6khz": 64.9682599616895,
+        "high_6_24khz": 20.922374836738772,
+        "visqol_moslqo": 4.712986390227299
+      },
+      "y_minus_baseline": {
+        "snr_db": -5.847231832681615,
+        "low_0_6khz": -13.632770611150164,
+        "high_6_24khz": -5.827021966617558,
+        "visqol_moslqo": -0.016063308171227142
+      }
+    },
+    {
+      "source": "demo",
+      "profile": "M700HY",
+      "case": "awgn75",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/demo_M700H_cn0-75.flac",
+      "y_file": "samples/monitor_y/demo_M700HY_cn0-75.flac",
+      "baseline_sha256": "714aedf2488d2f6cc8d2e504665ed0e19b236429575333a0e33403af2f526ef2",
+      "y_sha256": "fce36a02a2e1c7dd035667465ec2c78cd3829338120d69581ca0ec9cfc96823a",
+      "baseline": {
+        "snr_db": 34.60376110642857,
+        "low_0_6khz": 60.3006390789821,
+        "high_6_24khz": 13.060136044425253,
+        "visqol_moslqo": 4.648214865450097
+      },
+      "y": {
+        "snr_db": 36.01829181828345,
+        "low_0_6khz": 46.96291506071485,
+        "high_6_24khz": 14.824636901179051,
+        "visqol_moslqo": 4.320022359955145
+      },
+      "y_minus_baseline": {
+        "snr_db": 1.41453071185488,
+        "low_0_6khz": -13.337724018267252,
+        "high_6_24khz": 1.7645008567537985,
+        "visqol_moslqo": -0.32819250549495216
+      }
+    },
+    {
+      "source": "demo",
+      "profile": "M700HY",
+      "case": "awgn70",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/demo_M700H_cn0-70.flac",
+      "y_file": "samples/monitor_y/demo_M700HY_cn0-70.flac",
+      "baseline_sha256": "d12fcf75734e84910b58c78014f9e3c9aa4ef75a1f74e8519fcb2ad5b11e7116",
+      "y_sha256": "ca52b9b20d28aaf517d59b42180c3357415ec5f1e88a32e7a10031063213bba6",
+      "baseline": {
+        "snr_db": 29.147474041546317,
+        "low_0_6khz": 53.99661283647554,
+        "high_6_24khz": 7.606360247335493,
+        "visqol_moslqo": 4.184750395625571
+      },
+      "y": {
+        "snr_db": 30.783276092347272,
+        "low_0_6khz": 40.76850946913481,
+        "high_6_24khz": 9.683853937089,
+        "visqol_moslqo": 3.325754913020507
+      },
+      "y_minus_baseline": {
+        "snr_db": 1.6358020508009545,
+        "low_0_6khz": -13.22810336734073,
+        "high_6_24khz": 2.0774936897535063,
+        "visqol_moslqo": -0.8589954826050636
+      }
+    },
+    {
+      "source": "demo",
+      "profile": "M700HY",
+      "case": "awgn65",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/demo_M700H_cn0-65.flac",
+      "y_file": "samples/monitor_y/demo_M700HY_cn0-65.flac",
+      "baseline_sha256": "5d953a155312118466c9de62fb025c7612c94005d512de75e210b042f75d7b3d",
+      "y_sha256": "a982a8fa4d73427adee9a938aa53a3ce3935684f6d1fa391e1f3114ea68580b2",
+      "baseline": {
+        "snr_db": 25.923295560640923,
+        "low_0_6khz": 33.07987896770152,
+        "high_6_24khz": 5.289172533855128,
+        "visqol_moslqo": 3.2072904234579
+      },
+      "y": {
+        "snr_db": 26.570476899335294,
+        "low_0_6khz": 32.1299705630314,
+        "high_6_24khz": 6.418197733072507,
+        "visqol_moslqo": 2.7221973248929654
+      },
+      "y_minus_baseline": {
+        "snr_db": 0.6471813386943701,
+        "low_0_6khz": -0.9499084046701185,
+        "high_6_24khz": 1.129025199217379,
+        "visqol_moslqo": -0.48509309856493443
+      }
+    },
+    {
+      "source": "fishin",
+      "profile": "M700Y",
+      "case": "awgn70",
+      "baseline_profile": "M700",
+      "baseline_file": "samples/monitor/fishin_M700_cn0-70.flac",
+      "y_file": "samples/monitor_y/fishin_M700Y_cn0-70.flac",
+      "baseline_sha256": "78575e74b33eb8b82acd848a0de683b88ed141697492af0c1547188bee51cd80",
+      "y_sha256": "0bc2b55290f6328485cb200b708a19f14f691936c163628a8fc2842ca60cc4a9",
+      "baseline": {
+        "snr_db": 51.86249846705964,
+        "low_0_6khz": 65.3284213200492,
+        "high_6_24khz": 35.65224479376689,
+        "visqol_moslqo": 4.491632618124324
+      },
+      "y": {
+        "snr_db": 30.895717218219787,
+        "low_0_6khz": 68.84253418280396,
+        "high_6_24khz": 14.490767831417575,
+        "visqol_moslqo": 3.8156461549291496
+      },
+      "y_minus_baseline": {
+        "snr_db": -20.96678124883985,
+        "low_0_6khz": 3.5141128627547573,
+        "high_6_24khz": -21.161476962349315,
+        "visqol_moslqo": -0.6759864631951746
+      }
+    },
+    {
+      "source": "fishin",
+      "profile": "M700Y",
+      "case": "awgn65",
+      "baseline_profile": "M700",
+      "baseline_file": "samples/monitor/fishin_M700_cn0-65.flac",
+      "y_file": "samples/monitor_y/fishin_M700Y_cn0-65.flac",
+      "baseline_sha256": "1fd9b8cdb08acb1e9a454667a78ed312fee31a8fe14c723862150b42cd5bd042",
+      "y_sha256": "9c0b12e92b1cd506254188a72f14a57013e13614c28dd65ef4019138f29c9e17",
+      "baseline": {
+        "snr_db": 29.781848478183207,
+        "low_0_6khz": 29.957617689293343,
+        "high_6_24khz": 25.477887380754012,
+        "visqol_moslqo": 3.688246071047102
+      },
+      "y": {
+        "snr_db": 27.219709173330763,
+        "low_0_6khz": 32.32563089826468,
+        "high_6_24khz": 12.372712038704162,
+        "visqol_moslqo": 3.6834796749141354
+      },
+      "y_minus_baseline": {
+        "snr_db": -2.562139304852444,
+        "low_0_6khz": 2.368013208971334,
+        "high_6_24khz": -13.10517534204985,
+        "visqol_moslqo": -0.004766396132966477
+      }
+    },
+    {
+      "source": "fishin",
+      "profile": "M700HY",
+      "case": "awgn80",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/fishin_M700H_cn0-80.flac",
+      "y_file": "samples/monitor_y/fishin_M700HY_cn0-80.flac",
+      "baseline_sha256": "eb46fa4f2a439442112fe17a9501f7fb541b6725ec7670be512bf9902f4ed60f",
+      "y_sha256": "1716b3397116c3e59e465067d013f2c9cd6f8c8f41b8ee80f4acb3afee4bcec7",
+      "baseline": {
+        "snr_db": 49.31602394168158,
+        "low_0_6khz": 67.32689103761835,
+        "high_6_24khz": 32.978005398355414,
+        "visqol_moslqo": 4.393586405265131
+      },
+      "y": {
+        "snr_db": 37.12909128994515,
+        "low_0_6khz": 56.14205893869581,
+        "high_6_24khz": 20.77705458672199,
+        "visqol_moslqo": 4.037909436462397
+      },
+      "y_minus_baseline": {
+        "snr_db": -12.186932651736427,
+        "low_0_6khz": -11.184832098922541,
+        "high_6_24khz": -12.200950811633422,
+        "visqol_moslqo": -0.3556769688027339
+      }
+    },
+    {
+      "source": "fishin",
+      "profile": "M700HY",
+      "case": "awgn75",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/fishin_M700H_cn0-75.flac",
+      "y_file": "samples/monitor_y/fishin_M700HY_cn0-75.flac",
+      "baseline_sha256": "2cbfd85b032971dafe7e0dfc38428159a20d00f689ccc2366f1b8c4ef45588f4",
+      "y_sha256": "74fc8f0297c2be06beae86bbe24856c1d1f67a5d3f3c4bf70a3c51f355f54083",
+      "baseline": {
+        "snr_db": 36.953286078387436,
+        "low_0_6khz": 51.78608130590497,
+        "high_6_24khz": 20.689405222403963,
+        "visqol_moslqo": 3.7769358370644817
+      },
+      "y": {
+        "snr_db": 32.62426552303289,
+        "low_0_6khz": 37.55540360918307,
+        "high_6_24khz": 17.854958812029093,
+        "visqol_moslqo": 3.8341088682029136
+      },
+      "y_minus_baseline": {
+        "snr_db": -4.329020555354546,
+        "low_0_6khz": -14.230677696721905,
+        "high_6_24khz": -2.83444641037487,
+        "visqol_moslqo": 0.05717303113843197
+      }
+    },
+    {
+      "source": "fishin",
+      "profile": "M700HY",
+      "case": "awgn70",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/fishin_M700H_cn0-70.flac",
+      "y_file": "samples/monitor_y/fishin_M700HY_cn0-70.flac",
+      "baseline_sha256": "e7777082dd23cf1c149a7b31908bd3da3553ead13fb0005c012ebec1a778326e",
+      "y_sha256": "a4c0f483b5520258310847798aa54ce27b7f37c328dca46eadd7dcf871cb3f90",
+      "baseline": {
+        "snr_db": 31.811207829633755,
+        "low_0_6khz": 46.10371723865454,
+        "high_6_24khz": 15.566457098651178,
+        "visqol_moslqo": 3.632885588423422
+      },
+      "y": {
+        "snr_db": 28.513712059133447,
+        "low_0_6khz": 31.364318604513272,
+        "high_6_24khz": 15.17837611999823,
+        "visqol_moslqo": 3.7104671874921373
+      },
+      "y_minus_baseline": {
+        "snr_db": -3.2974957705003085,
+        "low_0_6khz": -14.739398634141267,
+        "high_6_24khz": -0.38808097865294755,
+        "visqol_moslqo": 0.07758159906871542
+      }
+    },
+    {
+      "source": "fishin",
+      "profile": "M700HY",
+      "case": "awgn65",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/fishin_M700H_cn0-65.flac",
+      "y_file": "samples/monitor_y/fishin_M700HY_cn0-65.flac",
+      "baseline_sha256": "e593e034aa109b74de0d0cc1f0d92b3a1295b3765b5ea5380eadc429a66fcf35",
+      "y_sha256": "6f14427d0fadf4e223865e2d04aedc0bf2140732756b6eaf70e2a3ac6bdf1a59",
+      "baseline": {
+        "snr_db": 27.210321186318392,
+        "low_0_6khz": 30.29593695237358,
+        "high_6_24khz": 13.646001290859463,
+        "visqol_moslqo": 3.619500468605966
+      },
+      "y": {
+        "snr_db": 25.143270576552883,
+        "low_0_6khz": 27.747210221284444,
+        "high_6_24khz": 12.076965324865782,
+        "visqol_moslqo": 3.585709374910533
+      },
+      "y_minus_baseline": {
+        "snr_db": -2.0670506097655093,
+        "low_0_6khz": -2.548726731089136,
+        "high_6_24khz": -1.569035965993681,
+        "visqol_moslqo": -0.033791093695433094
+      }
+    },
+    {
+      "source": "vibeace",
+      "profile": "M700Y",
+      "case": "awgn70",
+      "baseline_profile": "M700",
+      "baseline_file": "samples/monitor/vibeace_M700_cn0-70.flac",
+      "y_file": "samples/monitor_y/vibeace_M700Y_cn0-70.flac",
+      "baseline_sha256": "f9603c1eff1a7ddbaf0b89ecf2130a5a33a9aac1eef53dd1b4a62c16007ff5ab",
+      "y_sha256": "982fb5f7c1e0ce1ed58903b84d92f1138b64ce0e72bf207fdb1030b2eb4c789a",
+      "baseline": {
+        "snr_db": 64.66327195855983,
+        "low_0_6khz": 70.88915959464931,
+        "high_6_24khz": 38.10370401301931,
+        "visqol_moslqo": 4.481178184004847
+      },
+      "y": {
+        "snr_db": 44.60251478450204,
+        "low_0_6khz": 75.09189856849873,
+        "high_6_24khz": 16.86605029496365,
+        "visqol_moslqo": 3.029907463444729
+      },
+      "y_minus_baseline": {
+        "snr_db": -20.06075717405779,
+        "low_0_6khz": 4.202738973849421,
+        "high_6_24khz": -21.23765371805566,
+        "visqol_moslqo": -1.4512707205601179
+      }
+    },
+    {
+      "source": "vibeace",
+      "profile": "M700Y",
+      "case": "awgn65",
+      "baseline_profile": "M700",
+      "baseline_file": "samples/monitor/vibeace_M700_cn0-65.flac",
+      "y_file": "samples/monitor_y/vibeace_M700Y_cn0-65.flac",
+      "baseline_sha256": "d4e5f8181ae38f00030015d411783200479a250d104731597c4de6e02d803806",
+      "y_sha256": "b39ce30659da7e669d7a35e559cdb15b49a7ac7d7d3e020a40209976fb1e8a6f",
+      "baseline": {
+        "snr_db": 30.27433254412322,
+        "low_0_6khz": 30.28103201488536,
+        "high_6_24khz": 27.453586847996803,
+        "visqol_moslqo": 2.4444482025288274
+      },
+      "y": {
+        "snr_db": 33.61079627627806,
+        "low_0_6khz": 34.24210192168281,
+        "high_6_24khz": 14.51127869231809,
+        "visqol_moslqo": 2.5316183268799257
+      },
+      "y_minus_baseline": {
+        "snr_db": 3.33646373215484,
+        "low_0_6khz": 3.9610699067974515,
+        "high_6_24khz": -12.942308155678713,
+        "visqol_moslqo": 0.08717012435109828
+      }
+    },
+    {
+      "source": "vibeace",
+      "profile": "M700HY",
+      "case": "awgn80",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/vibeace_M700H_cn0-80.flac",
+      "y_file": "samples/monitor_y/vibeace_M700HY_cn0-80.flac",
+      "baseline_sha256": "e034cd06fe61733767105a99a3403618ab57e9ef3f7fdcacdcf90a6a712298e1",
+      "y_sha256": "2af32e7d9ed00da4e0997f27641b57b7b8be2055593b2e505fc32a5a96ffec1d",
+      "baseline": {
+        "snr_db": 63.14886017633826,
+        "low_0_6khz": 76.88408944037637,
+        "high_6_24khz": 35.59596303604489,
+        "visqol_moslqo": 4.456259357064429
+      },
+      "y": {
+        "snr_db": 50.973858678380346,
+        "low_0_6khz": 63.10542031464913,
+        "high_6_24khz": 23.507371869311395,
+        "visqol_moslqo": 4.0598356809353255
+      },
+      "y_minus_baseline": {
+        "snr_db": -12.175001497957915,
+        "low_0_6khz": -13.778669125727241,
+        "high_6_24khz": -12.088591166733497,
+        "visqol_moslqo": -0.39642367612910334
+      }
+    },
+    {
+      "source": "vibeace",
+      "profile": "M700HY",
+      "case": "awgn75",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/vibeace_M700H_cn0-75.flac",
+      "y_file": "samples/monitor_y/vibeace_M700HY_cn0-75.flac",
+      "baseline_sha256": "9890e05d967eebfd1bd80bb28ff54d5bab6ee54c7e81c9d462eb645d4017e945",
+      "y_sha256": "dcd89f48e7bb1d5422c177d430927872e5ca1c60fe583aeb4b8d5c00e13b783a",
+      "baseline": {
+        "snr_db": 50.71581316247979,
+        "low_0_6khz": 63.40232542052405,
+        "high_6_24khz": 23.21555020364475,
+        "visqol_moslqo": 3.811926858126996
+      },
+      "y": {
+        "snr_db": 44.16332239610739,
+        "low_0_6khz": 46.4729364405465,
+        "high_6_24khz": 20.258784141810864,
+        "visqol_moslqo": 3.5329325673105263
+      },
+      "y_minus_baseline": {
+        "snr_db": -6.552490766372401,
+        "low_0_6khz": -16.929388979977553,
+        "high_6_24khz": -2.9567660618338856,
+        "visqol_moslqo": -0.27899429081646954
+      }
+    },
+    {
+      "source": "vibeace",
+      "profile": "M700HY",
+      "case": "awgn70",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/vibeace_M700H_cn0-70.flac",
+      "y_file": "samples/monitor_y/vibeace_M700HY_cn0-70.flac",
+      "baseline_sha256": "22cff12754a0efa6100b8903605ab304cb8ad8fb2b025872f4e36db2d6701988",
+      "y_sha256": "0f47fc010fa977dbee20a197c96eb25961f7e8fb469be4491e905ddf975f6e6d",
+      "baseline": {
+        "snr_db": 45.34649597131471,
+        "low_0_6khz": 57.299549374630054,
+        "high_6_24khz": 17.891886134722576,
+        "visqol_moslqo": 3.0169953213979124
+      },
+      "y": {
+        "snr_db": 39.05180329909021,
+        "low_0_6khz": 40.34026896736865,
+        "high_6_24khz": 17.19578970739127,
+        "visqol_moslqo": 2.8840792399478294
+      },
+      "y_minus_baseline": {
+        "snr_db": -6.2946926722245,
+        "low_0_6khz": -16.959280407261403,
+        "high_6_24khz": -0.6960964273313053,
+        "visqol_moslqo": -0.13291608145008293
+      }
+    },
+    {
+      "source": "vibeace",
+      "profile": "M700HY",
+      "case": "awgn65",
+      "baseline_profile": "M700H",
+      "baseline_file": "samples/monitor/vibeace_M700H_cn0-65.flac",
+      "y_file": "samples/monitor_y/vibeace_M700HY_cn0-65.flac",
+      "baseline_sha256": "e0f261a08f76e4b7514b9d270671d52a87e2ee08d5bdfcbcd23daa700b133b18",
+      "y_sha256": "16cb5cb7b4257f13e692aea3712ea15ff964dead7f4f8cb5758a25acc57bb90f",
+      "baseline": {
+        "snr_db": 31.58824575916156,
+        "low_0_6khz": 31.86410957997015,
+        "high_6_24khz": 15.845986042312772,
+        "visqol_moslqo": 2.4754619334499806
+      },
+      "y": {
+        "snr_db": 34.09038121445337,
+        "low_0_6khz": 34.924461981664805,
+        "high_6_24khz": 13.89179692367172,
+        "visqol_moslqo": 2.4584360229437863
+      },
+      "y_minus_baseline": {
+        "snr_db": 2.502135455291814,
+        "low_0_6khz": 3.0603524016946544,
+        "high_6_24khz": -1.954189118641052,
+        "visqol_moslqo": -0.017025910506194286
+      }
+    }
+  ]
+}

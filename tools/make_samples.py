@@ -85,7 +85,7 @@ def codec(x, p, postfilter=True):
         if pf is None:
             M, S = haar_inverse(coefs["M"]), haar_inverse(coefs["S"])
         else:
-            M, S = pf.process("M", coefs["M"], cell["M"]), pf.process("S", coefs["S"], cell["S"])
+            M, S = pf.process("M", coefs["M"], cell["M"]), haar_inverse(coefs["S"])
         out[i * p.block:(i + 1) * p.block] = ms_to_lr(M, S)
     return out[:n]
 
@@ -135,12 +135,14 @@ def main():
                     help="既存のステレオ・モニター・FM・基本層音声を保ち、採用したモノラル主系だけ再生成")
     ap.add_argument("--stereo-only", action="store_true",
                     help="既存のモノラル・モニター・基本層音声を保ち、ステレオ主系の音声だけ再生成")
+    ap.add_argument("--monitor-only", action="store_true",
+                    help="放送用音声を保ち、48kHzモニター音声だけ再生成")
     ap.add_argument("--workers", type=int, default=3, help="並列に処理する素材数")
     args = ap.parse_args()
     if args.workers < 1:
         ap.error("workers は 1 以上にしてください")
-    if args.adopted_only and args.stereo_only:
-        ap.error("--adopted-only と --stereo-only は同時に指定できません")
+    if sum((args.adopted_only, args.stereo_only, args.monitor_only)) > 1:
+        ap.error("--adopted-only、--stereo-only、--monitor-only は併用できません")
     os.makedirs(OUT, exist_ok=True)
 
     sources = []
@@ -164,6 +166,13 @@ def main():
         if mono:
             x = np.repeat(x[:, :1], 2, axis=1)
         sources.append((name, x, mono))
+
+    if args.monitor_only:
+        with ProcessPoolExecutor(max_workers=min(args.workers, len(sources))) as executor:
+            for mon_rows in executor.map(generate_monitor_source, sources):
+                MON_ROWS.extend(mon_rows)
+        update_readme_monitor_only()
+        return
 
     tasks = [(name, x, mono, args.adopted_only or args.stereo_only) for name, x, mono in sources
              if (not args.adopted_only or mono) and (not args.stereo_only or not mono)]
@@ -224,6 +233,20 @@ def generate_source(task):
             save(f"{name}_fm_{kind}_cn0-{cn0}.flac", np.stack([y1, y1], 1), mono, x,
                  f"アナログFMモノラル。{what}。C/N0 {cn0}dB-Hz（C/N {cn(cn0):.1f}dB）")
     return ROWS, MON_ROWS
+
+
+def generate_monitor_source(source):
+    global MON_ROWS
+    MON_ROWS = []
+    name, x, mono = source
+    print(name, flush=True)
+    if name == "demo":
+        audio = make_demo(48000)
+        audio *= 0.89 / np.max(np.abs(audio))
+    else:
+        audio = wavio.resample(x, 32000, 48000)
+    monitor(name, audio, mono)
+    return MON_ROWS
 
 
 def monitor(name, x, mono):
@@ -306,6 +329,21 @@ def update_readme_stereo_only():
         lines.append(line)
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
+
+
+def update_readme_monitor_only():
+    """48 kHzモニター行を更新し、放送用音声の一覧を保つ。"""
+    path = os.path.join(OUT, "README.md")
+    with open(path, encoding="utf-8") as f:
+        lines = f.read().splitlines()
+    start = next(i for i, line in enumerate(lines) if line.startswith("## モニター用"))
+    end = next(i for i in range(start + 1, len(lines))
+               if lines[i].startswith("## 楽曲の出典"))
+    section = MONITOR_HEAD.splitlines() + ["", "| ファイル | 内容 | 波形SNR |", "|---|---|---|"]
+    for name, desc, snr in MON_ROWS:
+        section.append(f"| `{name}` | {desc} | {'—' if not np.isfinite(snr) else f'{snr:.1f}dB'} |")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines[:start] + section + [""] + lines[end:]) + "\n")
 
 
 README_HEAD = """# サンプル音声（GraceFM）

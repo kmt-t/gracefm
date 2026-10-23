@@ -11,7 +11,7 @@ from typing import Optional, Tuple
 
 @dataclass(frozen=True)
 class Profile:
-    pid: int                    # ヘッダに載せる ID (4bit)
+    pid: int                    # ヘッダに載せる ID (4bit)。実験タグとの組で一意
     name: str
     fs: int                     # サンプリング周波数 [Hz]
     block: int                  # 1ブロック = 1フレームのサンプル数
@@ -33,8 +33,15 @@ class Profile:
     exp_offset_s: Optional[Tuple[int, ...]] = None  # 評価用: S の固定指数オフセット emin
     attn_group_m: Optional[Tuple[int, ...]] = None  # 0=無効、正数=その係数数ごとに1bit
     attn_group_s: Optional[Tuple[int, ...]] = None
+    hybrid_start_k: Optional[int] = None  # 実験方式: この帯域から 1係数/複素シンボル
+    hybrid_amplitude: float = 0.08 * 7.5 / 31.5  # 8bit時の隣接半径間隔 (正規化前)
+    hybrid_bits: int = 8                  # 上位2bitが位相、残りは連続値で推定する半径
+    hybrid_channels: Tuple[str, ...] = ("M", "S")
+    experimental_tag: int = 0             # 非暗号化ヘッダの予約2bit。0は従来フレーム
 
     def __post_init__(self):
+        if not 0 <= self.pid < 16 or not 0 <= self.experimental_tag < 4:
+            raise ValueError("プロファイルIDは4bit、実験タグは2bitにしてください")
         if not 0 < self.pulse_beta <= 1 or self.pulse_span < 2 or self.pulse_span % 2:
             raise ValueError("RRC パルスのロールオフは (0, 1]、長さは正の偶数にしてください")
         if len(self.bits_m) != self.nbands or len(self.bits_s) != self.nbands:
@@ -52,6 +59,26 @@ class Profile:
                 group = self.attenuator_group(ch, k)
                 if group < 0 or (group and (b == 0 or self.ncoef(k) % group)):
                     raise ValueError("アッテネータの区間長は送信帯域の係数数を割り切る正数にしてください")
+        if self.hybrid_start_k is not None:
+            if self.hybrid_start_k not in (4, 5, 6) or self.fs not in (32000, 48000) or self.block != 64:
+                raise ValueError("ハイブリッド境界は32/48kHz・64サンプルの帯域4, 5, 6から選んでください")
+            if not 6 <= self.hybrid_bits <= 16:
+                raise ValueError("ハイブリッド仮数幅は6〜16bitにしてください")
+            half = (2 ** (self.hybrid_bits - 2) - 1) / 2
+            if not 0 < self.hybrid_amplitude < 1 / half:
+                raise ValueError("半径の最小値が正になる変調度にしてください")
+            if self.protect_k not in (1, 2):
+                raise ValueError("ハイブリッド方式は仮数上位1または2bitのFEC保護が必要です")
+            if not self.hybrid_channels or any(ch not in ("M", "S") for ch in self.hybrid_channels):
+                raise ValueError("ハイブリッド対象はM/Sから選んでください")
+            for ch in self.hybrid_channels:
+                bits = self.bits_m if ch == "M" else self.bits_s
+                if any(b not in (0, self.hybrid_bits) for b in bits[self.hybrid_start_k:]):
+                    raise ValueError("ハイブリッド帯域の仮数幅が設定値と一致しません")
+
+    @property
+    def hybrid(self) -> bool:
+        return self.hybrid_start_k is not None
 
     def exponent_bits(self, ch: str, k: int) -> int:
         values = self.exp_bits_m if ch == "M" else self.exp_bits_s
@@ -224,4 +251,61 @@ PROFILES["M700H"] = make_layered(Profile(pid=0, name="M340", fs=48000, block=64,
 PROFILES["S100W"] = Profile(pid=13, name="S100W", fs=48000, block=64, levels=6,
                             bits_m=(9, 8, 7, 6, 4, 0, 0), bits_s=(5, 4, 3, 0, 0, 0, 0), protect_k=1)
 
-BY_ID = {p.pid: p for p in PROFILES.values()}
+
+def make_hybrid(base: Profile, name: str, pid: int, start_k: int = 5,
+                amplitude: float = 0.08, mantissa_bits: int = 8,
+                channels: Tuple[str, ...] = ("M",), experimental_tag: int = 0) -> Profile:
+    """対象成分の境界以上だけを実験方式にし、他の成分は既存主系のままにする。
+
+    amplitude は6bit時の隣接半径間隔として指定し、幅変更時は最大変調度を保つ。
+    """
+    if not 6 <= mantissa_bits <= 16:
+        raise ValueError("ハイブリッド仮数幅は6〜16bitにしてください")
+
+    def widths(ch, bits):
+        return tuple(b if k < start_k or b == 0 or ch not in channels else mantissa_bits
+                     for k, b in enumerate(bits))
+
+    offsets_m = base.exp_offset_m
+    attenuator_m = base.attn_group_m
+    if base.name in ("B200MH-A4", "B200H-A4"):
+        # 32 kHz Y 主系の高域 M は、4〜8 kHz と 8〜16 kHz を各8区間に分ける。
+        # k=5 は16係数なので2係数/bit、k=6 は32係数なので4係数/bit。
+        groups = list(attenuator_m)
+        groups[5], groups[6] = 2, 4
+        attenuator_m = tuple(groups)
+    # モノラル A4 の指数オフセットは15/13bit仮数向けなので、
+    # ハイブリッド仮数幅に応じて量子化ステップの範囲をずらす。
+    if base.name == "B200MH-A4":
+        offsets_m = tuple(v if k < start_k else -19 - (mantissa_bits - 6)
+                          for k, v in enumerate(offsets_m))
+    elif base.name == "B200H-A4":
+        offsets_m = tuple(v if k < start_k else v - (mantissa_bits - 6)
+                          for k, v in enumerate(offsets_m))
+    # 階層Yでは高域Sの次位bitを強い位置へ置き、低域Mの下位bitを
+    # 弱い位置へ移す。いずれの仮数も削らず、デジタル部の長さを抑える。
+    base_m, base_s = base.base_m, base.base_s
+    if base.name == "B200H-A4":
+        base_m = (12, 11, 5, 3, 1, 2, 2)
+        base_s = (1, 1, 1, 1, 1, 2, 2)
+    elif base.name == "M700H":
+        base_m = (11, 10, 5, 4, 3, 3, 2)
+        base_s = (1, 1, 1, 1, 1, 2, 2)
+    return replace(base, pid=pid, name=name, bits_m=widths("M", base.bits_m),
+                   bits_s=widths("S", base.bits_s),
+                   base_m=base_m, base_s=base_s,
+                   exp_offset_m=offsets_m,
+                   exp_offset_s=base.exp_offset_s, attn_group_m=attenuator_m,
+                   hybrid_start_k=start_k,
+                   hybrid_amplitude=amplitude * 7.5 / ((2 ** (mantissa_bits - 2) - 1) / 2),
+                   hybrid_bits=mantissa_bits, hybrid_channels=channels,
+                   experimental_tag=experimental_tag)
+
+
+PROFILES["B200HY-A4"] = make_hybrid(PROFILES["B200H-A4"], "B200HY-A4", 15)
+PROFILES["B200MHY-A4"] = make_hybrid(PROFILES["B200MH-A4"], "B200MHY-A4", 0)
+PROFILES["M700Y"] = make_hybrid(PROFILES["M700"], "M700Y", 3, experimental_tag=1)
+PROFILES["M700HY"] = make_hybrid(PROFILES["M700H"], "M700HY", 12, experimental_tag=1)
+
+BY_ID = {p.pid: p for p in PROFILES.values() if p.experimental_tag == 0}
+BY_HEADER = {(p.pid, p.experimental_tag): p for p in PROFILES.values()}

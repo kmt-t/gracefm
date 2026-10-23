@@ -36,16 +36,16 @@
 | ファイル | 内容 | 波形SNR |
 |---|---|---|
 | `demo_orig.flac` | 原音（32kHzに変換したもの） | — |
-| `demo_B200H-A4.flac` | コーデックだけ（通信路なし）。B200H-A4 の全ビット（基本層＋拡張層、約536kbps） | 57.8dB |
+| `demo_B200H-A4.flac` | コーデックだけ（通信路なし）。B200H-A4 の全ビット（基本層＋拡張層、約536kbps） | 60.3dB |
 | `demo_B200.flac` | コーデックだけ。B200（約200kbps）。B200H-A4 の区間アッテネータは含まない | 29.4dB |
 | `demo_B200_nopf.flac` | 同上、ポストフィルタなし | 31.9dB |
-| `demo_final_cn0-80.flac` | 白色雑音のみ。C/N0 80dB-Hz（C/N 27.4dB）。主系 B200H-A4 Es/N0 24.5dB、副系 S100 Es/N0 27.2dB（電力 50:50） | 48.4dB |
-| `demo_final_cn0-66.flac` | 白色雑音のみ。C/N0 66dB-Hz（C/N 13.4dB）。主系 B200H-A4 Es/N0 10.5dB、副系 S100 Es/N0 13.2dB（電力 50:50） | 31.2dB |
-| `demo_final_cn0-60.flac` | 白色雑音のみ。C/N0 60dB-Hz（C/N 7.4dB）。主系 B200H-A4 Es/N0 4.5dB、副系 S100 Es/N0 7.2dB（電力 50:50） | 23.5dB |
-| `demo_final_cn0-57.flac` | 白色雑音のみ。C/N0 57dB-Hz（C/N 4.4dB）。主系 B200H-A4 Es/N0 1.5dB、副系 S100 Es/N0 4.2dB（電力 50:50） | 16.1dB |
+| `demo_final_cn0-80.flac` | 白色雑音のみ。C/N0 80dB-Hz（C/N 27.4dB）。主系 B200H-A4 Es/N0 24.5dB、副系 S100 Es/N0 27.2dB（電力 50:50） | 50.1dB |
+| `demo_final_cn0-66.flac` | 白色雑音のみ。C/N0 66dB-Hz（C/N 13.4dB）。主系 B200H-A4 Es/N0 10.5dB、副系 S100 Es/N0 13.2dB（電力 50:50） | 32.8dB |
+| `demo_final_cn0-60.flac` | 白色雑音のみ。C/N0 60dB-Hz（C/N 7.4dB）。主系 B200H-A4 Es/N0 4.5dB、副系 S100 Es/N0 7.2dB（電力 50:50） | 23.8dB |
+| `demo_final_cn0-57.flac` | 白色雑音のみ。C/N0 57dB-Hz（C/N 4.4dB）。主系 B200H-A4 Es/N0 1.5dB、副系 S100 Es/N0 4.2dB（電力 50:50） | 16.2dB |
 | `demo_final_cn0-54.flac` | 白色雑音のみ。C/N0 54dB-Hz（C/N 1.4dB）。主系 B200H-A4 Es/N0 -1.5dB、副系 S100 Es/N0 1.2dB（電力 50:50） | 8.8dB |
 | `demo_final_rayleigh_cn0-60.flac` | 系統ごとに独立なフェージング（時定数約100ms）。C/N0 60dB-Hz（C/N 7.4dB）。平均の 主系 B200H-A4 Es/N0 4.5dB、副系 S100 Es/N0 7.2dB（電力 50:50）。欠けて予測で埋めた時間 8.4% | 11.2dB |
-| `demo_final_fade10_cn0-66.flac` | 主系の周波数だけ10dB落ちている。C/N0 66dB-Hz（C/N 13.4dB）。主系 B200H-A4 Es/N0 0.5dB、副系 S100 Es/N0 13.2dB（電力 50:50）。欠けて予測で埋めた時間 0.0% | 26.2dB |
+| `demo_final_fade10_cn0-66.flac` | 主系の周波数だけ10dB落ちている。C/N0 66dB-Hz（C/N 13.4dB）。主系 B200H-A4 Es/N0 0.5dB、副系 S100 Es/N0 13.2dB（電力 50:50）。欠けて予測で埋めた時間 0.0% | 26.3dB |
 | `fishin_orig.flac` | 原音（32kHzに変換したもの） | — |
 | `fishin_B200MH-A4.flac` | コーデックだけ（通信路なし）。B200MH-A4 の全ビット（基本層＋拡張層、約474kbps） | 83.9dB |
 | `fishin_B200M.flac` | コーデックだけ。B200M（QPSK、約194kbps）の比較用音声。A4の基本層（198kbps）とは別プロファイル | 32.7dB |
@@ -97,15 +97,15 @@
 | ファイル | 内容 | 波形SNR |
 |---|---|---|
 | `monitor/demo_orig48.flac` | 原音（合成試験信号を48kHzで作ったもの、全帯域） | — |
-| `monitor/demo_M700.flac` | コーデックだけ。M700（約691kbps） | 33.9dB |
-| `monitor/demo_M700H.flac` | コーデックだけ。M700H の全ビット（約854kbps） | 52.3dB |
-| `monitor/demo_M700H-base.flac` | コーデックだけ。M700H の基本層だけ（約329kbps）＝拡張層が全部崩れたときの音 | 25.3dB |
-| `monitor/demo_M700H_cn0-80.flac` | M700H（階層16QAM、1.25×Rs 約343kHz）1系統。白色雑音のみ。C/N0 80dB-Hz（C/N 27.4dB）、Es/N0 25.6dB | 46.7dB |
-| `monitor/demo_M700H_cn0-75.flac` | M700H（階層16QAM、1.25×Rs 約343kHz）1系統。白色雑音のみ。C/N0 75dB-Hz（C/N 22.4dB）、Es/N0 20.6dB | 32.7dB |
-| `monitor/demo_M700H_cn0-70.flac` | M700H（階層16QAM、1.25×Rs 約343kHz）1系統。白色雑音のみ。C/N0 70dB-Hz（C/N 17.4dB）、Es/N0 15.6dB | 27.6dB |
-| `monitor/demo_M700H_cn0-65.flac` | M700H（階層16QAM、1.25×Rs 約343kHz）1系統。白色雑音のみ。C/N0 65dB-Hz（C/N 12.4dB）、Es/N0 10.6dB | 24.8dB |
-| `monitor/demo_M700_cn0-70.flac` | M700（QPSK、1.25×Rs 約629kHz）1系統。白色雑音のみ。C/N0 70dB-Hz（C/N 17.4dB）、Es/N0 13.0dB | 33.9dB |
-| `monitor/demo_M700_cn0-65.flac` | M700（QPSK、1.25×Rs 約629kHz）1系統。白色雑音のみ。C/N0 65dB-Hz（C/N 12.4dB）、Es/N0 8.0dB | 29.1dB |
+| `monitor/demo_M700.flac` | コーデックだけ。M700（約691kbps） | 38.3dB |
+| `monitor/demo_M700H.flac` | コーデックだけ。M700H の全ビット（約854kbps） | 54.6dB |
+| `monitor/demo_M700H-base.flac` | コーデックだけ。M700H の基本層だけ（約329kbps）＝拡張層が全部崩れたときの音 | 26.4dB |
+| `monitor/demo_M700H_cn0-80.flac` | M700H（階層16QAM、1.25×Rs 約343kHz）1系統。白色雑音のみ。C/N0 80dB-Hz（C/N 27.4dB）、Es/N0 25.6dB | 48.3dB |
+| `monitor/demo_M700H_cn0-75.flac` | M700H（階層16QAM、1.25×Rs 約343kHz）1系統。白色雑音のみ。C/N0 75dB-Hz（C/N 22.4dB）、Es/N0 20.6dB | 34.6dB |
+| `monitor/demo_M700H_cn0-70.flac` | M700H（階層16QAM、1.25×Rs 約343kHz）1系統。白色雑音のみ。C/N0 70dB-Hz（C/N 17.4dB）、Es/N0 15.6dB | 29.1dB |
+| `monitor/demo_M700H_cn0-65.flac` | M700H（階層16QAM、1.25×Rs 約343kHz）1系統。白色雑音のみ。C/N0 65dB-Hz（C/N 12.4dB）、Es/N0 10.6dB | 25.9dB |
+| `monitor/demo_M700_cn0-70.flac` | M700（QPSK、1.25×Rs 約629kHz）1系統。白色雑音のみ。C/N0 70dB-Hz（C/N 17.4dB）、Es/N0 13.0dB | 38.3dB |
+| `monitor/demo_M700_cn0-65.flac` | M700（QPSK、1.25×Rs 約629kHz）1系統。白色雑音のみ。C/N0 65dB-Hz（C/N 12.4dB）、Es/N0 8.0dB | 30.3dB |
 | `monitor/fishin_orig48.flac` | 原音（32kHz の原音を48kHzに変換したもの。元の音源の帯域は約11kHz） | — |
 | `monitor/fishin_M700.flac` | コーデックだけ。M700（約691kbps） | 52.0dB |
 | `monitor/fishin_M700H.flac` | コーデックだけ。M700H の全ビット（約854kbps） | 52.1dB |
