@@ -14,7 +14,7 @@ from scipy.interpolate import CubicSpline
 from scipy.signal import fftconvolve
 
 from . import fec, modem
-from .framing import Layout, _bits
+from .framing import HybridLayout, Layout, _bits
 from .profiles import Profile
 from .pulse import rrc_taps
 
@@ -74,8 +74,9 @@ def header_training_symbols(profile: Profile, stream_id: int, frame_no: int, enc
     by its equally likely mean, and decision-directed training refines it.
     """
     width = Layout(profile, encrypted=encrypted).header_bits
+    tag = _bits(profile.experimental_tag, 2)
     header = (_bits(profile.pid, 4) + _bits(stream_id, 1) +
-              ([1, 0, 0] if encrypted else [0, 0, 0]) +
+              [int(encrypted)] + tag +
               _bits(frame_no & ((1 << (width - 8)) - 1), width - 8))
     coded = fec.conv_encode(np.asarray(header, np.int64))[:2 * width]
     hp = coded ^ modem.prbs(len(coded))
@@ -155,6 +156,25 @@ def _slice_constellation(values, profile: Profile):
     for v, out in ((values.real, result.real), (values.imag, result.imag)):
         nearest = points[np.abs(np.abs(v)[:, None] - points).argmin(axis=1)]
         out[:] = np.where(v < 0, -nearest, nearest)
+    if profile.hybrid:
+        lay = HybridLayout(profile)
+        digital = modem.n_symbols(lay.n_tx, lay.n_strong, profile.modulation)
+        frame_len = len(modem.PREAMBLE) + digital + lay.n_hybrid
+        if len(result) % frame_len:
+            raise ValueError("等化器の入力がフレーム長の整数倍ではありません")
+        src = np.asarray(values).reshape(-1, frame_len)
+        dst = result.reshape(-1, frame_len)
+        high = src[:, len(modem.PREAMBLE) + digital:]
+        lower_bits = profile.hybrid_bits - 2
+        levels = 1 << lower_bits
+        center = (levels - 1) / 2
+        phase = np.mod(np.rint((np.angle(high) - np.pi / 4) / (np.pi / 2)).astype(np.int64), 4)
+        scale = modem.hybrid_scale(profile.hybrid_amplitude, lower_bits)
+        radial = np.clip(np.rint((np.abs(high) * scale - 1) / profile.hybrid_amplitude + center),
+                         0, levels - 1).astype(np.int64)
+        dst[:, len(modem.PREAMBLE) + digital:] = modem.hybrid_modulate(
+            (phase * levels + radial).ravel(), profile.hybrid_amplitude,
+            lower_bits=lower_bits).reshape(high.shape)
     return result
 
 

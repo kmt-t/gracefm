@@ -79,8 +79,9 @@ def main():
     rs = tx.symbol_rate()
     print(f"{p.name}: {p.fs}Hz / {p.audio_kbps():.0f}kbps / ブロック長 {p.frame_ms:.2f}ms "
           f"(伝送込みの最小遅延 {min_latency(p) * 1000:.2f}ms + 処理時間) / {p.modulation} / "
-          f"1系統 {rs / 1000:.1f}kシンボル/秒 (ロールオフ0.25で約 {rs * 1.25 / 1000:.0f}kHz。"
-          f"2系統の合計 約 {rs * 2.5 / 1000:.0f}kHz)")
+          f"1系統 {rs / 1000:.1f}kシンボル/秒 (ロールオフ{p.pulse_beta:g}で理論支持幅 "
+          f"{rs * (1 + p.pulse_beta) / 1000:.0f}kHz。"
+          f"同じプロファイル2系統の合計 {rs * (1 + p.pulse_beta) * 2 / 1000:.0f}kHz)")
     print(f"  電力条件 {args.power} / C/N0 = Es/N0 + {10 * np.log10(rs):.2f}dB, "
           f"C/N({args.bn / 1000:g}kHz) = Es/N0 + {10 * np.log10(rs / args.bn):+.2f}dB (各系統)")
     bm = metrics.BandMetric(x, p.fs)

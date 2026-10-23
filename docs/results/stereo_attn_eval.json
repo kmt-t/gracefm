@@ -1017,48 +1017,48 @@
     {
       "material": "piano",
       "layout": "none",
-      "lr_snr_db": 55.042,
-      "side_snr_db": 52.25,
-      "visqol_left": 4.508,
-      "visqol_right": 4.643
+      "lr_snr_db": 55.324,
+      "side_snr_db": 52.794,
+      "visqol_left": 4.169,
+      "visqol_right": 4.618
     },
     {
       "material": "piano",
       "layout": "M8S4",
-      "lr_snr_db": 55.32,
-      "side_snr_db": 52.529,
-      "visqol_left": 4.497,
-      "visqol_right": 4.639
+      "lr_snr_db": 55.526,
+      "side_snr_db": 52.922,
+      "visqol_left": 4.248,
+      "visqol_right": 4.627
     },
     {
       "material": "percussion",
       "layout": "none",
-      "lr_snr_db": 55.292,
-      "side_snr_db": 44.079,
-      "visqol_left": 4.655,
-      "visqol_right": 4.633
+      "lr_snr_db": 55.957,
+      "side_snr_db": 48.475,
+      "visqol_left": 4.681,
+      "visqol_right": 4.667
     },
     {
       "material": "percussion",
       "layout": "M8S4",
-      "lr_snr_db": 55.679,
-      "side_snr_db": 44.394,
-      "visqol_left": 4.666,
-      "visqol_right": 4.647
+      "lr_snr_db": 56.35,
+      "side_snr_db": 48.733,
+      "visqol_left": 4.691,
+      "visqol_right": 4.678
     },
     {
       "material": "demo",
       "layout": "none",
-      "lr_snr_db": 55.864,
-      "side_snr_db": 29.266,
+      "lr_snr_db": 58.833,
+      "side_snr_db": 37.092,
       "visqol_left": 4.728,
-      "visqol_right": 4.727
+      "visqol_right": 4.728
     },
     {
       "material": "demo",
       "layout": "M8S4",
-      "lr_snr_db": 57.14,
-      "side_snr_db": 30.466,
+      "lr_snr_db": 60.354,
+      "side_snr_db": 39.226,
       "visqol_left": 4.729,
       "visqol_right": 4.729
     }
