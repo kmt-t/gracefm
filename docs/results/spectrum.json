@@ -60,10 +60,10 @@
   "rrc_span_symbols": 16
  },
  "M700": {
-  "occupied_99_kHz": 586.4,
-  "bw_minus30dB_kHz": 664.5,
-  "symbol_rate_ksps": 533.2,
-  "modulation": "qpsk",
+  "occupied_99_kHz": 334.8,
+  "bw_minus30dB_kHz": 376.5,
+  "symbol_rate_ksps": 304.5,
+  "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
@@ -76,10 +76,10 @@
   "rrc_span_symbols": 16
  },
  "M700Y": {
-  "occupied_99_kHz": 523.2,
-  "bw_minus30dB_kHz": 586.0,
-  "symbol_rate_ksps": 473.2,
-  "modulation": "qpsk",
+  "occupied_99_kHz": 383.0,
+  "bw_minus30dB_kHz": 427.7,
+  "symbol_rate_ksps": 346.5,
+  "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-モニター用 (48kHz) の主系の変調の比較: M700 (QPSK) と階層16QAMを、同じ C/N0 で比べる。
+モニター用 (48kHz) の主系M700とM700H（いずれも階層16QAM）を、同じ C/N0 で比べる。
 
   python tools/eval_m700.py --json docs/results/m700_eval.json
 
@@ -21,7 +21,7 @@ sys.path.insert(0, ROOT)
 from gracefm import channel, metrics, wavio  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 
-CONFIGS = [("M700 (QPSK)", "M700", None),
+CONFIGS = [("M700 (階層16QAM)", "M700", None),
            ("M700H (階層)", "M700H", None),
            ("M700H＋SUB100-48K 75:25", "M700H", "SUB100-48K")]
 

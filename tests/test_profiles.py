@@ -22,6 +22,8 @@ def test_catalog_ids_and_standard_attenuation():
     assert not {'B200', 'B200M', 'S50M', 'S100', 'S100-48K'} & PROFILES.keys()
     assert all(PROFILES[name].modulation == 'qpsk' for name in ('SUB50M', 'SUB100', 'SUB100-48K'))
     assert all(PROFILES[name].modulation == 'qam16h' for name in ('B200H', 'B200Y', 'B200HY'))
+    assert all(PROFILES[name].modulation == 'qam16h' for name in ('M700', 'M700H', 'M700Y', 'M700HY'))
+    assert PROFILES['M700'].base_s == PROFILES['M700Y'].base_s == (2,) * 7
     assert not {'M700Q16', 'B150', 'B150M', 'S85M', 'B200MH-A4', 'B200H-A4'} & PROFILES.keys()
     for p in PROFILES.values():
         assert p.experimental_tag == 3 and BY_ID[p.pid] is p

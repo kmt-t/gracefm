@@ -178,7 +178,9 @@ def main():
         with ProcessPoolExecutor(max_workers=min(args.workers, len(sources))) as executor:
             for mon_rows in executor.map(generate_monitor_source, sources):
                 MON_ROWS.extend(mon_rows)
-        update_readme_monitor_only()
+        # The current index is generated from all samples and evaluation reports.
+        # A partial regeneration must not rewrite it from the obsolete section layout.
+        print("48 kHz samples generated; run tools/sample_catalog.py after dependent reports are current")
         return
 
     tasks = [(name, x, mono, args.adopted_only or args.stereo_only) for name, x, mono in sources
@@ -254,7 +256,7 @@ def generate_monitor_source(source):
 
 
 def monitor(name, x, mono):
-    """モニター用 (48kHz、近距離) のサンプル: M700 (QPSK) と M700H (階層16QAM)"""
+    """モニター用 (48kHz、近距離) の階層16QAMサンプル。"""
     os.makedirs(os.path.join(OUT, "monitor"), exist_ok=True)
     mh = PROFILES["M700H"]
 
@@ -333,21 +335,6 @@ def update_readme_stereo_only():
         f.write("\n".join(lines) + "\n")
 
 
-def update_readme_monitor_only():
-    """48 kHzモニター行を更新し、放送用音声の一覧を保つ。"""
-    path = os.path.join(OUT, "README.md")
-    with open(path, encoding="utf-8") as f:
-        lines = f.read().splitlines()
-    start = next(i for i, line in enumerate(lines) if line.startswith("## モニター用"))
-    end = next(i for i in range(start + 1, len(lines))
-               if lines[i].startswith("## 楽曲の出典"))
-    section = MONITOR_HEAD.splitlines() + ["", "| ファイル | 内容 | 波形SNR |", "|---|---|---|"]
-    for name, desc, snr in MON_ROWS:
-        section.append(f"| `{name}` | {desc} | {'—' if not np.isfinite(snr) else f'{snr:.1f}dB'} |")
-    with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines[:start] + section + [""] + lines[end:]) + "\n")
-
-
 README_HEAD = """# サンプル音声（GraceFM）
 
 ファイル名の読み方は[命名規則](NAMING.md)を参照。標準アッテネータを含む現行仕様の音源だけを掲載する。
@@ -385,7 +372,7 @@ MONITOR_HEAD = """## モニター用（48kHz、`monitor/`）
 | ファイル | 内容 |
 |---|---|
 | `*__M700H__*` | 階層16QAM、理論支持幅は現行設定表を参照 |
-| `*__M700__*` | QPSK、理論支持幅は現行設定表を参照 |
+| `*__M700__*` | 階層16QAM、上位2bitを強い位置に配置。理論支持幅は現行設定表を参照 |
 | `*__M700H-base__codec.flac` | M700Hの実際の基本層。係数別昇格を含み、拡張層のみ不明として復元 |
 
 - 1系統・全電力、白色雑音のみ。近距離（1m 程度）は C/N0 約80dB-Hz の見込み
