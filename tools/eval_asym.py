@@ -46,7 +46,7 @@ def job(a):
     return a, out
 if __name__ == "__main__":
     sec = int(sys.argv[1]) if len(sys.argv) > 1 else 5
-    sets = [("fishin", "B200M", ("S50M",)), ("vibeace", "B200M", ("S50M",)), ("demo", "B200", ("S100",))]
+    sets = [("fishin", "B200MH", ("SUB50M",)), ("vibeace", "B200MH", ("SUB50M",)), ("demo", "B200Y", ("SUB100",))]
     jobs = [(n, m, s, cn0, kind, sd, sec) for n, m, s in sets for kind in ("awgn", "mainfade", "rayleigh")
             for cn0 in (56, 58, 60, 63) for sd in ((1, 2, 3) if kind == "rayleigh" else (1,))]
     res = {}

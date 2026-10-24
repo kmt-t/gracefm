@@ -50,11 +50,11 @@ def main():
         for dly, rel in ((5e-6, -10), (10e-6, -10), (10e-6, -6), (20e-6, -6)):
             rows[f"FM C/N0 80dB-Hz ゴースト {dly * 1e6:.0f}µs {rel}dB"] = fm.receive(
                 80, np.random.default_rng(1), ghost=[(dly, rel, np.pi / 3)])
-        for name in ("B200M", "B200MH"):
+        for name in ("B200MH",):
             rows[f"{name} コーデックだけ"] = codec(x, PROFILES[name])[:, 0]
         for cn0 in (80, 66, 60):
-            y, st, es = channel.link(x, "B200MH", cn0, sub="S50M", power_main=0.5, seed=1)
-            rows[f"放送 B200MH+S50M C/N0 {cn0}dB-Hz"] = y[:, 0]
+            y, st, es = channel.link(x, "B200MH", cn0, sub="SUB50M", power_main=0.5, seed=1)
+            rows[f"放送 B200MH+SUB50M C/N0 {cn0}dB-Hz"] = y[:, 0]
         res = {}
         for k, y in rows.items():
             t, tn = metrics.thd(y, FS, f0)

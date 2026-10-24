@@ -55,7 +55,7 @@ def job(task):
         audio_kbps = int(method.split("-", 1)[1])
         y, encoded_bytes = mp3_roundtrip(x, 32000, audio_kbps)
     elif method == "GraceFM":
-        y, state, _ = channel.link(x, "B200MH", cn0, sub="S50M", power_main=0.5,
+        y, state, _ = channel.link(x, "B200MH", cn0, sub="SUB50M", power_main=0.5,
                                    kind_main=kind, kind_sub="awgn" if kind == "fade10" else kind, seed=1)
         plc = 100 * state["plc_samples"] / len(x)
         audio_kbps = 474.0
@@ -117,13 +117,13 @@ def main():
                                     capture_output=True, text=True).stdout.splitlines()[0]
     result = dict(metric="ViSQOL Audio MOS-LQO", metric_implementation="visqol-python 3.8.0",
                   mp3_encoder=f"{ffmpeg_version} / libmp3lame CBR",
-                  gracefm_main_profile="B200MH", gracefm_sub_profile="S50M",
+                  gracefm_main_profile="B200MH", gracefm_sub_profile="SUB50M",
                   seconds=args.seconds, evaluation_sample_rate_hz=32000,
                   visqol_sample_rate_hz=48000, cn0_noise_bandwidth_hz=180000,
                   channels=kinds,
                   source_processing="Read original WAV, take seconds 1..1+duration, downmix to mono, "
                                     "resample to 32 kHz and normalize peak to 0.89; duplicate to L/R codec input.",
-                  comparison="Codec-only A4 vs MP3 CBR; separate link comparison A4+S50M vs analog mono FM.",
+                  comparison="Codec-only A4 vs MP3 CBR; separate link comparison A4+SUB50M vs analog mono FM.",
                   sources=entries, rows=rows)
     with open(args.json, "w", encoding="utf-8") as output:
         json.dump(result, output, ensure_ascii=False, indent=2, allow_nan=False)

@@ -20,12 +20,12 @@
 例：
 
 - `fishin__32k__reference.flac`：32 kHzの原音。
-- `fishin__32k__B200MH+S50M__awgn-cn0-57dBHz.flac`：現行仕様のモノラル主系＋副系、白色雑音条件。
+- `fishin__32k__B200MH+SUB50M__awgn-cn0-57dBHz.flac`：現行仕様のモノラル主系＋副系、白色雑音条件。
 - `demo__48k__M700HY__ideal.flac`：現行仕様M700HY、雑音なしのシンボル送受信。
 - `demo__48k__M700HY__codec.flac`：現行仕様のコーデック単体音声。
 
 `M700H-base` は実際の基本層を保持し、拡張層だけ不明として復元する比較条件（係数別昇格1bitも含む）、`M700HY-R10` / `R12` はY仮数幅10 / 12 bitの比較条件。登録プロファイルとは区別する。
 
-保存場所は従来どおり、32 kHzの従来方式はこのディレクトリ、48 kHzは `monitor/`、Y系は `hybrid_y/` と `monitor_y/`。同じ原音が各評価フォルダに複製されている場合は同じ名前を使う。
+保存場所は、32 kHzの主系・副系音声がこのディレクトリ、48 kHzは `monitor/`、Y系は `hybrid_y/` と `monitor_y/`。同じ原音が各評価フォルダに複製されている場合は同じ名前を使う。
 
 生成ツールは `tools/sample_names.py` の共通関数で命名する。旧版の音声・試聴ページ・改名対応表は保持せず、履歴はGitで管理する。現行音声の全設定・保存後の波形SNR・SHA-256は [音源一覧JSON](../docs/results/samples.json) に記録する。名前は主要条件を示すものであり、乱数seed・電力配分・全設定は評価JSONを参照する。

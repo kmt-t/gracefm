@@ -27,16 +27,16 @@ from eval_hybrid import budget, score, spectrum  # noqa: E402
 from make_samples import codec  # noqa: E402
 
 SOURCES = {
-    "fishin": ("B200MHY", "S50M", True),
-    "vibeace": ("B200MHY", "S50M", True),
-    "demo": ("B200HY", "S100", False),
+    "fishin": ("B200MHY", "SUB50M", True),
+    "vibeace": ("B200MHY", "SUB50M", True),
+    "demo": ("B200HY", "SUB100", False),
 }
 CASES = ("codec", "ideal", "awgn80", "awgn66", "awgn60", "awgn57", "awgn54",
          "rayleigh60", "main_minus10db66", "phase_only66")
 
 
 def filename_for(source, profile_name, case):
-    sub = ("S50M" if source != "demo" else "S100") if case not in ("codec", "ideal") else None
+    sub = ("SUB50M" if source != "demo" else "SUB100") if case not in ("codec", "ideal") else None
     return sample_name(source, 32000, profile_name, case, sub=sub)
 
 
@@ -100,7 +100,7 @@ def main():
         "description": "GraceFM Y-profile listening samples; synced-symbol simulation, not RF capture",
         "sample_rate_hz": 32000, "seconds": args.seconds, "seed": 1,
         "baseline_match": "tools/make_samples.py: 10s, input peak 0.89, C/N0 80/66/60/57/54, seed 1, main/sub 50:50",
-        "noisy_link": {"secondary": "S50M or S100", "power_main": 0.5,
+        "noisy_link": {"secondary": "SUB50M or SUB100", "power_main": 0.5,
                        "power_secondary": 0.5, "phase_only_on_main": True},
         "sources": {}, "samples": [],
     }

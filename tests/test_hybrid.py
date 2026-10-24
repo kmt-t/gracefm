@@ -186,8 +186,8 @@ def test_hybrid_eight_bit_option_and_two_stream_fusion():
     p = make_hybrid(base, "experimental-8", 0, mantissa_bits=8)
     x = _audio(p, 12)
     fa = Transmitter(p).run(x)
-    fs = Transmitter(PROFILES["S50M"], 1, p.block // 2).run(x)
-    y, stats = receive(p, fa, fs, len(x), p.block // 2, profile_b=PROFILES["S50M"],
+    fs = Transmitter(PROFILES["SUB50M"], 1, p.block // 2).run(x)
+    y, stats = receive(p, fa, fs, len(x), p.block // 2, profile_b=PROFILES["SUB50M"],
                        postfilter=False)
     assert stats["plc_samples"] == 0
     assert np.isfinite(y).all()

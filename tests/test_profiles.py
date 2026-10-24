@@ -18,7 +18,10 @@ def test_catalog_ids_and_standard_attenuation():
     assert set(DEFAULT_SUB) <= PROFILES.keys()
     for main, secondary in DEFAULT_SUB.items():
         assert PROFILES[main].fs == PROFILES[secondary].fs
-    assert list(BY_ID) == list(range(1, 14))
+    assert list(BY_ID) == list(range(1, 13))
+    assert not {'B200', 'B200M', 'S50M', 'S100', 'S100-48K'} & PROFILES.keys()
+    assert all(PROFILES[name].modulation == 'qpsk' for name in ('SUB50M', 'SUB100', 'SUB100-48K'))
+    assert all(PROFILES[name].modulation == 'qam16h' for name in ('B200H', 'B200Y', 'B200HY'))
     assert not {'M700Q16', 'B150', 'B150M', 'S85M', 'B200MH-A4', 'B200H-A4'} & PROFILES.keys()
     for p in PROFILES.values():
         assert p.experimental_tag == 3 and BY_ID[p.pid] is p
@@ -66,6 +69,15 @@ def test_layer_assignment_matches_physical_positions():
             for index, (ch, k, j, pos) in enumerate(lay.unp_items, lay.n_coded):
                 width = (p.bits_m if ch == 'M' else p.bits_s)[k]
                 assert (index < 2 * n) == (width - pos <= p.base_bits(ch, k, j)), (p.name, ch, k, j, pos)
+
+
+def test_b200y_stereo_side_uses_qam_strong_positions():
+    p = PROFILES['B200Y']
+    assert p.hybrid_channels == ('M',) and p.bits_s == (7, 6, 5, 2, 2, 0, 2)
+    assert p.base_s == (1, 1, 1, 1, 1, 0, 1)
+    lay = HybridLayout(p)
+    assert any(ch == 'S' for ch, *_ in lay.unp_items)
+    assert lay.n_strong == 2 * modem.n_symbols(lay.n_tx, lay.n_strong, p.modulation)
 
 
 def test_other_format_identifiers_are_rejected_even_with_matching_id():
@@ -164,7 +176,7 @@ def test_broadcast_main_occupied_bandwidth_is_near_180_khz():
     from scipy.signal import welch
     from gracefm.pulse import shape
     audio = np.random.default_rng(2026).uniform(-0.4, 0.4, (64 * 200, 2))
-    for name in ('B200M', 'B200', 'B200MH', 'B200H', 'B200HY'):
+    for name in ('B200MH', 'B200H', 'B200HY'):
         p = PROFILES[name]
         tx = Transmitter(p)
         samples = shape(np.concatenate(tx.run(audio)), beta=p.pulse_beta,

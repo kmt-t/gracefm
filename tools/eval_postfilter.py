@@ -2,7 +2,7 @@
 """
 ポストフィルタの繰り返し回数の評価。
 
-  python tools/eval_postfilter.py 曲.wav --profile B200M --seconds 20
+  python tools/eval_postfilter.py 曲.wav --profile B200MH --seconds 20
 
 回数ごとに次を出す:
   収束    : 十分に回した結果 (--ref-iters 回) との差。信号に対する dB (小さいほど収束している)
@@ -44,7 +44,7 @@ def hf_energy(e, fs, f0):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("input")
-    ap.add_argument("--profile", default="B200M", choices=PROFILES)
+    ap.add_argument("--profile", default="B200MH", choices=PROFILES)
     ap.add_argument("--seconds", type=float, default=20.0)
     ap.add_argument("--iters", default="0,1,2,3,4,5,7,10,15,20")
     ap.add_argument("--ref-iters", type=int, default=40)

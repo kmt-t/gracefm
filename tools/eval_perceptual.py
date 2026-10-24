@@ -27,10 +27,9 @@ from gracefm.analog_fm import AnalogFM  # noqa: E402
 METHODS = {
     "AM": None,
     "FM": None,
-    "B200M": dict(main="B200M"),
     "B200MH": dict(main="B200MH"),
-    "GraceFM": dict(main="B200MH", sub="S50M", power_main=0.5),
-    "GraceFM75": dict(main="B200MH", sub="S50M", power_main=0.75),
+    "GraceFM": dict(main="B200MH", sub="SUB50M", power_main=0.5),
+    "GraceFM75": dict(main="B200MH", sub="SUB50M", power_main=0.75),
 }
 DEFAULT_METHODS = "AM,FM,GraceFM"
 
@@ -143,7 +142,7 @@ def main():
     summary = summarize(rows)
     if args.json:
         result = dict(metric="ViSQOL Audio MOS-LQO", metric_implementation="visqol-python 3.8.0",
-                      gracefm_main_profile="B200MH", gracefm_sub_profile="S50M",
+                      gracefm_main_profile="B200MH", gracefm_sub_profile="SUB50M",
                       reference="samples/{material}__32k__reference.flac", source_sample_rate_hz=32000,
                       visqol_sample_rate_hz=48000, seconds=args.seconds,
                       cn0_noise_bandwidth_hz=180000,

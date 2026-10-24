@@ -23,13 +23,12 @@ sys.path.insert(0, ROOT)
 from gracefm import channel, metrics, wavio  # noqa: E402
 from gracefm.analog_fm import AnalogFM  # noqa: E402
 
-MONO = [("FM", None), ("B200M", dict(main="B200M", sub=None)),
-        ("B200MH", dict(main="B200MH", sub=None)),
-        ("B200MH+S50M 50:50", dict(main="B200MH", sub="S50M", power_main=0.5)),
-        ("B200MH+S50M 75:25", dict(main="B200MH", sub="S50M", power_main=0.75))]
-STEREO = [("B200", dict(main="B200", sub=None)), ("B200H", dict(main="B200H", sub=None)),
-          ("B200H+S100 50:50", dict(main="B200H", sub="S100", power_main=0.5)),
-          ("B200H+S100 75:25", dict(main="B200H", sub="S100", power_main=0.75))]
+MONO = [("FM", None), ("B200MH", dict(main="B200MH", sub=None)),
+        ("B200MH+SUB50M 50:50", dict(main="B200MH", sub="SUB50M", power_main=0.5)),
+        ("B200MH+SUB50M 75:25", dict(main="B200MH", sub="SUB50M", power_main=0.75))]
+STEREO = [("B200Y", dict(main="B200Y", sub=None)), ("B200H", dict(main="B200H", sub=None)),
+          ("B200H+SUB100 50:50", dict(main="B200H", sub="SUB100", power_main=0.5)),
+          ("B200H+SUB100 75:25", dict(main="B200H", sub="SUB100", power_main=0.75))]
 
 
 def job(a):

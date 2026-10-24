@@ -134,7 +134,7 @@ def link_eval(api, clips, manifest, base, choices, cn0s):
         for cn0 in cn0s:
             for name, widths in choices.items():
                 profile = fixed_profile(base, widths)
-                y, state, _ = channel.link(x, profile, cn0, sub="S50M", power_main=0.5, seed=1)
+                y, state, _ = channel.link(x, profile, cn0, sub="SUB50M", power_main=0.5, seed=1)
                 rows.append(dict(material=key, cn0_db_hz=cn0, layout=name,
                                  snr_db=float(metrics.snr_db(x, y)),
                                  visqol_moslqo=visqol(api, x[:, 0], y.mean(axis=1)),
@@ -191,7 +191,7 @@ def main():
                   codec_perceptual=perceptual, link=link,
                   method="各帯域の幅2/3/4bitと固定オフセット。上限はフルスケール対応のまま。"
                          "訓練の最大波形SNR低下が1dB以内となる最大節約ビット数を選び、"
-                         "保留音源とViSQOL/通信路で検証。リンクはB200MH+S50M、50:50電力、seed 1。")
+                         "保留音源とViSQOL/通信路で検証。リンクはB200MH+SUB50M、50:50電力、seed 1。")
     if args.json:
         args.json.parent.mkdir(parents=True, exist_ok=True)
         args.json.write_text(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False) + "\n")

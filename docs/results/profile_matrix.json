@@ -3,158 +3,6 @@
     {
       "profile": {
         "pid": 1,
-        "name": "B200M",
-        "fs": 32000,
-        "block": 64,
-        "levels": 6,
-        "bits_m": [
-          9,
-          9,
-          9,
-          9,
-          8,
-          6,
-          4
-        ],
-        "bits_s": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "exp_bits": 4,
-        "protect_k": 1,
-        "modulation": "qpsk",
-        "alpha": 1.0,
-        "pulse_beta": 0.25,
-        "pulse_span": 16,
-        "pf_iters": 4,
-        "base_m": null,
-        "base_s": null,
-        "base_extra": [],
-        "exp_bits_m": null,
-        "exp_bits_s": null,
-        "exp_offset_m": null,
-        "exp_offset_s": null,
-        "attn_group_m": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          4
-        ],
-        "attn_group_s": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "hybrid_start_k": null,
-        "hybrid_amplitude": 0.019047619047619046,
-        "hybrid_bits": 8,
-        "hybrid_channels": [
-          "M",
-          "S"
-        ],
-        "experimental_tag": 3
-      },
-      "header_bits": 24,
-      "crc_count": 2,
-      "protected_crc_bits": 156,
-      "fec_bits": 324,
-      "digital_unprotected_bits": 296,
-      "symbols_per_frame": 326,
-      "symbol_rate": 163000.0,
-      "audio_kbps": 198.0,
-      "theoretical_bandwidth_hz": 203750.0
-    },
-    {
-      "profile": {
-        "pid": 2,
-        "name": "B200",
-        "fs": 32000,
-        "block": 64,
-        "levels": 6,
-        "bits_m": [
-          12,
-          11,
-          9,
-          7,
-          4,
-          2,
-          2
-        ],
-        "bits_s": [
-          7,
-          6,
-          5,
-          2,
-          2,
-          0,
-          2
-        ],
-        "exp_bits": 4,
-        "protect_k": 1,
-        "modulation": "qpsk",
-        "alpha": 1.0,
-        "pulse_beta": 0.1,
-        "pulse_span": 32,
-        "pf_iters": 4,
-        "base_m": null,
-        "base_s": null,
-        "base_extra": [],
-        "exp_bits_m": null,
-        "exp_bits_s": null,
-        "exp_offset_m": null,
-        "exp_offset_s": null,
-        "attn_group_m": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          4
-        ],
-        "attn_group_s": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          4
-        ],
-        "hybrid_start_k": null,
-        "hybrid_amplitude": 0.019047619047619046,
-        "hybrid_bits": 8,
-        "hybrid_channels": [
-          "M",
-          "S"
-        ],
-        "experimental_tag": 3
-      },
-      "header_bits": 24,
-      "crc_count": 2,
-      "protected_crc_bits": 236,
-      "fec_bits": 484,
-      "digital_unprotected_bits": 196,
-      "symbols_per_frame": 356,
-      "symbol_rate": 178000.0,
-      "audio_kbps": 188.0,
-      "theoretical_bandwidth_hz": 195800.00000000003
-    },
-    {
-      "profile": {
-        "pid": 3,
         "name": "B200MH",
         "fs": 32000,
         "block": 64,
@@ -254,7 +102,7 @@
     },
     {
       "profile": {
-        "pid": 4,
+        "pid": 2,
         "name": "B200H",
         "fs": 32000,
         "block": 64,
@@ -362,7 +210,7 @@
     },
     {
       "profile": {
-        "pid": 5,
+        "pid": 3,
         "name": "B200MHY",
         "fs": 32000,
         "block": 64,
@@ -461,7 +309,98 @@
     },
     {
       "profile": {
-        "pid": 6,
+        "pid": 4,
+        "name": "B200Y",
+        "fs": 32000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          12,
+          11,
+          9,
+          7,
+          4,
+          8,
+          8
+        ],
+        "bits_s": [
+          7,
+          6,
+          5,
+          2,
+          2,
+          0,
+          2
+        ],
+        "exp_bits": 4,
+        "protect_k": 1,
+        "modulation": "qam16h",
+        "alpha": 5.0,
+        "pulse_beta": 0.1,
+        "pulse_span": 32,
+        "pf_iters": 4,
+        "base_m": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "base_s": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1
+        ],
+        "base_extra": [],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": null,
+        "exp_offset_s": null,
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          4
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "hybrid_start_k": 5,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 2,
+      "protected_crc_bits": 244,
+      "fec_bits": 500,
+      "digital_unprotected_bits": 148,
+      "symbols_per_frame": 314,
+      "symbol_rate": 157000.0,
+      "audio_kbps": 336.0,
+      "theoretical_bandwidth_hz": 172700.0
+    },
+    {
+      "profile": {
+        "pid": 5,
         "name": "B200HY",
         "fs": 32000,
         "block": 64,
@@ -574,8 +513,8 @@
     },
     {
       "profile": {
-        "pid": 7,
-        "name": "S50M",
+        "pid": 6,
+        "name": "SUB50M",
         "fs": 32000,
         "block": 64,
         "levels": 6,
@@ -650,8 +589,8 @@
     },
     {
       "profile": {
-        "pid": 8,
-        "name": "S100",
+        "pid": 7,
+        "name": "SUB100",
         "fs": 32000,
         "block": 64,
         "levels": 6,
@@ -726,7 +665,7 @@
     },
     {
       "profile": {
-        "pid": 9,
+        "pid": 8,
         "name": "M700",
         "fs": 48000,
         "block": 64,
@@ -802,7 +741,7 @@
     },
     {
       "profile": {
-        "pid": 10,
+        "pid": 9,
         "name": "M700H",
         "fs": 48000,
         "block": 64,
@@ -900,7 +839,7 @@
     },
     {
       "profile": {
-        "pid": 11,
+        "pid": 10,
         "name": "M700Y",
         "fs": 48000,
         "block": 64,
@@ -975,7 +914,7 @@
     },
     {
       "profile": {
-        "pid": 12,
+        "pid": 11,
         "name": "M700HY",
         "fs": 48000,
         "block": 64,
@@ -1072,8 +1011,8 @@
     },
     {
       "profile": {
-        "pid": 13,
-        "name": "S100-48K",
+        "pid": 12,
+        "name": "SUB100-48K",
         "fs": 48000,
         "block": 64,
         "levels": 6,

@@ -130,7 +130,7 @@ def link_rows(clips, manifest, base, specs, cn0s):
         for cn0 in cn0s:
             for name, spec in specs.items():
                 p = profile_for(base, spec)
-                y, st, _ = channel.link(x, p, cn0, sub='S50M', power_main=0.5, seed=1)
+                y, st, _ = channel.link(x, p, cn0, sub='SUB50M', power_main=0.5, seed=1)
                 row = dict(layout=name, material=material, cn0_db_hz=cn0,
                            snr_db=float(metrics.snr_db(x, y)),
                            visqol_moslqo=visqol(api, x[:, 0], y.mean(axis=1)),
@@ -207,7 +207,7 @@ def main():
                             audio_kbps=p.audio_kbps(), symbol_rate_khz=channel.symbol_rate(p) / 1000)
     result = dict(method='訓練3素材×0/-20/-40 dB の正規化MSE平均を最小化。指数オフセットは帯域ごとに固定。'
                          '6詳細帯域＋低域近似のまま最高域32係数のみ区間アッテネータを比較。保留2素材は選択に使わない。'
-                         'リンクはB200MH+S50M、電力50:50、AWGN、seed1。',
+                         'リンクはB200MH+SUB50M、電力50:50、AWGN、seed1。',
                   seconds=args.seconds, materials=manifest, widths=widths, offset_shifts=shifts,
                   groups=groups, headroom_db=args.headroom_db,
                   train_peak_per_band=train_peaks, holdout_peak_per_band=holdout_peaks,

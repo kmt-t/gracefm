@@ -2,7 +2,7 @@
   "method": "Codec-only stereo comparison; no Bluetooth transport or radio channel",
   "ffmpeg_version": "ffmpeg version 7.0.2-static https://johnvansickle.com/ffmpeg/  Copyright (c) 2000-2024 the FFmpeg developers",
   "gracefm_profile": "B200H",
-  "gracefm_profile_signature": "Profile(pid=4, name='B200H', fs=32000, block=64, levels=6, bits_m=(16, 16, 16, 13, 10, 7, 7), bits_s=(14, 12, 11, 8, 7, 6, 6), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.1, pulse_span=32, pf_iters=4, base_m=(12, 11, 9, 7, 3, 1, 1), base_s=(7, 6, 5, 3, 2, 2, 2), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=(-25, -25, -26, -23, -21, -18, -19), exp_offset_s=(-23, -21, -21, -18, -18, -18, -19), attn_group_m=(0, 0, 0, 0, 0, 0, 8), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M', 'S'), experimental_tag=3)",
+  "gracefm_profile_signature": "Profile(pid=2, name='B200H', fs=32000, block=64, levels=6, bits_m=(16, 16, 16, 13, 10, 7, 7), bits_s=(14, 12, 11, 8, 7, 6, 6), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.1, pulse_span=32, pf_iters=4, base_m=(12, 11, 9, 7, 3, 1, 1), base_s=(7, 6, 5, 3, 2, 2, 2), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=(-25, -25, -26, -23, -21, -18, -19), exp_offset_s=(-23, -21, -21, -18, -18, -18, -19), attn_group_m=(0, 0, 0, 0, 0, 0, 8), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M', 'S'), experimental_tag=3)",
   "source_seconds": 5.0,
   "source_offset_seconds": 1,
   "source_peak": 0.89,

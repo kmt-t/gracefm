@@ -35,7 +35,7 @@ def main():
     ap.add_argument("--seconds", type=float, default=30.0)
     args = ap.parse_args()
 
-    base = replace(PROFILES["B200"], fs=args.fs)
+    base = replace(PROFILES["B200Y"], fs=args.fs)
     nb = base.nbands
     x, fs = wavio.read(args.input)
     x = wavio.resample(x, fs, args.fs)[: int(args.seconds * args.fs)]

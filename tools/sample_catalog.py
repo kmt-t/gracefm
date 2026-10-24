@@ -28,9 +28,10 @@ def expected_files():
     result = set()
     for source in ('demo', 'fishin', 'vibeace'):
         mono = source != 'demo'
-        main, base, sub = ('B200MH', 'B200M', 'S50M') if mono else ('B200H', 'B200', 'S100')
-        names = [sample_name(source, 32000, main), sample_name(source, 32000, base),
-                 sample_name(source, 32000, base, postfilter=False)]
+        main, sub = ('B200MH', 'SUB50M') if mono else ('B200H', 'SUB100')
+        names = [sample_name(source, 32000, main)]
+        if not mono:
+            names.append(sample_name(source, 32000, 'B200Y'))
         for case in ('awgn80', 'awgn66', 'awgn60', 'awgn57', 'awgn54', 'rayleigh60', 'main_minus10db66'):
             names.append(sample_name(source, 32000, main, case, sub=sub))
             if mono: names.append(sample_name(source, 32000, 'FM', case))
@@ -52,7 +53,7 @@ def expected_files():
             result.update('samples/monitor_y/' + monitor(source, f'M700HY-R{bits}', case)
                           for case in ('codec', 'awgn80', 'awgn75', 'awgn70', 'awgn65'))
     for cn0 in (80, 75, 70, 65):
-        result.add('samples/monitor/' + sample_name('demo', 48000, 'M700H', f'awgn{cn0}', sub='S100-48K'))
+        result.add('samples/monitor/' + sample_name('demo', 48000, 'M700H', f'awgn{cn0}', sub='SUB100-48K'))
     return result
 
 
@@ -121,7 +122,7 @@ def build():
         lines=[f'# 現行サンプル音声 — {title}', '',
                '**全デジタル主系・副系に標準アッテネータを含む現行設定の音声です。** 各10秒。保存したFLACを読み戻して波形SNRを再測定しています。', '',
                f'[命名規則]({rel("samples/NAMING.md")}) · [設定表]({rel("docs/PROFILES.md")}) · [全音源の設定・測定値・SHA-256]({rel("docs/results/samples.json")})', '',
-               '32 kHzの2系統は電力50:50。48 kHzの `M700H+S100-48K` は75:25。それ以外の48 kHz音声は主系1系統です。`codec` は通信路なし、`ideal` は雑音なしのシンボル送受信。AWGN等は同期既知のシミュレーションです。', '',
+               '32 kHzの2系統は電力50:50。48 kHzの `M700H+SUB100-48K` は75:25。それ以外の48 kHz音声は主系1系統です。`codec` は通信路なし、`ideal` は雑音なしのシンボル送受信。AWGN等は同期既知のシミュレーションです。', '',
                '`M700H-base` は実際の基本層を保持し、拡張層の事後確率だけを0.5にした比較音源です。係数別昇格1bitと標準アッテネータを含みます。`R10` / `R12` はY仮数幅の比較条件です。', '',
                '波形SNRは原音との差であり、聴感の点数ではありません。', '',
                '| 音源 | 構成 | 条件 | 試聴 | 波形SNR dB |', '|---|---|---|---|---:|']

@@ -5,7 +5,7 @@
   python tools/eval_m700.py --json docs/results/m700_eval.json
 
 素材は samples/*__32k__reference.flac (32kHz) を 48kHz に変換したもの (帯域は元の音源のまま)。1系統は全電力、
-主系＋副系 (S100-48K) は電力 75:25。通信路は白色雑音のみ。波形SNR [dB]、1kHz・−6dBFS の正弦波の THD・THD+N [%]。
+主系＋副系 (SUB100-48K) は電力 75:25。通信路は白色雑音のみ。波形SNR [dB]、1kHz・−6dBFS の正弦波の THD・THD+N [%]。
 """
 import argparse
 import json
@@ -23,7 +23,7 @@ from gracefm.profiles import PROFILES  # noqa: E402
 
 CONFIGS = [("M700 (QPSK)", "M700", None),
            ("M700H (階層)", "M700H", None),
-           ("M700H＋S100-48K 75:25", "M700H", "S100-48K")]
+           ("M700H＋SUB100-48K 75:25", "M700H", "SUB100-48K")]
 
 
 def job(a):
