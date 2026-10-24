@@ -40,8 +40,8 @@ for f in font_manager.findSystemFonts():
     if "NotoSansCJK" in f:
         font_manager.fontManager.addfont(f)
 plt.rcParams["font.family"] = ["Noto Sans CJK JP", "DejaVu Sans"]
-COL = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100"]       # 分類色 (固定順)
-LS = ["-", "--", "-.", ":"]
+COL = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#824db6", "#b05e70"]
+LS = ["-", "--", "-.", ":", "-", "--"]
 INK, INK2, GRID, SURF = "#0b0b0b", "#52514e", "#e4e3df", "#fcfcfb"
 SPS = 8
 
@@ -84,7 +84,7 @@ def main():
         ("放送モノラル主系（32kHz）とアナログFM", ["FM", "B200M", "B200MH", "B200MHY"]),
         ("放送ステレオ主系（32kHz）", ["B200", "B200H", "B200HY"]),
         ("放送の副系（32kHz）", ["S50M", "S100"]),
-        ("モニター（48kHz）", ["M700", "M700H", "S100-48K"]),
+        ("モニター（48kHz）", ["M700", "M700H", "M700Y", "M700HY", "S100-48K"]),
     ]
     res = {}
     fig, axs = plt.subplots(len(groups), 1, figsize=(8, 12), facecolor=SURF)
@@ -117,7 +117,7 @@ def main():
         ax.set_ylabel("電力スペクトル密度 [dB/Hz]\n（送信電力 = 1）", fontsize=9, color=INK2)
         ax.legend(fontsize=8.5, frameon=False, loc="upper right", labelcolor=INK)
     axs[-1].set_xlabel("搬送波からの周波数 [kHz]", fontsize=9, color=INK2)
-    fig.suptitle("送信スペクトル（B200・B200H は RRC β=0.10、他は β=0.25。送信電力をそろえた比較）", fontsize=12, color=INK, x=0.02,
+    fig.suptitle("送信スペクトル（RRC成形、送信電力を正規化）", fontsize=12, color=INK, x=0.02,
                  ha="left")
     fig.tight_layout()
     fig.savefig(os.path.join(ROOT, "docs", "figures", "rf_spectrum.png"), dpi=130, facecolor=SURF)
