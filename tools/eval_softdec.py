@@ -28,7 +28,7 @@ def dec(p, fr, n, off, soft):
 
 def single():
     print("== 1系統: 硬判定 → 軟判定 (波形SNR dB / BandMetric、2 seed 平均) ==")
-    for name, prof in (("fishin", "B200MH"), ("vibeace", "B200MH"), ("demo", "B200Y")):
+    for name, prof in (("fishin", "B200M"), ("vibeace", "B200M"), ("demo", "B200Y")):
         p = PROFILES[prof]; x, fs = wavio.read(R + f"{name}__32k__reference.flac"); bm = metrics.BandMetric(x, fs)
         row = []
         for snr in (4, 6, 8, 10, 12):

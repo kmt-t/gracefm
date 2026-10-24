@@ -18,7 +18,7 @@ def main():
     ap.add_argument('--json', type=Path, default=ROOT / 'docs/results/attn_headroom_validation.json')
     args = ap.parse_args()
     scan = json.loads(args.scan.read_text())
-    base = PROFILES['B200MH']
+    base = PROFILES['B200M']
     manifest, all_clips = read_clips(ROOT / 'eval_audio', scan['seconds'], base.block)
     clips = {k: v for k, v in all_clips.items() if manifest[k]['split'] == 'holdout'}
     specs = {k: scan['specs'][k] for k in ('attn4_same_rate', 'attn4_plus8')}

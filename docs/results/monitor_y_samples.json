@@ -29,6 +29,52 @@
     }
   },
   "profiles": {
+    "M700MY": {
+      "baseline": "M700M",
+      "baseline_budget": {
+        "profile": "M700M",
+        "hybrid_start_k": null,
+        "hybrid_bits": null,
+        "hybrid_amplitude": null,
+        "protected_before_crc_bits": 188,
+        "protected_with_crc_bits": 220,
+        "fec_coded_bits": 452,
+        "low_digital_unprotected_bits": 432,
+        "digital_symbols": 226,
+        "hybrid_symbols": 0,
+        "preamble_symbols": 16,
+        "total_symbols_per_frame": 242,
+        "symbol_rate_ksym_s": 181.5,
+        "rrc_support_khz": 226.875
+      },
+      "y_budget": {
+        "profile": "M700MY",
+        "hybrid_start_k": 5,
+        "hybrid_bits": 8,
+        "hybrid_amplitude": 0.019047619047619046,
+        "protected_before_crc_bits": 196,
+        "protected_with_crc_bits": 228,
+        "fec_coded_bits": 468,
+        "low_digital_unprotected_bits": 160,
+        "digital_symbols": 234,
+        "hybrid_symbols": 48,
+        "preamble_symbols": 16,
+        "total_symbols_per_frame": 298,
+        "symbol_rate_ksym_s": 223.5,
+        "rrc_support_khz": 279.375
+      },
+      "profile_signature": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(0, 0, 0, 0, 0, 0, 0), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "baseline_spectrum_3s": {
+        "occupied_99_khz": 200.642578125,
+        "bandwidth_minus30db_khz": 226.166015625,
+        "papr_db": 5.705775838579427
+      },
+      "y_spectrum_3s": {
+        "occupied_99_khz": 247.07226562500003,
+        "bandwidth_minus30db_khz": 278.93847656250006,
+        "papr_db": 7.2073239236874285
+      }
+    },
     "M700Y": {
       "baseline": "M700",
       "baseline_budget": {
@@ -74,88 +120,42 @@
         "bandwidth_minus30db_khz": 432.4482421875,
         "papr_db": 7.589337746749551
       }
-    },
-    "M700HY": {
-      "baseline": "M700H",
-      "baseline_budget": {
-        "profile": "M700H",
-        "hybrid_start_k": null,
-        "hybrid_bits": null,
-        "hybrid_amplitude": null,
-        "protected_before_crc_bits": 224,
-        "protected_with_crc_bits": 256,
-        "fec_coded_bits": 524,
-        "low_digital_unprotected_bits": 955,
-        "digital_symbols": 390,
-        "hybrid_symbols": 0,
-        "preamble_symbols": 16,
-        "total_symbols_per_frame": 406,
-        "symbol_rate_ksym_s": 304.5,
-        "rrc_support_khz": 380.625
-      },
-      "y_budget": {
-        "profile": "M700HY",
-        "hybrid_start_k": 5,
-        "hybrid_bits": 8,
-        "hybrid_amplitude": 0.019047619047619046,
-        "protected_before_crc_bits": 232,
-        "protected_with_crc_bits": 264,
-        "fec_coded_bits": 540,
-        "low_digital_unprotected_bits": 635,
-        "digital_symbols": 322,
-        "hybrid_symbols": 48,
-        "preamble_symbols": 16,
-        "total_symbols_per_frame": 386,
-        "symbol_rate_ksym_s": 289.5,
-        "rrc_support_khz": 361.875
-      },
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "baseline_spectrum_3s": {
-        "occupied_99_khz": 336.0205078125,
-        "bandwidth_minus30db_khz": 380.625,
-        "papr_db": 5.962479594576745
-      },
-      "y_spectrum_3s": {
-        "occupied_99_khz": 318.90234375,
-        "bandwidth_minus30db_khz": 360.744140625,
-        "papr_db": 7.593391432736533
-      }
     }
   },
   "samples": [
     {
       "source": "demo",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "profile": "M700MY",
+      "baseline": "M700M",
+      "profile_signature": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(0, 0, 0, 0, 0, 0, 0), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
       "case": "codec",
-      "file": "demo__48k__M700HY__codec.flac",
-      "sha256": "a73f2610ccbfc52e7906c5fe42fd236ecdbc9b86aec2dbe8b70ecbafa373ee60",
+      "file": "demo__48k__M700MY__codec.flac",
+      "sha256": "3f391ee153ef0c8a41597ec683a0e2af3559adad462ec257707b25e89ef0ed7c",
       "link": null,
       "measurements": {
-        "snr_db": 60.520779390202165,
-        "low_0_6khz": 83.6316799314008,
-        "high_6_24khz": 38.98664340470679,
-        "visqol_moslqo": 4.729282233871715,
+        "snr_db": 24.267691421597508,
+        "low_0_6khz": 35.59184878261163,
+        "high_6_24khz": 3.0425959062748698,
+        "visqol_moslqo": 4.718507149184491,
         "samples_clipped_at_flac": 0
       }
     },
     {
       "source": "demo",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "profile": "M700MY",
+      "baseline": "M700M",
+      "profile_signature": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(0, 0, 0, 0, 0, 0, 0), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
       "case": "ideal",
-      "file": "demo__48k__M700HY__ideal.flac",
-      "sha256": "e141b66dfda5b6418db8309e4d7bbd05e2d398016e0e410639300663746e368e",
+      "file": "demo__48k__M700MY__ideal.flac",
+      "sha256": "d07e87117a4fd23401eae04e362f4eef272654d83b7a55bf097f0742454ea285",
       "link": null,
       "measurements": {
-        "snr_db": 60.520767025199696,
-        "low_0_6khz": 83.63083926681247,
-        "high_6_24khz": 38.9866350780612,
-        "visqol_moslqo": 4.729282233650737,
+        "snr_db": 24.267691421940167,
+        "low_0_6khz": 35.5918488131394,
+        "high_6_24khz": 3.0425959042333095,
+        "visqol_moslqo": 4.718507149263586,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
@@ -164,368 +164,50 @@
     },
     {
       "source": "demo",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
-      "case": "awgn80",
-      "file": "demo__48k__M700HY__awgn-cn0-80dBHz.flac",
-      "sha256": "c6054ae54be166e1387535ea3331f43c89f6acba2a24d11d434057891a4b8bfe",
-      "link": {
-        "esn0_main": 25.383514319365446,
-        "esn0_sub": null
-      },
-      "measurements": {
-        "snr_db": 44.51871966007413,
-        "low_0_6khz": 63.02025383550066,
-        "high_6_24khz": 23.02478957681469,
-        "visqol_moslqo": 4.718311354112897,
-        "crc_fail": 0,
-        "crc_fail_percent": 0.0,
-        "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "demo",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
-      "case": "awgn75",
-      "file": "demo__48k__M700HY__awgn-cn0-75dBHz.flac",
-      "sha256": "5ab4116f8ca6f78f70df38d8d403aef1166db17d86e0bc0222a9ec50eed80c23",
-      "link": {
-        "esn0_main": 20.383514319365446,
-        "esn0_sub": null
-      },
-      "measurements": {
-        "snr_db": 37.52558289597285,
-        "low_0_6khz": 46.308562175999704,
-        "high_6_24khz": 16.58221949580786,
-        "visqol_moslqo": 4.289248401344116,
-        "crc_fail": 0,
-        "crc_fail_percent": 0.0,
-        "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "demo",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "profile": "M700MY",
+      "baseline": "M700M",
+      "profile_signature": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(0, 0, 0, 0, 0, 0, 0), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
       "case": "awgn70",
-      "file": "demo__48k__M700HY__awgn-cn0-70dBHz.flac",
-      "sha256": "2697fce7a0b4287a7346bfef639795439df3cb07c5043c446c998e6df3d2d920",
+      "file": "demo__48k__M700MY__awgn-cn0-70dBHz.flac",
+      "sha256": "28e88c1c3da9ae9576da0249e6be940b7d8e6371f24ea73e50329d1e6bf9f236",
       "link": {
-        "esn0_main": 15.383514319365446,
+        "esn0_main": 16.507224725320448,
         "esn0_sub": null
       },
       "measurements": {
-        "snr_db": 32.338714632281985,
-        "low_0_6khz": 40.316817148700714,
-        "high_6_24khz": 11.53125041359393,
-        "visqol_moslqo": 3.3069525279241976,
+        "snr_db": 16.669975311607324,
+        "low_0_6khz": 17.446395057327447,
+        "high_6_24khz": 2.8216516735918162,
+        "visqol_moslqo": 2.2041189167475377,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
+        "samples_clipped_at_flac": 2
       }
     },
     {
       "source": "demo",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "profile": "M700MY",
+      "baseline": "M700M",
+      "profile_signature": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(0, 0, 0, 0, 0, 0, 0), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
       "case": "awgn65",
-      "file": "demo__48k__M700HY__awgn-cn0-65dBHz.flac",
-      "sha256": "7b0d4e4bc4eb0bcb85bf388fe828b642f7cd19ce9cd47ce858c3d4054f08dc56",
+      "file": "demo__48k__M700MY__awgn-cn0-65dBHz.flac",
+      "sha256": "4f4f824d7c12a347912586512a466bcb77f4402d3c19e6070fc48cf7e3f4c322",
       "link": {
-        "esn0_main": 10.383514319365446,
+        "esn0_main": 11.507224725320448,
         "esn0_sub": null
       },
       "measurements": {
-        "snr_db": 27.681540387204173,
-        "low_0_6khz": 32.51747635309221,
-        "high_6_24khz": 7.840374116547055,
-        "visqol_moslqo": 2.6524708517436113,
+        "snr_db": 14.255814274827976,
+        "low_0_6khz": 14.699387095752602,
+        "high_6_24khz": 2.555146523966612,
+        "visqol_moslqo": 2.201738429075817,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "fishin",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
-      "case": "codec",
-      "file": "fishin__48k__M700HY__codec.flac",
-      "sha256": "4198d73faa509ebe3a12be0599023425e0838abd35152bc95119d256f42832ff",
-      "link": null,
-      "measurements": {
-        "snr_db": 55.605461388737645,
-        "low_0_6khz": 75.12872022732499,
-        "high_6_24khz": 39.24745068139458,
-        "visqol_moslqo": 4.670040618557138,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "fishin",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
-      "case": "ideal",
-      "file": "fishin__48k__M700HY__ideal.flac",
-      "sha256": "19506f3630ab6d3255b7095523438ef50ae7aa380c9b4c3515112a0aa487048a",
-      "link": null,
-      "measurements": {
-        "snr_db": 55.60546210520302,
-        "low_0_6khz": 75.12871620184085,
-        "high_6_24khz": 39.24745145014069,
-        "visqol_moslqo": 4.670040618650864,
-        "crc_fail": 0,
-        "crc_fail_percent": 0.0,
-        "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "fishin",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
-      "case": "awgn80",
-      "file": "fishin__48k__M700HY__awgn-cn0-80dBHz.flac",
-      "sha256": "fed80afafbdc904371827baab8d33c29cccdbb93a566953b599094907f87bab0",
-      "link": {
-        "esn0_main": 25.383514319365446,
-        "esn0_sub": null
-      },
-      "measurements": {
-        "snr_db": 38.58392195934003,
-        "low_0_6khz": 52.97489134523239,
-        "high_6_24khz": 22.335498847093195,
-        "visqol_moslqo": 4.056759758312464,
-        "crc_fail": 0,
-        "crc_fail_percent": 0.0,
-        "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "fishin",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
-      "case": "awgn75",
-      "file": "fishin__48k__M700HY__awgn-cn0-75dBHz.flac",
-      "sha256": "a4f8b38bfe3aec73b5d51978f19109e7635fe88d8023b0c3c1ebf82054ecf989",
-      "link": {
-        "esn0_main": 20.383514319365446,
-        "esn0_sub": null
-      },
-      "measurements": {
-        "snr_db": 33.21525019559901,
-        "low_0_6khz": 36.90949402437354,
-        "high_6_24khz": 19.155711079380183,
-        "visqol_moslqo": 3.7682970076830404,
-        "crc_fail": 0,
-        "crc_fail_percent": 0.0,
-        "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "fishin",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
-      "case": "awgn70",
-      "file": "fishin__48k__M700HY__awgn-cn0-70dBHz.flac",
-      "sha256": "07a103e3b891085c5dedce7942f616f951a8bfe735ffcb3271382e27d6bd855f",
-      "link": {
-        "esn0_main": 15.383514319365446,
-        "esn0_sub": null
-      },
-      "measurements": {
-        "snr_db": 28.89965787353649,
-        "low_0_6khz": 31.146903052185095,
-        "high_6_24khz": 16.28645705548601,
-        "visqol_moslqo": 3.6233362761290318,
-        "crc_fail": 0,
-        "crc_fail_percent": 0.0,
-        "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "fishin",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
-      "case": "awgn65",
-      "file": "fishin__48k__M700HY__awgn-cn0-65dBHz.flac",
-      "sha256": "8ba9449d2a5f3d67dca4d54303fdbabf4639d70720437b304f7256c0ca9d8f9a",
-      "link": {
-        "esn0_main": 10.383514319365446,
-        "esn0_sub": null
-      },
-      "measurements": {
-        "snr_db": 25.429675640072894,
-        "low_0_6khz": 27.353076600647114,
-        "high_6_24khz": 13.312690309038828,
-        "visqol_moslqo": 3.5336236445981757,
-        "crc_fail": 0,
-        "crc_fail_percent": 0.0,
-        "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "vibeace",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
-      "case": "codec",
-      "file": "vibeace__48k__M700HY__codec.flac",
-      "sha256": "560095d721fb250fa1ea47ee640c759ad2f6e56b5fda74cae3a87a4807e24563",
-      "link": null,
-      "measurements": {
-        "snr_db": 68.46724845675695,
-        "low_0_6khz": 80.94822472909911,
-        "high_6_24khz": 40.97896473469084,
-        "visqol_moslqo": 4.570060973491034,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "vibeace",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
-      "case": "ideal",
-      "file": "vibeace__48k__M700HY__ideal.flac",
-      "sha256": "560095d721fb250fa1ea47ee640c759ad2f6e56b5fda74cae3a87a4807e24563",
-      "link": null,
-      "measurements": {
-        "snr_db": 68.46724845675695,
-        "low_0_6khz": 80.94822472909911,
-        "high_6_24khz": 40.97896473469084,
-        "visqol_moslqo": 4.570060973491034,
-        "crc_fail": 0,
-        "crc_fail_percent": 0.0,
-        "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "vibeace",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
-      "case": "awgn80",
-      "file": "vibeace__48k__M700HY__awgn-cn0-80dBHz.flac",
-      "sha256": "0afb110d9b1ae441c3b4b6e552c4cebc8009cc62085df8980a4309bc78f84834",
-      "link": {
-        "esn0_main": 25.383514319365446,
-        "esn0_sub": null
-      },
-      "measurements": {
-        "snr_db": 52.2979534072143,
-        "low_0_6khz": 61.96591432914094,
-        "high_6_24khz": 25.052814804209994,
-        "visqol_moslqo": 4.131903538364993,
-        "crc_fail": 0,
-        "crc_fail_percent": 0.0,
-        "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "vibeace",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
-      "case": "awgn75",
-      "file": "vibeace__48k__M700HY__awgn-cn0-75dBHz.flac",
-      "sha256": "a2dd9e08061a331528618d8938f9d72daed50f7c1f8611c06cf3003f9755a2eb",
-      "link": {
-        "esn0_main": 20.383514319365446,
-        "esn0_sub": null
-      },
-      "measurements": {
-        "snr_db": 44.344028913440525,
-        "low_0_6khz": 46.022472775639194,
-        "high_6_24khz": 21.529230407950337,
-        "visqol_moslqo": 3.570038660595809,
-        "crc_fail": 0,
-        "crc_fail_percent": 0.0,
-        "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "vibeace",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
-      "case": "awgn70",
-      "file": "vibeace__48k__M700HY__awgn-cn0-70dBHz.flac",
-      "sha256": "b1a69effcbaab5fabeb0c8a07417ec7cc395a59ef5e8bde92c7f450bbf905c42",
-      "link": {
-        "esn0_main": 15.383514319365446,
-        "esn0_sub": null
-      },
-      "measurements": {
-        "snr_db": 39.07706177935892,
-        "low_0_6khz": 40.06961648266799,
-        "high_6_24khz": 18.20548486458292,
-        "visqol_moslqo": 2.944282566479855,
-        "crc_fail": 0,
-        "crc_fail_percent": 0.0,
-        "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
-      }
-    },
-    {
-      "source": "vibeace",
-      "profile": "M700HY",
-      "baseline": "M700H",
-      "profile_signature": "Profile(pid=11, name='M700HY', fs=48000, block=64, levels=6, bits_m=(16, 16, 16, 15, 12, 8, 8), bits_s=(16, 13, 11, 9, 9, 7, 7), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(11, 10, 5, 4, 3, 3, 2), base_s=(1, 1, 1, 1, 1, 2, 2), base_extra=(('S', 0, 0),), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
-      "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
-      "case": "awgn65",
-      "file": "vibeace__48k__M700HY__awgn-cn0-65dBHz.flac",
-      "sha256": "1fbad344c6cdd0830849b73a87a11fc427bb0f389790b71b8b2dd4862a4eb5c6",
-      "link": {
-        "esn0_main": 10.383514319365446,
-        "esn0_sub": null
-      },
-      "measurements": {
-        "snr_db": 32.197036264479564,
-        "low_0_6khz": 32.59965472001068,
-        "high_6_24khz": 14.91077726721511,
-        "visqol_moslqo": 2.361734427786292,
-        "crc_fail": 0,
-        "crc_fail_percent": 0.0,
-        "plc_percent": 0.0,
-        "samples_clipped_at_flac": 0
+        "samples_clipped_at_flac": 20
       }
     },
     {
@@ -565,6 +247,54 @@
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
+      }
+    },
+    {
+      "source": "demo",
+      "profile": "M700Y",
+      "baseline": "M700",
+      "profile_signature": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(12, 9, 8, 9, 7, 5, 3), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(2, 2, 2, 2, 2, 2, 2), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
+      "case": "awgn80",
+      "file": "demo__48k__M700Y__awgn-cn0-80dBHz.flac",
+      "sha256": "984d853669592e456a98c4241a48c97ea3b725b5b8649d3783bac73cdaa97ece",
+      "link": {
+        "esn0_main": 24.602967610521745,
+        "esn0_sub": null
+      },
+      "measurements": {
+        "snr_db": 32.19367826293496,
+        "low_0_6khz": 33.24749014142331,
+        "high_6_24khz": 17.19573288202067,
+        "visqol_moslqo": 3.690025681834114,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
+        "plc_percent": 0.0,
+        "samples_clipped_at_flac": 0
+      }
+    },
+    {
+      "source": "demo",
+      "profile": "M700Y",
+      "baseline": "M700",
+      "profile_signature": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(12, 9, 8, 9, 7, 5, 3), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(2, 2, 2, 2, 2, 2, 2), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
+      "case": "awgn75",
+      "file": "demo__48k__M700Y__awgn-cn0-75dBHz.flac",
+      "sha256": "d6f7af412232596cb290c02ef7d792d4d314fa17ba2a5b4de76561a4de061755",
+      "link": {
+        "esn0_main": 19.602967610521745,
+        "esn0_sub": null
+      },
+      "measurements": {
+        "snr_db": 21.138532318867046,
+        "low_0_6khz": 21.2598673947427,
+        "high_6_24khz": 14.224117943843986,
+        "visqol_moslqo": 2.3951722508135838,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
+        "plc_percent": 0.0,
+        "samples_clipped_at_flac": 59
       }
     },
     {
@@ -617,6 +347,93 @@
     },
     {
       "source": "fishin",
+      "profile": "M700MY",
+      "baseline": "M700M",
+      "profile_signature": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(0, 0, 0, 0, 0, 0, 0), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
+      "case": "codec",
+      "file": "fishin__48k__M700MY__codec.flac",
+      "sha256": "7f2145cb86ef44e4125292e7f78fe7b1e1f9a7143affe000af7dd23d037042fc",
+      "link": null,
+      "measurements": {
+        "snr_db": 55.456888943311114,
+        "low_0_6khz": 68.89837853560334,
+        "high_6_24khz": 39.24776286664576,
+        "visqol_moslqo": 4.6686526956358625,
+        "samples_clipped_at_flac": 0
+      }
+    },
+    {
+      "source": "fishin",
+      "profile": "M700MY",
+      "baseline": "M700M",
+      "profile_signature": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(0, 0, 0, 0, 0, 0, 0), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
+      "case": "ideal",
+      "file": "fishin__48k__M700MY__ideal.flac",
+      "sha256": "f88ee921acbe601e4a1992e35dd5ee17d3ff462c7a5e16e82afddfdc2852ca0f",
+      "link": null,
+      "measurements": {
+        "snr_db": 55.45688983698483,
+        "low_0_6khz": 68.89838277112328,
+        "high_6_24khz": 39.24776360563879,
+        "visqol_moslqo": 4.668652693425592,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
+        "plc_percent": 0.0,
+        "samples_clipped_at_flac": 0
+      }
+    },
+    {
+      "source": "fishin",
+      "profile": "M700MY",
+      "baseline": "M700M",
+      "profile_signature": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(0, 0, 0, 0, 0, 0, 0), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
+      "case": "awgn70",
+      "file": "fishin__48k__M700MY__awgn-cn0-70dBHz.flac",
+      "sha256": "161dfd35621d638749c47ba07e91deba4080fdc86e553a2315238b1001087bbd",
+      "link": {
+        "esn0_main": 16.507224725320448,
+        "esn0_sub": null
+      },
+      "measurements": {
+        "snr_db": 16.465154269816594,
+        "low_0_6khz": 16.47073043288362,
+        "high_6_24khz": 16.23345139863112,
+        "visqol_moslqo": 3.175378337290458,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
+        "plc_percent": 0.0,
+        "samples_clipped_at_flac": 0
+      }
+    },
+    {
+      "source": "fishin",
+      "profile": "M700MY",
+      "baseline": "M700M",
+      "profile_signature": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(0, 0, 0, 0, 0, 0, 0), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
+      "case": "awgn65",
+      "file": "fishin__48k__M700MY__awgn-cn0-65dBHz.flac",
+      "sha256": "ad21e104a4f4c9e24d88e10573ba23f0a49016cb8fb3fbb1bbbdb12ef9bdf417",
+      "link": {
+        "esn0_main": 11.507224725320448,
+        "esn0_sub": null
+      },
+      "measurements": {
+        "snr_db": 13.613094264914237,
+        "low_0_6khz": 13.619109759099544,
+        "high_6_24khz": 13.3636631073797,
+        "visqol_moslqo": 3.1130434873348474,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
+        "plc_percent": 0.0,
+        "samples_clipped_at_flac": 20
+      }
+    },
+    {
+      "source": "fishin",
       "profile": "M700Y",
       "baseline": "M700",
       "profile_signature": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(12, 9, 8, 9, 7, 5, 3), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(2, 2, 2, 2, 2, 2, 2), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
@@ -652,6 +469,54 @@
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
+      }
+    },
+    {
+      "source": "fishin",
+      "profile": "M700Y",
+      "baseline": "M700",
+      "profile_signature": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(12, 9, 8, 9, 7, 5, 3), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(2, 2, 2, 2, 2, 2, 2), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
+      "case": "awgn80",
+      "file": "fishin__48k__M700Y__awgn-cn0-80dBHz.flac",
+      "sha256": "0175959eac42c9efe797681c4059d1585d3b58d8dd5d7fbc24ffcedecbd6a78c",
+      "link": {
+        "esn0_main": 24.602967610521745,
+        "esn0_sub": null
+      },
+      "measurements": {
+        "snr_db": 33.531961716481874,
+        "low_0_6khz": 35.22699556193157,
+        "high_6_24khz": 21.829086356799206,
+        "visqol_moslqo": 3.846331000303527,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
+        "plc_percent": 0.0,
+        "samples_clipped_at_flac": 0
+      }
+    },
+    {
+      "source": "fishin",
+      "profile": "M700Y",
+      "baseline": "M700",
+      "profile_signature": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(12, 9, 8, 9, 7, 5, 3), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(2, 2, 2, 2, 2, 2, 2), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
+      "case": "awgn75",
+      "file": "fishin__48k__M700Y__awgn-cn0-75dBHz.flac",
+      "sha256": "06d0e958f62b8408bae510b5b0061be834f2dac78de914ea9be2d154c9522995",
+      "link": {
+        "esn0_main": 19.602967610521745,
+        "esn0_sub": null
+      },
+      "measurements": {
+        "snr_db": 20.17108434573457,
+        "low_0_6khz": 20.22563730413112,
+        "high_6_24khz": 18.315338135071595,
+        "visqol_moslqo": 3.3134571963672528,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
+        "plc_percent": 0.0,
+        "samples_clipped_at_flac": 8
       }
     },
     {
@@ -704,6 +569,93 @@
     },
     {
       "source": "vibeace",
+      "profile": "M700MY",
+      "baseline": "M700M",
+      "profile_signature": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(0, 0, 0, 0, 0, 0, 0), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
+      "case": "codec",
+      "file": "vibeace__48k__M700MY__codec.flac",
+      "sha256": "ee750fd11ed91ee7a74fdf90dd71a8a04cd123b86eafebee2d0ad200a3c7c627",
+      "link": null,
+      "measurements": {
+        "snr_db": 68.18951765966173,
+        "low_0_6khz": 77.54998203199546,
+        "high_6_24khz": 40.98303621318307,
+        "visqol_moslqo": 4.558892887715235,
+        "samples_clipped_at_flac": 0
+      }
+    },
+    {
+      "source": "vibeace",
+      "profile": "M700MY",
+      "baseline": "M700M",
+      "profile_signature": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(0, 0, 0, 0, 0, 0, 0), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
+      "case": "ideal",
+      "file": "vibeace__48k__M700MY__ideal.flac",
+      "sha256": "309f9b2718c9fef46973117d73621d109b7b3363e7ecbab9d15ed30a8b82a837",
+      "link": null,
+      "measurements": {
+        "snr_db": 68.18951764083229,
+        "low_0_6khz": 77.54998198677731,
+        "high_6_24khz": 40.98303619780527,
+        "visqol_moslqo": 4.558892885691739,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
+        "plc_percent": 0.0,
+        "samples_clipped_at_flac": 0
+      }
+    },
+    {
+      "source": "vibeace",
+      "profile": "M700MY",
+      "baseline": "M700M",
+      "profile_signature": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(0, 0, 0, 0, 0, 0, 0), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
+      "case": "awgn70",
+      "file": "vibeace__48k__M700MY__awgn-cn0-70dBHz.flac",
+      "sha256": "6279ad9f301b3e7b9937a9fc741dc7898558bf2e9e1957d5f694e3eafb1e04a1",
+      "link": {
+        "esn0_main": 16.507224725320448,
+        "esn0_sub": null
+      },
+      "measurements": {
+        "snr_db": 17.254130877133026,
+        "low_0_6khz": 17.255314851998527,
+        "high_6_24khz": 16.60306346933494,
+        "visqol_moslqo": 1.8679440255834923,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
+        "plc_percent": 0.0,
+        "samples_clipped_at_flac": 0
+      }
+    },
+    {
+      "source": "vibeace",
+      "profile": "M700MY",
+      "baseline": "M700M",
+      "profile_signature": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(0, 0, 0, 0, 0, 0, 0), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
+      "case": "awgn65",
+      "file": "vibeace__48k__M700MY__awgn-cn0-65dBHz.flac",
+      "sha256": "d39992bc9a8160c7d71525f93ff24b208f0b7bef020695ba0cd8dbd97ae3094f",
+      "link": {
+        "esn0_main": 11.507224725320448,
+        "esn0_sub": null
+      },
+      "measurements": {
+        "snr_db": 14.338860774066333,
+        "low_0_6khz": 14.341473119862059,
+        "high_6_24khz": 13.013719403651328,
+        "visqol_moslqo": 1.8329592602978364,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
+        "plc_percent": 0.0,
+        "samples_clipped_at_flac": 0
+      }
+    },
+    {
+      "source": "vibeace",
       "profile": "M700Y",
       "baseline": "M700",
       "profile_signature": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(12, 9, 8, 9, 7, 5, 3), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(2, 2, 2, 2, 2, 2, 2), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
@@ -735,6 +687,54 @@
         "low_0_6khz": 77.54998198677731,
         "high_6_24khz": 40.98303619780527,
         "visqol_moslqo": 4.558892885691739,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
+        "plc_percent": 0.0,
+        "samples_clipped_at_flac": 0
+      }
+    },
+    {
+      "source": "vibeace",
+      "profile": "M700Y",
+      "baseline": "M700",
+      "profile_signature": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(12, 9, 8, 9, 7, 5, 3), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(2, 2, 2, 2, 2, 2, 2), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
+      "case": "awgn80",
+      "file": "vibeace__48k__M700Y__awgn-cn0-80dBHz.flac",
+      "sha256": "7305236b293553d364fac4ade68487574f1348fb474569465eccd6b115cb6c29",
+      "link": {
+        "esn0_main": 24.602967610521745,
+        "esn0_sub": null
+      },
+      "measurements": {
+        "snr_db": 34.59409357695969,
+        "low_0_6khz": 34.6628603532772,
+        "high_6_24khz": 24.456869547624954,
+        "visqol_moslqo": 3.1255135903318045,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
+        "plc_percent": 0.0,
+        "samples_clipped_at_flac": 0
+      }
+    },
+    {
+      "source": "vibeace",
+      "profile": "M700Y",
+      "baseline": "M700",
+      "profile_signature": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 8, 8), bits_s=(12, 9, 8, 9, 7, 5, 3), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(2, 2, 2, 2, 2, 2, 2), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 2, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M',), experimental_tag=3)",
+      "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
+      "case": "awgn75",
+      "file": "vibeace__48k__M700Y__awgn-cn0-75dBHz.flac",
+      "sha256": "92e92ee3ac830e0eb22822cad7fbe11d9867acdf6ca563b9e8981b9e2537b6ec",
+      "link": {
+        "esn0_main": 19.602967610521745,
+        "esn0_sub": null
+      },
+      "measurements": {
+        "snr_db": 20.637703574438074,
+        "low_0_6khz": 20.639734066685683,
+        "high_6_24khz": 19.574626205377797,
+        "visqol_moslqo": 1.9155732018581277,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,

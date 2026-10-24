@@ -2,8 +2,8 @@
 """
 wav をコーデックに通す (通信路なし)。
 
-  python tools/codec_wav.py 入力.wav 出力.wav --profile B200H
-  python tools/codec_wav.py 入力.wav 出力.wav --profile M700 --no-postfilter
+  python tools/codec_wav.py 入力.wav 出力.wav --profile B200
+  python tools/codec_wav.py 入力.wav 出力.wav --profile M700M --no-postfilter
 
 入力はプロファイルのサンプリング周波数に変換して処理し、出力もそのサンプリング周波数 (32bit float)。
 """
@@ -26,7 +26,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("input")
     ap.add_argument("output")
-    ap.add_argument("--profile", default="B200H", choices=PROFILES)
+    ap.add_argument("--profile", default="B200", choices=PROFILES)
     ap.add_argument("--no-postfilter", action="store_true")
     ap.add_argument("--pf-iters", type=int, help="ポストフィルタの繰り返し回数 (省略時はプロファイルの値)")
     args = ap.parse_args()

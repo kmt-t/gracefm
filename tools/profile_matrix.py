@@ -21,7 +21,7 @@ def render():
     lines = ['# 現行プロファイル設定マトリクス', '',
              '`gracefm/profiles.py` の `PROFILE_MATRIX` から生成。更新は `python tools/profile_matrix.py`、一致確認は `--check`。アルゴリズムと測定条件は[技術論文](SPEC.md)を参照。', '',
              '全登録プロファイルに区間アッテネータを標準装備する。名前の数字は系列名であり、現在の実ビットレートは下表を参照。', '',
-             '共通設定：64サンプル、Haar 6段、指数4bit/送信帯域、基本CRC-16とH1/H2用の高域CRC-16（該当帯域を送る場合のみ）、畳み込み符号 K=7・r=1/2。ヘッダは非暗号化24bit（カウンタ16bit）、暗号化32bit（カウンタ24bit）。ID 0・13～15は予約。副系SUBはQPSK、ステレオ差分Sは主系の階層QAMで送る。', '',
+             '共通設定：64サンプル、Haar 6段、指数4bit/送信帯域、基本CRC-16とH1/H2用の高域CRC-16（該当帯域を送る場合のみ）、畳み込み符号 K=7・r=1/2。ヘッダは非暗号化24bit（カウンタ16bit）、暗号化32bit（カウンタ24bit）。ID 0・12～15は予約。副系SUBはQPSK、ステレオ差分Sは主系の階層QAMで送る。M接尾辞はモノラル、Y接尾辞はQASKを表す。', '',
              '## ID・方式・伝送予算', '',
              '非暗号化の値。シンボル数にはプリアンブル16シンボルとY専用シンボルを含む。理論支持幅は `(1+β)Rs` で、99%占有帯域の実測値ではない。音声量には指数とアッテネータを含む。', '',
              '| ID | 名前 | fs kHz | M/S | 変調 / α | Y開始k | FEC上位bit/係数 | 音声 kbps | CRC本数 | 保護部CRC込 bit | FEC後 bit | 非保護デジタル bit | シンボル/フレーム | Rs ksym/s | RRC β / span | 理論支持幅 kHz |',
@@ -36,8 +36,8 @@ def render():
                             symbols_per_frame=ns, symbol_rate=rs,
                             audio_kbps=p.audio_kbps(), theoretical_bandwidth_hz=rs*(1+p.pulse_beta)))
     lines += ['', '## 成分ごとの全設定', '',
-              'ベクトルは `k=0…6`。M/Sの各行に同じ項目を表示する。アッテネータ区間長0はその帯域では不使用。副系も各成分の最高送信帯域に配置し、4係数を基本とする（係数数が4未満ならその係数数）。B200HのM最高域だけは調整済みの8係数区間を維持。Yの高域Mは各帯域8区間。', '',
-              '基本層はFEC保護bitを含む。係数別の追加割当も基本層として数え、強い位置に拡張層が暗黙に入り込むことはない。追加欄の `k:j +1` は、その帯域の係数j（0始まり）だけ基本層を1bit増やす。Y高域Mの `H` は専用シンボルで、デジタル層分割の対象外。QPSKは層分割なし。', '',
+              'ベクトルは `k=0…6`。M/Sの各行に同じ項目を表示する。アッテネータ区間長0はその帯域では不使用。副系も各成分の最高送信帯域に配置し、4係数を基本とする（係数数が4未満ならその係数数）。B200のM最高域だけは調整済みの8係数区間を維持。Yの高域Mは各帯域8区間。', '',
+              '基本層はFEC保護bitを含む。係数別の追加割当も基本層として数え、強い位置に拡張層が暗黙に入り込むことはない。追加欄の `k:j +1` は、その帯域の係数j（0始まり）だけ基本層を1bit増やす。Y高域Mは専用シンボルで、デジタル層分割の対象外。QPSKは層分割なし。', '',
               '| ID | 名前 | 成分 | 全幅 | 基本層 | 拡張層 | 基本層追加 | アッテネータ区間長 | 指数幅 | 指数最小値 |',
               '|---|---|---|---|---|---|---|---|---|---|']
     for p in PROFILES.values():
@@ -47,7 +47,7 @@ def render():
             base=[]; ext=[]
             for k,b in enumerate(bits):
                 if p.hybrid and ch in p.hybrid_channels and k>=p.hybrid_start_k:
-                    base.append('H');ext.append('H')
+                    base.append('—');ext.append('—')
                 elif p.layered:
                     base.append(p.base_bits(ch,k));ext.append(b-p.base_bits(ch,k))
                 else: base.append('—');ext.append('—')

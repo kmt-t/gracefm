@@ -8,7 +8,7 @@
   (a) 波形: 原音 / ポストフィルタなし (Haar 合成のまま) / 平滑化だけ (射影なし) / ポストフィルタ (4回)
   (b) 誤差の波形
   (c) 誤差のスペクトル (と原音のスペクトル)
-  (d) 同じく --profile2 (既定 B200MH: 全帯域を送る基本層)
+  (d) 同じく --profile2 (既定 B200M: 全帯域を送る基本層)
 数値: 波形SNR [dB]、帯域ごとの誤差電力 [dB]
 """
 import argparse
@@ -56,7 +56,7 @@ def decode(x, p, mode):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--profile", default="SUB50M")
-    ap.add_argument("--profile2", default="B200MH")
+    ap.add_argument("--profile2", default="B200M")
     ap.add_argument("--material", default="fishin")
     ap.add_argument("--seconds", type=float, default=10)
     ap.add_argument("--json")

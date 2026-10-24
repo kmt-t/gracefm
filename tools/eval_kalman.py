@@ -23,7 +23,7 @@ from gracefm.profiles import PROFILES  # noqa: E402
 
 VARS = {"なし": None, "低3帯域 AR(2)": dict(kalman_bands=[0, 1, 2]), "全帯域 AR(2)": dict(kalman_bands="all"),
         "低3帯域 AR(8)": dict(kalman_bands=[0, 1, 2], kalman_order=8)}
-MATS = (("fishin", "B200MH"), ("vibeace", "B200MH"), ("demo", "B200H"))
+MATS = (("fishin", "B200M"), ("vibeace", "B200M"), ("demo", "B200"))
 CN0S = (54.0, 60.0, 66.0)
 
 

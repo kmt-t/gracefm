@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create paired 48 kHz M700Y/M700HY monitor samples and measurements."""
+"""Create paired 48 kHz M700MY/M700Y monitor samples and measurements."""
 
 import argparse
 import json
@@ -23,8 +23,8 @@ from make_hybrid_y_samples import atomic_json, sha256  # noqa: E402
 from make_samples import codec, make_demo  # noqa: E402
 
 SOURCES = ("demo", "fishin", "vibeace")
-PAIRS = {"M700Y": ("M700", (70, 65)),
-         "M700HY": ("M700H", (80, 75, 70, 65))}
+PAIRS = {"M700MY": ("M700M", (70, 65)),
+         "M700Y": ("M700", (80, 75, 70, 65))}
 
 
 def filename_for(source, profile, case):

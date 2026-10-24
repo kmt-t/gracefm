@@ -39,7 +39,7 @@ def main():
         with open(result_path, encoding="utf-8") as stream:
             result = json.load(stream)
     for source, (y_profile, _, mono) in SOURCES.items():
-        baseline_profile = "B200MH" if mono else "B200H"
+        baseline_profile = "B200M" if mono else "B200"
         input_path = os.path.join(ROOT, "samples", f"{source}__32k__reference.flac")
         original, _ = wavio.read(input_path)
         original = original[:y_manifest["seconds"] * 32000]

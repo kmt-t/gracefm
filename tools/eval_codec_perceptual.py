@@ -92,7 +92,7 @@ def main():
         ap.error("bitrates は MPEG-1 Layer III の対応ビットレートから選んでください")
     if not bitrates or args.seconds < 3 or args.seconds > 10 or args.workers < 1:
         ap.error("bitrates は空にせず、seconds は 3〜10、workers は 1 以上にしてください")
-    methods = ["B200MH"] + [f"MP3-{b}" for b in bitrates]
+    methods = ["B200M"] + [f"MP3-{b}" for b in bitrates]
     jobs = [(material, args.seconds, method) for material in materials for method in methods]
     with ProcessPoolExecutor(max_workers=args.workers) as executor:
         rows = []

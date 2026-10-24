@@ -27,9 +27,9 @@ from eval_hybrid import budget, score, spectrum  # noqa: E402
 from make_samples import codec  # noqa: E402
 
 SOURCES = {
-    "fishin": ("B200MHY", "SUB50M", True),
-    "vibeace": ("B200MHY", "SUB50M", True),
-    "demo": ("B200HY", "SUB100", False),
+    "fishin": ("B200MY", "SUB50M", True),
+    "vibeace": ("B200MY", "SUB50M", True),
+    "demo": ("B200Y", "SUB100", False),
 }
 CASES = ("codec", "ideal", "awgn80", "awgn66", "awgn60", "awgn57", "awgn54",
          "rayleigh60", "main_minus10db66", "phase_only66")

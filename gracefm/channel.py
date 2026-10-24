@@ -15,10 +15,10 @@ from .txrx import Transmitter, receive
 
 # 主系に組み合わせる副系 (主系より低いビットレートで、別の周波数で送る受け皿)
 DEFAULT_SUB = {
-    "B200MH": "SUB50M", "B200MHY": "SUB50M",
-    "B200H": "SUB100", "B200Y": "SUB100", "B200HY": "SUB100",
-    "M700": "SUB100-48K", "M700H": "SUB100-48K",
-    "M700Y": "SUB100-48K", "M700HY": "SUB100-48K",
+    "B200M": "SUB50M", "B200MY": "SUB50M",
+    "B200": "SUB100", "B200Y": "SUB100",
+    "M700M": "SUB100-48K", "M700MY": "SUB100-48K",
+    "M700": "SUB100-48K", "M700Y": "SUB100-48K",
 }
 
 

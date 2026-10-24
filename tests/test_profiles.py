@@ -18,13 +18,20 @@ def test_catalog_ids_and_standard_attenuation():
     assert set(DEFAULT_SUB) <= PROFILES.keys()
     for main, secondary in DEFAULT_SUB.items():
         assert PROFILES[main].fs == PROFILES[secondary].fs
-    assert list(BY_ID) == list(range(1, 13))
-    assert not {'B200', 'B200M', 'S50M', 'S100', 'S100-48K'} & PROFILES.keys()
+    assert list(BY_ID) == list(range(1, 12))
+    assert set(PROFILES) == {
+        'B200M', 'B200', 'B200MY', 'B200Y',
+        'M700M', 'M700', 'M700MY', 'M700Y',
+        'SUB50M', 'SUB100', 'SUB100-48K',
+    }
+    assert not {'S50M', 'S100', 'S100-48K'} & PROFILES.keys()
     assert all(PROFILES[name].modulation == 'qpsk' for name in ('SUB50M', 'SUB100', 'SUB100-48K'))
-    assert all(PROFILES[name].modulation == 'qam16h' for name in ('B200H', 'B200Y', 'B200HY'))
-    assert all(PROFILES[name].modulation == 'qam16h' for name in ('M700', 'M700H', 'M700Y', 'M700HY'))
-    assert PROFILES['M700'].base_s == PROFILES['M700Y'].base_s == (2,) * 7
-    assert not {'M700Q16', 'B150', 'B150M', 'S85M', 'B200MH-A4', 'B200H-A4'} & PROFILES.keys()
+    assert all(PROFILES[name].modulation == 'qam16h' for name in ('B200M', 'B200', 'B200MY', 'B200Y'))
+    assert all(PROFILES[name].modulation == 'qam16h' for name in ('M700M', 'M700', 'M700MY', 'M700Y'))
+    assert PROFILES['M700M'].bits_s == PROFILES['M700MY'].bits_s == (0,) * 7
+    assert PROFILES['M700M'].base_s == PROFILES['M700MY'].base_s == (0,) * 7
+    assert all(PROFILES[name].bits_s != (0,) * 7 for name in ('M700', 'M700Y'))
+    assert not {'M700Q16', 'B150', 'B150M', 'S85M', 'B200M-A4', 'B200-A4'} & PROFILES.keys()
     for p in PROFILES.values():
         assert p.experimental_tag == 3 and BY_ID[p.pid] is p
         assert BY_HEADER[p.pid, 3] is p
@@ -96,14 +103,14 @@ def test_other_format_identifiers_are_rejected_even_with_matching_id():
 
 
 def test_hybrid_factory_matches_catalog():
-    for base, name in [('B200MH', 'B200MHY'), ('B200H', 'B200HY'), ('M700', 'M700Y'), ('M700H', 'M700HY')]:
+    for base, name in [('B200M', 'B200MY'), ('M700M', 'M700MY'), ('M700', 'M700Y')]:
         p = PROFILES[name]
         assert make_hybrid(PROFILES[base], name, p.pid) == p
 
 
 def test_high_crc_erases_only_h1_h2_in_receiver():
     from gracefm.codec import haar_forward
-    p = PROFILES['B200H']
+    p = PROFILES['B200']
     x = np.random.default_rng(42).uniform(-0.5, 0.5, (p.block, 2))
     tx = Transmitter(p)
     lay = tx.layout
@@ -148,7 +155,7 @@ def test_high_crc_erases_only_h1_h2_in_receiver():
 
 def test_hybrid_high_crc_keeps_lower_hybrid_band():
     from gracefm.codec import haar_forward
-    p = PROFILES['B200HY']
+    p = PROFILES['B200Y']
     x = np.random.default_rng(43).uniform(-0.4, 0.4, (p.block, 2))
     tx = Transmitter(p)
     original = tx.frame(x)
@@ -178,7 +185,7 @@ def test_broadcast_main_occupied_bandwidth_is_near_180_khz():
     from scipy.signal import welch
     from gracefm.pulse import shape
     audio = np.random.default_rng(2026).uniform(-0.4, 0.4, (64 * 200, 2))
-    for name in ('B200MH', 'B200H', 'B200HY'):
+    for name in ('B200M', 'B200'):
         p = PROFILES[name]
         tx = Transmitter(p)
         samples = shape(np.concatenate(tx.run(audio)), beta=p.pulse_beta,

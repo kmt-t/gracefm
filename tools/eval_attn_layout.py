@@ -3,7 +3,7 @@
 
 音源取得: python tools/fetch_exp_audio.py (eval_audio/ は Git 管理外)
 実行例: python tools/eval_attn_layout.py --json docs/results/attn_layout_eval.json
-比較条件: B200MH の6詳細帯域＋低域近似、Mのみ、各フレームの固定ビット予算。
+比較条件: B200M の6詳細帯域＋低域近似、Mのみ、各フレームの固定ビット予算。
 訓練3素材×振幅3条件の正規化MSE平均を最小化し、保留2素材で検証する。
 """
 import argparse
@@ -162,7 +162,7 @@ def main():
     groups = tuple(sorted({int(v) for v in args.groups.split(',')}))
     if any(w not in range(1, 9) for w in widths) or 4 not in widths or 0 not in shifts or 0 not in groups:
         ap.error('幅に4、オフセットに0、グループに0を含めてください')
-    base = PROFILES['B200MH']
+    base = PROFILES['B200M']
     manifest, clips = read_clips(args.audio_dir, args.seconds, base.block)
     levels = (0, -20, -40)
     cases = {(name, db): haar_forward(blocks * 10 ** (db / 20), base.levels)
@@ -207,7 +207,7 @@ def main():
                             audio_kbps=p.audio_kbps(), symbol_rate_khz=channel.symbol_rate(p) / 1000)
     result = dict(method='訓練3素材×0/-20/-40 dB の正規化MSE平均を最小化。指数オフセットは帯域ごとに固定。'
                          '6詳細帯域＋低域近似のまま最高域32係数のみ区間アッテネータを比較。保留2素材は選択に使わない。'
-                         'リンクはB200MH+SUB50M、電力50:50、AWGN、seed1。',
+                         'リンクはB200M+SUB50M、電力50:50、AWGN、seed1。',
                   seconds=args.seconds, materials=manifest, widths=widths, offset_shifts=shifts,
                   groups=groups, headroom_db=args.headroom_db,
                   train_peak_per_band=train_peaks, holdout_peak_per_band=holdout_peaks,

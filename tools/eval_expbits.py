@@ -2,7 +2,7 @@
 """
 指数のビット数の評価。入力の音量を下げていったときに、相対的な音質が保たれるかを見る。
 
-  python tools/eval_expbits.py 曲.wav --profile B200MH
+  python tools/eval_expbits.py 曲.wav --profile B200M
 
 ブロック浮動小数点は本来、音量が変わっても相対的な音質は変わらない。指数の範囲 (2^exp_bits 段 × 6dB)
 の下限を割ると、量子化のステップがそれ以上細かくならず、仮数のビットが少ない帯域から 0 に潰れていく。
@@ -39,7 +39,7 @@ def run(x, p):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("input")
-    ap.add_argument("--profile", default="B200MH", choices=PROFILES)
+    ap.add_argument("--profile", default="B200M", choices=PROFILES)
     ap.add_argument("--seconds", type=float, default=10.0)
     ap.add_argument("--levels", default="0,-20,-40,-60,-80")
     ap.add_argument("--exp-bits", default="3,4,5")
