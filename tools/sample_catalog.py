@@ -28,7 +28,7 @@ def expected_files():
     result = set()
     for source in ('demo', 'fishin', 'vibeace'):
         mono = source != 'demo'
-        main, sub = ('B200MH', 'SUB50M') if mono else ('B200H', 'SUB100')
+        main, sub = ('B200M', 'SUB50M') if mono else ('B200', 'SUB100')
         names = [sample_name(source, 32000, main)]
         if not mono:
             names.append(sample_name(source, 32000, 'B200Y'))
@@ -36,9 +36,9 @@ def expected_files():
             names.append(sample_name(source, 32000, main, case, sub=sub))
             if mono: names.append(sample_name(source, 32000, 'FM', case))
         result.update('samples/' + n for n in names)
-        for profile, cases in [('M700', ('codec', 'awgn70', 'awgn65')),
-                               ('M700H', ('codec', 'awgn80', 'awgn75', 'awgn70', 'awgn65')),
-                               ('M700H-base', ('codec',))]:
+        for profile, cases in [('M700M', ('codec', 'awgn70', 'awgn65')),
+                               ('M700', ('codec', 'awgn80', 'awgn75', 'awgn70', 'awgn65')),
+                               ('M700-base', ('codec',))]:
             result.update('samples/monitor/' + monitor(source, profile, case) for case in cases)
         result.update('samples/hybrid_y/' + hybrid(source, main + 'Y', case) for case in CASES)
         for profile, (_, cn0s) in PAIRS.items():
@@ -50,18 +50,18 @@ def expected_files():
             result.update('samples/monitor_y/' + monitor('hires_probe', profile, case) for case in cases)
     for source in ('demo', 'hires_probe'):
         for bits in (10, 12):
-            result.update('samples/monitor_y/' + monitor(source, f'M700HY-R{bits}', case)
+            result.update('samples/monitor_y/' + monitor(source, f'M700Y-R{bits}', case)
                           for case in ('codec', 'awgn80', 'awgn75', 'awgn70', 'awgn65'))
     for cn0 in (80, 75, 70, 65):
-        result.add('samples/monitor/' + sample_name('demo', 48000, 'M700H', f'awgn{cn0}', sub='SUB100-48K'))
+        result.add('samples/monitor/' + sample_name('demo', 48000, 'M700', f'awgn{cn0}', sub='SUB100-48K'))
     return result
 
 
 def profile_for(name):
-    if name == 'M700H-base':
-        return PROFILES['M700H']
-    if name.startswith('M700HY-R'):
-        from eval_m700hy_radius_precision import variant
+    if name == 'M700-base':
+        return PROFILES['M700']
+    if name.startswith('M700Y-R'):
+        from eval_m700y_radius_precision import variant
         return variant(int(name.split('-R')[1]))
     return PROFILES[name]
 
@@ -72,14 +72,23 @@ def build():
     if expected != found:
         raise ValueError({'missing': sorted(expected-found), 'unexpected': sorted(found-expected)})
     measurements_by_file = {}
+    report_folders = {
+        'hybrid_y_samples': 'samples/hybrid_y',
+        'monitor_y_samples': 'samples/monitor_y',
+        'monitor_y_hires_probe': 'samples/monitor_y',
+        'monitor_y_radius_precision': 'samples/monitor_y',
+        'secondary_monitor_samples': 'samples/monitor',
+    }
     for stem in ('hybrid_y_samples', 'monitor_y_samples', 'monitor_y_hires_probe',
                  'monitor_y_radius_precision', 'secondary_monitor_samples'):
         report = json.loads((ROOT/'docs/results'/(stem+'.json')).read_text())
         for row in report.get('samples', report.get('comparison', [])):
-            matching = [name for name in expected if Path(name).name == row['file']]
+            matching = [name for name in expected
+                        if str(Path(name).parent) == report_folders[stem]
+                        and Path(name).name == row['file']]
             assert len(matching) == 1, (stem, row['file'])
             assert digest(ROOT/matching[0]) == row['sha256'], (stem, row['file'])
-            measurements_by_file[row['file']] = row.get('measurements', row.get('variant_measurements'))
+            measurements_by_file[matching[0]] = row.get('measurements', row.get('variant_measurements'))
     entries = []
     for relative in sorted(expected):
         path = ROOT / relative
@@ -102,7 +111,7 @@ def build():
                             sample_rate_hz=fs, seconds=len(audio)/fs, channels=sf.info(path).channels,
                             configuration=config,
                             condition=condition, profiles=profiles,
-                            detailed_measurements=measurements_by_file.get(path.name),
+                            detailed_measurements=measurements_by_file.get(relative),
                             snr_db=float(metrics.snr_db(reference, audio))))
     covered = {p['name'] for row in entries for p in row['profiles'] if p['name'] in PROFILES}
     assert covered == set(PROFILES), ('uncovered profiles', set(PROFILES)-covered)
@@ -110,7 +119,7 @@ def build():
             for p in sorted((ROOT/folder).glob('*.py'))}
     report = dict(description='Current 10-second listening samples; decoded FLAC measurements, not RF capture',
                   expected_sample_count=len(expected), seed=1, code_sha256=code,
-                  base_comparison_note='M700H-base retains the actual basic layer including base_extra; only extension posterior probabilities are set to 0.5',
+                  base_comparison_note='M700-base retains the actual basic layer; only extension posterior probabilities are set to 0.5',
                   samples=entries)
     destination=ROOT/'docs/results/samples.json'
     destination.write_text(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False)+'\n')
@@ -122,8 +131,8 @@ def build():
         lines=[f'# 現行サンプル音声 — {title}', '',
                '**全デジタル主系・副系に標準アッテネータを含む現行設定の音声です。** 各10秒。保存したFLACを読み戻して波形SNRを再測定しています。', '',
                f'[命名規則]({rel("samples/NAMING.md")}) · [設定表]({rel("docs/PROFILES.md")}) · [全音源の設定・測定値・SHA-256]({rel("docs/results/samples.json")})', '',
-               '32 kHzの2系統は電力50:50。48 kHzの `M700H+SUB100-48K` は75:25。それ以外の48 kHz音声は主系1系統です。`codec` は通信路なし、`ideal` は雑音なしのシンボル送受信。AWGN等は同期既知のシミュレーションです。', '',
-               '`M700H-base` は実際の基本層を保持し、拡張層の事後確率だけを0.5にした比較音源です。係数別昇格1bitと標準アッテネータを含みます。`R10` / `R12` はY仮数幅の比較条件です。', '',
+               '32 kHzの2系統は電力50:50。48 kHzの `M700+SUB100-48K` は75:25。それ以外の48 kHz音声は主系1系統です。`codec` は通信路なし、`ideal` は雑音なしのシンボル送受信。AWGN等は同期既知のシミュレーションです。', '',
+               '`M700-base` は実際の基本層を保持し、拡張層の事後確率だけを0.5にした比較音源です。標準アッテネータを含みます。`R10` / `R12` はY仮数幅の比較条件です。', '',
                '波形SNRは原音との差であり、聴感の点数ではありません。', '',
                '| 音源 | 構成 | 条件 | 試聴 | 波形SNR dB |', '|---|---|---|---|---:|']
         for row in entries:

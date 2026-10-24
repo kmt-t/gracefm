@@ -24,8 +24,8 @@ from gracefm.txrx import Transmitter  # noqa: E402
 from make_samples import codec  # noqa: E402
 
 CN0 = (54, 60, 66, 70, 80)
-PAIRS = (("B200MH", "B200MHY", "fishin", "SUB50M"),
-         ("B200H", "B200HY", "demo", "SUB100"))
+PAIRS = (("B200M", "B200MY", "fishin", "SUB50M"),
+         ("B200", "B200Y", "demo", "SUB100"))
 
 
 def band_snr(x, y, profile):

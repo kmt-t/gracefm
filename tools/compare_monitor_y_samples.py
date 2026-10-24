@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare saved M700Y/M700HY FLACs with matching current conventional monitor cases."""
+"""Compare saved M700MY/M700Y FLACs with matching current conventional monitor cases."""
 
 import json
 import os

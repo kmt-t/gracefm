@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate a 48 kHz/24-bit, 12–24 kHz-rich stereo probe and M700 Y pairs."""
+"""Generate a 48 kHz/24-bit, 12–24 kHz-rich stereo probe and M700M Y pairs."""
 
 import argparse
 import json
@@ -22,8 +22,8 @@ from make_hybrid_y_samples import atomic_json, sha256  # noqa: E402
 from make_monitor_y_samples import filename_for  # noqa: E402
 from make_samples import codec, make_demo  # noqa: E402
 
-PAIRS = (("M700", "M700Y", (70, 65)),
-         ("M700H", "M700HY", (80, 75, 70, 65)))
+PAIRS = (("M700M", "M700MY", (70, 65)),
+         ("M700", "M700Y", (80, 75, 70, 65)))
 
 
 def make_probe():
@@ -76,10 +76,10 @@ def main():
     parser.add_argument("--no-visqol", action="store_true")
     parser.add_argument("--out", default=os.path.join(ROOT, "samples/monitor_y"))
     parser.add_argument("--json", default=os.path.join(ROOT, "docs/results/monitor_y_hires_probe.json"))
-    parser.add_argument("--profiles", default="M700,M700Y,M700H,M700HY")
+    parser.add_argument("--profiles", default="M700M,M700MY,M700,M700Y")
     args = parser.parse_args()
     selected_profiles = args.profiles.split(",")
-    if any(name not in ("M700", "M700Y", "M700H", "M700HY") for name in selected_profiles):
+    if any(name not in ("M700M", "M700MY", "M700", "M700Y") for name in selected_profiles):
         parser.error("unknown profile")
     os.makedirs(args.out, exist_ok=True)
     os.makedirs(os.path.dirname(args.json), exist_ok=True)

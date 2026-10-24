@@ -61,7 +61,7 @@ def test_frame_roundtrip_bit_exact():
 def test_band_exponents_use_fixed_offsets_and_variable_widths():
     from gracefm.codec import exp_range
 
-    base = PROFILES["B200MH"]
+    base = PROFILES["B200M"]
     widths = (4, 3, 4, 3, 4, 3, 4)
     offsets = tuple(exp_range(k, b, base)[1] - (2 ** widths[k] - 1)
                     for k, b in enumerate(base.bits_m))
@@ -80,7 +80,7 @@ def test_band_exponents_use_fixed_offsets_and_variable_widths():
 
 def test_attenuator_roundtrip():
     from gracefm.codec import cells, dequantize, quantize, quantize_attenuated
-    base = replace(PROFILES["B200MH"], attn_group_m=(0,) * 7)
+    base = replace(PROFILES["B200M"], attn_group_m=(0,) * 7)
     groups = (0, 0, 0, 0, 0, 0, 4)
     p = replace(base, attn_group_m=groups)
     x = _signal(p.block, p.fs)
@@ -128,7 +128,7 @@ def test_attenuator_roundtrip():
 
 
 def test_adopted_attenuator_profile_end_to_end():
-    p = PROFILES["B200MH"]
+    p = PROFILES["B200M"]
     assert p.pid == 1 and p.exp_bits == 4 and p.attn_group_m[-1] == 4
     assert Layout(p).n_prot_crc == 156
     x = _signal(p.block * 12, p.fs)
@@ -140,7 +140,7 @@ def test_adopted_attenuator_profile_end_to_end():
 
 
 def test_broadcast_joint_stereo_attenuators():
-    p = PROFILES["B200H"]
+    p = PROFILES["B200"]
     assert p.pid == 2 and p.exp_bits == 4
     assert p.pulse_beta == 0.10 and p.pulse_span == 32
     from gracefm.channel import symbol_rate
@@ -169,7 +169,7 @@ def test_modem_noiseless():
 
 
 def test_end_to_end_without_noise():
-    p = PROFILES["M700"]
+    p = PROFILES["M700M"]
     x = _signal(p.block * 20, p.fs)
     tx = Transmitter(p)
     frames = tx.run(x)
@@ -180,7 +180,7 @@ def test_end_to_end_without_noise():
 
 
 def test_postfilter_stays_in_cells():
-    p = PROFILES["B200H"]
+    p = PROFILES["B200"]
     x = _signal(p.block, p.fs)
     coefs, cell = decode_coeffs(encode_block(x, p), p)
     pf = PostFilter(p.levels, p.pf_iters)
@@ -223,7 +223,7 @@ def test_cells_contain_original():
 def test_high_band_cell_contains_original():
     """最高域の量子化区間は元の係数を含む。"""
     from gracefm.codec import cells
-    p = PROFILES["B200H"]
+    p = PROFILES["B200"]
     bands = [np.zeros(p.ncoef(k)) for k in range(p.nbands)]
     bands[-1] = np.array([0.8] + [0.55] * (p.ncoef(p.nbands - 1) - 1))
     mono = haar_inverse(bands)
@@ -250,7 +250,7 @@ def test_receiver_is_causal():
     """受信処理 (復号・ポストフィルタ・融合・PLC) は未来のフレームを使わない:
     あるフレームを欠落させても、そのフレームが運ぶ区間より前の出力は変わらない"""
     from gracefm.txrx import receive
-    p = PROFILES["B200H"]
+    p = PROFILES["B200"]
     x = _signal(p.block * 24, p.fs)
     off = p.block // 2
     rng = np.random.default_rng(3)
@@ -273,7 +273,7 @@ def test_receiver_is_causal():
 
 
 def test_two_streams_survive_single_stream_loss():
-    p = PROFILES["B200H"]
+    p = PROFILES["B200"]
     x = _signal(p.block * 40, p.fs)
     fa = Transmitter(p, 0, 0).run(x)
     fb = Transmitter(p, 1, p.block // 2).run(x)
@@ -285,7 +285,7 @@ def test_two_streams_survive_single_stream_loss():
 def test_low_rate_sub_stream():
     """副系が主系より低いビットレートでも融合でき、雑音なしなら主系の音質を落とさない"""
     from gracefm import metrics
-    p, ps = PROFILES["B200MH"], PROFILES["SUB50M"]
+    p, ps = PROFILES["B200M"], PROFILES["SUB50M"]
     x = _signal(p.block * 40, p.fs)
     x[:, 1] = x[:, 0]
     fa = Transmitter(p, 0, 0).run(x)
@@ -302,11 +302,11 @@ def test_layered_profile():
     """階層化: 基本層は元のプロファイルと同じビットで強い位置に収まり、雑音なしなら全ビットで復号できる"""
     from gracefm import metrics
     from dataclasses import replace
-    p = PROFILES["B200MH"]
-    base = replace(p, bits_m=p.base_m, modulation="qpsk", alpha=1.0, base_m=None, base_s=None)   # 基本層 = B200MH の基本層割り当て (保護は上位 protect_k bit)
+    p = PROFILES["B200M"]
+    base = replace(p, bits_m=p.base_m, modulation="qpsk", alpha=1.0, base_m=None, base_s=None)   # 基本層 = B200M の基本層割り当て (保護は上位 protect_k bit)
     lay, lb = Layout(p), Layout(base)
     t = Transmitter(p)
-    assert lay.n_strong == lb.n_tx                          # 基本層 = B200MH の基本層割り当ての送信ビット数
+    assert lay.n_strong == lb.n_tx                          # 基本層 = B200M の基本層割り当ての送信ビット数
     assert 2 * t.nsym >= lay.n_strong                       # 強い位置 (象限ビット) に全部入る
     assert t.nsym == Transmitter(base).nsym                 # 帯域幅 (シンボル数) は基本層を QPSK で送るのと同じ
     x = _signal(p.block * 40, p.fs)
@@ -317,12 +317,12 @@ def test_layered_profile():
     assert metrics.snr_db(x, y) > metrics.snr_db(x, yb) + 20
 
 
-def test_b200h_soft_postfilter_preserves_high_side_signal():
+def test_b200_soft_postfilter_preserves_high_side_signal():
     """帯域圧縮後も高域Sのレベルを保ち、基本層を減らしたY系の差を検出する。"""
     from gracefm import channel, wavio
     from gracefm.codec import haar_forward
 
-    p = PROFILES["B200H"]
+    p = PROFILES["B200"]
     path = os.path.join(os.path.dirname(__file__), "..", "samples", "demo__32k__reference.flac")
     x, fs = wavio.read(path)
     assert fs == p.fs
@@ -331,7 +331,7 @@ def test_b200h_soft_postfilter_preserves_high_side_signal():
     s_ref = (x[:, 0] - x[:, 1]) / 2
     ref = haar_forward(s_ref.reshape(-1, p.block), p.levels)
     power_ref = sum(np.sum(a * a) for a in ref[5:])
-    for name in ("B200H", "B200HY"):
+    for name in ("B200",):
         current = PROFILES[name]
         y, _, _ = channel.link(x, current, 66, sub="SUB100", power_main=0.5, seed=1)
         s_out = (y[:, 0] - y[:, 1]) / 2
@@ -340,12 +340,12 @@ def test_b200h_soft_postfilter_preserves_high_side_signal():
         error = sum(np.sum((a - b) ** 2) for a, b in zip(ref[5:], out[5:]))
         level_change_db = 10 * np.log10(power_out / power_ref)
         snr_db = 10 * np.log10(power_ref / error)
-        assert abs(level_change_db) < (1.0 if name == "B200H" else 2.0)
-        assert snr_db > (8.0 if name == "B200H" else 3.0)
+        assert abs(level_change_db) < 1.0
+        assert snr_db > 8.0
 
 
 def test_side_component_bypasses_optional_postfilter():
-    p = PROFILES["B200H"]
+    p = PROFILES["B200"]
     x = _signal(p.block * 12, p.fs)
     frames = Transmitter(p).run(x)
     filtered, _ = receive(p, frames, None, len(x), 0, postfilter=True)
@@ -360,7 +360,7 @@ def test_encryption():
     """暗号化: 正しい鍵なら暗号化なしと同じ音、違う鍵なら復号できない。24bit のフレーム番号の周回も復元できる"""
     from gracefm import metrics
     from gracefm.crypto import StreamCipher, unwrap_counter
-    p = PROFILES["B200MH"]
+    p = PROFILES["B200M"]
     x = _signal(p.block * 30, p.fs)
     x[:, 1] = x[:, 0]
     key, nonce = bytes(range(16)), bytes(8)

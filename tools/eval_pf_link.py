@@ -23,7 +23,7 @@ from gracefm import channel, metrics, plc, txrx, wavio  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 
 VARS = {"なし": dict(postfilter=False), "区間を広げない": dict(eps=0.5), "既定": dict()}
-MATS = (("fishin", "B200MH"), ("vibeace", "B200MH"), ("demo", "B200H"))
+MATS = (("fishin", "B200M"), ("vibeace", "B200M"), ("demo", "B200"))
 CN0S = (None, 57.0, 63.0, 70.0, 80.0)
 
 

@@ -3,7 +3,7 @@
   "occupied_99_kHz": 74.3,
   "bw_minus30dB_kHz": 111.0
  },
- "B200MH": {
+ "B200M": {
   "occupied_99_kHz": 179.2,
   "bw_minus30dB_kHz": 203.8,
   "symbol_rate_ksps": 163.0,
@@ -11,13 +11,21 @@
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
- "B200MHY": {
+ "B200MY": {
   "occupied_99_kHz": 161.9,
   "bw_minus30dB_kHz": 183.5,
   "symbol_rate_ksps": 147.0,
   "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
+ },
+ "B200": {
+  "occupied_99_kHz": 179.4,
+  "bw_minus30dB_kHz": 194.3,
+  "symbol_rate_ksps": 177.0,
+  "modulation": "qam16h",
+  "rrc_beta": 0.1,
+  "rrc_span_symbols": 32
  },
  "B200Y": {
   "occupied_99_kHz": 159.8,
@@ -27,35 +35,27 @@
   "rrc_beta": 0.1,
   "rrc_span_symbols": 32
  },
- "B200H": {
-  "occupied_99_kHz": 179.4,
-  "bw_minus30dB_kHz": 194.3,
-  "symbol_rate_ksps": 177.0,
-  "modulation": "qam16h",
-  "rrc_beta": 0.1,
-  "rrc_span_symbols": 32
- },
- "B200HY": {
-  "occupied_99_kHz": 179.6,
-  "bw_minus30dB_kHz": 194.1,
-  "symbol_rate_ksps": 176.5,
-  "modulation": "qam16h",
-  "rrc_beta": 0.1,
-  "rrc_span_symbols": 32
- },
  "SUB50M": {
-  "occupied_99_kHz": 70.9,
-  "bw_minus30dB_kHz": 79.0,
+  "occupied_99_kHz": 70.1,
+  "bw_minus30dB_kHz": 79.1,
   "symbol_rate_ksps": 64.0,
   "modulation": "qpsk",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
  "SUB100": {
-  "occupied_99_kHz": 120.1,
-  "bw_minus30dB_kHz": 135.6,
+  "occupied_99_kHz": 120.5,
+  "bw_minus30dB_kHz": 135.2,
   "symbol_rate_ksps": 109.0,
   "modulation": "qpsk",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
+ },
+ "M700M": {
+  "occupied_99_kHz": 199.9,
+  "bw_minus30dB_kHz": 226.9,
+  "symbol_rate_ksps": 181.5,
+  "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
@@ -67,10 +67,10 @@
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
- "M700H": {
-  "occupied_99_kHz": 334.2,
-  "bw_minus30dB_kHz": 377.7,
-  "symbol_rate_ksps": 304.5,
+ "M700MY": {
+  "occupied_99_kHz": 246.6,
+  "bw_minus30dB_kHz": 279.4,
+  "symbol_rate_ksps": 223.5,
   "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
@@ -79,14 +79,6 @@
   "occupied_99_kHz": 383.0,
   "bw_minus30dB_kHz": 427.7,
   "symbol_rate_ksps": 346.5,
-  "modulation": "qam16h",
-  "rrc_beta": 0.25,
-  "rrc_span_symbols": 16
- },
- "M700HY": {
-  "occupied_99_kHz": 320.0,
-  "bw_minus30dB_kHz": 357.9,
-  "symbol_rate_ksps": 289.5,
   "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
@@ -100,11 +92,11 @@
   "rrc_span_symbols": 16
  },
  "audio_error_snr_dB": {
-  "B200H": 61.1,
+  "B200": 61.1,
   "B200Y": 51.0,
   "SUB100": 29.4,
-  "M700H": 58.7,
   "M700": 58.7,
-  "M700H基本層": 30.4
+  "M700M": 58.7,
+  "M700基本層": 13.2
  }
 }

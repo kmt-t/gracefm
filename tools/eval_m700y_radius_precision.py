@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare 10/12-bit continuous-radius variants against the standard 8-bit M700HY."""
+"""Compare 10/12-bit continuous-radius variants against the standard 8-bit M700Y."""
 
 import argparse
 import json
@@ -52,7 +52,7 @@ def source_audio(source):
 def variant(bits):
     if bits not in (8, 10, 12):
         raise ValueError("this evaluation covers 8, 10, and 12 bits")
-    return make_hybrid(PROFILES["M700H"], f"M700HY-R{bits}", PROFILES["M700HY"].pid,
+    return make_hybrid(PROFILES["M700"], f"M700Y-R{bits}", PROFILES["M700Y"].pid,
                        mantissa_bits=bits, experimental_tag=3)
 
 
@@ -71,7 +71,7 @@ def main():
     if any(bits not in (8, 10, 12) for bits in bit_values):
         parser.error("bits must be 8, 10, and/or 12")
 
-    baseline = PROFILES["M700HY"]
+    baseline = PROFILES["M700Y"]
     report_path = args.json
     report = {"description": "10 s stereo, single main carrier, AWGN seed 1; same 48 M-hybrid symbols and FEC top bit",
               "reference_profile": baseline.name,
@@ -79,7 +79,7 @@ def main():
     if args.resume and os.path.exists(report_path):
         with open(report_path, encoding="utf-8") as stream:
             report = json.load(stream)
-        chosen = {f"M700HY-R{bits}" for bits in bit_values}
+        chosen = {f"M700Y-R{bits}" for bits in bit_values}
         report["variants"] = {name: value for name, value in report["variants"].items()
                               if name in chosen}
         report["comparison"] = [row for row in report["comparison"] if row["profile"] in chosen]

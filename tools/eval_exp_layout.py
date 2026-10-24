@@ -4,7 +4,7 @@
   python tools/fetch_exp_audio.py
   python tools/eval_exp_layout.py --json docs/results/exp_layout_eval.json
 
-探索: M 成分のみを送る B200MH の6詳細帯域＋低域近似で、各指数を 2/3/4bit から選ぶ。
+探索: M 成分のみを送る B200M の6詳細帯域＋低域近似で、各指数を 2/3/4bit から選ぶ。
 各候補のオフセットは、全振幅入力の頭打ちを避ける emax から一意に決めて固定する。
 訓練3素材・保留2素材 × 入力0/-20/-40dB の量子化SNRを使い、基準の全4bitから
 最大何bit減らせるかを1dBの最大SNR低下制約で探索する。保留素材は選択に使わない。
@@ -161,7 +161,7 @@ def main():
     cn0s = tuple(float(v) for v in args.link_cn0.split(","))
     if args.seconds < 3 or not widths or any(w < 1 or w > 8 for w in widths) or 4 not in widths:
         ap.error("seconds は3以上、探索幅は1〜8で4bitを含めてください")
-    base = replace(PROFILES["B200MH"], attn_group_m=None, exp_offset_m=None)
+    base = replace(PROFILES["B200M"], attn_group_m=None, exp_offset_m=None)
     if any(base.bits_s):
         raise ValueError("この探索は M のみのプロファイル用です")
     manifest, clips = read_clips(args.audio_dir, args.seconds, base.block)
@@ -191,7 +191,7 @@ def main():
                   codec_perceptual=perceptual, link=link,
                   method="各帯域の幅2/3/4bitと固定オフセット。上限はフルスケール対応のまま。"
                          "訓練の最大波形SNR低下が1dB以内となる最大節約ビット数を選び、"
-                         "保留音源とViSQOL/通信路で検証。リンクはB200MH+SUB50M、50:50電力、seed 1。")
+                         "保留音源とViSQOL/通信路で検証。リンクはB200M+SUB50M、50:50電力、seed 1。")
     if args.json:
         args.json.parent.mkdir(parents=True, exist_ok=True)
         args.json.write_text(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False) + "\n")

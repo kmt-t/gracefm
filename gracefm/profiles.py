@@ -11,7 +11,7 @@ from typing import Optional, Tuple
 
 @dataclass(frozen=True)
 class Profile:
-    pid: int                    # ヘッダに載せる ID (4bit)。現行カタログ内で一意（0・13～15は予約）
+    pid: int                    # ヘッダに載せる ID (4bit)。現行カタログ内で一意（0・12～15は予約）
     name: str
     fs: int                     # サンプリング周波数 [Hz]
     block: int                  # 1ブロック = 1フレームのサンプル数
@@ -189,25 +189,15 @@ def make_hybrid(base: Profile, name: str, pid: int, start_k: int = 5,
         attenuator_m = tuple(groups)
     # モノラル A4 の指数オフセットは15/13bit仮数向けなので、
     # ハイブリッド仮数幅に応じて量子化ステップの範囲をずらす。
-    if base.name == "B200MH":
+    if base.name == "B200M":
         offsets_m = tuple(v if k < start_k else -19 - (mantissa_bits - 6)
-                          for k, v in enumerate(offsets_m))
-    elif base.name == "B200H":
-        offsets_m = tuple(v if k < start_k else v - (mantissa_bits - 6)
                           for k, v in enumerate(offsets_m))
     # 階層Yではデジタル部の強い位置を基本層に使う。
     base_m, base_s = base.base_m, base.base_s
-    if base.name == "B200H":
-        base_m = (12, 11, 5, 3, 1, 2, 2)
-        base_s = (1, 1, 1, 1, 1, 1, 1)
-    elif base.name == "M700H":
-        base_m = (11, 10, 5, 4, 3, 3, 2)
-        base_s = (1, 1, 1, 1, 1, 2, 2)
     return replace(base, pid=pid, name=name, bits_m=widths("M", base.bits_m),
                    bits_s=widths("S", base.bits_s),
                    base_m=base_m, base_s=base_s,
-                   base_extra=(("M", 4, 0),) if base.name == "B200H" else
-                              ((("S", 0, 0),) if base.name == "M700H" else ()),
+                   base_extra=base.base_extra,
                    exp_offset_m=offsets_m,
                    exp_offset_s=base.exp_offset_s, attn_group_m=attenuator_m,
                    hybrid_start_k=start_k,
@@ -216,13 +206,12 @@ def make_hybrid(base: Profile, name: str, pid: int, start_k: int = 5,
                    experimental_tag=experimental_tag)
 
 # Standard catalog. All active M/S components have interval attenuation.
-# IDs: 1–5 32kHz main, 6–7 32kHz secondary,
-# 8–11 48kHz main, 12 48kHz secondary. 0 and 13–15 are reserved.
+# IDs: 1–4 32kHz main, 5–6 32kHz secondary, 7–10 48kHz main, 11 48kHz secondary. 0 and 12–15 are reserved.
 # Every row has the same fields; bit widths are explicit, never expanded implicitly.
 PROFILE_MATRIX = (
     dict(
         pid=1,
-        name='B200MH',
+        name='B200M',
         base_extra=(),
         fs=32000,
         bits_m=(16, 16, 16, 16, 16, 15, 13),
@@ -245,7 +234,7 @@ PROFILE_MATRIX = (
     ),
     dict(
         pid=2,
-        name='B200H',
+        name='B200',
         base_extra=(),
         fs=32000,
         bits_m=(16, 16, 16, 13, 10, 7, 7),
@@ -268,7 +257,7 @@ PROFILE_MATRIX = (
     ),
     dict(
         pid=3,
-        name='B200MHY',
+        name='B200MY',
         base_extra=(),
         fs=32000,
         bits_m=(16, 16, 16, 16, 16, 8, 8),
@@ -314,29 +303,6 @@ PROFILE_MATRIX = (
     ),
     dict(
         pid=5,
-        name='B200HY',
-        base_extra=(('M', 4, 0),),
-        fs=32000,
-        bits_m=(16, 16, 16, 13, 10, 8, 8),
-        bits_s=(14, 12, 11, 8, 7, 6, 6),
-        protect_k=1,
-        modulation='qam16h',
-        alpha=5.0,
-        base_m=(12, 11, 5, 3, 1, 2, 2),
-        base_s=(1, 1, 1, 1, 1, 1, 1),
-        attn_group_m=(0, 0, 0, 0, 0, 2, 4),
-        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
-        exp_offset_m=(-25, -25, -26, -23, -21, -20, -21),
-        exp_offset_s=(-23, -21, -21, -18, -18, -18, -19),
-        pulse_beta=0.1,
-        pulse_span=32,
-        hybrid_start_k=5,
-        hybrid_channels=('M',),
-        hybrid_bits=8,
-        hybrid_amplitude=0.019047619047619046,
-    ),
-    dict(
-        pid=6,
         name='SUB50M',
         base_extra=(),
         fs=32000,
@@ -359,7 +325,7 @@ PROFILE_MATRIX = (
         hybrid_amplitude=0.019047619047619046,
     ),
     dict(
-        pid=7,
+        pid=6,
         name='SUB100',
         base_extra=(),
         fs=32000,
@@ -372,6 +338,29 @@ PROFILE_MATRIX = (
         base_s=None,
         attn_group_m=(0, 0, 0, 0, 0, 4, 0),
         attn_group_s=(0, 0, 0, 4, 0, 0, 0),
+        exp_offset_m=None,
+        exp_offset_s=None,
+        pulse_beta=0.25,
+        pulse_span=16,
+        hybrid_start_k=None,
+        hybrid_channels=('M', 'S'),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=7,
+        name='M700M',
+        base_extra=(),
+        fs=48000,
+        bits_m=(16, 14, 13, 12, 11, 9, 7),
+        bits_s=(0, 0, 0, 0, 0, 0, 0),
+        protect_k=2,
+        modulation='qam16h',
+        alpha=5.0,
+        base_m=(2, 2, 2, 2, 2, 2, 2),
+        base_s=(0, 0, 0, 0, 0, 0, 0),
+        attn_group_m=(0, 0, 0, 0, 0, 0, 4),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 0),
         exp_offset_m=None,
         exp_offset_s=None,
         pulse_beta=0.25,
@@ -406,24 +395,24 @@ PROFILE_MATRIX = (
     ),
     dict(
         pid=9,
-        name='M700H',
-        base_extra=(('M', 6, 0),),
+        name='M700MY',
+        base_extra=(),
         fs=48000,
-        bits_m=(16, 16, 16, 15, 12, 9, 7),
-        bits_s=(16, 13, 11, 9, 9, 7, 7),
-        protect_k=1,
+        bits_m=(16, 14, 13, 12, 11, 8, 8),
+        bits_s=(0, 0, 0, 0, 0, 0, 0),
+        protect_k=2,
         modulation='qam16h',
         alpha=5.0,
-        base_m=(11, 10, 9, 8, 6, 3, 2),
-        base_s=(7, 5, 4, 3, 3, 2, 2),
-        attn_group_m=(0, 0, 0, 0, 0, 0, 4),
-        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
+        base_m=(2, 2, 2, 2, 2, 2, 2),
+        base_s=(0, 0, 0, 0, 0, 0, 0),
+        attn_group_m=(0, 0, 0, 0, 0, 2, 4),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 0),
         exp_offset_m=None,
         exp_offset_s=None,
         pulse_beta=0.25,
         pulse_span=16,
-        hybrid_start_k=None,
-        hybrid_channels=('M', 'S'),
+        hybrid_start_k=5,
+        hybrid_channels=('M',),
         hybrid_bits=8,
         hybrid_amplitude=0.019047619047619046,
     ),
@@ -452,29 +441,6 @@ PROFILE_MATRIX = (
     ),
     dict(
         pid=11,
-        name='M700HY',
-        base_extra=(('S', 0, 0),),
-        fs=48000,
-        bits_m=(16, 16, 16, 15, 12, 8, 8),
-        bits_s=(16, 13, 11, 9, 9, 7, 7),
-        protect_k=1,
-        modulation='qam16h',
-        alpha=5.0,
-        base_m=(11, 10, 5, 4, 3, 3, 2),
-        base_s=(1, 1, 1, 1, 1, 2, 2),
-        attn_group_m=(0, 0, 0, 0, 0, 2, 4),
-        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
-        exp_offset_m=None,
-        exp_offset_s=None,
-        pulse_beta=0.25,
-        pulse_span=16,
-        hybrid_start_k=5,
-        hybrid_channels=('M',),
-        hybrid_bits=8,
-        hybrid_amplitude=0.019047619047619046,
-    ),
-    dict(
-        pid=12,
         name='SUB100-48K',
         base_extra=(),
         fs=48000,

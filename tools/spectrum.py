@@ -81,10 +81,10 @@ def main():
     x = x[: 4 * fs]
     x48 = wavio.resample(x, fs, 48000)
     groups = [
-        ("放送モノラル主系（32kHz）とアナログFM", ["FM", "B200MH", "B200MHY"]),
-        ("放送ステレオ主系（32kHz）", ["B200Y", "B200H", "B200HY"]),
+        ("放送モノラル主系（32kHz）とアナログFM", ["FM", "B200M", "B200MY"]),
+        ("放送ステレオ主系（32kHz）", ["B200", "B200Y"]),
         ("放送の副系（32kHz）", ["SUB50M", "SUB100"]),
-        ("モニター（48kHz）", ["M700", "M700H", "M700Y", "M700HY", "SUB100-48K"]),
+        ("モニター（48kHz）", ["M700M", "M700", "M700MY", "M700Y", "SUB100-48K"]),
     ]
     res = {}
     fig, axs = plt.subplots(len(groups), 1, figsize=(8, 12), facecolor=SURF)
@@ -126,8 +126,8 @@ def main():
     demo48 = make_demo(48000)
     demo32 = wavio.resample(demo48, 48000, 32000)
     demo32 *= 0.89 / np.abs(demo32).max()
-    agroups = [("放送（32kHz、demo の M）", demo32, 32000, ["B200H", "B200Y", "SUB100"]),
-               ("モニター（48kHz、demo の M）", demo48, 48000, ["M700H", "M700", "M700H基本層"])]
+    agroups = [("放送（32kHz、demo の M）", demo32, 32000, ["B200", "B200Y", "SUB100"]),
+               ("モニター（48kHz、demo の M）", demo48, 48000, ["M700", "M700M", "M700基本層"])]
     from base_layer_sample import base_layer_audio
     fig, axs = plt.subplots(2, 1, figsize=(8, 7), facecolor=SURF)
     for ax, (title, xx, fsa, names) in zip(axs, agroups):
@@ -136,10 +136,10 @@ def main():
         f, P0 = welch(m, fs=fsa, nperseg=4096)
         ax.plot(f / 1e3, 10 * np.log10(P0 + 1e-30), color=INK2, lw=1.2, label="原音")
         for j, n in enumerate(names):
-            y = base_layer_audio(xx, PROFILES["M700H"]) if n == "M700H基本層" else codec(xx, PROFILES[n])
+            y = base_layer_audio(xx, PROFILES["M700"]) if n == "M700基本層" else codec(xx, PROFILES[n])
             e = (y[:, 0] + y[:, 1]) / 2 - m
             f, P = welch(e, fs=fsa, nperseg=4096)
-            label = (f"誤差：{n}" if n == "M700H基本層" else
+            label = (f"誤差：{n}" if n == "M700基本層" else
                      f"誤差：{n}（{PROFILES[n].audio_kbps():.0f}kbps）")
             ax.plot(f / 1e3, 10 * np.log10(P + 1e-30), color=COL[j], ls=LS[j], lw=1.5,
                     label=label)

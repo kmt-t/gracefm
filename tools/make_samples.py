@@ -7,7 +7,7 @@ samples/ のサンプル FLAC と、その説明 (samples/README.md) を作る�
                                --vibeace Kevin_MacLeod_-_Vibe_Ace.ogg を48kHzに変換したwav   # 原音から作り直す
 
 試験信号 (demo) はこのスクリプトの中で合成する。放送用は32kHz、モニター用は48kHz、各10秒。
-通信路込みのサンプルは採用構成 (主系 = 階層16QAM の B200MH / B200H、副系 = SUB50M / SUB100、帯域ごとの融合、
+通信路込みのサンプルは採用構成 (主系 = 階層16QAM の B200M / B200、副系 = SUB50M / SUB100、帯域ごとの融合、
 軟判定の復号、ポストフィルタ4回) で、同じ受信電力のアナログFM (モノラル) も並べる。
 """
 import argparse
@@ -203,7 +203,7 @@ def generate_source(task):
     global ROWS, MON_ROWS
     ROWS, MON_ROWS = [], []
     name, x, mono, adopted_only = task
-    main_p = "B200MH" if mono else "B200H"
+    main_p = "B200M" if mono else "B200"
     sub = channel.DEFAULT_SUB[main_p]
     print(name, flush=True)
     save(f"{name}__32k__reference.flac", x, mono, x, "原音（32kHzに変換したもの）")
@@ -258,16 +258,16 @@ def generate_monitor_source(source):
 def monitor(name, x, mono):
     """モニター用 (48kHz、近距離) の階層16QAMサンプル。"""
     os.makedirs(os.path.join(OUT, "monitor"), exist_ok=True)
-    mh = PROFILES["M700H"]
+    mh = PROFILES["M700"]
 
     kw = dict(fs=48000, rows=MON_ROWS, sub="monitor")
     src = "原音（合成試験信号を48kHzで作ったもの、全帯域）" if name == "demo" else "原音（32kHz の原音を48kHzに変換したもの。元の音源の帯域は約11kHz）"
     save(f"{name}__48k__reference.flac", x, mono, x, src, **kw)
-    save(sample_name(name, 48000, "M700"), codec(x, PROFILES["M700"]), mono, x, f"コーデックだけ。M700（約{PROFILES['M700'].audio_kbps():.0f}kbps）", **kw)
-    save(sample_name(name, 48000, "M700H"), codec(x, mh), mono, x, f"コーデックだけ。M700H の全ビット（約{mh.audio_kbps():.0f}kbps）", **kw)
-    save(sample_name(name, 48000, "M700H-base"), base_layer_audio(x, mh), mono, x,
-         "M700Hの実際の基本層（係数別昇格を含む）を保持し、拡張層の事後確率を0.5にした比較。標準アッテネータあり", **kw)
-    for prof, cl in (("M700H", MON_CN0), ("M700", (70, 65))):
+    save(sample_name(name, 48000, "M700M"), codec(x, PROFILES["M700M"]), mono, x, f"コーデックだけ。M700M（約{PROFILES['M700M'].audio_kbps():.0f}kbps）", **kw)
+    save(sample_name(name, 48000, "M700"), codec(x, mh), mono, x, f"コーデックだけ。M700 の全ビット（約{mh.audio_kbps():.0f}kbps）", **kw)
+    save(sample_name(name, 48000, "M700-base"), base_layer_audio(x, mh), mono, x,
+         "M700の実際の基本層を保持し、拡張層の事後確率を0.5にした比較。標準アッテネータあり", **kw)
+    for prof, cl in (("M700", MON_CN0), ("M700M", (70, 65))):
         p = PROFILES[prof]
         bw = 1.25 * channel.symbol_rate(p) / 1e3
         for cn0 in cl:
@@ -304,14 +304,14 @@ def update_readme_adopted_only():
             continue
         if line.startswith("| `"):
             name = line.split("`", 2)[1]
-            if "__B200MH__codec.flac" in name:
+            if "__B200M__codec.flac" in name:
                 continue
             if name in measurements:
                 desc, snr = measurements[name]
                 line = f"| `{name}` | {desc} | {'—' if not np.isfinite(snr) else f'{snr:.1f}dB'} |"
         lines.append(line)
         if line.startswith("| `fishin__32k__reference.flac`") or line.startswith("| `vibeace__32k__reference.flac`"):
-            name = sample_name(line.split("`", 2)[1].split("__")[0], 32000, "B200MH")
+            name = sample_name(line.split("`", 2)[1].split("__")[0], 32000, "B200M")
             desc, snr = measurements[name]
             lines.append(f"| `{name}` | {desc} | {snr:.1f}dB |")
     with open(path, "w", encoding="utf-8") as f:
@@ -346,12 +346,12 @@ README_HEAD = """# サンプル音声（GraceFM）
 
 | ファイル | 内容 |
 |---|---|
-| `*__B200MH+SUB50M__* / *__B200H+SUB100__*` | この方式の放送の採用構成（主系 B200MH / B200H ＋ 副系 SUB50M / SUB100、送信電力 50:50） |
+| `*__B200M+SUB50M__* / *__B200+SUB100__*` | この方式の放送の採用構成（主系 B200M / B200 ＋ 副系 SUB50M / SUB100、送信電力 50:50） |
 | `*__FM__*` | 同じ受信電力のアナログFM（モノラル、ゴーストなし） |
-| `*__B200MH__codec.flac`・`*__B200H__codec.flac` | コーデックだけ、全ビット（拡張層まで届いたときの上限） |
+| `*__B200M__codec.flac`・`*__B200__codec.flac` | コーデックだけ、全ビット（拡張層まで届いたときの上限） |
 | `*__B200Y__codec.flac` | B200Y（階層16QAM＋Y）のステレオ音声。区間アッテネータを含む |
 
-- おすすめ：`fishin__32k__B200MH+SUB50M__awgn-cn0-57dBHz.flac` と `fishin__32k__FM__awgn-cn0-57dBHz.flac`（FM がスレッショルドを割る強さ）、`*__rayleigh-cn0-60dBHz.flac`（途切れ方）
+- おすすめ：`fishin__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac` と `fishin__32k__FM__awgn-cn0-57dBHz.flac`（FM がスレッショルドを割る強さ）、`*__rayleigh-cn0-60dBHz.flac`（途切れ方）
 - demo（ステレオ）は FM ステレオのモデルがないため FM なし
 
 ## 電波の強さ
@@ -371,9 +371,9 @@ MONITOR_HEAD = """## モニター用（48kHz、`monitor/`）
 
 | ファイル | 内容 |
 |---|---|
-| `*__M700H__*` | 階層16QAM、理論支持幅は現行設定表を参照 |
-| `*__M700__*` | 階層16QAM、上位2bitを強い位置に配置。理論支持幅は現行設定表を参照 |
-| `*__M700H-base__codec.flac` | M700Hの実際の基本層。係数別昇格を含み、拡張層のみ不明として復元 |
+| `*__M700__*` | 階層16QAM、理論支持幅は現行設定表を参照 |
+| `*__M700M__*` | 階層16QAM、上位2bitを強い位置に配置。理論支持幅は現行設定表を参照 |
+| `*__M700-base__codec.flac` | M700の実際の基本層。拡張層のみ不明として復元 |
 
 - 1系統・全電力、白色雑音のみ。近距離（1m 程度）は C/N0 約80dB-Hz の見込み
 - fishin・vibeace は32kHz の原音を48kHz に変換したもの（元の帯域は約11kHz）"""

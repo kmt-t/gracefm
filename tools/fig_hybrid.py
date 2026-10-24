@@ -11,8 +11,8 @@ import numpy as np
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RESULT = os.path.join(ROOT, "docs/results/hybrid_eval.json")
 OUT = os.path.join(ROOT, "docs/figures")
-PAIRS = (("B200MH-A4", "B200MHY-A4", "Mono"),
-         ("B200H-A4", "B200HY-A4", "Stereo"))
+PAIRS = (("B200M-A4", "B200MY-A4", "Mono"),
+         ("B200-A4", "B200Y-A4", "Stereo"))
 
 
 def main():

@@ -21,14 +21,14 @@ from gracefm.framing import Layout  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 from eval_lossless_benchmark import prepare  # noqa: E402
 
-BASE = replace(PROFILES["B200MH"], attn_group_m=None, exp_offset_m=None)
+BASE = replace(PROFILES["B200M"], attn_group_m=None, exp_offset_m=None)
 FOUR = (4,) * BASE.nbands
 GROUP4 = (0,) * (BASE.nbands - 1) + (4,)
 LAYOUTS = {
     "baseline": BASE,
     "offset_only": replace(BASE, exp_bits_m=FOUR,
                            exp_offset_m=(-26, -26, -27, -28, -29, -28, -26)),
-    "A4_adopted": PROFILES["B200MH"],
+    "A4_adopted": PROFILES["B200M"],
     "A4_tuned_offset": replace(BASE, exp_bits_m=FOUR,
                                exp_offset_m=(-26, -26, -27, -28, -29, -28, -26),
                                attn_group_m=GROUP4),

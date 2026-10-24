@@ -25,7 +25,7 @@ def main():
                                 ('regenerate_y_samples.py',),
                                 ('make_hires_y_probe.py',)]))
     with ThreadPoolExecutor(max_workers=2) as executor:
-        list(executor.map(run, [('eval_m700hy_radius_precision.py',),
+        list(executor.map(run, [('eval_m700y_radius_precision.py',),
                                 ('make_secondary_monitor_samples.py',)]))
     run(('sample_catalog.py',))
 
