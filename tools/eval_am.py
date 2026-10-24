@@ -4,7 +4,7 @@
 
   python tools/eval_am.py --json docs/results/am_eval.json
 
-素材は samples/fishin_orig.flac・vibeace_orig.flac の先頭5秒 (tools/eval_final.py と同じ)。
+素材は samples/fishin__32k__reference.flac・vibeace__32k__reference.flac の先頭5秒 (tools/eval_final.py と同じ)。
 FM と放送構成の値は docs/results/final_eval.json を参照 (SPEC 5.2節)。
 """
 import argparse
@@ -29,7 +29,7 @@ def main():
     args = ap.parse_args()
     out = {}
     for mat in ("fishin", "vibeace"):
-        x, fs = wavio.read(os.path.join(ROOT, "samples", f"{mat}_orig.flac"))
+        x, fs = wavio.read(os.path.join(ROOT, "samples", f"{mat}__32k__reference.flac"))
         x = x[: int(args.seconds * fs)]
         bm = metrics.BandMetric(x, fs)
         am = AnalogAM(x[:, 0], fs)

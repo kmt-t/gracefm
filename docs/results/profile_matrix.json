@@ -1,0 +1,1150 @@
+{
+  "profiles": [
+    {
+      "profile": {
+        "pid": 1,
+        "name": "B200M",
+        "fs": 32000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          9,
+          9,
+          9,
+          9,
+          8,
+          6,
+          4
+        ],
+        "bits_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "exp_bits": 4,
+        "protect_k": 1,
+        "modulation": "qpsk",
+        "alpha": 1.0,
+        "pulse_beta": 0.25,
+        "pulse_span": 16,
+        "pf_iters": 4,
+        "base_m": null,
+        "base_s": null,
+        "base_extra": [],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": null,
+        "exp_offset_s": null,
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hybrid_start_k": null,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M",
+          "S"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 2,
+      "protected_crc_bits": 156,
+      "fec_bits": 324,
+      "digital_unprotected_bits": 296,
+      "symbols_per_frame": 326,
+      "symbol_rate": 163000.0,
+      "audio_kbps": 198.0,
+      "theoretical_bandwidth_hz": 203750.0
+    },
+    {
+      "profile": {
+        "pid": 2,
+        "name": "B200",
+        "fs": 32000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          12,
+          11,
+          9,
+          7,
+          4,
+          2,
+          2
+        ],
+        "bits_s": [
+          7,
+          6,
+          5,
+          2,
+          2,
+          0,
+          2
+        ],
+        "exp_bits": 4,
+        "protect_k": 1,
+        "modulation": "qpsk",
+        "alpha": 1.0,
+        "pulse_beta": 0.1,
+        "pulse_span": 32,
+        "pf_iters": 4,
+        "base_m": null,
+        "base_s": null,
+        "base_extra": [],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": null,
+        "exp_offset_s": null,
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "hybrid_start_k": null,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M",
+          "S"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 2,
+      "protected_crc_bits": 236,
+      "fec_bits": 484,
+      "digital_unprotected_bits": 196,
+      "symbols_per_frame": 356,
+      "symbol_rate": 178000.0,
+      "audio_kbps": 188.0,
+      "theoretical_bandwidth_hz": 195800.00000000003
+    },
+    {
+      "profile": {
+        "pid": 3,
+        "name": "B200MH",
+        "fs": 32000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          16,
+          16,
+          16,
+          16,
+          16,
+          15,
+          13
+        ],
+        "bits_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "exp_bits": 4,
+        "protect_k": 1,
+        "modulation": "qam16h",
+        "alpha": 5.0,
+        "pulse_beta": 0.25,
+        "pulse_span": 16,
+        "pf_iters": 4,
+        "base_m": [
+          9,
+          9,
+          9,
+          9,
+          8,
+          6,
+          4
+        ],
+        "base_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "base_extra": [],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": [
+          -26,
+          -26,
+          -27,
+          -27,
+          -28,
+          -27,
+          -26
+        ],
+        "exp_offset_s": null,
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hybrid_start_k": null,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M",
+          "S"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 2,
+      "protected_crc_bits": 156,
+      "fec_bits": 324,
+      "digital_unprotected_bits": 848,
+      "symbols_per_frame": 326,
+      "symbol_rate": 163000.0,
+      "audio_kbps": 474.0,
+      "theoretical_bandwidth_hz": 203750.0
+    },
+    {
+      "profile": {
+        "pid": 4,
+        "name": "B200H",
+        "fs": 32000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          16,
+          16,
+          16,
+          13,
+          10,
+          7,
+          7
+        ],
+        "bits_s": [
+          14,
+          12,
+          11,
+          8,
+          7,
+          6,
+          6
+        ],
+        "exp_bits": 4,
+        "protect_k": 1,
+        "modulation": "qam16h",
+        "alpha": 5.0,
+        "pulse_beta": 0.1,
+        "pulse_span": 32,
+        "pf_iters": 4,
+        "base_m": [
+          12,
+          11,
+          9,
+          7,
+          3,
+          1,
+          1
+        ],
+        "base_s": [
+          7,
+          6,
+          5,
+          3,
+          2,
+          2,
+          2
+        ],
+        "base_extra": [],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": [
+          -25,
+          -25,
+          -26,
+          -23,
+          -21,
+          -18,
+          -19
+        ],
+        "exp_offset_s": [
+          -23,
+          -21,
+          -21,
+          -18,
+          -18,
+          -18,
+          -19
+        ],
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          8
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "hybrid_start_k": null,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M",
+          "S"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 2,
+      "protected_crc_bits": 252,
+      "fec_bits": 516,
+      "digital_unprotected_bits": 828,
+      "symbols_per_frame": 354,
+      "symbol_rate": 177000.0,
+      "audio_kbps": 512.0,
+      "theoretical_bandwidth_hz": 194700.00000000003
+    },
+    {
+      "profile": {
+        "pid": 5,
+        "name": "B200MHY",
+        "fs": 32000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          16,
+          16,
+          16,
+          16,
+          16,
+          8,
+          8
+        ],
+        "bits_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "exp_bits": 4,
+        "protect_k": 1,
+        "modulation": "qam16h",
+        "alpha": 5.0,
+        "pulse_beta": 0.25,
+        "pulse_span": 16,
+        "pf_iters": 4,
+        "base_m": [
+          9,
+          9,
+          9,
+          9,
+          8,
+          6,
+          4
+        ],
+        "base_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "base_extra": [],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": [
+          -26,
+          -26,
+          -27,
+          -27,
+          -28,
+          -21,
+          -21
+        ],
+        "exp_offset_s": null,
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          4
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hybrid_start_k": 5,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 2,
+      "protected_crc_bits": 164,
+      "fec_bits": 340,
+      "digital_unprotected_bits": 240,
+      "symbols_per_frame": 294,
+      "symbol_rate": 147000.0,
+      "audio_kbps": 342.0,
+      "theoretical_bandwidth_hz": 183750.0
+    },
+    {
+      "profile": {
+        "pid": 6,
+        "name": "B200HY",
+        "fs": 32000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          16,
+          16,
+          16,
+          13,
+          10,
+          8,
+          8
+        ],
+        "bits_s": [
+          14,
+          12,
+          11,
+          8,
+          7,
+          6,
+          6
+        ],
+        "exp_bits": 4,
+        "protect_k": 1,
+        "modulation": "qam16h",
+        "alpha": 5.0,
+        "pulse_beta": 0.1,
+        "pulse_span": 32,
+        "pf_iters": 4,
+        "base_m": [
+          12,
+          11,
+          5,
+          3,
+          1,
+          2,
+          2
+        ],
+        "base_s": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "base_extra": [
+          [
+            "M",
+            4,
+            0
+          ]
+        ],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": [
+          -25,
+          -25,
+          -26,
+          -23,
+          -21,
+          -20,
+          -21
+        ],
+        "exp_offset_s": [
+          -23,
+          -21,
+          -21,
+          -18,
+          -18,
+          -18,
+          -19
+        ],
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          4
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "hybrid_start_k": 5,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 2,
+      "protected_crc_bits": 264,
+      "fec_bits": 540,
+      "digital_unprotected_bits": 540,
+      "symbols_per_frame": 353,
+      "symbol_rate": 176500.0,
+      "audio_kbps": 542.0,
+      "theoretical_bandwidth_hz": 194150.00000000003
+    },
+    {
+      "profile": {
+        "pid": 7,
+        "name": "S50M",
+        "fs": 32000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          8,
+          7,
+          6,
+          5,
+          3,
+          0,
+          0
+        ],
+        "bits_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "exp_bits": 4,
+        "protect_k": 1,
+        "modulation": "qpsk",
+        "alpha": 1.0,
+        "pulse_beta": 0.25,
+        "pulse_span": 16,
+        "pf_iters": 4,
+        "base_m": null,
+        "base_s": null,
+        "base_extra": [],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": null,
+        "exp_offset_s": null,
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hybrid_start_k": null,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M",
+          "S"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 1,
+      "protected_crc_bits": 78,
+      "fec_bits": 168,
+      "digital_unprotected_bits": 55,
+      "symbols_per_frame": 128,
+      "symbol_rate": 64000.0,
+      "audio_kbps": 46.5,
+      "theoretical_bandwidth_hz": 80000.0
+    },
+    {
+      "profile": {
+        "pid": 8,
+        "name": "S100",
+        "fs": 32000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          10,
+          9,
+          8,
+          6,
+          4,
+          2,
+          0
+        ],
+        "bits_s": [
+          6,
+          5,
+          4,
+          2,
+          0,
+          0,
+          0
+        ],
+        "exp_bits": 4,
+        "protect_k": 1,
+        "modulation": "qpsk",
+        "alpha": 1.0,
+        "pulse_beta": 0.25,
+        "pulse_span": 16,
+        "pf_iters": 4,
+        "base_m": null,
+        "base_s": null,
+        "base_extra": [],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": null,
+        "exp_offset_s": null,
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0
+        ],
+        "hybrid_start_k": null,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M",
+          "S"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 2,
+      "protected_crc_bits": 141,
+      "fec_bits": 294,
+      "digital_unprotected_bits": 110,
+      "symbols_per_frame": 218,
+      "symbol_rate": 109000.0,
+      "audio_kbps": 97.5,
+      "theoretical_bandwidth_hz": 136250.0
+    },
+    {
+      "profile": {
+        "pid": 9,
+        "name": "M700",
+        "fs": 48000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          16,
+          14,
+          13,
+          12,
+          11,
+          9,
+          7
+        ],
+        "bits_s": [
+          12,
+          9,
+          8,
+          9,
+          7,
+          5,
+          3
+        ],
+        "exp_bits": 4,
+        "protect_k": 2,
+        "modulation": "qpsk",
+        "alpha": 1.0,
+        "pulse_beta": 0.25,
+        "pulse_span": 16,
+        "pf_iters": 4,
+        "base_m": null,
+        "base_s": null,
+        "base_extra": [],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": null,
+        "exp_offset_s": null,
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "hybrid_start_k": null,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M",
+          "S"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 2,
+      "protected_crc_bits": 384,
+      "fec_bits": 780,
+      "digital_unprotected_bits": 609,
+      "symbols_per_frame": 711,
+      "symbol_rate": 533250.0,
+      "audio_kbps": 702.75,
+      "theoretical_bandwidth_hz": 666562.5
+    },
+    {
+      "profile": {
+        "pid": 10,
+        "name": "M700H",
+        "fs": 48000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          16,
+          16,
+          16,
+          15,
+          12,
+          9,
+          7
+        ],
+        "bits_s": [
+          16,
+          13,
+          11,
+          9,
+          9,
+          7,
+          7
+        ],
+        "exp_bits": 4,
+        "protect_k": 1,
+        "modulation": "qam16h",
+        "alpha": 5.0,
+        "pulse_beta": 0.25,
+        "pulse_span": 16,
+        "pf_iters": 4,
+        "base_m": [
+          11,
+          10,
+          9,
+          8,
+          6,
+          3,
+          2
+        ],
+        "base_s": [
+          7,
+          5,
+          4,
+          3,
+          3,
+          2,
+          2
+        ],
+        "base_extra": [
+          [
+            "M",
+            6,
+            0
+          ]
+        ],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": null,
+        "exp_offset_s": null,
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "hybrid_start_k": null,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M",
+          "S"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 2,
+      "protected_crc_bits": 256,
+      "fec_bits": 524,
+      "digital_unprotected_bits": 955,
+      "symbols_per_frame": 406,
+      "symbol_rate": 304500.0,
+      "audio_kbps": 866.25,
+      "theoretical_bandwidth_hz": 380625.0
+    },
+    {
+      "profile": {
+        "pid": 11,
+        "name": "M700Y",
+        "fs": 48000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          16,
+          14,
+          13,
+          12,
+          11,
+          8,
+          8
+        ],
+        "bits_s": [
+          12,
+          9,
+          8,
+          9,
+          7,
+          5,
+          3
+        ],
+        "exp_bits": 4,
+        "protect_k": 2,
+        "modulation": "qpsk",
+        "alpha": 1.0,
+        "pulse_beta": 0.25,
+        "pulse_span": 16,
+        "pf_iters": 4,
+        "base_m": null,
+        "base_s": null,
+        "base_extra": [],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": null,
+        "exp_offset_s": null,
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          4
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "hybrid_start_k": 5,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 2,
+      "protected_crc_bits": 392,
+      "fec_bits": 796,
+      "digital_unprotected_bits": 337,
+      "symbols_per_frame": 631,
+      "symbol_rate": 473250.0,
+      "audio_kbps": 720.75,
+      "theoretical_bandwidth_hz": 591562.5
+    },
+    {
+      "profile": {
+        "pid": 12,
+        "name": "M700HY",
+        "fs": 48000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          16,
+          16,
+          16,
+          15,
+          12,
+          8,
+          8
+        ],
+        "bits_s": [
+          16,
+          13,
+          11,
+          9,
+          9,
+          7,
+          7
+        ],
+        "exp_bits": 4,
+        "protect_k": 1,
+        "modulation": "qam16h",
+        "alpha": 5.0,
+        "pulse_beta": 0.25,
+        "pulse_span": 16,
+        "pf_iters": 4,
+        "base_m": [
+          11,
+          10,
+          5,
+          4,
+          3,
+          3,
+          2
+        ],
+        "base_s": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2
+        ],
+        "base_extra": [
+          [
+            "S",
+            0,
+            0
+          ]
+        ],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": null,
+        "exp_offset_s": null,
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          4
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        "hybrid_start_k": 5,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 2,
+      "protected_crc_bits": 264,
+      "fec_bits": 540,
+      "digital_unprotected_bits": 635,
+      "symbols_per_frame": 386,
+      "symbol_rate": 289500.0,
+      "audio_kbps": 884.25,
+      "theoretical_bandwidth_hz": 361875.0
+    },
+    {
+      "profile": {
+        "pid": 13,
+        "name": "S100-48K",
+        "fs": 48000,
+        "block": 64,
+        "levels": 6,
+        "bits_m": [
+          9,
+          8,
+          7,
+          6,
+          4,
+          0,
+          0
+        ],
+        "bits_s": [
+          5,
+          4,
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        "exp_bits": 4,
+        "protect_k": 1,
+        "modulation": "qpsk",
+        "alpha": 1.0,
+        "pulse_beta": 0.25,
+        "pulse_span": 16,
+        "pf_iters": 4,
+        "base_m": null,
+        "base_s": null,
+        "base_extra": [],
+        "exp_bits_m": null,
+        "exp_bits_s": null,
+        "exp_offset_m": null,
+        "exp_offset_s": null,
+        "attn_group_m": [
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        "attn_group_s": [
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hybrid_start_k": null,
+        "hybrid_amplitude": 0.019047619047619046,
+        "hybrid_bits": 8,
+        "hybrid_channels": [
+          "M",
+          "S"
+        ],
+        "experimental_tag": 3
+      },
+      "header_bits": 24,
+      "crc_count": 1,
+      "protected_crc_bits": 95,
+      "fec_bits": 202,
+      "digital_unprotected_bits": 82,
+      "symbols_per_frame": 158,
+      "symbol_rate": 118500.0,
+      "audio_kbps": 102.75,
+      "theoretical_bandwidth_hz": 148125.0
+    }
+  ]
+}

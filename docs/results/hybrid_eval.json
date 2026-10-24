@@ -1,6 +1,6 @@
 {
   "description": "同期済みシンボルと静的RRCマルチパスのシミュレーション。実RF測定ではない。",
-  "source": "samples/{material}_orig.flac",
+  "source": "samples/{material}__32k__reference.flac",
   "seconds": 3.0,
   "cn0_db_hz": [
     54,

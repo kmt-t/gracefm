@@ -23,14 +23,14 @@ from gracefm import channel, metrics, plc, txrx, wavio  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 
 VARS = {"なし": dict(postfilter=False), "区間を広げない": dict(eps=0.5), "既定": dict()}
-MATS = (("fishin", "B200MH-A4"), ("vibeace", "B200MH-A4"), ("demo", "B200H-A4"))
+MATS = (("fishin", "B200MH"), ("vibeace", "B200MH"), ("demo", "B200H"))
 CN0S = (None, 57.0, 63.0, 70.0, 80.0)
 
 
 def job(a):
     mat, prof, cn0, seed, sec = a
     p = PROFILES[prof]
-    x, fs = wavio.read(os.path.join(ROOT, "samples", f"{mat}_orig.flac"))
+    x, fs = wavio.read(os.path.join(ROOT, "samples", f"{mat}__32k__reference.flac"))
     x = x[: int(sec * fs)]
     bm = metrics.BandMetric(x, fs)
     fr = txrx.Transmitter(p, 0, 0).run(x)

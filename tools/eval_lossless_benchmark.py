@@ -48,14 +48,14 @@ def job(task):
     x = prepare(entry, seconds)
     plc = 0.0
     encoded_bytes = None
-    if method == "B200MH-A4":
+    if method == "B200MH":
         y = codec(x, PROFILES[method])
         audio_kbps = round(PROFILES[method].audio_kbps(), 1)
     elif method.startswith("MP3-"):
         audio_kbps = int(method.split("-", 1)[1])
         y, encoded_bytes = mp3_roundtrip(x, 32000, audio_kbps)
     elif method == "GraceFM":
-        y, state, _ = channel.link(x, "B200MH-A4", cn0, sub="S50M", power_main=0.5,
+        y, state, _ = channel.link(x, "B200MH", cn0, sub="S50M", power_main=0.5,
                                    kind_main=kind, kind_sub="awgn" if kind == "fade10" else kind, seed=1)
         plc = 100 * state["plc_samples"] / len(x)
         audio_kbps = 474.0
@@ -103,7 +103,7 @@ def main():
     for entry in entries:
         if not args.skip_codec:
             tasks.extend((entry, args.seconds, method, None, None)
-                         for method in ("B200MH-A4", "MP3-128", "MP3-192", "MP3-320"))
+                         for method in ("B200MH", "MP3-128", "MP3-192", "MP3-320"))
         tasks.extend((entry, args.seconds, method, cn0, kind)
                      for kind in kinds for cn0 in strengths for method in ("FM", "GraceFM"))
     rows = []
@@ -117,7 +117,7 @@ def main():
                                     capture_output=True, text=True).stdout.splitlines()[0]
     result = dict(metric="ViSQOL Audio MOS-LQO", metric_implementation="visqol-python 3.8.0",
                   mp3_encoder=f"{ffmpeg_version} / libmp3lame CBR",
-                  gracefm_main_profile="B200MH-A4", gracefm_sub_profile="S50M",
+                  gracefm_main_profile="B200MH", gracefm_sub_profile="S50M",
                   seconds=args.seconds, evaluation_sample_rate_hz=32000,
                   visqol_sample_rate_hz=48000, cn0_noise_bandwidth_hz=180000,
                   channels=kinds,

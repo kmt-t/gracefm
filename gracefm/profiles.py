@@ -11,7 +11,7 @@ from typing import Optional, Tuple
 
 @dataclass(frozen=True)
 class Profile:
-    pid: int                    # ヘッダに載せる ID (4bit)。実験タグとの組で一意
+    pid: int                    # ヘッダに載せる ID (4bit)。現行カタログ内で一意（0・14・15は予約）
     name: str
     fs: int                     # サンプリング周波数 [Hz]
     block: int                  # 1ブロック = 1フレームのサンプル数
@@ -24,9 +24,10 @@ class Profile:
     alpha: float = 1.0          # 階層 QAM の象限間距離パラメータ (1 = 通常の QAM)
     pulse_beta: float = 0.25    # スペクトル評価用 RRC パルスのロールオフ
     pulse_span: int = 16        # 同パルスの長さ [シンボル]
-    pf_iters: int = 4           # 受信側ポストフィルタの繰り返し回数 (全プロファイル共通。SPEC 3.6.3節)
+    pf_iters: int = 4           # 受信側ポストフィルタの繰り返し回数 (全プロファイル共通。docs/SPEC.md「フレームと受信」)
     base_m: Optional[Tuple[int, ...]] = None   # 階層化したときの基本層の仮数ビット数 (None = 階層化なし)
     base_s: Optional[Tuple[int, ...]] = None   # 同 S。基本層を超えるビット (拡張層) は変調の弱い位置に入る
+    base_extra: Tuple[Tuple[str, int, int], ...] = ()  # 強い位置の余りへ次位bitを昇格する (成分, 帯域, 係数)
     exp_bits_m: Optional[Tuple[int, ...]] = None  # 評価用: M の帯域別指数幅。None は exp_bits を使う
     exp_bits_s: Optional[Tuple[int, ...]] = None  # 評価用: S の帯域別指数幅
     exp_offset_m: Optional[Tuple[int, ...]] = None  # 評価用: M の固定指数オフセット emin
@@ -37,7 +38,7 @@ class Profile:
     hybrid_amplitude: float = 0.08 * 7.5 / 31.5  # 8bit時の隣接半径間隔 (正規化前)
     hybrid_bits: int = 8                  # 上位2bitが位相、残りは連続値で推定する半径
     hybrid_channels: Tuple[str, ...] = ("M", "S")
-    experimental_tag: int = 0             # 非暗号化ヘッダの予約2bit。0は従来フレーム
+    experimental_tag: int = 3             # 2bitの形式識別子。値3はビット列11を表し、世代番号ではない。
 
     def __post_init__(self):
         if not 0 <= self.pid < 16 or not 0 <= self.experimental_tag < 4:
@@ -59,6 +60,20 @@ class Profile:
                 group = self.attenuator_group(ch, k)
                 if group < 0 or (group and (b == 0 or self.ncoef(k) % group)):
                     raise ValueError("アッテネータの区間長は送信帯域の係数数を割り切る正数にしてください")
+        if (self.base_m is None) != (self.base_s is None):
+            raise ValueError("M/Sの基本層は両方指定してください")
+        for ch, k, j in self.base_extra:
+            if not self.layered or ch not in ("M", "S") or not 0 <= k < self.nbands or not 0 <= j < self.ncoef(k):
+                raise ValueError("基本層の追加割当が不正です")
+        if self.layered:
+            for ch, widths in (("M", self.bits_m), ("S", self.bits_s)):
+                base = self.base_m if ch == "M" else self.base_s
+                if len(base) != self.nbands:
+                    raise ValueError("基本層の帯域数が不正です")
+                for k, width in enumerate(widths):
+                    for j in range(self.ncoef(k)):
+                        if not (min(self.protect_k, width) <= self.base_bits(ch, k, j) <= width):
+                            raise ValueError("基本層幅が保護bit数または全幅と矛盾しています")
         if self.hybrid_start_k is not None:
             if self.hybrid_start_k not in (4, 5, 6) or self.fs not in (32000, 48000) or self.block != 64:
                 raise ValueError("ハイブリッド境界は32/48kHz・64サンプルの帯域4, 5, 6から選んでください")
@@ -100,11 +115,12 @@ class Profile:
     def layered(self) -> bool:
         return self.base_m is not None
 
-    def base_bits(self, ch: str, k: int) -> int:
-        """帯域 k の基本層のビット数 (階層化なしなら全ビット)"""
+    def base_bits(self, ch: str, k: int, coefficient: int | None = None) -> int:
+        """帯域共通幅。coefficient 指定時は昇格bitも含む実効幅。非階層は全幅。"""
         if not self.layered:
             return (self.bits_m if ch == "M" else self.bits_s)[k]
-        return (self.base_m if ch == "M" else self.base_s)[k]
+        return ((self.base_m if ch == "M" else self.base_s)[k]
+                + (self.base_extra.count((ch, k, coefficient)) if coefficient is not None else 0))
 
     @property
     def nbands(self) -> int:
@@ -150,111 +166,9 @@ def band_edges(fs: int, levels: int):
     return edges
 
 
-PROFILES = {
-    # 放送 (FM 放送の代替)。32kHz, 帯域 〜16kHz, ブロック長 2.0ms (伝送込みの遅延は処理時間 0 で 4.0ms)。
-    # ステレオの割り当ては全帯域・ステレオの試験信号で探索した暫定値。
-    "B200": Profile(pid=1, name="B200", fs=32000, block=64, levels=6,
-                    bits_m=(12, 11, 9, 7, 4, 2, 2), bits_s=(7, 6, 5, 3, 2, 2, 2),
-                    protect_k=1),
-    # 放送のモノラル版。
-    "B200M": Profile(pid=2, name="B200M", fs=32000, block=64, levels=6,
-                     bits_m=(9, 9, 9, 9, 8, 6, 4), bits_s=(0, 0, 0, 0, 0, 0, 0),
-                     protect_k=1),
-    # 放送の低ビットレート版 (約150kbps)。ステレオは 4kHz 以下だけ S を送る。
-    "B150": Profile(pid=4, name="B150", fs=32000, block=64, levels=6,
-                    bits_m=(12, 10, 8, 6, 4, 2, 2), bits_s=(7, 5, 4, 3, 2, 0, 0),
-                    protect_k=1),
-    "B150M": Profile(pid=5, name="B150M", fs=32000, block=64, levels=6,
-                     bits_m=(9, 9, 8, 7, 6, 4, 3), bits_s=(0, 0, 0, 0, 0, 0, 0),
-                     protect_k=1),
-    # 副系 (主系より低いビットレートで、主系と半ブロックずらして別の周波数で送る。主系が壊れたときの受け皿)。
-    # 試行中の暫定値。
-    "S85M": Profile(pid=6, name="S85M", fs=32000, block=64, levels=6,
-                    bits_m=(8, 8, 7, 6, 5, 3, 0), bits_s=(0, 0, 0, 0, 0, 0, 0),
-                    protect_k=1),
-    "S50M": Profile(pid=7, name="S50M", fs=32000, block=64, levels=6,
-                    bits_m=(8, 7, 6, 5, 3, 0, 0), bits_s=(0, 0, 0, 0, 0, 0, 0),
-                    protect_k=1),
-    "S100": Profile(pid=8, name="S100", fs=32000, block=64, levels=6,
-                    bits_m=(10, 9, 8, 6, 4, 2, 0), bits_s=(6, 5, 4, 2, 0, 0, 0),
-                    protect_k=1),
-    # 据え置き機のモニター用。48kHz, ブロック長 1.33ms (伝送込みの遅延は処理時間 0 で 2.67ms)。
-    "M700": Profile(pid=3, name="M700", fs=48000, block=64, levels=6,
-                    bits_m=(16, 14, 13, 12, 11, 9, 7), bits_s=(12, 9, 8, 9, 7, 5, 3),
-                    protect_k=2),
-}
-
-
-
-def make_layered(base: Profile, name: str, pid: int, modulation: str = "qam16h", alpha: float = 5.0,
-                 max_bits: int = 16, protect_k: int = 1) -> Profile:
-    """
-    階層変調のプロファイルを作る。基本層は base と同じビット数の仮数で (FEC で守る上位ビットは protect_k)、
-    変調の強い位置 (象限ビット) に入る。シンボル数は基本層が強い位置に収まる数にし、
-    弱い位置 (位置ビット) を、各帯域の仮数を 1bit ずつ下に延ばす拡張層で埋める
-    (低域→高域、M→S の順に 1bit ずつ、上限 max_bits、入りきらなくなるまで)。
-    拡張層は基本層の下位ビットなので、受信が弱くなると拡張層から崩れ、基本層 (base の音質) が残る。
-    """
-    from .framing import Layout          # 循環 import を避ける
-    base = replace(base, protect_k=protect_k)
-    from .modem import bits_per_symbol
-    lay = Layout(base)
-    nsym = -(-lay.n_tx // 2)
-    cap = nsym * (bits_per_symbol(modulation) - 2)        # 弱い位置の数
-    bm, bs = list(base.bits_m), list(base.bits_s)
-    used = 0
-    changed = True
-    while changed:
-        changed = False
-        for bits in (bm, bs):
-            for k in range(len(bits)):
-                if bits[k] == 0 or bits[k] >= max_bits:
-                    continue
-                n = base.ncoef(k)
-                if used + n <= cap:
-                    bits[k] += 1
-                    used += n
-                    changed = True
-    return replace(base, pid=pid, name=name, bits_m=tuple(bm), bits_s=tuple(bs), modulation=modulation,
-                   alpha=alpha, base_m=base.bits_m, base_s=base.bits_s)
-
-
-# 階層 16QAM の層付きプロファイル: B200M / B200 と同じ帯域幅・同じ基本層に、電波が強いときだけ効く拡張層を足す
-PROFILES["B200MH"] = make_layered(PROFILES["B200M"], "B200MH", 9)
-# 放送ステレオ主系は M/S の最高域32係数に区間アッテネータを付ける。
-# M は8係数ごとに4bit、S は4係数ごとに8bit。指数幅と仮数幅は維持する。
-# A4 はステレオの S 側を4係数ごとに区切る構成を示す（M 側は8係数ごと）。
-# 固定指数オフセットはフレームには送らない。
-PROFILES["B200H-A4"] = replace(make_layered(PROFILES["B200"], "B200H-A4", 10),
-                             exp_offset_m=(-25, -25, -26, -23, -21, -18, -19),
-                             exp_offset_s=(-23, -21, -21, -18, -18, -18, -19),
-                             attn_group_m=(0, 0, 0, 0, 0, 0, 8),
-                             attn_group_s=(0, 0, 0, 0, 0, 0, 4),
-                             pulse_beta=0.10, pulse_span=32)
-
-# モノラル主系: B200MH の6詳細帯域＋低域近似を維持し、最高域32係数を4係数ずつ8区間に分ける。
-# 受信側がフレームごとにオフセットを受け取らずに復元できるよう、指数オフセットは固定値。
-# 元の指数4bitを維持するので保護部は8bit増える。
-PROFILES["B200MH-A4"] = replace(PROFILES["B200MH"], pid=14, name="B200MH-A4",
-                                  exp_offset_m=(-26, -26, -27, -27, -28, -27, -26),
-                                  attn_group_m=(0, 0, 0, 0, 0, 0, 4))
-
-# モニター用 (48kHz) の 16QAM 主系 (SPEC 5.6節)。RF占有帯域は M700 (QPSK) の約半分。
-# M700H: 階層16QAM。基本層 329.25kbps (48kHz、全帯域ステレオ) ＋ 拡張層。M700Q16: 通常の16QAM で M700 と同じビット
-PROFILES["M700Q16"] = Profile(pid=11, name="M700Q16", fs=48000, block=64, levels=6,
-                              bits_m=(16, 14, 13, 12, 11, 9, 7), bits_s=(12, 9, 8, 9, 7, 5, 3),
-                              protect_k=2, modulation="qam16h", alpha=1.0)
-PROFILES["M700H"] = make_layered(Profile(pid=0, name="M340", fs=48000, block=64, levels=6,
-                                         bits_m=(11, 10, 9, 8, 6, 3, 2), bits_s=(7, 5, 4, 3, 3, 2, 2)),
-                                 "M700H", 12, protect_k=1)
-# モニター用の副系 (48kHz)
-PROFILES["S100W"] = Profile(pid=13, name="S100W", fs=48000, block=64, levels=6,
-                            bits_m=(9, 8, 7, 6, 4, 0, 0), bits_s=(5, 4, 3, 0, 0, 0, 0), protect_k=1)
-
-
 def make_hybrid(base: Profile, name: str, pid: int, start_k: int = 5,
                 amplitude: float = 0.08, mantissa_bits: int = 8,
-                channels: Tuple[str, ...] = ("M",), experimental_tag: int = 0) -> Profile:
+                channels: Tuple[str, ...] = ("M",), experimental_tag: int = 3) -> Profile:
     """対象成分の境界以上だけを実験方式にし、他の成分は既存主系のままにする。
 
     amplitude は6bit時の隣接半径間隔として指定し、幅変更時は最大変調度を保つ。
@@ -268,32 +182,32 @@ def make_hybrid(base: Profile, name: str, pid: int, start_k: int = 5,
 
     offsets_m = base.exp_offset_m
     attenuator_m = base.attn_group_m
-    if base.name in ("B200MH-A4", "B200H-A4"):
-        # 32 kHz Y 主系の高域 M は、4〜8 kHz と 8〜16 kHz を各8区間に分ける。
-        # k=5 は16係数なので2係数/bit、k=6 は32係数なので4係数/bit。
-        groups = list(attenuator_m)
-        groups[5], groups[6] = 2, 4
+    if "M" in channels:
+        groups = list(attenuator_m or (0,) * base.nbands)
+        for k in range(start_k, base.nbands):
+            groups[k] = max(1, base.ncoef(k) // 8)
         attenuator_m = tuple(groups)
     # モノラル A4 の指数オフセットは15/13bit仮数向けなので、
     # ハイブリッド仮数幅に応じて量子化ステップの範囲をずらす。
-    if base.name == "B200MH-A4":
+    if base.name == "B200MH":
         offsets_m = tuple(v if k < start_k else -19 - (mantissa_bits - 6)
                           for k, v in enumerate(offsets_m))
-    elif base.name == "B200H-A4":
+    elif base.name == "B200H":
         offsets_m = tuple(v if k < start_k else v - (mantissa_bits - 6)
                           for k, v in enumerate(offsets_m))
-    # 階層Yでは高域Sの次位bitを強い位置へ置き、低域Mの下位bitを
-    # 弱い位置へ移す。いずれの仮数も削らず、デジタル部の長さを抑える。
+    # 階層Yではデジタル部の強い位置を基本層に使う。
     base_m, base_s = base.base_m, base.base_s
-    if base.name == "B200H-A4":
+    if base.name == "B200H":
         base_m = (12, 11, 5, 3, 1, 2, 2)
-        base_s = (1, 1, 1, 1, 1, 2, 2)
+        base_s = (1, 1, 1, 1, 1, 1, 1)
     elif base.name == "M700H":
         base_m = (11, 10, 5, 4, 3, 3, 2)
         base_s = (1, 1, 1, 1, 1, 2, 2)
     return replace(base, pid=pid, name=name, bits_m=widths("M", base.bits_m),
                    bits_s=widths("S", base.bits_s),
                    base_m=base_m, base_s=base_s,
+                   base_extra=(("M", 4, 0),) if base.name == "B200H" else
+                              ((("S", 0, 0),) if base.name == "M700H" else ()),
                    exp_offset_m=offsets_m,
                    exp_offset_s=base.exp_offset_s, attn_group_m=attenuator_m,
                    hybrid_start_k=start_k,
@@ -301,11 +215,319 @@ def make_hybrid(base: Profile, name: str, pid: int, start_k: int = 5,
                    hybrid_bits=mantissa_bits, hybrid_channels=channels,
                    experimental_tag=experimental_tag)
 
+# Standard catalog. All active M/S components have interval attenuation.
+# IDs: 1–6 32kHz main (mono/stereo pairs), 7–8 32kHz secondary,
+# 9–12 48kHz main, 13 48kHz secondary. 0, 14 and 15 are reserved.
+# Every row has the same fields; bit widths are explicit, never expanded implicitly.
+PROFILE_MATRIX = (
+    dict(
+        pid=1,
+        name='B200M',
+        base_extra=(),
+        fs=32000,
+        bits_m=(9, 9, 9, 9, 8, 6, 4),
+        bits_s=(0, 0, 0, 0, 0, 0, 0),
+        protect_k=1,
+        modulation='qpsk',
+        alpha=1.0,
+        base_m=None,
+        base_s=None,
+        attn_group_m=(0, 0, 0, 0, 0, 0, 4),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 0),
+        exp_offset_m=None,
+        exp_offset_s=None,
+        pulse_beta=0.25,
+        pulse_span=16,
+        hybrid_start_k=None,
+        hybrid_channels=('M', 'S'),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=2,
+        name='B200',
+        base_extra=(),
+        fs=32000,
+        bits_m=(12, 11, 9, 7, 4, 2, 2),
+        bits_s=(7, 6, 5, 2, 2, 0, 2),
+        protect_k=1,
+        modulation='qpsk',
+        alpha=1.0,
+        base_m=None,
+        base_s=None,
+        attn_group_m=(0, 0, 0, 0, 0, 0, 4),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
+        exp_offset_m=None,
+        exp_offset_s=None,
+        pulse_beta=0.1,
+        pulse_span=32,
+        hybrid_start_k=None,
+        hybrid_channels=('M', 'S'),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=3,
+        name='B200MH',
+        base_extra=(),
+        fs=32000,
+        bits_m=(16, 16, 16, 16, 16, 15, 13),
+        bits_s=(0, 0, 0, 0, 0, 0, 0),
+        protect_k=1,
+        modulation='qam16h',
+        alpha=5.0,
+        base_m=(9, 9, 9, 9, 8, 6, 4),
+        base_s=(0, 0, 0, 0, 0, 0, 0),
+        attn_group_m=(0, 0, 0, 0, 0, 0, 4),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 0),
+        exp_offset_m=(-26, -26, -27, -27, -28, -27, -26),
+        exp_offset_s=None,
+        pulse_beta=0.25,
+        pulse_span=16,
+        hybrid_start_k=None,
+        hybrid_channels=('M', 'S'),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=4,
+        name='B200H',
+        base_extra=(),
+        fs=32000,
+        bits_m=(16, 16, 16, 13, 10, 7, 7),
+        bits_s=(14, 12, 11, 8, 7, 6, 6),
+        protect_k=1,
+        modulation='qam16h',
+        alpha=5.0,
+        base_m=(12, 11, 9, 7, 3, 1, 1),
+        base_s=(7, 6, 5, 3, 2, 2, 2),
+        attn_group_m=(0, 0, 0, 0, 0, 0, 8),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
+        exp_offset_m=(-25, -25, -26, -23, -21, -18, -19),
+        exp_offset_s=(-23, -21, -21, -18, -18, -18, -19),
+        pulse_beta=0.1,
+        pulse_span=32,
+        hybrid_start_k=None,
+        hybrid_channels=('M', 'S'),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=5,
+        name='B200MHY',
+        base_extra=(),
+        fs=32000,
+        bits_m=(16, 16, 16, 16, 16, 8, 8),
+        bits_s=(0, 0, 0, 0, 0, 0, 0),
+        protect_k=1,
+        modulation='qam16h',
+        alpha=5.0,
+        base_m=(9, 9, 9, 9, 8, 6, 4),
+        base_s=(0, 0, 0, 0, 0, 0, 0),
+        attn_group_m=(0, 0, 0, 0, 0, 2, 4),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 0),
+        exp_offset_m=(-26, -26, -27, -27, -28, -21, -21),
+        exp_offset_s=None,
+        pulse_beta=0.25,
+        pulse_span=16,
+        hybrid_start_k=5,
+        hybrid_channels=('M',),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=6,
+        name='B200HY',
+        base_extra=(('M', 4, 0),),
+        fs=32000,
+        bits_m=(16, 16, 16, 13, 10, 8, 8),
+        bits_s=(14, 12, 11, 8, 7, 6, 6),
+        protect_k=1,
+        modulation='qam16h',
+        alpha=5.0,
+        base_m=(12, 11, 5, 3, 1, 2, 2),
+        base_s=(1, 1, 1, 1, 1, 1, 1),
+        attn_group_m=(0, 0, 0, 0, 0, 2, 4),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
+        exp_offset_m=(-25, -25, -26, -23, -21, -20, -21),
+        exp_offset_s=(-23, -21, -21, -18, -18, -18, -19),
+        pulse_beta=0.1,
+        pulse_span=32,
+        hybrid_start_k=5,
+        hybrid_channels=('M',),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=7,
+        name='S50M',
+        base_extra=(),
+        fs=32000,
+        bits_m=(8, 7, 6, 5, 3, 0, 0),
+        bits_s=(0, 0, 0, 0, 0, 0, 0),
+        protect_k=1,
+        modulation='qpsk',
+        alpha=1.0,
+        base_m=None,
+        base_s=None,
+        attn_group_m=(0, 0, 0, 0, 4, 0, 0),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 0),
+        exp_offset_m=None,
+        exp_offset_s=None,
+        pulse_beta=0.25,
+        pulse_span=16,
+        hybrid_start_k=None,
+        hybrid_channels=('M', 'S'),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=8,
+        name='S100',
+        base_extra=(),
+        fs=32000,
+        bits_m=(10, 9, 8, 6, 4, 2, 0),
+        bits_s=(6, 5, 4, 2, 0, 0, 0),
+        protect_k=1,
+        modulation='qpsk',
+        alpha=1.0,
+        base_m=None,
+        base_s=None,
+        attn_group_m=(0, 0, 0, 0, 0, 4, 0),
+        attn_group_s=(0, 0, 0, 4, 0, 0, 0),
+        exp_offset_m=None,
+        exp_offset_s=None,
+        pulse_beta=0.25,
+        pulse_span=16,
+        hybrid_start_k=None,
+        hybrid_channels=('M', 'S'),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=9,
+        name='M700',
+        base_extra=(),
+        fs=48000,
+        bits_m=(16, 14, 13, 12, 11, 9, 7),
+        bits_s=(12, 9, 8, 9, 7, 5, 3),
+        protect_k=2,
+        modulation='qpsk',
+        alpha=1.0,
+        base_m=None,
+        base_s=None,
+        attn_group_m=(0, 0, 0, 0, 0, 0, 4),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
+        exp_offset_m=None,
+        exp_offset_s=None,
+        pulse_beta=0.25,
+        pulse_span=16,
+        hybrid_start_k=None,
+        hybrid_channels=('M', 'S'),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=10,
+        name='M700H',
+        base_extra=(('M', 6, 0),),
+        fs=48000,
+        bits_m=(16, 16, 16, 15, 12, 9, 7),
+        bits_s=(16, 13, 11, 9, 9, 7, 7),
+        protect_k=1,
+        modulation='qam16h',
+        alpha=5.0,
+        base_m=(11, 10, 9, 8, 6, 3, 2),
+        base_s=(7, 5, 4, 3, 3, 2, 2),
+        attn_group_m=(0, 0, 0, 0, 0, 0, 4),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
+        exp_offset_m=None,
+        exp_offset_s=None,
+        pulse_beta=0.25,
+        pulse_span=16,
+        hybrid_start_k=None,
+        hybrid_channels=('M', 'S'),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=11,
+        name='M700Y',
+        base_extra=(),
+        fs=48000,
+        bits_m=(16, 14, 13, 12, 11, 8, 8),
+        bits_s=(12, 9, 8, 9, 7, 5, 3),
+        protect_k=2,
+        modulation='qpsk',
+        alpha=1.0,
+        base_m=None,
+        base_s=None,
+        attn_group_m=(0, 0, 0, 0, 0, 2, 4),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
+        exp_offset_m=None,
+        exp_offset_s=None,
+        pulse_beta=0.25,
+        pulse_span=16,
+        hybrid_start_k=5,
+        hybrid_channels=('M',),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=12,
+        name='M700HY',
+        base_extra=(('S', 0, 0),),
+        fs=48000,
+        bits_m=(16, 16, 16, 15, 12, 8, 8),
+        bits_s=(16, 13, 11, 9, 9, 7, 7),
+        protect_k=1,
+        modulation='qam16h',
+        alpha=5.0,
+        base_m=(11, 10, 5, 4, 3, 3, 2),
+        base_s=(1, 1, 1, 1, 1, 2, 2),
+        attn_group_m=(0, 0, 0, 0, 0, 2, 4),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
+        exp_offset_m=None,
+        exp_offset_s=None,
+        pulse_beta=0.25,
+        pulse_span=16,
+        hybrid_start_k=5,
+        hybrid_channels=('M',),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=13,
+        name='S100-48K',
+        base_extra=(),
+        fs=48000,
+        bits_m=(9, 8, 7, 6, 4, 0, 0),
+        bits_s=(5, 4, 3, 0, 0, 0, 0),
+        protect_k=1,
+        modulation='qpsk',
+        alpha=1.0,
+        base_m=None,
+        base_s=None,
+        attn_group_m=(0, 0, 0, 0, 4, 0, 0),
+        attn_group_s=(0, 0, 2, 0, 0, 0, 0),
+        exp_offset_m=None,
+        exp_offset_s=None,
+        pulse_beta=0.25,
+        pulse_span=16,
+        hybrid_start_k=None,
+        hybrid_channels=('M', 'S'),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+)
 
-PROFILES["B200HY-A4"] = make_hybrid(PROFILES["B200H-A4"], "B200HY-A4", 15)
-PROFILES["B200MHY-A4"] = make_hybrid(PROFILES["B200MH-A4"], "B200MHY-A4", 0)
-PROFILES["M700Y"] = make_hybrid(PROFILES["M700"], "M700Y", 3, experimental_tag=1)
-PROFILES["M700HY"] = make_hybrid(PROFILES["M700H"], "M700HY", 12, experimental_tag=1)
-
-BY_ID = {p.pid: p for p in PROFILES.values() if p.experimental_tag == 0}
+PROFILES = {row["name"]: Profile(block=64, levels=6, experimental_tag=3, **row)
+            for row in PROFILE_MATRIX}
+BY_ID = {p.pid: p for p in PROFILES.values()}
 BY_HEADER = {(p.pid, p.experimental_tag): p for p in PROFILES.values()}
+if len(BY_ID) != len(PROFILES):
+    raise ValueError("プロファイルIDが重複しています")
+for _profile in PROFILES.values():
+    for _ch, _bits in (("M", _profile.bits_m), ("S", _profile.bits_s)):
+        if any(_bits) and not any(_profile.attenuator_bits(_ch, k) for k in range(_profile.nbands)):
+            raise ValueError(f"{_profile.name}: {_ch} の標準アッテネータがありません")

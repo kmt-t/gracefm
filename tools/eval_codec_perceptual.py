@@ -3,7 +3,7 @@
 
   python tools/eval_codec_perceptual.py --json docs/results/codec_perceptual_eval.json
 
-原音は samples/*_orig.flac の10秒全体（32kHz・モノラル）。GraceFM は通信路と
+原音は samples/*__32k__reference.flac の10秒全体（32kHz・モノラル）。GraceFM は通信路と
 誤り訂正を通さず、MP3 は FFmpeg/libmp3lame の CBR で符号化・復号する。
 MP3 のデコードには gapless メタデータを使い、長さが原音と違えば失敗させる。
 MP3 には無線路を含めないので、この結果を C/N0 別の結果とは混同しない。
@@ -51,7 +51,7 @@ def job(args):
     material, seconds, method = args
     from visqol import VisqolApi
 
-    x, fs = wavio.read(os.path.join(ROOT, "samples", f"{material}_orig.flac"))
+    x, fs = wavio.read(os.path.join(ROOT, "samples", f"{material}__32k__reference.flac"))
     x = x[: int(seconds * fs)]
     if fs != 32000 or len(x) != int(seconds * fs):
         raise ValueError(f"{material}: 32kHz、{seconds:g}秒以上の原音が必要")
@@ -92,7 +92,7 @@ def main():
         ap.error("bitrates は MPEG-1 Layer III の対応ビットレートから選んでください")
     if not bitrates or args.seconds < 3 or args.seconds > 10 or args.workers < 1:
         ap.error("bitrates は空にせず、seconds は 3〜10、workers は 1 以上にしてください")
-    methods = ["B200M", "B200MH-A4"] + [f"MP3-{b}" for b in bitrates]
+    methods = ["B200M", "B200MH"] + [f"MP3-{b}" for b in bitrates]
     jobs = [(material, args.seconds, method) for material in materials for method in methods]
     with ProcessPoolExecutor(max_workers=args.workers) as executor:
         rows = []

@@ -1,0 +1,31 @@
+"""Render the actual basic layer, retaining coefficient-specific promotions."""
+import copy
+import numpy as np
+from gracefm.codec import offset_of
+from gracefm.txrx import StreamDecoder, Transmitter
+
+
+class BaseLayerDecoder(StreamDecoder):
+    def soft_coeffs(self, bd, probabilities, high_ok=True):
+        bd = copy.deepcopy(bd)
+        probabilities = np.array(probabilities, copy=True)
+        # soft_coeffs expects mantissas to contain the hard decisions for its probabilities.
+        # An erased bit has p=0.5 and hard decision 0, so clear that bit before taking its mean.
+        for ch, k, j, pos in self.layout.unp_items[self.layout.n_base_unp:]:
+            bits = self.p.bits_m if ch == "M" else self.p.bits_s
+            offset = offset_of(bits[k], self.p, ch, k)
+            value = int(bd.mant[ch][k][j]) + offset
+            bd.mant[ch][k][j] = (value & ~(1 << pos)) - offset
+        # Layout includes base_extra in n_base_unp. Only extension evidence is erased.
+        probabilities[self.layout.n_base_unp:] = 0.5
+        return super().soft_coeffs(bd, probabilities, high_ok)
+
+
+def base_layer_audio(audio, profile):
+    if not profile.layered or profile.hybrid:
+        raise ValueError('a conventional layered profile is required')
+    decoder = BaseLayerDecoder(profile)
+    output, valid = decoder.run(Transmitter(profile).run(audio), len(audio))
+    if not np.all(valid):
+        raise AssertionError('noiseless basic-layer decode failed')
+    return output

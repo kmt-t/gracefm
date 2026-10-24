@@ -29,7 +29,7 @@ def dec(p, fr, n, off, soft):
 def single():
     print("== 1系統: 硬判定 → 軟判定 (波形SNR dB / BandMetric、2 seed 平均) ==")
     for name, prof in (("fishin", "B200M"), ("vibeace", "B200M"), ("demo", "B200")):
-        p = PROFILES[prof]; x, fs = wavio.read(R + f"{name}_orig.flac"); bm = metrics.BandMetric(x, fs)
+        p = PROFILES[prof]; x, fs = wavio.read(R + f"{name}__32k__reference.flac"); bm = metrics.BandMetric(x, fs)
         row = []
         for snr in (4, 6, 8, 10, 12):
             r = []
@@ -47,7 +47,7 @@ def single():
 def iq_eval():
     print("== I/Q の雑音が不均等・相関あり (1系統, fishin B200M, Es/N0 8dB, 軟判定の復号)："
           "軸ごと独立・等分散とみなす → 2次元の共分散を使う (波形SNR dB) ==")
-    p = PROFILES["B200M"]; x, fs = wavio.read(R + "fishin_orig.flac")
+    p = PROFILES["B200M"]; x, fs = wavio.read(R + "fishin__32k__reference.flac")
     orig = modem.bit_probs
 
     def diag_probs(sym, n_bits, mod="qpsk", alpha=1.0):

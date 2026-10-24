@@ -4,7 +4,7 @@
   python tools/eval_perceptual.py --json docs/results/perceptual_eval.json
   python tools/eval_perceptual.py --materials fishin --cn0 60 --channels awgn
 
-音楽素材は samples/*_orig.flac の10秒全体（既定）。評価する通信路は
+音楽素材は samples/*__32k__reference.flac の10秒全体（既定）。評価する通信路は
 tools/eval_final.py と同じ同期済みシンボル列のモデル。ViSQOL は
 32kHz の原音と受信音を共に48kHzに再標本化し、モノラルにして Audio mode で測る。
 MOS-LQO は予測値であり、実際の聴取試験の MOS ではない。
@@ -28,9 +28,9 @@ METHODS = {
     "AM": None,
     "FM": None,
     "B200M": dict(main="B200M"),
-    "B200MH-A4": dict(main="B200MH-A4"),
-    "GraceFM": dict(main="B200MH-A4", sub="S50M", power_main=0.5),
-    "GraceFM75": dict(main="B200MH-A4", sub="S50M", power_main=0.75),
+    "B200MH": dict(main="B200MH"),
+    "GraceFM": dict(main="B200MH", sub="S50M", power_main=0.5),
+    "GraceFM75": dict(main="B200MH", sub="S50M", power_main=0.75),
 }
 DEFAULT_METHODS = "AM,FM,GraceFM"
 
@@ -56,7 +56,7 @@ def job(args):
     material, kind, cn0, seed, seconds, method = args
     from visqol import VisqolApi
 
-    x, fs = wavio.read(os.path.join(ROOT, "samples", f"{material}_orig.flac"))
+    x, fs = wavio.read(os.path.join(ROOT, "samples", f"{material}__32k__reference.flac"))
     x = x[: int(seconds * fs)]
     if fs != 32000 or len(x) != int(seconds * fs):
         raise ValueError(f"{material}: 32kHz、{seconds:g}秒以上の原音が必要")
@@ -143,8 +143,8 @@ def main():
     summary = summarize(rows)
     if args.json:
         result = dict(metric="ViSQOL Audio MOS-LQO", metric_implementation="visqol-python 3.8.0",
-                      gracefm_main_profile="B200MH-A4", gracefm_sub_profile="S50M",
-                      reference="samples/{material}_orig.flac", source_sample_rate_hz=32000,
+                      gracefm_main_profile="B200MH", gracefm_sub_profile="S50M",
+                      reference="samples/{material}__32k__reference.flac", source_sample_rate_hz=32000,
                       visqol_sample_rate_hz=48000, seconds=args.seconds,
                       cn0_noise_bandwidth_hz=180000,
                       notes="FM/AM はモノラル。fade10 は GraceFM の主系と FM の搬送波のみ -10dB。"

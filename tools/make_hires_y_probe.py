@@ -76,10 +76,14 @@ def main():
     parser.add_argument("--no-visqol", action="store_true")
     parser.add_argument("--out", default=os.path.join(ROOT, "samples/monitor_y"))
     parser.add_argument("--json", default=os.path.join(ROOT, "docs/results/monitor_y_hires_probe.json"))
+    parser.add_argument("--profiles", default="M700,M700Y,M700H,M700HY")
     args = parser.parse_args()
+    selected_profiles = args.profiles.split(",")
+    if any(name not in ("M700", "M700Y", "M700H", "M700HY") for name in selected_profiles):
+        parser.error("unknown profile")
     os.makedirs(args.out, exist_ok=True)
     os.makedirs(os.path.dirname(args.json), exist_ok=True)
-    filename = "hires_probe_orig48.flac"
+    filename = "hires_probe__48k__reference.flac"
     original_path = os.path.join(args.out, filename)
     if not (args.resume and os.path.exists(original_path)):
         wavio.write_flac24(original_path, make_probe(), 48000)
@@ -103,6 +107,8 @@ def main():
 
     for old_name, y_name, cn0_values in PAIRS:
         for name in (old_name, y_name):
+            if name not in selected_profiles:
+                continue
             profile = PROFILES[name]
             cases = ("codec", *(f"awgn{cn0}" for cn0 in cn0_values))
             if name == y_name:

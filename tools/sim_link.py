@@ -112,7 +112,8 @@ def main():
     for k in ("A", "B"):
         if k in st:
             s = st[k]
-            print(f"  系統{k}: {s['frames']}フレーム中 欠落 {s['lost']} / CRC不一致 {s['crc_fail']}")
+            print(f"  系統{k}: {s['frames']}フレーム中 欠落 {s['lost']} / "
+                  f"基本CRC不一致 {s['crc_fail']} / H1/H2 CRC不一致 {s['high_crc_fail']}")
     print(f"  PLC で埋めたサンプル {st['plc_samples']} ({st['plc_samples'] / len(x) * 100:.2f}%)")
     m, seg = report(y)
     print(f"  波形SNR {metrics.snr_db(x, y):.2f}dB  セグメンタルSNR {seg:.1f}dB  帯域指標 {m:.2f}")

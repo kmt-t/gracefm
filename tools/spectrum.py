@@ -77,16 +77,17 @@ def axes_style(ax):
 
 
 def main():
-    x, fs = wavio.read(os.path.join(ROOT, "samples", "fishin_orig.flac"))
+    x, fs = wavio.read(os.path.join(ROOT, "samples", "fishin__32k__reference.flac"))
     x = x[: 4 * fs]
     x48 = wavio.resample(x, fs, 48000)
     groups = [
-        ("放送の主系（32kHz）とアナログFM", ["FM", "B200MH-A4", "B200H-A4", "B200M"]),
-        ("放送の副系（32kHz）", ["S50M", "S100", "S85M"]),
-        ("モニター（48kHz）", ["M700", "M700Q16", "M700H", "S100W"]),
+        ("放送モノラル主系（32kHz）とアナログFM", ["FM", "B200M", "B200MH", "B200MHY"]),
+        ("放送ステレオ主系（32kHz）", ["B200", "B200H", "B200HY"]),
+        ("放送の副系（32kHz）", ["S50M", "S100"]),
+        ("モニター（48kHz）", ["M700", "M700H", "S100-48K"]),
     ]
     res = {}
-    fig, axs = plt.subplots(len(groups), 1, figsize=(8, 9.5), facecolor=SURF)
+    fig, axs = plt.subplots(len(groups), 1, figsize=(8, 12), facecolor=SURF)
     for ax, (title, names) in zip(axs, groups):
         axes_style(ax)
         for j, n in enumerate(names):
@@ -116,7 +117,7 @@ def main():
         ax.set_ylabel("電力スペクトル密度 [dB/Hz]\n（送信電力 = 1）", fontsize=9, color=INK2)
         ax.legend(fontsize=8.5, frameon=False, loc="upper right", labelcolor=INK)
     axs[-1].set_xlabel("搬送波からの周波数 [kHz]", fontsize=9, color=INK2)
-    fig.suptitle("送信スペクトル（B200H-A4 は RRC β=0.10、他は β=0.25。送信電力をそろえた比較）", fontsize=12, color=INK, x=0.02,
+    fig.suptitle("送信スペクトル（B200・B200H は RRC β=0.10、他は β=0.25。送信電力をそろえた比較）", fontsize=12, color=INK, x=0.02,
                  ha="left")
     fig.tight_layout()
     fig.savefig(os.path.join(ROOT, "docs", "figures", "rf_spectrum.png"), dpi=130, facecolor=SURF)
@@ -125,12 +126,9 @@ def main():
     demo48 = make_demo(48000)
     demo32 = wavio.resample(demo48, 48000, 32000)
     demo32 *= 0.89 / np.abs(demo32).max()
-    agroups = [("放送（32kHz、demo の M）", demo32, 32000, ["B200H-A4", "B200", "S100"]),
+    agroups = [("放送（32kHz、demo の M）", demo32, 32000, ["B200H", "B200", "S100"]),
                ("モニター（48kHz、demo の M）", demo48, 48000, ["M700H", "M700", "M700H基本層"])]
-    from dataclasses import replace
-    mh = PROFILES["M700H"]
-    PROFILES["M700H基本層"] = replace(mh, name="M700H基本層", bits_m=mh.base_m, bits_s=mh.base_s, base_m=None,
-                                     base_s=None, modulation="qpsk", alpha=1.0)
+    from base_layer_sample import base_layer_audio
     fig, axs = plt.subplots(2, 1, figsize=(8, 7), facecolor=SURF)
     for ax, (title, xx, fsa, names) in zip(axs, agroups):
         axes_style(ax)
@@ -138,11 +136,13 @@ def main():
         f, P0 = welch(m, fs=fsa, nperseg=4096)
         ax.plot(f / 1e3, 10 * np.log10(P0 + 1e-30), color=INK2, lw=1.2, label="原音")
         for j, n in enumerate(names):
-            y = codec(xx, PROFILES[n])
+            y = base_layer_audio(xx, PROFILES["M700H"]) if n == "M700H基本層" else codec(xx, PROFILES[n])
             e = (y[:, 0] + y[:, 1]) / 2 - m
             f, P = welch(e, fs=fsa, nperseg=4096)
+            label = (f"誤差：{n}" if n == "M700H基本層" else
+                     f"誤差：{n}（{PROFILES[n].audio_kbps():.0f}kbps）")
             ax.plot(f / 1e3, 10 * np.log10(P + 1e-30), color=COL[j], ls=LS[j], lw=1.5,
-                    label=f"誤差：{n}（{PROFILES[n].audio_kbps():.0f}kbps）")
+                    label=label)
             res.setdefault("audio_error_snr_dB", {})[n] = round(float(10 * np.log10(np.sum(m ** 2) / np.sum(e ** 2))), 1)
         ax.set_xlim(0, fsa / 2e3)
         ax.set_ylim(-200, -20)

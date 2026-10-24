@@ -54,7 +54,7 @@ def test_frame_roundtrip_bit_exact():
         bits = lay.pack(bd, 1, 5)
         assert len(bits) == lay.n_tx
         bd2, hdr = lay.unpack(1.0 - 2.0 * bits[: lay.n_coded], bits[lay.n_coded:])
-        assert hdr == {"pid": p.pid, "stream": 1, "encrypted": False, "counter": 5}
+        assert hdr == {"pid": p.pid, "stream": 1, "encrypted": False, "counter": 5, "high_ok": True}
         assert np.allclose(decode_block(bd2, p), decode_block(bd, p)), name
 
 
@@ -80,7 +80,7 @@ def test_band_exponents_use_fixed_offsets_and_variable_widths():
 
 def test_attenuator_roundtrip():
     from gracefm.codec import cells, dequantize, quantize, quantize_attenuated
-    base = PROFILES["B200MH"]
+    base = replace(PROFILES["B200MH"], attn_group_m=(0,) * 7)
     groups = (0, 0, 0, 0, 0, 0, 4)
     p = replace(base, attn_group_m=groups)
     x = _signal(p.block, p.fs)
@@ -97,10 +97,10 @@ def test_attenuator_roundtrip():
     wrong, _ = wrong_layout.unpack(1.0 - 2.0 * frame[:lay.n_coded], frame[lay.n_coded:])
     assert wrong is None
     body = fec.viterbi_decode(1.0 - 2.0 * frame[:lay.n_coded], lay.n_prot_crc)
-    body[16 + 7 * 4] ^= 1  # 最初のアッテネータbitを壊す
+    body[lay.header_bits + 7 * 4] ^= 1  # 最初のアッテネータbitを壊す
     damaged = np.concatenate([fec.conv_encode(body), frame[lay.n_coded:]])
-    rejected, _ = lay.unpack(1.0 - 2.0 * damaged[:lay.n_coded], damaged[lay.n_coded:])
-    assert rejected is None
+    recovered, hdr = lay.unpack(1.0 - 2.0 * damaged[:lay.n_coded], damaged[lay.n_coded:])
+    assert recovered is not None and hdr["high_ok"] is False
 
     rng = np.random.default_rng(123)
     for _ in range(50):
@@ -128,9 +128,9 @@ def test_attenuator_roundtrip():
 
 
 def test_adopted_attenuator_profile_end_to_end():
-    p = PROFILES["B200MH-A4"]
-    assert p.pid == 14 and p.exp_bits == 4 and p.attn_group_m[-1] == 4
-    assert Layout(p).n_prot_crc == 132
+    p = PROFILES["B200MH"]
+    assert p.pid == 3 and p.exp_bits == 4 and p.attn_group_m[-1] == 4
+    assert Layout(p).n_prot_crc == 156
     x = _signal(p.block * 12, p.fs)
     frames = Transmitter(p).run(x)
     y, valid = StreamDecoder(p, postfilter=False).run(frames, len(x))
@@ -140,15 +140,15 @@ def test_adopted_attenuator_profile_end_to_end():
 
 
 def test_broadcast_joint_stereo_attenuators():
-    p = PROFILES["B200H-A4"]
-    assert p.pid == 10 and p.exp_bits == 4
+    p = PROFILES["B200H"]
+    assert p.pid == 4 and p.exp_bits == 4
     assert p.pulse_beta == 0.10 and p.pulse_span == 32
     from gracefm.channel import symbol_rate
-    assert (1 + p.pulse_beta) * symbol_rate(p) < 200000
+    assert symbol_rate(p) <= 180000
     assert p.attn_group_m[-1] == 8 and p.attn_group_s[-1] == 4
     assert p.attenuator_bits("M", 6) == 4 and p.attenuator_bits("S", 6) == 8
-    assert Layout(p).n_prot_crc == 228
-    assert p.audio_kbps() == 536
+    assert Layout(p).n_prot_crc == 252
+    assert p.audio_kbps() == 512
     x = _signal(p.block * 8, p.fs)
     bd = encode_block(x[:p.block], p)
     assert len(bd.attn["M"][6]) == 4 and len(bd.attn["S"][6]) == 8
@@ -317,12 +317,12 @@ def test_layered_profile():
 
 
 def test_b200h_soft_postfilter_preserves_high_side_signal():
-    """弱いQAM位置の不確実さで高域Sが過剰に平滑化されない。"""
+    """帯域圧縮後も高域Sのレベルを保ち、基本層を減らしたY系の差を検出する。"""
     from gracefm import channel, wavio
     from gracefm.codec import haar_forward
 
-    p = PROFILES["B200H-A4"]
-    path = os.path.join(os.path.dirname(__file__), "..", "samples", "demo_orig.flac")
+    p = PROFILES["B200H"]
+    path = os.path.join(os.path.dirname(__file__), "..", "samples", "demo__32k__reference.flac")
     x, fs = wavio.read(path)
     assert fs == p.fs
     x = x[:fs]
@@ -330,7 +330,7 @@ def test_b200h_soft_postfilter_preserves_high_side_signal():
     s_ref = (x[:, 0] - x[:, 1]) / 2
     ref = haar_forward(s_ref.reshape(-1, p.block), p.levels)
     power_ref = sum(np.sum(a * a) for a in ref[5:])
-    for name in ("B200H-A4", "B200HY-A4"):
+    for name in ("B200H", "B200HY"):
         current = PROFILES[name]
         y, _, _ = channel.link(x, current, 66, sub="S100", power_main=0.5, seed=1)
         s_out = (y[:, 0] - y[:, 1]) / 2
@@ -339,12 +339,12 @@ def test_b200h_soft_postfilter_preserves_high_side_signal():
         error = sum(np.sum((a - b) ** 2) for a, b in zip(ref[5:], out[5:]))
         level_change_db = 10 * np.log10(power_out / power_ref)
         snr_db = 10 * np.log10(power_ref / error)
-        assert abs(level_change_db) < 1.0
-        assert snr_db > 8.0
+        assert abs(level_change_db) < (1.0 if name == "B200H" else 2.0)
+        assert snr_db > (8.0 if name == "B200H" else 3.0)
 
 
 def test_side_component_bypasses_optional_postfilter():
-    p = PROFILES["B200H-A4"]
+    p = PROFILES["B200H"]
     x = _signal(p.block * 12, p.fs)
     frames = Transmitter(p).run(x)
     filtered, _ = receive(p, frames, None, len(x), 0, postfilter=True)
