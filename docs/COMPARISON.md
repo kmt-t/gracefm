@@ -34,8 +34,19 @@
 
 この条件の ViSQOL では aptX 系が上回る。元の48 kHz帯域の比較には、GraceFM B200H の音声帯域上限16 kHzも含まれる。ビットレートは音声データであり、無線フレーム全体の速度ではない。
 
-## DAB+：規格上の位置付け
+## MPEG HE-AAC v2：DAB+の音声コーデックとの比較
 
-[ETSI TS 102 563](https://www.etsi.org/deliver/etsi_ts/102500_102599/102563/02.01.01_60/ts_102563v020101p.pdf) によると、DAB+音声は MPEG HE-AACv2 の規定されたサブセットを使い、120 ms の音声スーパーフレームを Reed–Solomon 符号と仮想インターリーブで保護する。[ETSI EN 300 401](https://www.etsi.org/deliver/etsi_en/300400_300499/300401/02.01.01_60/en_300401v020101p.pdf) の DAB 無線信号の公称帯域は1.536 MHz。GraceFM の約180 kHzの単一主系と、DAB の多サービス用の多重信号を帯域だけで同条件とみなすことはできない。
+[ETSI TS 102 563](https://www.etsi.org/deliver/etsi_ts/102500_102599/102563/02.01.01_60/ts_102563v020101p.pdf) は、DAB+の音声にMPEG-4 HE-AAC v2のサブセットを規定する。このプロファイルにはAAC-LC、SBR、高効率ステレオ用のPSが含まれる。ここでは**HE-AAC v2（SBR+PSを有効化）**をGraceFM `B200H`と比べる。DAB+ではAAC変換長を960サンプルに限定するが、今回使用した通常のFDK AACエンコーダはそのDAB+専用設定を使っていない。したがって下表は**MPEG HE-AAC v2のコーデック実装との比較**であり、DAB+準拠ストリームの実測値ではない。
 
-DAB+は比較候補に含めるが、現環境に規格に合う HE-AACv2 エンコーダと DAB+ フレーミング・RFモデルがないため、音質・受信感度・端末間遅延の数値比較は**未測定**。手元の AAC-LC エンコーダによる結果を DAB+ として代用しない。比較するには、同一原音で規格準拠の DAB+ スーパーフレームを生成し、受信機バッファを含む遅延、同一条件のRF通信路、音声復号後の品質を測る。
+aptX比較と同じ3素材の同じ5秒区間を使い、ピークを0.89に合わせた。GraceFMは32 kHz、HE-AAC v2は48 kHzのステレオ入力で符号化・復号した。共通16 kHz帯域の評価では両者に同じ32 kHz化原音を与え、HE-AAC v2の入力だけ48 kHzへ再標本化する。「元の48 kHz」は原音を基準とし、GraceFMの16 kHz音声帯域上限も結果に含める。[DAB+向けODR-AudioEnc](https://github.com/Opendigitalradio/ODR-AudioEnc/blob/master/README.md#dab-aac-encoder-configuration)の既定設定ではステレオ48 kb/s以下でPSを使うため、32/48 kb/sを選んだ。HE-AAC v2は[FDK AAC](https://github.com/mstorsjo/fdk-aac)のAOT 29を`fdkaac`でCBRに設定し、FFmpegで復号した。復号出力の一定遅延を相互相関で測って除去した。ViSQOL Audio MOS-LQOは素材・左右チャンネルの平均、波形SNRは素材ごとにステレオ全体で計算して平均した。通信路、FEC、DAB+スーパーフレーム、受信バッファは含まない。[素材別測定値・ビルド情報](results/heaacv2_benchmark.json)と[再現用スクリプト](../tools/eval_heaacv2_benchmark.py)を参照。
+
+| 評価帯域 | 方式 | 音声ビットレート kb/s | ViSQOL 平均 | 波形 SNR 平均 dB |
+|---|---|---:|---:|---:|
+| 共通16 kHz | B200H | 512 | 4.411 | 55.50 |
+| 共通16 kHz | HE-AAC v2 | 32 | 3.816 | 17.78 |
+| 共通16 kHz | HE-AAC v2 | 48 | 3.776 | 18.23 |
+| 元の48 kHz | B200H | 512 | 3.925 | 52.07 |
+| 元の48 kHz | HE-AAC v2 | 32 | 4.146 | 17.77 |
+| 元の48 kHz | HE-AAC v2 | 48 | 4.182 | 18.22 |
+
+共通帯域ではB200HのViSQOLが高く、元の48 kHzを基準にするとHE-AAC v2のViSQOLが高い。ただしB200Hの音声ペイロードは512 kb/sで、HE-AAC v2の目標32/48 kb/sと大きく異なるため、同一ビットレートでの符号化効率を示す比較ではない。HE-AAC v2のPSはステレオをパラメータから再構成するので、波形SNRの差をそのまま聴感差と読めない。3素材・5秒の小規模測定であり、32 kb/sと48 kb/sのViSQOL順位もこの条件の結果に限る。DAB+固有の960サンプル変換、120 msスーパーフレーム、Reed–Solomon符号と仮想インターリーブを含む品質・遅延は未測定である。
