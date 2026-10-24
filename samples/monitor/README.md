@@ -22,8 +22,8 @@
 | demo | M700H | awgn-cn0-75dBHz | [再生](demo__48k__M700H__awgn-cn0-75dBHz.flac) | 35.89 |
 | demo | M700H | awgn-cn0-80dBHz | [再生](demo__48k__M700H__awgn-cn0-80dBHz.flac) | 49.92 |
 | demo | M700H | codec | [再生](demo__48k__M700H__codec.flac) | 57.42 |
-| demo | M700 | awgn-cn0-65dBHz | [再生](demo__48k__M700__awgn-cn0-65dBHz.flac) | 30.52 |
-| demo | M700 | awgn-cn0-70dBHz | [再生](demo__48k__M700__awgn-cn0-70dBHz.flac) | 40.28 |
+| demo | M700 | awgn-cn0-65dBHz | [再生](demo__48k__M700__awgn-cn0-65dBHz.flac) | 14.18 |
+| demo | M700 | awgn-cn0-70dBHz | [再生](demo__48k__M700__awgn-cn0-70dBHz.flac) | 16.27 |
 | demo | M700 | codec | [再生](demo__48k__M700__codec.flac) | 40.28 |
 | fishin | M700H-base | codec | [再生](fishin__48k__M700H-base__codec.flac) | 29.71 |
 | fishin | M700H | awgn-cn0-65dBHz | [再生](fishin__48k__M700H__awgn-cn0-65dBHz.flac) | 27.06 |
@@ -31,8 +31,8 @@
 | fishin | M700H | awgn-cn0-75dBHz | [再生](fishin__48k__M700H__awgn-cn0-75dBHz.flac) | 36.86 |
 | fishin | M700H | awgn-cn0-80dBHz | [再生](fishin__48k__M700H__awgn-cn0-80dBHz.flac) | 49.61 |
 | fishin | M700H | codec | [再生](fishin__48k__M700H__codec.flac) | 54.24 |
-| fishin | M700 | awgn-cn0-65dBHz | [再生](fishin__48k__M700__awgn-cn0-65dBHz.flac) | 28.71 |
-| fishin | M700 | awgn-cn0-70dBHz | [再生](fishin__48k__M700__awgn-cn0-70dBHz.flac) | 50.23 |
+| fishin | M700 | awgn-cn0-65dBHz | [再生](fishin__48k__M700__awgn-cn0-65dBHz.flac) | 13.21 |
+| fishin | M700 | awgn-cn0-70dBHz | [再生](fishin__48k__M700__awgn-cn0-70dBHz.flac) | 15.56 |
 | fishin | M700 | codec | [再生](fishin__48k__M700__codec.flac) | 54.13 |
 | vibeace | M700H-base | codec | [再生](vibeace__48k__M700H-base__codec.flac) | 43.16 |
 | vibeace | M700H | awgn-cn0-65dBHz | [再生](vibeace__48k__M700H__awgn-cn0-65dBHz.flac) | 32.88 |
@@ -40,8 +40,8 @@
 | vibeace | M700H | awgn-cn0-75dBHz | [再生](vibeace__48k__M700H__awgn-cn0-75dBHz.flac) | 50.52 |
 | vibeace | M700H | awgn-cn0-80dBHz | [再生](vibeace__48k__M700H__awgn-cn0-80dBHz.flac) | 62.61 |
 | vibeace | M700H | codec | [再生](vibeace__48k__M700H__codec.flac) | 67.46 |
-| vibeace | M700 | awgn-cn0-65dBHz | [再生](vibeace__48k__M700__awgn-cn0-65dBHz.flac) | 28.93 |
-| vibeace | M700 | awgn-cn0-70dBHz | [再生](vibeace__48k__M700__awgn-cn0-70dBHz.flac) | 63.54 |
+| vibeace | M700 | awgn-cn0-65dBHz | [再生](vibeace__48k__M700__awgn-cn0-65dBHz.flac) | 14.04 |
+| vibeace | M700 | awgn-cn0-70dBHz | [再生](vibeace__48k__M700__awgn-cn0-70dBHz.flac) | 16.37 |
 | vibeace | M700 | codec | [再生](vibeace__48k__M700__codec.flac) | 67.24 |
 
 ## 原音

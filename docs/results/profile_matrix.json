@@ -690,13 +690,29 @@
         ],
         "exp_bits": 4,
         "protect_k": 2,
-        "modulation": "qpsk",
-        "alpha": 1.0,
+        "modulation": "qam16h",
+        "alpha": 5.0,
         "pulse_beta": 0.25,
         "pulse_span": 16,
         "pf_iters": 4,
-        "base_m": null,
-        "base_s": null,
+        "base_m": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "base_s": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
         "base_extra": [],
         "exp_bits_m": null,
         "exp_bits_s": null,
@@ -734,10 +750,10 @@
       "protected_crc_bits": 384,
       "fec_bits": 780,
       "digital_unprotected_bits": 609,
-      "symbols_per_frame": 711,
-      "symbol_rate": 533250.0,
+      "symbols_per_frame": 406,
+      "symbol_rate": 304500.0,
       "audio_kbps": 702.75,
-      "theoretical_bandwidth_hz": 666562.5
+      "theoretical_bandwidth_hz": 380625.0
     },
     {
       "profile": {
@@ -864,13 +880,29 @@
         ],
         "exp_bits": 4,
         "protect_k": 2,
-        "modulation": "qpsk",
-        "alpha": 1.0,
+        "modulation": "qam16h",
+        "alpha": 5.0,
         "pulse_beta": 0.25,
         "pulse_span": 16,
         "pf_iters": 4,
-        "base_m": null,
-        "base_s": null,
+        "base_m": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "base_s": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
         "base_extra": [],
         "exp_bits_m": null,
         "exp_bits_s": null,
@@ -907,10 +939,10 @@
       "protected_crc_bits": 392,
       "fec_bits": 796,
       "digital_unprotected_bits": 337,
-      "symbols_per_frame": 631,
-      "symbol_rate": 473250.0,
+      "symbols_per_frame": 462,
+      "symbol_rate": 346500.0,
       "audio_kbps": 720.75,
-      "theoretical_bandwidth_hz": 591562.5
+      "theoretical_bandwidth_hz": 433125.0
     },
     {
       "profile": {
