@@ -19,13 +19,13 @@ def vector(values):
 
 def render():
     lines = ['# 現行プロファイル設定マトリクス', '',
-             '`gracefm/profiles.py` の `PROFILE_MATRIX` から生成。更新は `python tools/profile_matrix.py`、一致確認は `--check`。', '',
+             '`gracefm/profiles.py` の `PROFILE_MATRIX` から生成。更新は `python tools/profile_matrix.py`、一致確認は `--check`。アルゴリズムと測定条件は[技術論文](SPEC.md)を参照。', '',
              '全登録プロファイルに区間アッテネータを標準装備する。名前の数字は系列名であり、現在の実ビットレートは下表を参照。', '',
              '共通設定：64サンプル、Haar 6段、指数4bit/送信帯域、基本CRC-16とH1/H2用の高域CRC-16（該当帯域を送る場合のみ）、畳み込み符号 K=7・r=1/2。ヘッダは非暗号化24bit（カウンタ16bit）、暗号化32bit（カウンタ24bit）。ID 0・14・15は予約。', '',
              '## ID・方式・伝送予算', '',
              '非暗号化の値。シンボル数にはプリアンブル16シンボルとY専用シンボルを含む。理論支持幅は `(1+β)Rs` で、99%占有帯域の実測値ではない。音声量には指数とアッテネータを含む。', '',
              '| ID | 名前 | fs kHz | M/S | 変調 / α | Y開始k | FEC上位bit/係数 | 音声 kbps | CRC本数 | 保護部CRC込 bit | FEC後 bit | 非保護デジタル bit | シンボル/フレーム | Rs ksym/s | RRC β / span | 理論支持幅 kHz |',
-             '|---|---|---:|---|---|---|---:|---:|---:|---:|---:|---:|---:|---|---:|']
+             '|---|---|---:|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---:|']
     budgets=[]
     for p in PROFILES.values():
         tx=Transmitter(p); l=tx.layout; ns=tx.nsym+16; rs=tx.symbol_rate()
