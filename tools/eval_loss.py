@@ -10,7 +10,7 @@
 構成:
   1系統・無音     : B200MH のみ (全電力)。欠落は 0 (無音) で埋める
   1系統・PLC      : B200MH のみ。欠落は PLC (32次 LPC の外挿、10ms 保持・20ms で減衰)
-  2系統・PLC      : B200MH＋S50M (50:50)。帯域ごとに融合し、両方欠けた区間だけ PLC
+  2系統・PLC      : B200MH＋SUB50M (50:50)。帯域ごとに融合し、両方欠けた区間だけ PLC
 数値: 波形SNR [dB] / 両系統とも欠けた時間 (PLC で埋めた時間) [%] / 無音になった時間 [%] / 最長の欠け [ms]
 """
 import argparse
@@ -64,7 +64,7 @@ def job(a):
     mat, kind, val, seed, sec = a
     x, fs = wavio.read(os.path.join(ROOT, "samples", f"{mat}__32k__reference.flac"))
     x = x[: int(sec * fs)]
-    pm, ps = PROFILES["B200MH"], PROFILES["S50M"]
+    pm, ps = PROFILES["B200MH"], PROFILES["SUB50M"]
     off = pm.block // 2
     block_ms = 1000 * pm.block / pm.fs
     rng = np.random.default_rng(seed)
@@ -132,7 +132,7 @@ def main():
     if a.json:
         with open(a.json, "w") as f:
             json.dump(dict(cn0=CN0, configs=CONFIGS, patterns=patterns, seconds=a.seconds,
-                           seeds=a.seeds, main_profile="B200MH", sub_profile="S50M", table=table),
+                           seeds=a.seeds, main_profile="B200MH", sub_profile="SUB50M", table=table),
                       f, ensure_ascii=False, indent=1)
 
 

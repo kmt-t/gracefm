@@ -2,10 +2,10 @@
 """
 送信 → 通信路 (AWGN + フレーム欠落) → 受信 の一括シミュレーション。
 
-  python tools/sim_link.py 入力.wav 出力.wav --profile B200 --snr 8 --loss 0.02
+  python tools/sim_link.py 入力.wav 出力.wav --profile B200H --snr 8 --loss 0.02
   python tools/sim_link.py 入力.wav 出力.wav --profile M700 --snr-a 6 --snr-b 15 --single
-  python tools/sim_link.py 入力.wav --profile B200 --sweep        # SNR を振って表を出す
-  python tools/sim_link.py 入力.wav --profile B200M --snr 8 --power total   # 合計電力を固定して2系統に等分
+  python tools/sim_link.py 入力.wav --profile B200H --sweep        # SNR を振って表を出す
+  python tools/sim_link.py 入力.wav --profile B200MH --snr 8 --power total   # 合計電力を固定して2系統に等分
 
 SNR は Es/N0 (1シンボルあたり、各系統)。--loss は系統ごとに独立なフレーム欠落率 (干渉・フェージングの谷の代わり)。
 換算 (同じ平均シンボルエネルギー・シンボルレートのモデル):
@@ -55,7 +55,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("input")
     ap.add_argument("output", nargs="?")
-    ap.add_argument("--profile", default="B200", choices=PROFILES)
+    ap.add_argument("--profile", default="B200H", choices=PROFILES)
     ap.add_argument("--snr", type=float, default=20.0, help="両系統の Es/N0 [dB]")
     ap.add_argument("--snr-a", type=float)
     ap.add_argument("--snr-b", type=float)

@@ -7,7 +7,7 @@ samples/ のサンプル FLAC と、その説明 (samples/README.md) を作る�
                                --vibeace Kevin_MacLeod_-_Vibe_Ace.ogg を48kHzに変換したwav   # 原音から作り直す
 
 試験信号 (demo) はこのスクリプトの中で合成する。放送用は32kHz、モニター用は48kHz、各10秒。
-通信路込みのサンプルは採用構成 (主系 = 階層16QAM の B200MH / B200H、副系 = S50M / S100、帯域ごとの融合、
+通信路込みのサンプルは採用構成 (主系 = 階層16QAM の B200MH / B200H、副系 = SUB50M / SUB100、帯域ごとの融合、
 軟判定の復号、ポストフィルタ4回) で、同じ受信電力のアナログFM (モノラル) も並べる。
 """
 import argparse
@@ -201,7 +201,7 @@ def generate_source(task):
     global ROWS, MON_ROWS
     ROWS, MON_ROWS = [], []
     name, x, mono, adopted_only = task
-    main_p, base_p = ("B200MH", "B200M") if mono else ("B200H", "B200")
+    main_p = "B200MH" if mono else "B200H"
     sub = channel.DEFAULT_SUB[main_p]
     print(name, flush=True)
     save(f"{name}__32k__reference.flac", x, mono, x, "原音（32kHzに変換したもの）")
@@ -212,12 +212,10 @@ def generate_source(task):
         monitor(name, demo48 if name == "demo" else wavio.resample(x, 32000, 48000), mono)
     save(sample_name(name, 32000, main_p), codec(x, PROFILES[main_p]), mono, x,
          f"コーデックだけ（通信路なし）。{main_p} の全ビット（基本層＋拡張層、約{PROFILES[main_p].audio_kbps():.0f}kbps）")
-    if not adopted_only:
-        base_desc = f"コーデックだけ。{base_p}（QPSK、約{PROFILES[base_p].audio_kbps():.0f}kbps）。標準アッテネータを含む比較用プロファイル"
-        save(sample_name(name, 32000, base_p), codec(x, PROFILES[base_p]), mono, x,
-             base_desc)
-        save(sample_name(name, 32000, base_p, postfilter=False), codec(x, PROFILES[base_p], postfilter=False), mono, x,
-             f"同上、ポストフィルタなし")
+    if not adopted_only and not mono:
+        p = PROFILES["B200Y"]
+        save(sample_name(name, 32000, "B200Y"), codec(x, p), mono, x,
+             f"コーデックだけ。B200Y（階層16QAM＋Y、約{p.audio_kbps():.0f}kbps）。標準アッテネータを含む")
     fm = AnalogFM(x[:, 0], 32000) if mono and not adopted_only else None
     for cn0 in CN0_LIST:
         y, st, es = channel.link(x, main_p, cn0, sub=sub, power_main=POWER_MAIN, seed=1)
@@ -361,13 +359,12 @@ README_HEAD = """# サンプル音声（GraceFM）
 
 | ファイル | 内容 |
 |---|---|
-| `*__B200MH+S50M__* / *__B200H+S100__*` | この方式の放送の採用構成（主系 B200MH / B200H ＋ 副系 S50M / S100、送信電力 50:50） |
+| `*__B200MH+SUB50M__* / *__B200H+SUB100__*` | この方式の放送の採用構成（主系 B200MH / B200H ＋ 副系 SUB50M / SUB100、送信電力 50:50） |
 | `*__FM__*` | 同じ受信電力のアナログFM（モノラル、ゴーストなし） |
 | `*__B200MH__codec.flac`・`*__B200H__codec.flac` | コーデックだけ、全ビット（拡張層まで届いたときの上限） |
-| `*__B200M__codec.flac` | B200M（QPSK）の比較用音声。区間アッテネータを含む |
-| `*__B200__codec.flac` | B200（QPSK）の比較用音声。区間アッテネータを含む |
+| `*__B200Y__codec.flac` | B200Y（階層16QAM＋Y）のステレオ音声。区間アッテネータを含む |
 
-- おすすめ：`fishin__32k__B200MH+S50M__awgn-cn0-57dBHz.flac` と `fishin__32k__FM__awgn-cn0-57dBHz.flac`（FM がスレッショルドを割る強さ）、`*__rayleigh-cn0-60dBHz.flac`（途切れ方）
+- おすすめ：`fishin__32k__B200MH+SUB50M__awgn-cn0-57dBHz.flac` と `fishin__32k__FM__awgn-cn0-57dBHz.flac`（FM がスレッショルドを割る強さ）、`*__rayleigh-cn0-60dBHz.flac`（途切れ方）
 - demo（ステレオ）は FM ステレオのモデルがないため FM なし
 
 ## 電波の強さ

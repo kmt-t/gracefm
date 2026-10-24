@@ -81,10 +81,10 @@ def main():
     x = x[: 4 * fs]
     x48 = wavio.resample(x, fs, 48000)
     groups = [
-        ("放送モノラル主系（32kHz）とアナログFM", ["FM", "B200M", "B200MH", "B200MHY"]),
-        ("放送ステレオ主系（32kHz）", ["B200", "B200H", "B200HY"]),
-        ("放送の副系（32kHz）", ["S50M", "S100"]),
-        ("モニター（48kHz）", ["M700", "M700H", "M700Y", "M700HY", "S100-48K"]),
+        ("放送モノラル主系（32kHz）とアナログFM", ["FM", "B200MH", "B200MHY"]),
+        ("放送ステレオ主系（32kHz）", ["B200Y", "B200H", "B200HY"]),
+        ("放送の副系（32kHz）", ["SUB50M", "SUB100"]),
+        ("モニター（48kHz）", ["M700", "M700H", "M700Y", "M700HY", "SUB100-48K"]),
     ]
     res = {}
     fig, axs = plt.subplots(len(groups), 1, figsize=(8, 12), facecolor=SURF)
@@ -126,7 +126,7 @@ def main():
     demo48 = make_demo(48000)
     demo32 = wavio.resample(demo48, 48000, 32000)
     demo32 *= 0.89 / np.abs(demo32).max()
-    agroups = [("放送（32kHz、demo の M）", demo32, 32000, ["B200H", "B200", "S100"]),
+    agroups = [("放送（32kHz、demo の M）", demo32, 32000, ["B200H", "B200Y", "SUB100"]),
                ("モニター（48kHz、demo の M）", demo48, 48000, ["M700H", "M700", "M700H基本層"])]
     from base_layer_sample import base_layer_audio
     fig, axs = plt.subplots(2, 1, figsize=(8, 7), facecolor=SURF)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create current M700H + S100-48K dual-carrier monitoring examples."""
+"""Create current M700H + SUB100-48K dual-carrier monitoring examples."""
 import json
 import os
 from pathlib import Path
@@ -21,11 +21,11 @@ def main():
     assert fs==48000 and audio.shape==reference.shape
     report={'power_main':0.75,'power_secondary':0.25,'seed':1,
             'main_profile_signature':repr(PROFILES['M700H']),
-            'secondary_profile_signature':repr(PROFILES['S100-48K']),'samples':[]}
+            'secondary_profile_signature':repr(PROFILES['SUB100-48K']),'samples':[]}
     for cn0 in (80,75,70,65):
-        output,stats,link=channel.link(audio,'M700H',cn0,sub='S100-48K',power_main=0.75,seed=1)
+        output,stats,link=channel.link(audio,'M700H',cn0,sub='SUB100-48K',power_main=0.75,seed=1)
         assert np.all(np.isfinite(output))
-        path=ROOT/'samples/monitor'/sample_name('demo',48000,'M700H',f'awgn{cn0}',sub='S100-48K')
+        path=ROOT/'samples/monitor'/sample_name('demo',48000,'M700H',f'awgn{cn0}',sub='SUB100-48K')
         wavio.write_flac24(path,output,fs)
         stored,_=wavio.read(path)
         measurements=score(reference,stored,PROFILES['M700H'],stats)

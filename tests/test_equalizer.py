@@ -19,9 +19,9 @@ from gracefm.txrx import Transmitter  # noqa: E402
 
 
 def test_header_training_matches_transmitted_quadrants():
-    for name in ("B200MH", "S50M", "B200H", "S100"):
+    for name in ("B200MH", "SUB50M", "B200H", "SUB100"):
         p = PROFILES[name]
-        sid = int(name in ("S50M", "S100"))
+        sid = int(name in ("SUB50M", "SUB100"))
         transmitter = Transmitter(p, sid)
         pilot = header_training_symbols(p, sid, 7)
         transmitter.frame_no = 7
@@ -98,10 +98,10 @@ def test_trained_equalizer_removes_static_echo_without_future_training():
 
 
 def test_filter_and_equalizer_delay_is_accounted_per_stream():
-    mono, sub = PROFILES["B200MH"], PROFILES["S50M"]
+    mono, sub = PROFILES["B200MH"], PROFILES["SUB50M"]
     tm = waveform_timing(mono, sub, lookahead_symbols=4)
     assert np.isclose(min_latency(mono, True, "half", tm) * 1000, 4.3125, atol=1e-5)
-    stereo, sub_st = PROFILES["B200H"], PROFILES["S100"]
+    stereo, sub_st = PROFILES["B200H"], PROFILES["SUB100"]
     ts = waveform_timing(stereo, sub_st, lookahead_symbols=4)
     assert np.isclose(min_latency(stereo, True, "half", ts) * 1000, 4.2033898, atol=1e-4)
 

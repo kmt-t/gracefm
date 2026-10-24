@@ -11,7 +11,7 @@ from typing import Optional, Tuple
 
 @dataclass(frozen=True)
 class Profile:
-    pid: int                    # ヘッダに載せる ID (4bit)。現行カタログ内で一意（0・14・15は予約）
+    pid: int                    # ヘッダに載せる ID (4bit)。現行カタログ内で一意（0・13～15は予約）
     name: str
     fs: int                     # サンプリング周波数 [Hz]
     block: int                  # 1ブロック = 1フレームのサンプル数
@@ -216,58 +216,12 @@ def make_hybrid(base: Profile, name: str, pid: int, start_k: int = 5,
                    experimental_tag=experimental_tag)
 
 # Standard catalog. All active M/S components have interval attenuation.
-# IDs: 1–6 32kHz main (mono/stereo pairs), 7–8 32kHz secondary,
-# 9–12 48kHz main, 13 48kHz secondary. 0, 14 and 15 are reserved.
+# IDs: 1–5 32kHz main, 6–7 32kHz secondary,
+# 8–11 48kHz main, 12 48kHz secondary. 0 and 13–15 are reserved.
 # Every row has the same fields; bit widths are explicit, never expanded implicitly.
 PROFILE_MATRIX = (
     dict(
         pid=1,
-        name='B200M',
-        base_extra=(),
-        fs=32000,
-        bits_m=(9, 9, 9, 9, 8, 6, 4),
-        bits_s=(0, 0, 0, 0, 0, 0, 0),
-        protect_k=1,
-        modulation='qpsk',
-        alpha=1.0,
-        base_m=None,
-        base_s=None,
-        attn_group_m=(0, 0, 0, 0, 0, 0, 4),
-        attn_group_s=(0, 0, 0, 0, 0, 0, 0),
-        exp_offset_m=None,
-        exp_offset_s=None,
-        pulse_beta=0.25,
-        pulse_span=16,
-        hybrid_start_k=None,
-        hybrid_channels=('M', 'S'),
-        hybrid_bits=8,
-        hybrid_amplitude=0.019047619047619046,
-    ),
-    dict(
-        pid=2,
-        name='B200',
-        base_extra=(),
-        fs=32000,
-        bits_m=(12, 11, 9, 7, 4, 2, 2),
-        bits_s=(7, 6, 5, 2, 2, 0, 2),
-        protect_k=1,
-        modulation='qpsk',
-        alpha=1.0,
-        base_m=None,
-        base_s=None,
-        attn_group_m=(0, 0, 0, 0, 0, 0, 4),
-        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
-        exp_offset_m=None,
-        exp_offset_s=None,
-        pulse_beta=0.1,
-        pulse_span=32,
-        hybrid_start_k=None,
-        hybrid_channels=('M', 'S'),
-        hybrid_bits=8,
-        hybrid_amplitude=0.019047619047619046,
-    ),
-    dict(
-        pid=3,
         name='B200MH',
         base_extra=(),
         fs=32000,
@@ -290,7 +244,7 @@ PROFILE_MATRIX = (
         hybrid_amplitude=0.019047619047619046,
     ),
     dict(
-        pid=4,
+        pid=2,
         name='B200H',
         base_extra=(),
         fs=32000,
@@ -313,7 +267,7 @@ PROFILE_MATRIX = (
         hybrid_amplitude=0.019047619047619046,
     ),
     dict(
-        pid=5,
+        pid=3,
         name='B200MHY',
         base_extra=(),
         fs=32000,
@@ -336,7 +290,30 @@ PROFILE_MATRIX = (
         hybrid_amplitude=0.019047619047619046,
     ),
     dict(
-        pid=6,
+        pid=4,
+        name='B200Y',
+        base_extra=(),
+        fs=32000,
+        bits_m=(12, 11, 9, 7, 4, 8, 8),
+        bits_s=(7, 6, 5, 2, 2, 0, 2),
+        protect_k=1,
+        modulation='qam16h',
+        alpha=5.0,
+        base_m=(1, 1, 1, 1, 1, 1, 1),
+        base_s=(1, 1, 1, 1, 1, 0, 1),
+        attn_group_m=(0, 0, 0, 0, 0, 2, 4),
+        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
+        exp_offset_m=None,
+        exp_offset_s=None,
+        pulse_beta=0.1,
+        pulse_span=32,
+        hybrid_start_k=5,
+        hybrid_channels=('M',),
+        hybrid_bits=8,
+        hybrid_amplitude=0.019047619047619046,
+    ),
+    dict(
+        pid=5,
         name='B200HY',
         base_extra=(('M', 4, 0),),
         fs=32000,
@@ -359,8 +336,8 @@ PROFILE_MATRIX = (
         hybrid_amplitude=0.019047619047619046,
     ),
     dict(
-        pid=7,
-        name='S50M',
+        pid=6,
+        name='SUB50M',
         base_extra=(),
         fs=32000,
         bits_m=(8, 7, 6, 5, 3, 0, 0),
@@ -382,8 +359,8 @@ PROFILE_MATRIX = (
         hybrid_amplitude=0.019047619047619046,
     ),
     dict(
-        pid=8,
-        name='S100',
+        pid=7,
+        name='SUB100',
         base_extra=(),
         fs=32000,
         bits_m=(10, 9, 8, 6, 4, 2, 0),
@@ -405,7 +382,7 @@ PROFILE_MATRIX = (
         hybrid_amplitude=0.019047619047619046,
     ),
     dict(
-        pid=9,
+        pid=8,
         name='M700',
         base_extra=(),
         fs=48000,
@@ -428,7 +405,7 @@ PROFILE_MATRIX = (
         hybrid_amplitude=0.019047619047619046,
     ),
     dict(
-        pid=10,
+        pid=9,
         name='M700H',
         base_extra=(('M', 6, 0),),
         fs=48000,
@@ -451,7 +428,7 @@ PROFILE_MATRIX = (
         hybrid_amplitude=0.019047619047619046,
     ),
     dict(
-        pid=11,
+        pid=10,
         name='M700Y',
         base_extra=(),
         fs=48000,
@@ -474,7 +451,7 @@ PROFILE_MATRIX = (
         hybrid_amplitude=0.019047619047619046,
     ),
     dict(
-        pid=12,
+        pid=11,
         name='M700HY',
         base_extra=(('S', 0, 0),),
         fs=48000,
@@ -497,8 +474,8 @@ PROFILE_MATRIX = (
         hybrid_amplitude=0.019047619047619046,
     ),
     dict(
-        pid=13,
-        name='S100-48K',
+        pid=12,
+        name='SUB100-48K',
         base_extra=(),
         fs=48000,
         bits_m=(9, 8, 7, 6, 4, 0, 0),

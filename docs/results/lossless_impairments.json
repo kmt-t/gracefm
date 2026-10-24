@@ -3,7 +3,7 @@
   "metric_implementation": "visqol-python 3.8.0",
   "mp3_encoder": "ffmpeg version 7.0.2-static https://johnvansickle.com/ffmpeg/  Copyright (c) 2000-2024 the FFmpeg developers / libmp3lame CBR",
   "gracefm_main_profile": "B200MH-A4",
-  "gracefm_sub_profile": "S50M",
+  "gracefm_sub_profile": "SUB50M",
   "seconds": 5.0,
   "evaluation_sample_rate_hz": 32000,
   "visqol_sample_rate_hz": 48000,
@@ -13,7 +13,7 @@
     "fade10"
   ],
   "source_processing": "Read original WAV, take seconds 1..1+duration, downmix to mono, resample to 32 kHz and normalize peak to 0.89; duplicate to L/R codec input.",
-  "comparison": "Codec-only A4 vs MP3 CBR; separate link comparison A4+S50M vs analog mono FM.",
+  "comparison": "Codec-only A4 vs MP3 CBR; separate link comparison A4+SUB50M vs analog mono FM.",
   "sources": [
     {
       "name": "piano",

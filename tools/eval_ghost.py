@@ -27,7 +27,7 @@ from gracefm.profiles import PROFILES  # noqa: E402
 from gracefm.txrx import Transmitter, receive  # noqa: E402
 from eval_lossless_benchmark import prepare  # noqa: E402
 
-MAIN, SUB = "B200MH", "S50M"
+MAIN, SUB = "B200MH", "SUB50M"
 SCENARIOS = (
     ("none", None),
     ("echo_1us_m10", (1e-6, -10.0, np.pi / 3)),
