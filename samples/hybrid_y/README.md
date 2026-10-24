@@ -1,23 +1,50 @@
-# Y系・位相＋振幅ハイブリッド方式の試聴音源
+# 現行サンプル音声 — 32 kHz Y系
 
-高域Mの標準仮数幅は8 bitで、上位2 bitを位相、下位6 bitを連続半径に割り当てます。
+**全デジタル主系・副系に標準アッテネータを含む現行設定の音声です。** 各10秒。保存したFLACを読み戻して波形SNRを再測定しています。
 
-`fishin` と `vibeace` はモノラル `B200MHY-A4`＋副系 `S50M`、`demo` はステレオ `B200HY-A4`＋副系 `S100`。高域Mの各係数を4位相＋連続半径の1複素シンボルで送り、上位1bitをFECで保護します。32 kHz Y主系のMには4〜8 kHz（16係数を2係数ずつ）と8〜16 kHz（32係数を4係数ずつ）に各8 bitの区間アッテネータを置き、FECで保護します。`demo` のS成分は高域を含めて送ります。復号時はSを逆Haar変換だけで復元し、Mのポストフィルタだけをソフトウェアで有効にしています。
+[命名規則](../NAMING.md) · [設定表](../../docs/PROFILES.md) · [全音源の設定・測定値・SHA-256](../../docs/results/samples.json)
 
-| 素材 | 原音 | Y系コーデック単体 | Y系・理想シンボル | Y系・AWGN 66dB-Hz | 半径を使わない対照・66dB-Hz |
-|---|---|---|---|---|---|
-| Fishin | [原音](fishin_orig.flac) | [コーデック](fishin_B200MHY-A4.flac) | [理想送受信](fishin_Y_ideal_symbols.flac) | [AWGN66](fishin_final_cn0-66.flac) | [位相のみ](fishin_Y_phaseonly_cn0-66.flac) |
-| Vibe Ace | [原音](vibeace_orig.flac) | [コーデック](vibeace_B200MHY-A4.flac) | [理想送受信](vibeace_Y_ideal_symbols.flac) | [AWGN66](vibeace_final_cn0-66.flac) | [位相のみ](vibeace_Y_phaseonly_cn0-66.flac) |
-| 合成ステレオ | [原音](demo_orig.flac) | [コーデック](demo_B200HY-A4.flac) | [理想送受信](demo_Y_ideal_symbols.flac) | [AWGN66](demo_final_cn0-66.flac) | [位相のみ](demo_Y_phaseonly_cn0-66.flac) |
+32 kHzの2系統は電力50:50。48 kHzの `M700H+S100-48K` は75:25。それ以外の48 kHz音声は主系1系統です。`codec` は通信路なし、`ideal` は雑音なしのシンボル送受信。AWGN等は同期既知のシミュレーションです。
 
-原音は従来の16bit FLACをそのまま複製し、復号音は32kHz・各10秒・24bit FLACです。入力区間と0.89のピーク正規化は従来の `tools/make_samples.py` と同じです。`*_B200*Y-A4.flac` は従来のプロファイル名付きファイルと同じコーデック単体の条件。`*_Y_ideal_symbols.flac` は実際のY系変調器・FEC・復調器を通した雑音なしの送受信です。雑音ありの条件は、従来の `*_final_*` と同じ主系＋副系、電力50:50、seed=1、半ブロックずらしと帯域別融合を使います。
+`M700H-base` は実際の基本層を保持し、拡張層の事後確率だけを0.5にした比較音源です。係数別昇格1bitと標準アッテネータを含みます。`R10` / `R12` はY仮数幅の比較条件です。
 
-追加の条件：
+波形SNRは原音との差であり、聴感の点数ではありません。
 
-| 素材 | AWGN 80 | AWGN 60 | AWGN 57 | AWGN 54 | レイリー 60 | 主系−10dB・66 |
-|---|---|---|---|---|---|---|
-| Fishin | [80](fishin_final_cn0-80.flac) | [60](fishin_final_cn0-60.flac) | [57](fishin_final_cn0-57.flac) | [54](fishin_final_cn0-54.flac) | [レイリー](fishin_final_rayleigh_cn0-60.flac) | [主系低下](fishin_final_fade10_cn0-66.flac) |
-| Vibe Ace | [80](vibeace_final_cn0-80.flac) | [60](vibeace_final_cn0-60.flac) | [57](vibeace_final_cn0-57.flac) | [54](vibeace_final_cn0-54.flac) | [レイリー](vibeace_final_rayleigh_cn0-60.flac) | [主系低下](vibeace_final_fade10_cn0-66.flac) |
-| 合成ステレオ | [80](demo_final_cn0-80.flac) | [60](demo_final_cn0-60.flac) | [57](demo_final_cn0-57.flac) | [54](demo_final_cn0-54.flac) | [レイリー](demo_final_rayleigh_cn0-60.flac) | [主系低下](demo_final_fade10_cn0-66.flac) |
+| 音源 | 構成 | 条件 | 試聴 | 波形SNR dB |
+|---|---|---|---|---:|
+| demo | B200HY+S100 | awgn-cn0-54dBHz | [再生](demo__32k__B200HY+S100__awgn-cn0-54dBHz.flac) | 4.80 |
+| demo | B200HY+S100 | awgn-cn0-57dBHz | [再生](demo__32k__B200HY+S100__awgn-cn0-57dBHz.flac) | 16.72 |
+| demo | B200HY+S100 | awgn-cn0-60dBHz | [再生](demo__32k__B200HY+S100__awgn-cn0-60dBHz.flac) | 24.29 |
+| demo | B200HY+S100 | awgn-cn0-66dBHz | [再生](demo__32k__B200HY+S100__awgn-cn0-66dBHz.flac) | 30.98 |
+| demo | B200HY+S100 | awgn-cn0-80dBHz | [再生](demo__32k__B200HY+S100__awgn-cn0-80dBHz.flac) | 47.13 |
+| demo | B200HY+S100 | main-fade-10dB-cn0-66dBHz | [再生](demo__32k__B200HY+S100__main-fade-10dB-cn0-66dBHz.flac) | 26.32 |
+| demo | B200HY+S100 | phase-only-awgn-cn0-66dBHz | [再生](demo__32k__B200HY+S100__phase-only-awgn-cn0-66dBHz.flac) | 31.20 |
+| demo | B200HY+S100 | rayleigh-cn0-60dBHz | [再生](demo__32k__B200HY+S100__rayleigh-cn0-60dBHz.flac) | 10.52 |
+| demo | B200HY | codec | [再生](demo__32k__B200HY__codec.flac) | 60.99 |
+| demo | B200HY | ideal | [再生](demo__32k__B200HY__ideal.flac) | 60.99 |
+| fishin | B200MHY+S50M | awgn-cn0-54dBHz | [再生](fishin__32k__B200MHY+S50M__awgn-cn0-54dBHz.flac) | 10.55 |
+| fishin | B200MHY+S50M | awgn-cn0-57dBHz | [再生](fishin__32k__B200MHY+S50M__awgn-cn0-57dBHz.flac) | 16.40 |
+| fishin | B200MHY+S50M | awgn-cn0-60dBHz | [再生](fishin__32k__B200MHY+S50M__awgn-cn0-60dBHz.flac) | 20.57 |
+| fishin | B200MHY+S50M | awgn-cn0-66dBHz | [再生](fishin__32k__B200MHY+S50M__awgn-cn0-66dBHz.flac) | 25.38 |
+| fishin | B200MHY+S50M | awgn-cn0-80dBHz | [再生](fishin__32k__B200MHY+S50M__awgn-cn0-80dBHz.flac) | 35.12 |
+| fishin | B200MHY+S50M | main-fade-10dB-cn0-66dBHz | [再生](fishin__32k__B200MHY+S50M__main-fade-10dB-cn0-66dBHz.flac) | 17.13 |
+| fishin | B200MHY+S50M | phase-only-awgn-cn0-66dBHz | [再生](fishin__32k__B200MHY+S50M__phase-only-awgn-cn0-66dBHz.flac) | 22.90 |
+| fishin | B200MHY+S50M | rayleigh-cn0-60dBHz | [再生](fishin__32k__B200MHY+S50M__rayleigh-cn0-60dBHz.flac) | 12.56 |
+| fishin | B200MHY | codec | [再生](fishin__32k__B200MHY__codec.flac) | 52.22 |
+| fishin | B200MHY | ideal | [再生](fishin__32k__B200MHY__ideal.flac) | 52.22 |
+| vibeace | B200MHY+S50M | awgn-cn0-54dBHz | [再生](vibeace__32k__B200MHY+S50M__awgn-cn0-54dBHz.flac) | 13.43 |
+| vibeace | B200MHY+S50M | awgn-cn0-57dBHz | [再生](vibeace__32k__B200MHY+S50M__awgn-cn0-57dBHz.flac) | 20.33 |
+| vibeace | B200MHY+S50M | awgn-cn0-60dBHz | [再生](vibeace__32k__B200MHY+S50M__awgn-cn0-60dBHz.flac) | 28.90 |
+| vibeace | B200MHY+S50M | awgn-cn0-66dBHz | [再生](vibeace__32k__B200MHY+S50M__awgn-cn0-66dBHz.flac) | 38.48 |
+| vibeace | B200MHY+S50M | awgn-cn0-80dBHz | [再生](vibeace__32k__B200MHY+S50M__awgn-cn0-80dBHz.flac) | 49.19 |
+| vibeace | B200MHY+S50M | main-fade-10dB-cn0-66dBHz | [再生](vibeace__32k__B200MHY+S50M__main-fade-10dB-cn0-66dBHz.flac) | 28.80 |
+| vibeace | B200MHY+S50M | phase-only-awgn-cn0-66dBHz | [再生](vibeace__32k__B200MHY+S50M__phase-only-awgn-cn0-66dBHz.flac) | 35.27 |
+| vibeace | B200MHY+S50M | rayleigh-cn0-60dBHz | [再生](vibeace__32k__B200MHY+S50M__rayleigh-cn0-60dBHz.flac) | 14.95 |
+| vibeace | B200MHY | codec | [再生](vibeace__32k__B200MHY__codec.flac) | 67.00 |
+| vibeace | B200MHY | ideal | [再生](vibeace__32k__B200MHY__ideal.flac) | 67.00 |
 
-測定値、CRC失敗率、PLC使用率、送信レート、占有帯域、ファイルのSHA-256は[結果JSON](../../docs/results/hybrid_y_samples.json)に保存します。方式は[Y系の設計・評価報告](../../docs/HYBRID_Y_PAPER.md)、従来方式との音質比較は[音質評価レポート](../../docs/HYBRID_Y_AUDIO_QUALITY.md)を参照してください。
+## 原音
+
+- [demo](demo__32k__reference.flac)
+- [fishin](fishin__32k__reference.flac)
+- [vibeace](vibeace__32k__reference.flac)

@@ -24,8 +24,8 @@ from gracefm.txrx import Transmitter  # noqa: E402
 from make_samples import codec  # noqa: E402
 
 CN0 = (54, 60, 66, 70, 80)
-PAIRS = (("B200MH-A4", "B200MHY-A4", "fishin", "S50M"),
-         ("B200H-A4", "B200HY-A4", "demo", "S100"))
+PAIRS = (("B200MH", "B200MHY", "fishin", "S50M"),
+         ("B200H", "B200HY", "demo", "S100"))
 
 
 def band_snr(x, y, profile):
@@ -126,7 +126,7 @@ def run_case(x, p, cn0, scenario, sub=None, phase_only=False, use_visqol=True):
 
 def save_result(path, seconds, use_visqol, budgets, spectra, rows):
     result = dict(description="同期済みシンボルと静的RRCマルチパスのシミュレーション。実RF測定ではない。",
-                  source="samples/{material}_orig.flac", seconds=seconds,
+                  source="samples/{material}__32k__reference.flac", seconds=seconds,
                   cn0_db_hz=CN0, seed=1, visqol_enabled=use_visqol,
                   rrc_sps=8, rrc_welch_nperseg=4096,
                   budgets=budgets, spectra=spectra, results=rows)
@@ -164,7 +164,7 @@ def main():
         rows = [row for row in rows if not selected(row["profile"])]
         budgets = [row for row in budgets if not selected(row["profile"])]
         spectra = [row for row in spectra if not selected(row["profile"])]
-        x, fs = wavio.read(os.path.join(ROOT, "samples", f"{material}_orig.flac"))
+        x, fs = wavio.read(os.path.join(ROOT, "samples", f"{material}__32k__reference.flac"))
         x = x[:int(fs * args.seconds)]
         if fs != 32000 or len(x) != int(fs * args.seconds):
             raise ValueError("評価音源の長さ・標本化周波数が不足しています")

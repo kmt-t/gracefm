@@ -1,39 +1,89 @@
-# 48 kHz Y系の試聴音源
+# 現行サンプル音声 — 48 kHz Y系・高域試験
 
-`M700Y` はQPSK、`M700HY` は階層16QAMを使う実験用主系です。高域Mの標準仮数は8 bitで、上位2 bitを位相、下位6 bitを連続半径へ送り、6〜24 kHzの各係数を1複素シンボルに載せます。指数と仮数上位bitはFECで保護します。`M700HY` は高域Sの次位bitを強い位置、低域Mの一部の下位bitを弱い位置へ配置します。
+**全デジタル主系・副系に標準アッテネータを含む現行設定の音声です。** 各10秒。保存したFLACを読み戻して波形SNRを再測定しています。
 
-各音源は48 kHz・10秒です。従来版と同じ入力区間、単一主系、C/N0、乱数種1を使います。`demo` は合成ステレオ、`fishin` と `vibeace` は32 kHz原音を48 kHzへ再標本化したモノラルです。復号時はSにポストフィルタを適用せず、Mのポストフィルタだけをソフトウェアで有効にしています。
+[命名規則](../NAMING.md) · [設定表](../../docs/PROFILES.md) · [全音源の設定・測定値・SHA-256](../../docs/results/samples.json)
 
-| 素材 | 原音 | `M700Y` コーデック | `M700Y` AWGN 70 / 65 | `M700HY` コーデック | `M700HY` AWGN 80 / 75 / 70 / 65 |
-|---|---|---|---|---|---|
-| demo | [原音](demo_orig48.flac) | [コーデック](demo_M700Y.flac) | [70](demo_M700Y_cn0-70.flac) / [65](demo_M700Y_cn0-65.flac) | [コーデック](demo_M700HY.flac) | [80](demo_M700HY_cn0-80.flac) / [75](demo_M700HY_cn0-75.flac) / [70](demo_M700HY_cn0-70.flac) / [65](demo_M700HY_cn0-65.flac) |
-| Fishin | [原音](fishin_orig48.flac) | [コーデック](fishin_M700Y.flac) | [70](fishin_M700Y_cn0-70.flac) / [65](fishin_M700Y_cn0-65.flac) | [コーデック](fishin_M700HY.flac) | [80](fishin_M700HY_cn0-80.flac) / [75](fishin_M700HY_cn0-75.flac) / [70](fishin_M700HY_cn0-70.flac) / [65](fishin_M700HY_cn0-65.flac) |
-| Vibe Ace | [原音](vibeace_orig48.flac) | [コーデック](vibeace_M700Y.flac) | [70](vibeace_M700Y_cn0-70.flac) / [65](vibeace_M700Y_cn0-65.flac) | [コーデック](vibeace_M700HY.flac) | [80](vibeace_M700HY_cn0-80.flac) / [75](vibeace_M700HY_cn0-75.flac) / [70](vibeace_M700HY_cn0-70.flac) / [65](vibeace_M700HY_cn0-65.flac) |
+32 kHzの2系統は電力50:50。48 kHzの `M700H+S100-48K` は75:25。それ以外の48 kHz音声は主系1系統です。`codec` は通信路なし、`ideal` は雑音なしのシンボル送受信。AWGN等は同期既知のシミュレーションです。
 
-雑音なしの実シンボル往復は、各素材の `*_M700Y_ideal.flac` と `*_M700HY_ideal.flac` です。測定値、FEC・CRC・PLC、ファイルハッシュは[結果JSON](../../docs/results/monitor_y_samples.json)、従来方式と対になる評価は[比較JSON](../../docs/results/monitor_y_vs_legacy.json)に保存します。
+`M700H-base` は実際の基本層を保持し、拡張層の事後確率だけを0.5にした比較音源です。係数別昇格1bitと標準アッテネータを含みます。`R10` / `R12` はY仮数幅の比較条件です。
 
-## 12〜24 kHzを含む試験音源
+波形SNRは原音との差であり、聴感の点数ではありません。
 
-[hires_probe原音](hires_probe_orig48.flac)は合成ステレオに12〜24 kHzのM成分を加えた48 kHz・24 bitの試験音源です。自然音源のハイレゾ録音ではありません。
+| 音源 | 構成 | 条件 | 試聴 | 波形SNR dB |
+|---|---|---|---|---:|
+| demo | M700HY-R10 | awgn-cn0-65dBHz | [再生](demo__48k__M700HY-R10__awgn-cn0-65dBHz.flac) | 27.34 |
+| demo | M700HY-R10 | awgn-cn0-70dBHz | [再生](demo__48k__M700HY-R10__awgn-cn0-70dBHz.flac) | 32.37 |
+| demo | M700HY-R10 | awgn-cn0-75dBHz | [再生](demo__48k__M700HY-R10__awgn-cn0-75dBHz.flac) | 37.68 |
+| demo | M700HY-R10 | awgn-cn0-80dBHz | [再生](demo__48k__M700HY-R10__awgn-cn0-80dBHz.flac) | 45.01 |
+| demo | M700HY-R10 | codec | [再生](demo__48k__M700HY-R10__codec.flac) | 63.06 |
+| demo | M700HY-R12 | awgn-cn0-65dBHz | [再生](demo__48k__M700HY-R12__awgn-cn0-65dBHz.flac) | 27.35 |
+| demo | M700HY-R12 | awgn-cn0-70dBHz | [再生](demo__48k__M700HY-R12__awgn-cn0-70dBHz.flac) | 32.39 |
+| demo | M700HY-R12 | awgn-cn0-75dBHz | [再生](demo__48k__M700HY-R12__awgn-cn0-75dBHz.flac) | 37.73 |
+| demo | M700HY-R12 | awgn-cn0-80dBHz | [再生](demo__48k__M700HY-R12__awgn-cn0-80dBHz.flac) | 45.17 |
+| demo | M700HY-R12 | codec | [再生](demo__48k__M700HY-R12__codec.flac) | 63.31 |
+| demo | M700HY | awgn-cn0-65dBHz | [再生](demo__48k__M700HY__awgn-cn0-65dBHz.flac) | 27.68 |
+| demo | M700HY | awgn-cn0-70dBHz | [再生](demo__48k__M700HY__awgn-cn0-70dBHz.flac) | 32.33 |
+| demo | M700HY | awgn-cn0-75dBHz | [再生](demo__48k__M700HY__awgn-cn0-75dBHz.flac) | 37.48 |
+| demo | M700HY | awgn-cn0-80dBHz | [再生](demo__48k__M700HY__awgn-cn0-80dBHz.flac) | 44.53 |
+| demo | M700HY | codec | [再生](demo__48k__M700HY__codec.flac) | 60.52 |
+| demo | M700HY | ideal | [再生](demo__48k__M700HY__ideal.flac) | 60.52 |
+| demo | M700Y | awgn-cn0-65dBHz | [再生](demo__48k__M700Y__awgn-cn0-65dBHz.flac) | 27.94 |
+| demo | M700Y | awgn-cn0-70dBHz | [再生](demo__48k__M700Y__awgn-cn0-70dBHz.flac) | 33.89 |
+| demo | M700Y | codec | [再生](demo__48k__M700Y__codec.flac) | 40.32 |
+| demo | M700Y | ideal | [再生](demo__48k__M700Y__ideal.flac) | 40.32 |
+| fishin | M700HY | awgn-cn0-65dBHz | [再生](fishin__48k__M700HY__awgn-cn0-65dBHz.flac) | 25.42 |
+| fishin | M700HY | awgn-cn0-70dBHz | [再生](fishin__48k__M700HY__awgn-cn0-70dBHz.flac) | 28.90 |
+| fishin | M700HY | awgn-cn0-75dBHz | [再生](fishin__48k__M700HY__awgn-cn0-75dBHz.flac) | 33.22 |
+| fishin | M700HY | awgn-cn0-80dBHz | [再生](fishin__48k__M700HY__awgn-cn0-80dBHz.flac) | 38.58 |
+| fishin | M700HY | codec | [再生](fishin__48k__M700HY__codec.flac) | 55.61 |
+| fishin | M700HY | ideal | [再生](fishin__48k__M700HY__ideal.flac) | 55.61 |
+| fishin | M700Y | awgn-cn0-65dBHz | [再生](fishin__48k__M700Y__awgn-cn0-65dBHz.flac) | 27.93 |
+| fishin | M700Y | awgn-cn0-70dBHz | [再生](fishin__48k__M700Y__awgn-cn0-70dBHz.flac) | 32.14 |
+| fishin | M700Y | codec | [再生](fishin__48k__M700Y__codec.flac) | 55.46 |
+| fishin | M700Y | ideal | [再生](fishin__48k__M700Y__ideal.flac) | 55.46 |
+| hires_probe | M700HY-R10 | awgn-cn0-65dBHz | [再生](hires_probe__48k__M700HY-R10__awgn-cn0-65dBHz.flac) | 22.04 |
+| hires_probe | M700HY-R10 | awgn-cn0-70dBHz | [再生](hires_probe__48k__M700HY-R10__awgn-cn0-70dBHz.flac) | 26.62 |
+| hires_probe | M700HY-R10 | awgn-cn0-75dBHz | [再生](hires_probe__48k__M700HY-R10__awgn-cn0-75dBHz.flac) | 31.29 |
+| hires_probe | M700HY-R10 | awgn-cn0-80dBHz | [再生](hires_probe__48k__M700HY-R10__awgn-cn0-80dBHz.flac) | 36.46 |
+| hires_probe | M700HY-R10 | codec | [再生](hires_probe__48k__M700HY-R10__codec.flac) | 61.61 |
+| hires_probe | M700HY-R12 | awgn-cn0-65dBHz | [再生](hires_probe__48k__M700HY-R12__awgn-cn0-65dBHz.flac) | 22.06 |
+| hires_probe | M700HY-R12 | awgn-cn0-70dBHz | [再生](hires_probe__48k__M700HY-R12__awgn-cn0-70dBHz.flac) | 26.65 |
+| hires_probe | M700HY-R12 | awgn-cn0-75dBHz | [再生](hires_probe__48k__M700HY-R12__awgn-cn0-75dBHz.flac) | 31.36 |
+| hires_probe | M700HY-R12 | awgn-cn0-80dBHz | [再生](hires_probe__48k__M700HY-R12__awgn-cn0-80dBHz.flac) | 36.61 |
+| hires_probe | M700HY-R12 | codec | [再生](hires_probe__48k__M700HY-R12__codec.flac) | 63.07 |
+| hires_probe | M700HY | awgn-cn0-65dBHz | [再生](hires_probe__48k__M700HY__awgn-cn0-65dBHz.flac) | 21.70 |
+| hires_probe | M700HY | awgn-cn0-70dBHz | [再生](hires_probe__48k__M700HY__awgn-cn0-70dBHz.flac) | 26.42 |
+| hires_probe | M700HY | awgn-cn0-75dBHz | [再生](hires_probe__48k__M700HY__awgn-cn0-75dBHz.flac) | 30.97 |
+| hires_probe | M700HY | awgn-cn0-80dBHz | [再生](hires_probe__48k__M700HY__awgn-cn0-80dBHz.flac) | 35.86 |
+| hires_probe | M700HY | codec | [再生](hires_probe__48k__M700HY__codec.flac) | 54.19 |
+| hires_probe | M700HY | ideal | [再生](hires_probe__48k__M700HY__ideal.flac) | 54.19 |
+| hires_probe | M700H | awgn-cn0-65dBHz | [再生](hires_probe__48k__M700H__awgn-cn0-65dBHz.flac) | 20.77 |
+| hires_probe | M700H | awgn-cn0-70dBHz | [再生](hires_probe__48k__M700H__awgn-cn0-70dBHz.flac) | 23.49 |
+| hires_probe | M700H | awgn-cn0-75dBHz | [再生](hires_probe__48k__M700H__awgn-cn0-75dBHz.flac) | 28.33 |
+| hires_probe | M700H | awgn-cn0-80dBHz | [再生](hires_probe__48k__M700H__awgn-cn0-80dBHz.flac) | 41.92 |
+| hires_probe | M700H | codec | [再生](hires_probe__48k__M700H__codec.flac) | 49.25 |
+| hires_probe | M700Y | awgn-cn0-65dBHz | [再生](hires_probe__48k__M700Y__awgn-cn0-65dBHz.flac) | 22.33 |
+| hires_probe | M700Y | awgn-cn0-70dBHz | [再生](hires_probe__48k__M700Y__awgn-cn0-70dBHz.flac) | 25.82 |
+| hires_probe | M700Y | codec | [再生](hires_probe__48k__M700Y__codec.flac) | 40.26 |
+| hires_probe | M700Y | ideal | [再生](hires_probe__48k__M700Y__ideal.flac) | 40.26 |
+| hires_probe | M700 | awgn-cn0-65dBHz | [再生](hires_probe__48k__M700__awgn-cn0-65dBHz.flac) | 27.61 |
+| hires_probe | M700 | awgn-cn0-70dBHz | [再生](hires_probe__48k__M700__awgn-cn0-70dBHz.flac) | 39.89 |
+| hires_probe | M700 | codec | [再生](hires_probe__48k__M700__codec.flac) | 39.90 |
+| vibeace | M700HY | awgn-cn0-65dBHz | [再生](vibeace__48k__M700HY__awgn-cn0-65dBHz.flac) | 32.18 |
+| vibeace | M700HY | awgn-cn0-70dBHz | [再生](vibeace__48k__M700HY__awgn-cn0-70dBHz.flac) | 39.08 |
+| vibeace | M700HY | awgn-cn0-75dBHz | [再生](vibeace__48k__M700HY__awgn-cn0-75dBHz.flac) | 44.35 |
+| vibeace | M700HY | awgn-cn0-80dBHz | [再生](vibeace__48k__M700HY__awgn-cn0-80dBHz.flac) | 52.30 |
+| vibeace | M700HY | codec | [再生](vibeace__48k__M700HY__codec.flac) | 68.47 |
+| vibeace | M700HY | ideal | [再生](vibeace__48k__M700HY__ideal.flac) | 68.47 |
+| vibeace | M700Y | awgn-cn0-65dBHz | [再生](vibeace__48k__M700Y__awgn-cn0-65dBHz.flac) | 30.77 |
+| vibeace | M700Y | awgn-cn0-70dBHz | [再生](vibeace__48k__M700Y__awgn-cn0-70dBHz.flac) | 45.92 |
+| vibeace | M700Y | codec | [再生](vibeace__48k__M700Y__codec.flac) | 68.19 |
+| vibeace | M700Y | ideal | [再生](vibeace__48k__M700Y__ideal.flac) | 68.19 |
 
-| プロファイル | コーデック | AWGN 80 / 75 / 70 / 65 |
-|---|---|---|
-| `M700` | [音声](hires_probe_M700.flac) | [70](hires_probe_M700_cn0-70.flac) / [65](hires_probe_M700_cn0-65.flac) |
-| `M700Y` | [音声](hires_probe_M700Y.flac) | [70](hires_probe_M700Y_cn0-70.flac) / [65](hires_probe_M700Y_cn0-65.flac) |
-| `M700H` | [音声](hires_probe_M700H.flac) | [80](hires_probe_M700H_cn0-80.flac) / [75](hires_probe_M700H_cn0-75.flac) / [70](hires_probe_M700H_cn0-70.flac) / [65](hires_probe_M700H_cn0-65.flac) |
-| `M700HY` | [音声](hires_probe_M700HY.flac) | [80](hires_probe_M700HY_cn0-80.flac) / [75](hires_probe_M700HY_cn0-75.flac) / [70](hires_probe_M700HY_cn0-70.flac) / [65](hires_probe_M700HY_cn0-65.flac) |
+## 原音
 
-12〜24 kHzのSNRを含む結果は[高域試験JSON](../../docs/results/monitor_y_hires_probe.json)に保存します。
-
-## 高域Mの半径分解能
-
-標準の8 bitに加え、10 bitと12 bitを同じ1係数/1シンボルで比較します。FEC保護量とフレーム長は各幅で同じです。
-
-| 素材 | 8 bit標準 | 10 bit | 12 bit |
-|---|---|---|---|
-| demo・コーデック | [音声](demo_M700HY.flac) | [音声](demo_M700HY-R10.flac) | [音声](demo_M700HY-R12.flac) |
-| demo・AWGN 70 | [音声](demo_M700HY_cn0-70.flac) | [音声](demo_M700HY-R10_cn0-70.flac) | [音声](demo_M700HY-R12_cn0-70.flac) |
-| hires_probe・コーデック | [音声](hires_probe_M700HY.flac) | [音声](hires_probe_M700HY-R10.flac) | [音声](hires_probe_M700HY-R12.flac) |
-| hires_probe・AWGN 70 | [音声](hires_probe_M700HY_cn0-70.flac) | [音声](hires_probe_M700HY-R10_cn0-70.flac) | [音声](hires_probe_M700HY-R12_cn0-70.flac) |
-
-全条件の測定値とSHA-256は[分解能比較JSON](../../docs/results/monitor_y_radius_precision.json)に保存します。方式と測定結果は[設計・評価報告](../../docs/HYBRID_Y_PAPER.md)と[音質評価レポート](../../docs/HYBRID_Y_AUDIO_QUALITY.md)に記載します。
+- [demo](demo__48k__reference.flac)
+- [fishin](fishin__48k__reference.flac)
+- [hires_probe](hires_probe__48k__reference.flac)
+- [vibeace](vibeace__48k__reference.flac)

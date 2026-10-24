@@ -19,7 +19,7 @@ from gracefm.txrx import Transmitter  # noqa: E402
 
 
 def test_header_training_matches_transmitted_quadrants():
-    for name in ("B200MH-A4", "S50M", "B200H-A4", "S100"):
+    for name in ("B200MH", "S50M", "B200H", "S100"):
         p = PROFILES[name]
         sid = int(name in ("S50M", "S100"))
         transmitter = Transmitter(p, sid)
@@ -34,7 +34,7 @@ def test_header_training_matches_transmitted_quadrants():
         if p.modulation == "qpsk":
             assert np.allclose(actual, expected)
 
-    p = PROFILES["B200MH-A4"]
+    p = PROFILES["B200MH"]
     cipher = StreamCipher(bytes(range(16)), bytes(8))
     transmitter = Transmitter(p, 0, cipher=cipher)
     transmitter.frame_no = 7
@@ -47,7 +47,7 @@ def test_header_training_matches_transmitted_quadrants():
 
 
 def test_frequency_separation_can_align_the_same_fade():
-    p = PROFILES["B200MH-A4"]
+    p = PROFILES["B200MH"]
     path = ((5e-6, -3.0, np.pi),)
     _, same = matched_channel_taps(p, path, rf_offset_hz=0)
     _, one_mhz = matched_channel_taps(p, path, rf_offset_hz=1e6)
@@ -59,7 +59,7 @@ def test_frequency_separation_can_align_the_same_fade():
 def test_symbol_channel_matches_shaped_fractional_delay_waveform():
     from gracefm.channel import symbol_rate
 
-    p = PROFILES["B200MH-A4"]
+    p = PROFILES["B200MH"]
     symbols = np.concatenate(Transmitter(p).run(np.zeros((p.block * 30, 2))))
     sps = 8
     pulse = rrc_taps(p.pulse_beta, sps, p.pulse_span)
@@ -78,7 +78,7 @@ def test_symbol_channel_matches_shaped_fractional_delay_waveform():
 
 
 def test_trained_equalizer_removes_static_echo_without_future_training():
-    p = PROFILES["B200MH-A4"]
+    p = PROFILES["B200MH"]
     frames = Transmitter(p).run(np.zeros((p.block * 150, 2)))
     y, _ = through_matched_channel(frames, p, 24.0, ((5e-6, -10, np.pi / 3),))
     direct, _ = through_matched_channel(frames, p, 24.0)
@@ -98,12 +98,12 @@ def test_trained_equalizer_removes_static_echo_without_future_training():
 
 
 def test_filter_and_equalizer_delay_is_accounted_per_stream():
-    mono, sub = PROFILES["B200MH-A4"], PROFILES["S50M"]
+    mono, sub = PROFILES["B200MH"], PROFILES["S50M"]
     tm = waveform_timing(mono, sub, lookahead_symbols=4)
-    assert np.isclose(min_latency(mono, True, "half", tm) * 1000, 4.338983, atol=1e-5)
-    stereo, sub_st = PROFILES["B200H-A4"], PROFILES["S100"]
+    assert np.isclose(min_latency(mono, True, "half", tm) * 1000, 4.3125, atol=1e-5)
+    stereo, sub_st = PROFILES["B200H"], PROFILES["S100"]
     ts = waveform_timing(stereo, sub_st, lookahead_symbols=4)
-    assert np.isclose(min_latency(stereo, True, "half", ts) * 1000, 4.21164, atol=1e-4)
+    assert np.isclose(min_latency(stereo, True, "half", ts) * 1000, 4.2033898, atol=1e-4)
 
 
 if __name__ == "__main__":

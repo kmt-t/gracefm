@@ -24,7 +24,7 @@ from gracefm.profiles import PROFILES  # noqa: E402
 
 
 def profiles():
-    base = replace(PROFILES["B200H-A4"], attn_group_m=None, attn_group_s=None)
+    base = replace(PROFILES["B200H"], attn_group_m=None, attn_group_s=None)
     off4 = (0, 0, 0, 0, 0, 0, 4)
     off8 = (0, 0, 0, 0, 0, 0, 8)
     variants = {
@@ -59,7 +59,7 @@ def source_clips(seconds):
         if len(x) != n:
             raise ValueError(f"{item['name']}: 音声が短すぎます")
         clips[item["name"]] = x * (0.89 / np.max(np.abs(x)))
-    x, fs = sf.read(ROOT / "samples/demo_orig.flac", always_2d=True)
+    x, fs = sf.read(ROOT / "samples/demo__32k__reference.flac", always_2d=True)
     clips["demo"] = wavio.resample(x, fs, 32000)[:n]
     return clips
 

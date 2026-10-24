@@ -18,6 +18,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.dirname(__file__))
 
+from sample_names import sample_name
+
 from gracefm import channel, wavio  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 from gracefm.txrx import Transmitter, receive  # noqa: E402
@@ -25,29 +27,17 @@ from eval_hybrid import budget, score, spectrum  # noqa: E402
 from make_samples import codec  # noqa: E402
 
 SOURCES = {
-    "fishin": ("B200MHY-A4", "S50M", True),
-    "vibeace": ("B200MHY-A4", "S50M", True),
-    "demo": ("B200HY-A4", "S100", False),
+    "fishin": ("B200MHY", "S50M", True),
+    "vibeace": ("B200MHY", "S50M", True),
+    "demo": ("B200HY", "S100", False),
 }
 CASES = ("codec", "ideal", "awgn80", "awgn66", "awgn60", "awgn57", "awgn54",
          "rayleigh60", "main_minus10db66", "phase_only66")
 
 
 def filename_for(source, profile_name, case):
-    """Match tools/make_samples.py basenames inside samples/hybrid_y/."""
-    if case == "codec":
-        return f"{source}_{profile_name}.flac"
-    if case == "ideal":
-        return f"{source}_Y_ideal_symbols.flac"
-    if case.startswith("awgn"):
-        return f"{source}_final_cn0-{case[4:]}.flac"
-    if case == "rayleigh60":
-        return f"{source}_final_rayleigh_cn0-60.flac"
-    if case == "main_minus10db66":
-        return f"{source}_final_fade10_cn0-66.flac"
-    if case == "phase_only66":
-        return f"{source}_Y_phaseonly_cn0-66.flac"
-    raise ValueError(case)
+    sub = ("S50M" if source != "demo" else "S100") if case not in ("codec", "ideal") else None
+    return sample_name(source, 32000, profile_name, case, sub=sub)
 
 
 def sha256(path):
@@ -123,7 +113,7 @@ def main():
     for source in selected_sources:
         profile_name, sub_name, mono = SOURCES[source]
         profile, secondary = PROFILES[profile_name], PROFILES[sub_name]
-        input_path = os.path.join(ROOT, "samples", f"{source}_orig.flac")
+        input_path = os.path.join(ROOT, "samples", f"{source}__32k__reference.flac")
         audio, fs = wavio.read(input_path)
         need = args.seconds * 32000
         if fs != 32000 or len(audio) < need:
@@ -132,7 +122,7 @@ def main():
         audio = audio * (0.89 / np.max(np.abs(audio)))
         if mono:
             audio = np.repeat(audio[:, :1], 2, axis=1)
-        reference_name = f"{source}_orig.flac"
+        reference_name = f"{source}__32k__reference.flac"
         reference_path = os.path.join(args.out, reference_name)
         shutil.copyfile(input_path, reference_path)
         reference, _ = wavio.read(reference_path)

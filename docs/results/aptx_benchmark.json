@@ -1,7 +1,8 @@
 {
   "method": "Codec-only stereo comparison; no Bluetooth transport or radio channel",
   "ffmpeg_version": "ffmpeg version 7.0.2-static https://johnvansickle.com/ffmpeg/  Copyright (c) 2000-2024 the FFmpeg developers",
-  "gracefm_profile": "B200H-A4",
+  "gracefm_profile": "B200H",
+  "gracefm_profile_signature": "Profile(pid=4, name='B200H', fs=32000, block=64, levels=6, bits_m=(16, 16, 16, 13, 10, 7, 7), bits_s=(14, 12, 11, 8, 7, 6, 6), exp_bits=4, protect_k=1, modulation='qam16h', alpha=5.0, pulse_beta=0.1, pulse_span=32, pf_iters=4, base_m=(12, 11, 9, 7, 3, 1, 1), base_s=(7, 6, 5, 3, 2, 2, 2), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=(-25, -25, -26, -23, -21, -18, -19), exp_offset_s=(-23, -21, -21, -18, -18, -18, -19), attn_group_m=(0, 0, 0, 0, 0, 0, 8), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M', 'S'), experimental_tag=3)",
   "source_seconds": 5.0,
   "source_offset_seconds": 1,
   "source_peak": 0.89,
@@ -59,13 +60,13 @@
     {
       "material": "piano",
       "view": "common_16khz",
-      "method": "B200H-A4",
-      "audio_kbps": 536.0,
+      "method": "B200H",
+      "audio_kbps": 512.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 53.18,
-      "visqol_left": 4.256,
-      "visqol_right": 4.437,
-      "visqol_mean": 4.346
+      "snr_db": 52.12,
+      "visqol_left": 3.613,
+      "visqol_right": 4.128,
+      "visqol_mean": 3.87
     },
     {
       "material": "piano",
@@ -92,13 +93,13 @@
     {
       "material": "piano",
       "view": "full_48khz",
-      "method": "B200H-A4",
-      "audio_kbps": 536.0,
+      "method": "B200H",
+      "audio_kbps": 512.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 52.82,
-      "visqol_left": 3.965,
-      "visqol_right": 3.564,
-      "visqol_mean": 3.764
+      "snr_db": 51.77,
+      "visqol_left": 3.452,
+      "visqol_right": 3.535,
+      "visqol_mean": 3.494
     },
     {
       "material": "piano",
@@ -125,13 +126,13 @@
     {
       "material": "percussion",
       "view": "common_16khz",
-      "method": "B200H-A4",
-      "audio_kbps": 536.0,
+      "method": "B200H",
+      "audio_kbps": 512.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 55.35,
-      "visqol_left": 4.668,
-      "visqol_right": 4.63,
-      "visqol_mean": 4.649
+      "snr_db": 55.7,
+      "visqol_left": 4.695,
+      "visqol_right": 4.666,
+      "visqol_mean": 4.68
     },
     {
       "material": "percussion",
@@ -158,13 +159,13 @@
     {
       "material": "percussion",
       "view": "full_48khz",
-      "method": "B200H-A4",
-      "audio_kbps": 536.0,
+      "method": "B200H",
+      "audio_kbps": 512.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 48.13,
-      "visqol_left": 4.177,
-      "visqol_right": 4.097,
-      "visqol_mean": 4.137
+      "snr_db": 48.2,
+      "visqol_left": 4.21,
+      "visqol_right": 4.136,
+      "visqol_mean": 4.173
     },
     {
       "material": "percussion",
@@ -191,8 +192,8 @@
     {
       "material": "guitar",
       "view": "common_16khz",
-      "method": "B200H-A4",
-      "audio_kbps": 536.0,
+      "method": "B200H",
+      "audio_kbps": 512.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 58.69,
       "visqol_left": 4.683,
@@ -224,8 +225,8 @@
     {
       "material": "guitar",
       "view": "full_48khz",
-      "method": "B200H-A4",
-      "audio_kbps": 536.0,
+      "method": "B200H",
+      "audio_kbps": 512.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 56.23,
       "visqol_left": 4.108,

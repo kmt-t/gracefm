@@ -4,7 +4,7 @@
 送信: 同じ音声を 2系統で送る。系統 B はブロックの格子を半ブロックずらす (先頭に block/2 サンプルの 0)。
       2系統は大きく離れた別の周波数で送り、欠落やフェージングを独立にする。
 受信: 系統ごとに 復調 → 軟判定ビタビ → CRC 判定 → 復号 → ポストフィルタ。
-      CRC が合わないフレームは欠落扱い。非保護部のビット誤りはそのまま受け入れる (ノイズとして出る)。
+      基本CRC不一致はフレーム欠落。H1/H2 CRCだけの不一致は高域を消去して低中域を採用する。
       2系統の合成: 半ブロック単位で、両方届いた区間は帯域ごとに融合 (gracefm/fusion.py。各系統の係数の
       誤差分散による逆分散重み) / 片方だけなら片方 / どちらも無ければ PLC。
 """
@@ -93,11 +93,11 @@ class StreamDecoder:
         iters = profile.pf_iters if pf_iters is None else pf_iters
         self.pf = PostFilter(profile.levels, iters, profile.block) if postfilter else None
         self.last_ok = False
-        self.stats = {"frames": 0, "lost": 0, "crc_fail": 0}
+        self.stats = {"frames": 0, "lost": 0, "crc_fail": 0, "high_crc_fail": 0}
         self.last_r = (np.nan, np.nan)          # 直前フレームの誤差分散の見積もり (M, S)
         self.hybrid_variance = {}
 
-    def _recover_hybrid(self, sym, bd):
+    def _recover_hybrid(self, sym, bd, high_ok=True):
         lay, p = self.layout, self.p
         start = len(modem.PREAMBLE) + self.digital_nsym
         if len(sym) != start + lay.n_hybrid:
@@ -115,6 +115,8 @@ class StreamDecoder:
                                                  protected_second=second)
         self.hybrid_variance = {}
         for i, (ch, k, j) in enumerate(lay.hybrid_items):
+            if k >= 5 and not high_ok:
+                continue
             if (ch, k) not in self.hybrid_variance:
                 self.hybrid_variance[(ch, k)] = np.zeros(p.ncoef(k))
                 bd.mant[ch][k] = bd.mant[ch][k].astype(float)
@@ -153,7 +155,7 @@ class StreamDecoder:
             tot += np.bincount(lay.unp_ch, weights=e, minlength=2)
         return tot / p.block
 
-    def soft_coeffs(self, bd, p1_unp):
+    def soft_coeffs(self, bd, p1_unp, high_ok=True):
         """
         軟判定の復号: 非保護ビットを 0/1 に丸めず、1 である事後確率 p1 をそのままビットの値として使う。
         ビットどうしは独立とみなし、仮数の期待値・事後分散・取り得る区間を閉じた式で求める:
@@ -177,6 +179,12 @@ class StreamDecoder:
             coefs[ch], cell[ch] = [], []
             for k, b in enumerate(bits):
                 n = p.ncoef(k)
+                if k >= 5 and not high_ok:
+                    coefs[ch].append(np.zeros(n))
+                    cell[ch].append((np.zeros(n), np.zeros(n)))
+                    if self.kf is not None and b:
+                        self.kf.predict_only(ch, k, n)
+                    continue
                 if b == 0:
                     coefs[ch].append(np.zeros(n))
                     cell[ch].append(None)
@@ -237,7 +245,7 @@ class StreamDecoder:
             soft = soft * (1 - 2 * sc)
             hard = hard ^ modem.prbs(len(hard))
             self._axis = soft
-            bd, _ = lay.unpack(soft[: lay.n_coded], hard[lay.n_coded:], self._ks_for)
+            bd, hdr = lay.unpack(soft[: lay.n_coded], hard[lay.n_coded:], self._ks_for)
             p1 = hard.astype(float)
             if bd is None:
                 self.stats["crc_fail"] += 1
@@ -251,15 +259,26 @@ class StreamDecoder:
                         if b > 0:
                             self.kf.predict_only(ch, k, p.ncoef(k))
             return np.zeros((p.block, 2)), False
+        high_ok = hdr["high_ok"]
+        if not high_ok:
+            self.stats["high_crc_fail"] += 1
         if p.hybrid:
-            self._recover_hybrid(sym, bd)
+            self._recover_hybrid(sym, bd, high_ok)
         if self.soft_decode or p.hybrid:
-            coefs, cell, R = self.soft_coeffs(bd, p1[lay.n_coded:lay.n_tx])
+            coefs, cell, R = self.soft_coeffs(bd, p1[lay.n_coded:lay.n_tx], high_ok)
             self.last_r = tuple(R)
         else:
             self.last_r = tuple(self.error_variance(bd, soft[lay.n_coded:lay.n_tx]))
             self.last_rb = None
             coefs, cell = decode_coeffs(bd, p)
+            if not high_ok:
+                self.last_rb = np.broadcast_to(np.asarray(self.last_r)[None, :, None],
+                                               (2, 2, p.nbands)).copy()
+                self.last_rb[:, :, 5:] = np.inf
+                for ch in ("M", "S"):
+                    for k in (5, 6):
+                        coefs[ch][k] = np.zeros(p.ncoef(k))
+                        cell[ch][k] = (np.zeros(p.ncoef(k)), np.zeros(p.ncoef(k)))
         out = {}
         for ch in ("M", "S"):
             if self.pf is None or ch == "S":

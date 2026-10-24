@@ -2,15 +2,15 @@
 フレームのビット配置。1フレーム = 1ブロック。
 
 保護部 (FEC で符号化する):
-  ヘッダ 16bit   : プロファイルID 4 | 系統ID 1 | 暗号化 1 (=0) | 実験タグ 2 | フレーム番号 8   (各 MSB から)
-  実験タグ非0はヘッダ24bitとし、フレーム番号を16bitに拡張する。
+  現行ヘッダ24bit: プロファイルID 4 | 系統ID 1 | 暗号化 1 (=0) | 形式識別子 2 | フレーム番号 16 (各 MSB から)
+  タグ0の旧16bitヘッダは互換性検証用の明示的な設定でのみ使用する。
   (暗号化するとき 32bit: プロファイルID 4 | 系統ID 1 | 暗号化 1 (=1) | 実験タグ 2 | フレーム番号 24)
-  実験タグ 0 は既存フレーム。既存IDを共有する48kHz Y系はタグ1とし、
-  ヘッダ長・CRC位置も変えることで旧受信機による誤受理を防ぐ。
+  現行カタログは全てタグ3・ヘッダ24bit。タグ0/1/2の旧フレームとは互換性がない。
   指数           : M の係数群 0→6, 続いて S の係数群 0→6 (0bit の群は無し)。k=0 は低域近似、k=1..6 は詳細帯域。各 exp_bits, MSB から
-  区間アッテネータ: 有効なプロファイルのみ。M→S、帯域低→高、区間先頭→末尾の順に1bitずつ
+  区間アッテネータ: 全登録プロファイルに標準装備。M→S、帯域低→高、区間先頭→末尾の順に1bitずつ
   仮数の上位 K bit: (M→S, 帯域 低→高, 係数 先頭→末尾) の順に、各係数の上位 K bit を MSB から
-  CRC-16         : 以上すべてに対する CRC-16-CCITT
+  CRC-16         : ヘッダと k=0..4 に対する基本CRC、および k=5,6 (H2/H1) に対する高域CRC。
+                   高域を送らないプロファイルは基本CRCのみ。
 非保護部 (そのまま送る):
   残りの仮数ビットを「上から何ビット目か (rank)」の小さい順に並べる。
   同じ rank の中は (M→S, 帯域 低→高, 係数 先頭→末尾)。
@@ -61,7 +61,7 @@ class Layout:
                         if rank < p.protect_k:
                             self.top_items.append((ch, k, j, pos))
                         else:
-                            ext = int(rank >= p.base_bits(ch, k))      # 拡張層 (階層化したときだけ 1)
+                            ext = int(rank >= p.base_bits(ch, k, j))      # 拡張層 (階層化したときだけ 1)
                             unp.append((ext, rank, order, ch, k, j, pos))
                         order += 1
         unp.sort(key=lambda t: (t[0], t[1], t[2]))
@@ -70,7 +70,19 @@ class Layout:
         self.n_prot = (self.header_bits + sum(p.exponent_bits(ch, k) for ch, k in self.exp_items)
                        + len(self.attn_items) + len(self.top_items))
         self.n_body = self.n_prot - self.header_bits      # 暗号化する保護部のビット数
-        self.n_prot_crc = self.n_prot + 16
+        core, high = list(range(self.header_bits)), []
+        bit = self.header_bits
+        for items, widths in ((self.exp_items, (p.exponent_bits(ch, k) for ch, k in self.exp_items)),
+                              (self.attn_items, (1 for _ in self.attn_items)),
+                              (self.top_items, (1 for _ in self.top_items))):
+            for item, width in zip(items, widths):
+                (high if item[1] >= 5 else core).extend(range(bit, bit + width))
+                bit += width
+        assert bit == self.n_prot
+        self.core_prot_indices = np.asarray(core, np.int64)
+        self.high_prot_indices = np.asarray(high, np.int64)
+        self.has_high_crc = bool(high)
+        self.n_prot_crc = self.n_prot + 16 + (16 if self.has_high_crc else 0)
         self.n_coded = 2 * (self.n_prot_crc + fec.K - 1)
         self.n_unp = len(self.unp_items)
         self.n_tx = self.n_coded + self.n_unp
@@ -118,7 +130,10 @@ class Layout:
         if self.encrypted:
             prot[self.header_bits:] ^= keystream[: self.n_body]
             unp = unp ^ keystream[self.n_body:]
-        prot = np.concatenate([prot, fec.crc16(prot)])
+        checks = [fec.crc16(prot[self.core_prot_indices])]
+        if self.has_high_crc:
+            checks.append(fec.crc16(prot[self.high_prot_indices]))
+        prot = np.concatenate([prot, *checks])
         return np.concatenate([fec.conv_encode(prot), unp])
 
     # ---------------------------------------------------------------- 受信側
@@ -126,17 +141,20 @@ class Layout:
         """
         soft_coded: 保護部の符号化ビットの軟値 (正 = 0 らしい), unp_bits: 非保護部の硬判定
         keystream_for: 暗号化するとき、ヘッダ (dict) からキーストリームを返す関数。使ったキーストリームは header["ks"]
-        返り値: (BlockData, header dict) / CRC が合わなければ (None, None)
+        返り値: (BlockData, header dict) / 基本CRCが合わなければ (None, None)。
+        高域CRCだけが不一致なら header["high_ok"] が False。
         """
         p = self.p
         prot = fec.viterbi_decode(soft_coded, self.n_prot_crc)
-        body, crc = prot[: self.n_prot], prot[self.n_prot:]
-        if not np.array_equal(fec.crc16(body), crc):
+        body = prot[: self.n_prot]
+        if not np.array_equal(fec.crc16(body[self.core_prot_indices]), prot[self.n_prot:self.n_prot + 16]):
             return None, None
+        high_ok = (not self.has_high_crc or
+                   np.array_equal(fec.crc16(body[self.high_prot_indices]), prot[self.n_prot + 16:]))
         hdr = body[: self.header_bits]
         val = lambda bb: int("".join(str(int(v)) for v in bb), 2)
         header = {"pid": val(hdr[0:4]), "stream": int(hdr[4]), "encrypted": bool(hdr[5]),
-                  "counter": val(hdr[8: self.header_bits])}
+                  "counter": val(hdr[8: self.header_bits]), "high_ok": high_ok}
         if (header["pid"] != p.pid or header["encrypted"] != self.encrypted
                 or val(hdr[6:8]) != p.experimental_tag):
             return None, None
@@ -192,9 +210,9 @@ class HybridLayout(Layout):
         self.unp_k = self.unp_k[keep]
         self.unp_pos = self.unp_pos[keep]
         self.unp_flat = self.unp_flat[keep]
-        self.n_base_unp = sum(1 for ch, k, _, pos in self.unp_items
+        self.n_base_unp = sum(1 for ch, k, j, pos in self.unp_items
                               if (profile.bits_m if ch == "M" else profile.bits_s)[k] - pos
-                              <= profile.base_bits(ch, k))
+                              <= profile.base_bits(ch, k, j))
         self.n_unp = len(self.unp_items)
         self.n_tx = self.n_coded + self.n_unp
         self.n_keystream = self.n_body + self.n_unp

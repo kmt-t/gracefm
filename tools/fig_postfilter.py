@@ -64,7 +64,7 @@ def main():
     ap.add_argument("--t0", type=float, default=None, help="波形を描く位置 [s] (省略時は誤差の大きい所を選ぶ)")
     a = ap.parse_args()
     p = PROFILES[a.profile]
-    x, fs = wavio.read(os.path.join(ROOT, "samples", f"{a.material}_orig.flac"))
+    x, fs = wavio.read(os.path.join(ROOT, "samples", f"{a.material}__32k__reference.flac"))
     x = x[: int(a.seconds * fs) // p.block * p.block]
     m = (x[:, 0] + x[:, 1]) / 2
     ys = {k: decode(np.stack([m, m], 1), p, k) for k in ("none", "smooth", "pf")}

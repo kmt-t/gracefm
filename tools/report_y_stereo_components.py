@@ -80,22 +80,22 @@ def pair(group, source, case, fs, reference, baseline_file, y_file,
 
 def main():
     rows = []
-    reference32, fs32 = audio("samples/demo_orig.flac")
+    reference32, fs32 = audio("samples/demo__32k__reference.flac")
     reference32 = reference32[:10 * fs32]
     if fs32 != 32000:
         raise ValueError("32 kHz reference expected")
-    for row in read_json("hybrid_y_vs_legacy.json")["comparison"]:
+    for row in read_json("hybrid_y_comparison.json")["comparison"]:
         if row["source"] != "demo":
             continue
         rows.append(pair("32k_main_plus_secondary", "demo", row["case"], fs32, reference32,
                          row["baseline_file"], row["y_file"], row["baseline_sha256"],
                          row["y_sha256"], row["baseline_profile"], row["y_profile"]))
 
-    reference48, fs48 = audio("samples/monitor/demo_orig48.flac")
+    reference48, fs48 = audio("samples/monitor/demo__48k__reference.flac")
     reference48 = reference48[:10 * fs48]
     if fs48 != 48000:
         raise ValueError("48 kHz reference expected")
-    for row in read_json("monitor_y_vs_legacy.json")["comparison"]:
+    for row in read_json("monitor_y_comparison.json")["comparison"]:
         if row["source"] != "demo":
             continue
         rows.append(pair("48k_single_main", "demo", row["case"], fs48, reference48,

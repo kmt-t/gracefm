@@ -161,7 +161,7 @@ def main():
     cn0s = tuple(float(v) for v in args.link_cn0.split(","))
     if args.seconds < 3 or not widths or any(w < 1 or w > 8 for w in widths) or 4 not in widths:
         ap.error("seconds は3以上、探索幅は1〜8で4bitを含めてください")
-    base = PROFILES["B200MH"]
+    base = replace(PROFILES["B200MH"], attn_group_m=None, exp_offset_m=None)
     if any(base.bits_s):
         raise ValueError("この探索は M のみのプロファイル用です")
     manifest, clips = read_clips(args.audio_dir, args.seconds, base.block)

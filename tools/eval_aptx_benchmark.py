@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare stereo B200H-A4 with FFmpeg aptX and aptX HD on untracked lossless WAVs.
+"""Compare stereo B200H with FFmpeg aptX and aptX HD on untracked lossless WAVs.
 
 The common-band view uses the same 32 kHz input for GraceFM and aptX (the
 latter is upsampled to its 48 kHz operating rate). The full-band view uses
@@ -80,14 +80,14 @@ def evaluate(task):
 
     entry, seconds = task
     original48, x32, common48 = source(entry, seconds)
-    grace48 = wavio.resample(codec(x32, PROFILES["B200H-A4"]), 32000, 48000)
+    grace48 = wavio.resample(codec(x32, PROFILES["B200H"]), 32000, 48000)
     api = VisqolApi()
     api.create(mode="audio")
     rows = []
     for view, reference in (("common_16khz", common48), ("full_48khz", original48)):
-        for method in ("B200H-A4", "aptX", "aptX_HD"):
-            if method == "B200H-A4":
-                y, bitrate, delay = grace48, PROFILES["B200H-A4"].audio_kbps(), 0
+        for method in ("B200H", "aptX", "aptX_HD"):
+            if method == "B200H":
+                y, bitrate, delay = grace48, PROFILES["B200H"].audio_kbps(), 0
             else:
                 variant = "aptx" if method == "aptX" else "aptx_hd"
                 y, bitrate, delay = aptx_roundtrip(reference, variant, get_ffmpeg_exe())
@@ -132,7 +132,8 @@ def main():
     version = subprocess.run([ffmpeg, "-version"], check=True, capture_output=True,
                              text=True).stdout.splitlines()[0]
     result = dict(method="Codec-only stereo comparison; no Bluetooth transport or radio channel",
-                  ffmpeg_version=version, gracefm_profile="B200H-A4", source_seconds=args.seconds,
+                  ffmpeg_version=version, gracefm_profile="B200H",
+                  gracefm_profile_signature=repr(PROFILES["B200H"]), source_seconds=args.seconds,
                   source_offset_seconds=1, source_peak=0.89, aptx_sample_rate_hz=48000,
                   gracefm_sample_rate_hz=32000, metric_sample_rate_hz=48000,
                   common_view="All codecs receive the same 16 kHz-limited input; aptX input is upsampled from 32 to 48 kHz.",

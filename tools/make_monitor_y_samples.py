@@ -13,6 +13,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.dirname(__file__))
 
+from sample_names import sample_name
+
 from gracefm import channel, wavio  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 from gracefm.txrx import Transmitter, receive  # noqa: E402
@@ -26,7 +28,7 @@ PAIRS = {"M700Y": ("M700", (70, 65)),
 
 
 def filename_for(source, profile, case):
-    return f"{source}_{profile}{'_cn0-' + case[4:] if case.startswith('awgn') else '_ideal' if case == 'ideal' else ''}.flac"
+    return sample_name(source, 48000, profile, case)
 
 
 def input_audio(source, seconds):
@@ -35,7 +37,7 @@ def input_audio(source, seconds):
         audio = make_demo(48000)
         audio = audio * (0.89 / np.max(np.abs(audio)))
     else:
-        audio, fs = wavio.read(os.path.join(ROOT, "samples", f"{source}_orig.flac"))
+        audio, fs = wavio.read(os.path.join(ROOT, "samples", f"{source}__32k__reference.flac"))
         if fs != 32000 or len(audio) < 320000:
             raise ValueError(f"{source}: 10 s, 32 kHz source required")
         audio = audio[:320000]
@@ -93,7 +95,7 @@ def main():
                       for name in profiles}
     for source in sources:
         audio = input_audio(source, args.seconds)
-        reference_name = f"{source}_orig48.flac"
+        reference_name = f"{source}__48k__reference.flac"
         reference_path = os.path.join(ROOT, "samples/monitor", reference_name)
         output_reference = os.path.join(args.out, reference_name)
         shutil.copyfile(reference_path, output_reference)

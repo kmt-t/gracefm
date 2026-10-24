@@ -24,9 +24,7 @@ def digest(path):
         return hashlib.sha256(stream.read()).hexdigest()
 
 
-def legacy_name(source, baseline_profile, case):
-    if case == "codec":
-        return f"{source}_{baseline_profile}.flac"
+def baseline_name(source, baseline_profile, case):
     return filename_for(source, baseline_profile, case)
 
 
@@ -34,19 +32,19 @@ def main():
     y_manifest_path = os.path.join(ROOT, "docs/results/hybrid_y_samples.json")
     with open(y_manifest_path, encoding="utf-8") as stream:
         y_manifest = json.load(stream)
-    result_path = os.path.join(ROOT, "docs/results/hybrid_y_vs_legacy.json")
-    result = {"description": "Stored 10s FLACs, exact matched source and channel case",
+    result_path = os.path.join(ROOT, "docs/results/hybrid_y_comparison.json")
+    result = {"description": "Generation-2 10s FLACs, exact matched source and channel case",
               "comparison": []}
     if os.path.exists(result_path):
         with open(result_path, encoding="utf-8") as stream:
             result = json.load(stream)
     for source, (y_profile, _, mono) in SOURCES.items():
-        baseline_profile = "B200MH-A4" if mono else "B200H-A4"
-        input_path = os.path.join(ROOT, "samples", f"{source}_orig.flac")
+        baseline_profile = "B200MH" if mono else "B200H"
+        input_path = os.path.join(ROOT, "samples", f"{source}__32k__reference.flac")
         original, _ = wavio.read(input_path)
         original = original[:y_manifest["seconds"] * 32000]
         for case in CASES:
-            name_old = legacy_name(source, baseline_profile, case)
+            name_old = baseline_name(source, baseline_profile, case)
             name_y = filename_for(source, y_profile, case)
             old_path = os.path.join(ROOT, "samples", name_old)
             y_path = os.path.join(ROOT, "samples/hybrid_y", name_y)

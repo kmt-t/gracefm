@@ -14,11 +14,12 @@ from .profiles import PROFILES, Profile
 from .txrx import Transmitter, receive
 
 # 主系に組み合わせる副系 (主系より低いビットレートで、別の周波数で送る受け皿)
-DEFAULT_SUB = {"M700Q16": "S100W", "M700H": "S100W", "M700": "S100W",
-               "M700Y": "S100W", "M700HY": "S100W", "B200MH": "S50M",
-               "B200MH-A4": "S50M", "B200H-A4": "S100", "B200MHY-A4": "S50M",
-               "B200HY-A4": "S100", "B200M": "S50M", "B150M": "S50M",
-               "B200": "S100", "B150": "S100"}
+DEFAULT_SUB = {
+    "B200M": "S50M", "B200MH": "S50M", "B200MHY": "S50M",
+    "B200": "S100", "B200H": "S100", "B200HY": "S100",
+    "M700": "S100-48K", "M700H": "S100-48K",
+    "M700Y": "S100-48K", "M700HY": "S100-48K",
+}
 
 
 def symbol_rate(p):

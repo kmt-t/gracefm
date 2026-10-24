@@ -24,17 +24,17 @@ from gracefm import channel, metrics, wavio  # noqa: E402
 from gracefm.analog_fm import AnalogFM  # noqa: E402
 
 MONO = [("FM", None), ("B200M", dict(main="B200M", sub=None)),
-        ("B200MH-A4", dict(main="B200MH-A4", sub=None)),
-        ("B200MH-A4+S50M 50:50", dict(main="B200MH-A4", sub="S50M", power_main=0.5)),
-        ("B200MH-A4+S50M 75:25", dict(main="B200MH-A4", sub="S50M", power_main=0.75))]
-STEREO = [("B200", dict(main="B200", sub=None)), ("B200H-A4", dict(main="B200H-A4", sub=None)),
-          ("B200H-A4+S100 50:50", dict(main="B200H-A4", sub="S100", power_main=0.5)),
-          ("B200H-A4+S100 75:25", dict(main="B200H-A4", sub="S100", power_main=0.75))]
+        ("B200MH", dict(main="B200MH", sub=None)),
+        ("B200MH+S50M 50:50", dict(main="B200MH", sub="S50M", power_main=0.5)),
+        ("B200MH+S50M 75:25", dict(main="B200MH", sub="S50M", power_main=0.75))]
+STEREO = [("B200", dict(main="B200", sub=None)), ("B200H", dict(main="B200H", sub=None)),
+          ("B200H+S100 50:50", dict(main="B200H", sub="S100", power_main=0.5)),
+          ("B200H+S100 75:25", dict(main="B200H", sub="S100", power_main=0.75))]
 
 
 def job(a):
     mat, kind, cn0, seed, sec = a
-    x, fs = wavio.read(os.path.join(ROOT, "samples", f"{mat}_orig.flac"))
+    x, fs = wavio.read(os.path.join(ROOT, "samples", f"{mat}__32k__reference.flac"))
     x = x[: int(sec * fs)]
     bm = metrics.BandMetric(x, fs)
     stereo = mat == "demo"

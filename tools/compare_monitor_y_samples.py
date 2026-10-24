@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare saved M700Y/M700HY FLACs with matching legacy monitor cases."""
+"""Compare saved M700Y/M700HY FLACs with matching current conventional monitor cases."""
 
 import json
 import os
@@ -20,14 +20,14 @@ def main():
     manifest_path = os.path.join(ROOT, "docs/results/monitor_y_samples.json")
     with open(manifest_path, encoding="utf-8") as stream:
         manifest = json.load(stream)
-    out_path = os.path.join(ROOT, "docs/results/monitor_y_vs_legacy.json")
-    result = {"description": "Stored 48 kHz FLACs; paired material, C/N0, one carrier and seed",
+    out_path = os.path.join(ROOT, "docs/results/monitor_y_comparison.json")
+    result = {"description": "Generation-2 48 kHz FLACs; paired material, C/N0, one carrier and seed",
               "comparison": []}
     if os.path.exists(out_path):
         with open(out_path, encoding="utf-8") as stream:
             result = json.load(stream)
     for source in SOURCES:
-        original, fs = wavio.read(os.path.join(ROOT, "samples/monitor", f"{source}_orig48.flac"))
+        original, fs = wavio.read(os.path.join(ROOT, "samples/monitor", f"{source}__48k__reference.flac"))
         original = original[:manifest["seconds"] * fs]
         for y_name, (base_name, cn0_values) in PAIRS.items():
             for case in ("codec", *(f"awgn{cn0}" for cn0 in cn0_values)):

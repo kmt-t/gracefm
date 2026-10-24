@@ -40,7 +40,7 @@ def test_all_hybrid_points_and_continuous_radius():
 
 
 def test_hybrid_quantizer_uses_both_extreme_codes():
-    p = PROFILES["B200MHY-A4"]
+    p = PROFILES["B200MHY"]
     bd = encode_block(_audio(p, 1), p)
     low = -(1 << (p.hybrid_bits - 1))
     high = (1 << (p.hybrid_bits - 1)) - 1
@@ -58,8 +58,8 @@ def test_hybrid_quantizer_uses_both_extreme_codes():
 
 
 def test_stereo_y_preserves_existing_s_coefficients():
-    old = PROFILES["B200H-A4"]
-    y = PROFILES["B200HY-A4"]
+    old = PROFILES["B200H"]
+    y = PROFILES["B200HY"]
     assert y.bits_s == old.bits_s
     assert y.exp_offset_s == old.exp_offset_s
     assert y.attn_group_s == old.attn_group_s
@@ -73,12 +73,12 @@ def test_stereo_y_preserves_existing_s_coefficients():
 
 
 def test_fec_top_bit_is_retained_and_has_separate_phase_copy():
-    for name in ("B200MHY-A4", "B200HY-A4"):
+    for name in ("B200MHY", "B200HY"):
         p = PROFILES[name]
         assert p.hybrid_bits == 8
         lay = HybridLayout(p)
         conventional = Layout(p)
-        baseline = Layout(PROFILES["B200MH-A4" if name.startswith("B200MH") else "B200H-A4"])
+        baseline = Layout(PROFILES["B200MH" if name.startswith("B200MH") else "B200H"])
         assert lay.n_coded == conventional.n_coded
         assert lay.n_prot == conventional.n_prot
         added_attenuator_bits = (p.attenuator_bits("M", 5) + p.attenuator_bits("M", 6)
@@ -105,7 +105,7 @@ def test_fec_top_bit_is_retained_and_has_separate_phase_copy():
 
 
 def test_broadcast_y_two_high_m_bands_have_protected_attenuator_bytes():
-    for name in ("B200MHY-A4", "B200HY-A4"):
+    for name in ("B200MHY", "B200HY"):
         p = PROFILES[name]
         assert p.attenuator_group("M", 5) == 2
         assert p.attenuator_group("M", 6) == 4
@@ -120,26 +120,28 @@ def test_broadcast_y_two_high_m_bands_have_protected_attenuator_bytes():
 
         protected = fec.viterbi_decode(1 - 2 * packed[:layout.n_coded], layout.n_prot_crc)
         first_attn = layout.header_bits + sum(p.exponent_bits(ch, k) for ch, k in layout.exp_items)
-        protected[first_attn] ^= 1
+        protected[layout.high_prot_indices[0]] ^= 1
         corrupted = np.concatenate((fec.conv_encode(protected), packed[layout.n_coded:]))
-        assert layout.unpack(1 - 2 * corrupted[:layout.n_coded], corrupted[layout.n_coded:]) == (None, None)
+        recovered, header = layout.unpack(1 - 2 * corrupted[:layout.n_coded], corrupted[layout.n_coded:])
+        assert recovered is not None and header['high_ok'] is False
 
 
 def test_stereo_y_uses_fewer_main_symbols_than_legacy_stereo():
-    for old_name, y_name in (("B200H-A4", "B200HY-A4"), ("M700H", "M700HY")):
+    for old_name, y_name in (("B200H", "B200HY"), ("M700H", "M700HY")):
         old, y = PROFILES[old_name], PROFILES[y_name]
         assert Transmitter(y).nsym < Transmitter(old).nsym, (old_name, y_name)
-        assert y.base_s == (1, 1, 1, 1, 1, 2, 2)
+        assert y.base_s == ((1, 1, 1, 1, 1, 1, 1) if y.fs == 32000
+                            else (1, 1, 1, 1, 1, 2, 2))
         lay = HybridLayout(y)
         strong_slots = 2 * Transmitter(y).digital_nsym
         high_s = [(k, pos) for i, (ch, k, _, pos) in enumerate(lay.unp_items)
                   if ch == "S" and k in (5, 6) and lay.n_coded + i < strong_slots]
-        assert len(high_s) == 48
+        assert len(high_s) == (0 if y.fs == 32000 else 48)
         assert all(pos == y.bits_s[k] - 2 for k, pos in high_s)
 
 
 def test_hybrid_noiseless_audio_and_phase_only_fallback():
-    for name in ("B200MHY-A4", "B200HY-A4"):
+    for name in ("B200MHY", "B200HY"):
         p = PROFILES[name]
         x = _audio(p)
         frames = Transmitter(p).run(x)
@@ -160,7 +162,7 @@ def test_hybrid_noiseless_audio_and_phase_only_fallback():
 
 
 def test_amplitude_damage_does_not_damage_fec_or_low_bands():
-    p = PROFILES["B200MHY-A4"]
+    p = PROFILES["B200MHY"]
     x = _audio(p, 1)
     frame = Transmitter(p).frame(x)
     lay = HybridLayout(p)
@@ -180,7 +182,7 @@ def test_amplitude_damage_does_not_damage_fec_or_low_bands():
 
 
 def test_hybrid_eight_bit_option_and_two_stream_fusion():
-    base = PROFILES["B200MH-A4"]
+    base = PROFILES["B200MH"]
     p = make_hybrid(base, "experimental-8", 0, mantissa_bits=8)
     x = _audio(p, 12)
     fa = Transmitter(p).run(x)
@@ -196,7 +198,7 @@ def test_m700hy_radius_precision_does_not_use_extra_symbols_or_remove_fec():
     baseline_layout = HybridLayout(baseline)
     for bits in (8, 10, 12):
         p = make_hybrid(PROFILES["M700H"], f"M700HY-R{bits}", 13,
-                        mantissa_bits=bits, experimental_tag={8: 1, 10: 2, 12: 3}[bits])
+                        mantissa_bits=bits, experimental_tag=3)
         lay = HybridLayout(p)
         assert p.bits_m[5:] == (bits, bits)
         assert p.bits_s == baseline.bits_s
@@ -221,10 +223,10 @@ def test_m700_y_profiles_preserve_s_fec_and_experimental_identity():
         assert y.bits_s == old.bits_s and y.exp_offset_s == old.exp_offset_s
         assert y.attn_group_s == old.attn_group_s
         assert y.protect_k == old.protect_k
-        assert y.pid == old.pid and y.experimental_tag == 1
-        assert BY_ID[y.pid] is old and BY_HEADER[(y.pid, 1)] is y
+        assert y.pid != old.pid and y.experimental_tag == old.experimental_tag == 3
+        assert BY_ID[y.pid] is y and BY_HEADER[(y.pid, 3)] is y
         lay, old_lay = HybridLayout(y), Layout(old)
-        assert lay.header_bits == 24 and old_lay.header_bits == 16
+        assert lay.header_bits == old_lay.header_bits == 24
         assert lay.n_prot == old_lay.n_prot + 8 and lay.n_coded == old_lay.n_coded + 16
         assert lay.n_hybrid == 48
         assert sum(ch == "M" and k >= 5 for ch, k, _, _ in lay.top_items) == 48 * y.protect_k
@@ -236,9 +238,6 @@ def test_m700_y_profiles_preserve_s_fec_and_experimental_identity():
         soft = 1 - 2 * packed[:lay.n_coded]
         assert lay.unpack(soft, packed[lay.n_coded:])[0] is not None
         assert old_lay.unpack(soft, packed[lay.n_coded:]) == (None, None)
-        old_decode = fec.viterbi_decode(soft[:old_lay.n_coded], old_lay.n_prot_crc)
-        assert not np.array_equal(fec.crc16(old_decode[:old_lay.n_prot]),
-                                  old_decode[old_lay.n_prot:])
         x = _audio(y)
         frames = Transmitter(y).run(x)
         pilot = header_training_symbols(y, 0, 0)
@@ -273,13 +272,13 @@ def test_monitor_hierarchy_keeps_base_bits_on_strong_qam_positions():
         strong_slots = 2 * tx.digital_nsym
         assert lay.n_strong <= strong_slots
         assert strong_slots - lay.n_strong < 2
-        for bit_index, (ch, k, _, pos) in enumerate(lay.unp_items, start=lay.n_coded):
+        for bit_index, (ch, k, coefficient, pos) in enumerate(lay.unp_items, start=lay.n_coded):
             width = (p.bits_m if ch == "M" else p.bits_s)[k]
             rank = width - 1 - pos
-            if rank < p.base_bits(ch, k):
+            if rank < p.base_bits(ch, k, coefficient):
                 assert bit_index < strong_slots
             if bit_index >= strong_slots:
-                assert rank >= p.base_bits(ch, k)
+                assert rank >= p.base_bits(ch, k, coefficient)
         for ch, k, _, pos in lay.top_items:
             if k >= 5:
                 assert pos == (p.bits_m if ch == "M" else p.bits_s)[k] - 1
@@ -296,7 +295,7 @@ def test_monitor_y_bit_positions_preserve_s_codes():
     assert y_profile.base_m == (11, 10, 5, 4, 3, 3, 2)
     assert BY_HEADER[(y_profile.pid, y_profile.experimental_tag)] is y_profile
     old_lay, y_layout = Layout(old), HybridLayout(y_profile)
-    assert y_layout.n_prot == old_lay.n_prot + 8  # 実験ヘッダの追加分だけ
+    assert y_layout.n_prot == old_lay.n_prot + 8  # 高域Mの追加アッテネータ8bit
     assert y_layout.n_coded == old_lay.n_coded + 16
     assert sum(ch == "S" for ch, _, _, _ in y_layout.top_items) == 64
     strong_slots = 2 * Transmitter(y_profile).digital_nsym
@@ -305,7 +304,7 @@ def test_monitor_y_bit_positions_preserve_s_codes():
     assert sum(k in (5, 6) and pos == y_profile.bits_s[k] - 2
                for k, pos in strong_s) == 48
     assert len(strong_s) <= 49  # 端数の強い位置を1bit使える
-    assert Transmitter(y_profile).nsym + len(modem.PREAMBLE) == 346
+    assert Transmitter(y_profile).nsym + len(modem.PREAMBLE) == 386
     x = _audio(y_profile, 8)
     for start in range(0, len(x), y_profile.block):
         block = x[start:start + y_profile.block]
@@ -343,7 +342,7 @@ def test_m700_y_equalizer_uses_extended_header():
 
 
 def test_hybrid_cipher_is_explicitly_rejected():
-    p = PROFILES["B200MHY-A4"]
+    p = PROFILES["B200MHY"]
     for factory in (Transmitter, StreamDecoder):
         try:
             factory(p, cipher=object())
@@ -356,7 +355,7 @@ def test_hybrid_cipher_is_explicitly_rejected():
 def test_hybrid_equalizer_accepts_mixed_constellation():
     from gracefm import channel
 
-    p = PROFILES["B200HY-A4"]
+    p = PROFILES["B200HY"]
     x = _audio(p, 100)
     y, stats, diagnostics = channel.link_static_multipath(
         x, p, 80, paths=((5e-6, -10, .5),), sub=None,

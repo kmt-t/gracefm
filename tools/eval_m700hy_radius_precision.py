@@ -12,6 +12,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.dirname(__file__))
 
+from sample_names import sample_name
+
 from gracefm import channel, metrics, wavio  # noqa: E402
 from gracefm.codec import haar_forward  # noqa: E402
 from gracefm.profiles import PROFILES, make_hybrid  # noqa: E402
@@ -37,9 +39,9 @@ def s_quality(reference, output):
 def source_audio(source):
     if source == "demo":
         transmitted = input_audio("demo", 10)
-        reference, fs = wavio.read(os.path.join(ROOT, "samples/monitor/demo_orig48.flac"))
+        reference, fs = wavio.read(os.path.join(ROOT, "samples/monitor/demo__48k__reference.flac"))
     else:
-        path = os.path.join(ROOT, "samples/monitor_y/hires_probe_orig48.flac")
+        path = os.path.join(ROOT, "samples/monitor_y/hires_probe__48k__reference.flac")
         transmitted, fs = wavio.read(path)
         reference = transmitted
     if fs != 48000 or len(transmitted) != 480000 or len(reference) != len(transmitted):
@@ -50,8 +52,8 @@ def source_audio(source):
 def variant(bits):
     if bits not in (8, 10, 12):
         raise ValueError("this evaluation covers 8, 10, and 12 bits")
-    return make_hybrid(PROFILES["M700H"], f"M700HY-R{bits}", 13,
-                       mantissa_bits=bits, experimental_tag={8: 1, 10: 2, 12: 3}[bits])
+    return make_hybrid(PROFILES["M700H"], f"M700HY-R{bits}", PROFILES["M700HY"].pid,
+                       mantissa_bits=bits, experimental_tag=3)
 
 
 def main():
@@ -59,6 +61,8 @@ def main():
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--sources", default="demo,hires_probe")
     parser.add_argument("--bits", default="10,12")
+    parser.add_argument("--generate-only", action="store_true", help="generate current audio before baseline comparison is ready")
+    parser.add_argument("--json", default=os.path.join(ROOT, "docs/results/monitor_y_radius_precision.json"))
     args = parser.parse_args()
     sources = args.sources.split(",")
     bit_values = [int(value) for value in args.bits.split(",")]
@@ -68,7 +72,7 @@ def main():
         parser.error("bits must be 8, 10, and/or 12")
 
     baseline = PROFILES["M700HY"]
-    report_path = os.path.join(ROOT, "docs/results/monitor_y_radius_precision.json")
+    report_path = args.json
     report = {"description": "10 s stereo, single main carrier, AWGN seed 1; same 48 M-hybrid symbols and FEC top bit",
               "reference_profile": baseline.name,
               "reference_budget": budget(baseline), "variants": {}, "comparison": []}
@@ -85,8 +89,9 @@ def main():
     baseline_manifests = {}
     for source, filename in (("demo", "monitor_y_samples.json"),
                              ("hires_probe", "monitor_y_hires_probe.json")):
-        with open(os.path.join(ROOT, "docs/results", filename), encoding="utf-8") as stream:
-            baseline_manifests[source] = json.load(stream)
+        if not args.generate_only:
+            with open(os.path.join(ROOT, "docs/results", filename), encoding="utf-8") as stream:
+                baseline_manifests[source] = json.load(stream)
 
     for bits in bit_values:
         p = variant(bits)
@@ -98,11 +103,11 @@ def main():
         report["variants"][p.name] = profile_data
         for source in sources:
             transmitted, reference = source_audio(source)
-            if source == "demo" and not report["variants"][p.name]["spectrum_3s"]:
+            if not args.generate_only and source == "demo" and not report["variants"][p.name]["spectrum_3s"]:
                 report["variants"][p.name]["spectrum_3s"] = spectrum(p, transmitted[:3 * 48000])
                 atomic_json(report_path, report)
             for case in ("codec", "awgn80", "awgn75", "awgn70", "awgn65"):
-                filename = f"{source}_{p.name}" + (".flac" if case == "codec" else f"_cn0-{case[4:]}.flac")
+                filename = sample_name(source, 48000, p.name, case)
                 path = os.path.join(ROOT, "samples/monitor_y", filename)
                 existing = next((row for row in report["comparison"]
                                  if (row["source"], row["profile"], row["case"]) == (source, p.name, case)), None)
@@ -127,6 +132,14 @@ def main():
                         measurement["highest_12_24khz"] = highest_band_snr(reference, stored)
                 if fs != 48000 or stored.shape != reference.shape:
                     raise ValueError(f"stored audio mismatch: {filename}")
+                if args.generate_only:
+                    report["comparison"] = [r for r in report["comparison"] if (r["source"], r["profile"], r["case"]) != (source, p.name, case)]
+                    report["comparison"].append(dict(source=source, profile=p.name, case=case,
+                                                      file=filename, sha256=sha256(path),
+                                                      variant_measurements=measurement))
+                    atomic_json(report_path, report)
+                    print(source, p.name, case, "generated", flush=True)
+                    continue
                 base_row = next(row for row in baseline_manifests[source]["samples"]
                                 if row["profile"] == baseline.name and row["case"] == case
                                 and (source == "hires_probe" or row["source"] == source))
