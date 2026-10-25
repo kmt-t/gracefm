@@ -1,85 +1,65 @@
 """
-受信側ポストフィルタ: 半サンプルずらしの 3次補間 (シフテッドスプライン) + 量子化区間への射影。
+出力段のポストフィルタ (DAC 前の再構成フィルタ)。
 
-Haar の係数は区間の平均値で、箱型のまま戻すと量子化誤差が振幅に応じた階段状の量子化歪みになる。各ブロックで
-  1. 半サンプル 3次補間 (Keys, a=-0.5) で半サンプルずらし、ずらし戻す (対称な 7タップの平滑化)
-  2. Haar で分解し直し、各係数を受信した量子化区間 [lo, hi] に収める
-  3. 合成
-を iters 回繰り返す (既定はプロファイルの pf_iters)。区間の外には出ないので、受信した情報と矛盾しない範囲で量子化歪みだけが滑らかになる。
+Haar 合成後の PCM を int32 にし、Lanczos 補間で 8 倍にオーバーサンプリングし、
+元のナイキスト周波数の LPF で鏡像を落としてから、48 kHz / int32 へダウンサンプルする。
+量子化区間への射影は行わない。フィルタ演算は float64 で行い (int32 は float64 で厳密に表せる)、
+入力と出力の境界でだけ int32 に丸める。
 
-参考 (考え方の出典):
-  - T. Blu, P. Thévenaz, M. Unser, "Linear interpolation revitalized", IEEE Trans. Image Process., 2004
-  - 量子化区間への射影を繰り返す復元 (POCS) は変換符号化のブロックノイズ除去などで用いられる手法
-
-追加遅延なし版: 左側は確定済みの前ブロックの末尾 3サンプル、右側は現在の推定値の線形外挿で補う。
+遅延: Lanczos の先読み LANCZOS_A 入力サンプルと LPF の群遅延 (オーバーサンプル後の
+LPF_TAPS // 2 サンプル) を、ブロックを待つ分とは別に加える。ここでは位相を補正して出力を入力と時刻合わせする。
 """
 import numpy as np
+from scipy.signal import firwin, oaconvolve, resample_poly
 
-from .codec import haar_forward, haar_inverse
-from .profiles import band_level
-
-HALF_CUBIC = np.array([-1 / 16, 9 / 16, 9 / 16, -1 / 16])
-KERNEL = np.convolve(HALF_CUBIC, HALF_CUBIC[::-1])        # 7タップ, 和 = 1
-PAD = len(KERNEL) // 2
-
-
-def _haar_matrix(block, levels):
-    """ブロック内 Haar 分解の直交行列 (行 = 帯域 0→最高域の順に並べた係数)"""
-    return np.concatenate(haar_forward(np.eye(block), levels), axis=-1).T
+OVERSAMPLE = 8
+OUT_FS = 48000
+LANCZOS_A = 8           # Lanczos 窓の半幅 [入力サンプル]。大きいほど高域の振幅誤差が小さい
+LPF_TAPS = 1023         # オーバーサンプル後の線形位相 FIR (奇数)
+INT32_MAX = 2 ** 31 - 1
 
 
-def _smooth_matrix(block):
-    """[前の確定 PAD サンプル, 現ブロック, 右の線形外挿 PAD サンプル] → 平滑化した現ブロック"""
-    n = block + 2 * PAD
-    conv = np.zeros((block, n))
-    for i in range(block):
-        conv[i, i:i + len(KERNEL)] = KERNEL[::-1]
-    # 右の外挿 y[-1] + (y[-1] - y[-2]) * t を現ブロックの線形結合で表す
-    ext_y = np.zeros((n, block))
-    ext_y[PAD:PAD + block] = np.eye(block)
-    for t in range(1, PAD + 1):
-        ext_y[PAD + block + t - 1, block - 1] = 1 + t
-        ext_y[PAD + block + t - 1, block - 2] = -t
-    ext_prev = np.zeros((n, PAD))
-    ext_prev[:PAD] = np.eye(PAD)
-    return conv @ ext_y, conv @ ext_prev
+def to_int32(y):
+    """±1 に正規化した float PCM → int32 (範囲外は飽和)"""
+    return np.clip(np.round(np.asarray(y, float) * INT32_MAX), -INT32_MAX - 1, INT32_MAX).astype(np.int32)
 
 
-class PostFilter:
-    def __init__(self, levels, iters=4, block=64):
-        self.levels = levels
-        self.iters = iters
-        self.H = _haar_matrix(block, levels)
-        A, B = _smooth_matrix(block)
-        self.HA = self.H @ A                    # y → 平滑化して分解した係数
-        self.HB = self.H @ B                    # 前の確定サンプル → 同上への寄与
-        self.prev = {"M": np.zeros(PAD), "S": np.zeros(PAD)}
+def lanczos_kernel(oversample=OVERSAMPLE, a=LANCZOS_A):
+    """オーバーサンプル後のレートでの Lanczos 補間核 (長さ 2·a·oversample + 1)"""
+    n = np.arange(-a * oversample, a * oversample + 1) / oversample
+    return np.sinc(n) * np.sinc(n / a)
 
-    def reset_history(self, ch, tail):
-        self.prev[ch] = np.asarray(tail[-PAD:], float)
 
-    def process(self, ch, coefs, cell):
-        """
-        coefs: 受信した帯域係数 [..], cell: 各帯域の (lo, hi) or None
-        0bit の帯域 (送っていない帯域) は真の値が分からないので、区間を入力振幅の上限 ±2^(lev/2) まで開く
-        (0 に固定すると真の信号が制約の集合に入らず、射影が階段を作り直す)。初期値は 0。
-        返り値: 時間波形 (block,)
-        """
-        c = np.concatenate(coefs)
-        lo, hi = [], []
-        for k, (b, cl) in enumerate(zip(coefs, cell)):
-            if cl is None:
-                g = 2.0 ** (band_level(k, self.levels) / 2)
-                lo.append(np.full(len(b), -g))
-                hi.append(np.full(len(b), g))
-            else:
-                lo.append(cl[0])
-                hi.append(cl[1])
-        lo, hi = np.concatenate(lo), np.concatenate(hi)
-        bias = self.HB @ self.prev[ch]
-        y = self.H.T @ c
-        for _ in range(self.iters):
-            c = np.clip(self.HA @ y + bias, lo, hi)
-            y = self.H.T @ c
-        self.prev[ch] = y[-PAD:].copy()
-        return y
+def lanczos_upsample(x, oversample=OVERSAMPLE, a=LANCZOS_A):
+    """x: (n, ch) → (n·oversample, ch)。元の標本点は変えず、間を Lanczos で補間する。端は 0 とみなす"""
+    x = np.asarray(x, float)
+    z = np.zeros((len(x) * oversample,) + x.shape[1:])
+    z[::oversample] = x
+    h = lanczos_kernel(oversample, a)
+    half = len(h) // 2
+    return oaconvolve(z, h[:, None], axes=0)[half:half + len(z)]
+
+
+def postfilter(y, fs, out_fs=OUT_FS, oversample=OVERSAMPLE, a=LANCZOS_A):
+    """
+    y: Haar 合成後の (n, ch) float PCM (±1) または int32、fs: そのサンプリング周波数。
+    返り値: out_fs の int32 PCM (n·out_fs/fs, ch)。
+    """
+    y = np.asarray(y)
+    if y.dtype == np.int32:
+        x = y.astype(float)
+    else:
+        x = to_int32(y).astype(float)
+    if x.ndim == 1:
+        x = x[:, None]
+    up = lanczos_upsample(x, oversample, a)
+    fs_up = fs * oversample
+    # 元のナイキスト周波数 (帯域端の 2% 手前を通過域端とする) の線形位相 LPF で鏡像を落とす
+    lpf = firwin(LPF_TAPS, 0.98 * fs / 2, window=("kaiser", 9.0), fs=fs_up)
+    half = LPF_TAPS // 2
+    filt = oaconvolve(up, lpf[:, None], axes=0)[half:half + len(up)]
+    g = np.gcd(out_fs, fs_up)
+    down = resample_poly(filt, out_fs // g, fs_up // g, axis=0, window=("kaiser", 9.0))
+    n_out = int(round(len(x) * out_fs / fs))
+    down = down[:n_out]
+    return np.clip(np.round(down), -INT32_MAX - 1, INT32_MAX).astype(np.int32)

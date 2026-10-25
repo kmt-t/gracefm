@@ -12,14 +12,14 @@ from base_layer_sample import BaseLayerDecoder,base_layer_audio
 
 def test_erasing_extension_retains_basic_layer():
     p=PROFILES['M700']
-    decoder=BaseLayerDecoder(p,postfilter=False)
+    decoder=BaseLayerDecoder(p)
     bd=encode_block(np.random.default_rng(18).normal(0,0.05,(64,2)),p)
     layout=decoder.layout
     def probs(block):
         return np.array([((int(block.mant[ch][k][j])+offset_of((p.bits_m if ch=='M' else p.bits_s)[k],p,ch,k))>>pos)&1
-                         for ch,k,j,pos in layout.unp_items],float)
+                         for ch,k,j,pos in layout.coef_items],float)
     changed=copy.deepcopy(bd)
-    for ch,k,j,pos in layout.unp_items[layout.n_base_unp:]:
+    for ch,k,j,pos in layout.coef_items[layout.n_base_bits:]:
         offset=offset_of((p.bits_m if ch=='M' else p.bits_s)[k],p,ch,k)
         changed.mant[ch][k][j]=((int(changed.mant[ch][k][j])+offset)^(1<<pos))-offset
     a=decoder.soft_coeffs(bd,probs(bd))[0]

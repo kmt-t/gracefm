@@ -33,7 +33,7 @@ from .profiles import Profile
 class Timing:
     t_enc: float = 0.0       # 符号化・フレーム化 [s]
     t_filt: float = 0.0      # 送受信フィルタと等化器の先読みの遅延 [s]
-    t_dec: float = 0.0       # 復調・復号・ポストフィルタ [s]
+    t_dec: float = 0.0       # 復調・復号 [s]
     t_out: float = 0.0       # 融合・PLC・出力バッファ [s]
     t_filt_b: float | None = None  # 副系が異なるシンボルレート・フィルタを使うとき [s]
 

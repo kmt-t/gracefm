@@ -23,10 +23,9 @@ def bandlimit(x):
 
 
 def evaluate(task):
-    from imageio_ffmpeg import get_ffmpeg_exe
     from visqol import VisqolApi
 
-    entry, seconds, channels, bandwidth, fdkaac = task
+    entry, seconds, channels, bandwidth, fdkaac, gracefm_only = task
     x48, _, _ = source(entry, seconds)
     if channels == 1:
         x48 = x48.mean(axis=1, keepdims=True)
@@ -36,12 +35,16 @@ def evaluate(task):
     x32 = wavio.resample(reference, 48000, 32000)
     methods = (("B200M", "B200MY") if channels == 1 else ("B200", "B200Y")) if bandwidth == 16 else ()
     methods += ("M700M", "M700MY") if channels == 1 else ("M700", "M700Y")
-    if channels == 2:
-        methods += ("aptX", "aptX HD")
-    methods += ("HE-AAC v1 32k", "HE-AAC v1 48k") if channels == 1 else ("HE-AAC v2 32k", "HE-AAC v2 48k")
+    if not gracefm_only:
+        if channels == 2:
+            methods += ("aptX", "aptX HD")
+        methods += ("HE-AAC v1 32k", "HE-AAC v1 48k") if channels == 1 else ("HE-AAC v2 32k", "HE-AAC v2 48k")
     api = VisqolApi()
     api.create(mode="audio")
-    ffmpeg = get_ffmpeg_exe()
+    ffmpeg = None
+    if not gracefm_only:
+        from imageio_ffmpeg import get_ffmpeg_exe
+        ffmpeg = get_ffmpeg_exe()
     rows = []
     for method in methods:
         if method in PROFILES:
@@ -85,16 +88,24 @@ def main():
     parser.add_argument("--seconds", type=float, default=5.0)
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--json", type=Path, default=ROOT / "docs/results/codec_matched.json")
+    parser.add_argument("--gracefm-only", action="store_true",
+                        help="GraceFMの行だけ測り直し、既存JSONのaptX・HE-AACの行と測定条件はそのまま残す")
     args = parser.parse_args()
     if args.seconds < 3 or args.workers < 1:
         parser.error("seconds must be >= 3 and workers >= 1")
     manifest = json.loads((ROOT / "eval_audio/lossless/manifest.json").read_text())
     entries = manifest["sources"]
-    tasks = [(entry, args.seconds, channels, bandwidth, args.fdkaac)
+    tasks = [(entry, args.seconds, channels, bandwidth, args.fdkaac, args.gracefm_only)
              for entry in entries for channels in (1, 2) if channels == 1 or entry["channels"] == 2
              for bandwidth in (16, 24)]
     with ProcessPoolExecutor(max_workers=args.workers) as executor:
         rows = [row for result in executor.map(evaluate, tasks) for row in result]
+    if args.gracefm_only:
+        result = json.loads(args.json.read_text())
+        result["rows"] = [r for r in result["rows"] if r["method"] not in PROFILES] + rows
+        result["profile_signatures"] = {name: repr(p) for name, p in PROFILES.items() if name.startswith(("B200", "M700"))}
+        args.json.write_text(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False) + "\n")
+        return
     from imageio_ffmpeg import get_ffmpeg_exe
     result = dict(method="Codec-only channel-count and bandwidth matched comparison",
                   source_seconds=args.seconds, source_offset_seconds=1, source_peak=0.89,

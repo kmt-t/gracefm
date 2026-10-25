@@ -11,7 +11,7 @@
 | 音源 | `demo`、`fishin`、`vibeace`、`hires_probe` |
 | サンプリング周波数 | `32k`、`48k`。音声帯域を表す値ではない |
 | 構成 | プロファイル名。2系統は `主系+副系`。アナログFMは `FM` |
-| コーデックのみ | `codec`：通信路なし。`codec-pf-off`：ポストフィルタなし |
+| コーデックのみ | `codec`：通信路なし |
 | 理想通信路 | `ideal`：雑音なしの実シンボル送受信 |
 | 白色雑音 | `awgn-cn0-66dBHz`：C/N0が66 dB-Hz。C/NやEs/N0ではない |
 | フェージング | `rayleigh-cn0-60dBHz`、`main-fade-10dB-cn0-66dBHz` |

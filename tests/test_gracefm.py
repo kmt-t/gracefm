@@ -11,7 +11,6 @@ from gracefm import fec, modem  # noqa: E402
 from gracefm.codec import (decode_block, decode_coeffs, encode_block, haar_forward,  # noqa: E402
                         haar_inverse)
 from gracefm.framing import Layout  # noqa: E402
-from gracefm.postfilter import PostFilter  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 from gracefm.txrx import StreamDecoder, Transmitter, receive  # noqa: E402
 
@@ -53,8 +52,10 @@ def test_frame_roundtrip_bit_exact():
         lay = Layout(p)
         bits = lay.pack(bd, 1, 5)
         assert len(bits) == lay.n_tx
-        bd2, hdr = lay.unpack(1.0 - 2.0 * bits[: lay.n_coded], bits[lay.n_coded:])
-        assert hdr == {"pid": p.pid, "stream": 1, "encrypted": False, "counter": 5, "high_ok": True}
+        bd2, hdr = lay.unpack(1.0 - 2.0 * bits, bits)
+        assert {k: v for k, v in hdr.items() if k not in ("top_bits", "y_msb")} == {
+            "pid": p.pid, "stream": 1, "encrypted": False, "counter": 5, "high_ok": True}
+        assert len(hdr["top_bits"]) == lay.n_top
         assert np.allclose(decode_block(bd2, p), decode_block(bd, p)), name
 
 
@@ -73,13 +74,13 @@ def test_band_exponents_use_fixed_offsets_and_variable_widths():
     for k, b in enumerate(p.bits_m):
         assert exp_range(k, b, p) == (offsets[k], offsets[k] + 2 ** widths[k] - 1)
     frame = lay.pack(bd, 1, 5)
-    decoded, header = lay.unpack(1.0 - 2.0 * frame[:lay.n_coded], frame[lay.n_coded:])
+    decoded, header = lay.unpack(1.0 - 2.0 * frame, frame)
     assert header["pid"] == p.pid
     assert np.allclose(decode_block(decoded, p), decode_block(bd, p))
 
 
 def test_attenuator_roundtrip():
-    from gracefm.codec import cells, dequantize, quantize, quantize_attenuated
+    from gracefm.codec import dequantize, quantize, quantize_attenuated
     base = replace(PROFILES["B200M"], attn_group_m=(0,) * 7)
     groups = (0, 0, 0, 0, 0, 0, 4)
     p = replace(base, attn_group_m=groups)
@@ -89,17 +90,17 @@ def test_attenuator_roundtrip():
     lay = Layout(p)
     assert lay.n_prot == Layout(base).n_prot + 8
     frame = lay.pack(bd, 1, 5)
-    recovered, hdr = lay.unpack(1.0 - 2.0 * frame[:lay.n_coded], frame[lay.n_coded:])
+    recovered, hdr = lay.unpack(1.0 - 2.0 * frame, frame)
     assert hdr["pid"] == p.pid
     assert np.array_equal(recovered.attn["M"][6], bd.attn["M"][6])
     assert np.allclose(decode_block(recovered, p), decode_block(bd, p))
     wrong_layout = Layout(replace(p, pid=15))
-    wrong, _ = wrong_layout.unpack(1.0 - 2.0 * frame[:lay.n_coded], frame[lay.n_coded:])
+    wrong, _ = wrong_layout.unpack(1.0 - 2.0 * frame, frame)
     assert wrong is None
-    body = fec.viterbi_decode(1.0 - 2.0 * frame[:lay.n_coded], lay.n_prot_crc)
+    body = lay.header_info(frame)
     body[lay.header_bits + 7 * 4] ^= 1  # 最初のアッテネータbitを壊す
-    damaged = np.concatenate([fec.conv_encode(body), frame[lay.n_coded:]])
-    recovered, hdr = lay.unpack(1.0 - 2.0 * damaged[:lay.n_coded], damaged[lay.n_coded:])
+    damaged = lay.with_header(frame, body)
+    recovered, hdr = lay.unpack(1.0 - 2.0 * damaged, damaged)
     assert recovered is not None and hdr["high_ok"] is False
 
     rng = np.random.default_rng(123)
@@ -107,9 +108,6 @@ def test_attenuator_roundtrip():
         x = rng.uniform(-1, 1, (p.block, 2))
         bd = encode_block(x, p)
         c = haar_forward((x[:, 0] + x[:, 1]) / 2, p.levels)[6]
-        m, e, a = bd.mant["M"][6], bd.eidx["M"][6], bd.attn["M"][6]
-        lo, hi = cells(m, e, 6, p.bits_m[6], p, "M", a)
-        assert np.all(c >= lo - 1e-12) and np.all(c <= hi + 1e-12)
         m0, e0 = quantize(c, 6, p.bits_m[6], base)
         m1, e1, a1 = quantize_attenuated(c, 6, p.bits_m[6], p)
         err0 = np.sum((c - dequantize(m0, e0, 6, p.bits_m[6], base)) ** 2)
@@ -123,17 +121,17 @@ def test_attenuator_roundtrip():
     bd = encode_block(_signal(narrow.block, narrow.fs) * 0.01, narrow)
     lay = Layout(narrow)
     frame = lay.pack(bd, 0, 1)
-    recovered, _ = lay.unpack(1.0 - 2.0 * frame[:lay.n_coded], frame[lay.n_coded:])
+    recovered, _ = lay.unpack(1.0 - 2.0 * frame, frame)
     assert np.allclose(decode_block(recovered, narrow), decode_block(bd, narrow))
 
 
 def test_adopted_attenuator_profile_end_to_end():
     p = PROFILES["B200M"]
     assert p.pid == 1 and p.exp_bits == 4 and p.attn_group_m[-1] == 4
-    assert Layout(p).n_prot_crc == 156
+    assert Layout(p).n_prot_crc == 82
     x = _signal(p.block * 12, p.fs)
     frames = Transmitter(p).run(x)
-    y, valid = StreamDecoder(p, postfilter=False).run(frames, len(x))
+    y, valid = StreamDecoder(p).run(frames, len(x))
     expected = np.concatenate([decode_block(encode_block(x[i:i + p.block], p), p)
                                for i in range(0, len(x), p.block)])
     assert valid.all() and np.allclose(y, expected)
@@ -145,15 +143,15 @@ def test_broadcast_joint_stereo_attenuators():
     assert p.pulse_beta == 0.10 and p.pulse_span == 32
     from gracefm.channel import symbol_rate
     assert symbol_rate(p) <= 180000
-    assert p.attn_group_m[-1] == 8 and p.attn_group_s[-1] == 4
-    assert p.attenuator_bits("M", 6) == 4 and p.attenuator_bits("S", 6) == 8
-    assert Layout(p).n_prot_crc == 252
-    assert p.audio_kbps() == 512
+    assert p.attn_group_m[-1] == 4 and p.attn_group_s[-1] == 4
+    assert p.attenuator_bits("M", 6) == 8 and p.attenuator_bits("S", 6) == 8
+    assert Layout(p).n_prot_crc == 118
+    assert p.audio_kbps() == 504
     x = _signal(p.block * 8, p.fs)
     bd = encode_block(x[:p.block], p)
-    assert len(bd.attn["M"][6]) == 4 and len(bd.attn["S"][6]) == 8
+    assert len(bd.attn["M"][6]) == 8 and len(bd.attn["S"][6]) == 8
     frames = Transmitter(p).run(x)
-    y, valid = StreamDecoder(p, postfilter=False).run(frames, len(x))
+    y, valid = StreamDecoder(p).run(frames, len(x))
     expected = np.concatenate([decode_block(encode_block(x[i:i + p.block], p), p)
                                for i in range(0, len(x), p.block)])
     assert valid.all() and np.allclose(y, expected)
@@ -173,65 +171,24 @@ def test_end_to_end_without_noise():
     x = _signal(p.block * 20, p.fs)
     tx = Transmitter(p)
     frames = tx.run(x)
-    dec = StreamDecoder(p, postfilter=False)
+    dec = StreamDecoder(p)
     y, v = dec.run(frames, len(x))
     ref = np.concatenate([decode_block(encode_block(x[i:i + 64], p), p) for i in range(0, len(x), 64)])
     assert v.all() and np.allclose(y, ref)
 
 
-def test_postfilter_stays_in_cells():
-    p = PROFILES["B200"]
-    x = _signal(p.block, p.fs)
-    coefs, cell = decode_coeffs(encode_block(x, p), p)
-    pf = PostFilter(p.levels, p.pf_iters)
-    y = pf.process("M", coefs["M"], cell["M"])
-    for c, cl in zip(haar_forward(y, p.levels), cell["M"]):
-        if cl is not None:
-            assert np.all(c >= cl[0] - 1e-9) and np.all(c <= cl[1] + 1e-9)
-
-
-def test_cells_contain_original():
-    """量子化区間は元の係数を必ず含む (飽和・クリップを許す指数選択・指数の上下限を含めて)"""
-    from gracefm.codec import cells, exp_range, quantize
-    rng = np.random.default_rng(5)
-    for p in PROFILES.values():
-        for trial in range(200):
-            kind = trial % 4
-            if kind == 0:
-                x = rng.uniform(-1, 1, (p.block, 2))                 # フルスケールの雑音
-            elif kind == 1:
-                x = rng.standard_normal((p.block, 2)) * 1e-6         # 指数の下限付近
-            elif kind == 2:
-                x = np.sign(rng.standard_normal((p.block, 2)))       # 振幅 ±1 (最大振幅)
-            else:
-                x = np.zeros((p.block, 2))                           # 1係数だけ突出 (飽和しやすい)
-                x[rng.integers(p.block), :] = rng.uniform(-1, 1)
-                x += rng.standard_normal((p.block, 2)) * 0.05
-                x = np.clip(x, -1, 1)
-            ms = {"M": (x[:, 0] + x[:, 1]) / 2, "S": (x[:, 0] - x[:, 1]) / 2}
-            for ch, bits in (("M", p.bits_m), ("S", p.bits_s)):
-                bands = haar_forward(ms[ch], p.levels)
-                for k, (c, b) in enumerate(zip(bands, bits)):
-                    if b == 0:
-                        continue
-                    for clip_opt in (True, False):
-                        m, e = quantize(c, k, b, p, clip_opt, ch)
-                        lo, hi = cells(m, e, k, b, p, ch)
-                        assert np.all(c >= lo - 1e-12) and np.all(c <= hi + 1e-12), (p.name, ch, k, kind)
-
-
-def test_high_band_cell_contains_original():
-    """最高域の量子化区間は元の係数を含む。"""
-    from gracefm.codec import cells
-    p = PROFILES["B200"]
-    bands = [np.zeros(p.ncoef(k)) for k in range(p.nbands)]
-    bands[-1] = np.array([0.8] + [0.55] * (p.ncoef(p.nbands - 1) - 1))
-    mono = haar_inverse(bands)
-    bd = encode_block(np.stack([mono, mono], axis=1), p, clip_opt=True)
-    coefs, cell = decode_coeffs(bd, p)
-    lo, hi = cell["M"][-1]
-    assert lo[0] <= 0.8 <= hi[0]
-    assert lo[0] <= coefs["M"][-1][0] <= hi[0]
+def test_postfilter_resamples_to_48k_int32():
+    from gracefm.postfilter import postfilter
+    for fs in (32000, 48000):
+        t = np.arange(fs) / fs
+        x = np.stack([0.5 * np.sin(2 * np.pi * 1000 * t), 0.3 * np.sin(2 * np.pi * 5000 * t + 1)], axis=1)
+        y = postfilter(x, fs)
+        assert y.dtype == np.int32 and y.shape == (48000, 2)
+        t48 = np.arange(len(y)) / 48000
+        ref = np.stack([0.5 * np.sin(2 * np.pi * 1000 * t48), 0.3 * np.sin(2 * np.pi * 5000 * t48 + 1)],
+                       axis=1) * (2 ** 31 - 1)
+        err = (y[4800:-4800] - ref[4800:-4800]).astype(float)
+        assert 10 * np.log10(np.mean(err ** 2) / np.mean(ref[4800:-4800] ** 2)) < -55, fs
 
 
 def test_latency_model():
@@ -303,21 +260,32 @@ def test_layered_profile():
     from gracefm import metrics
     from dataclasses import replace
     p = PROFILES["B200M"]
-    base = replace(p, bits_m=p.base_m, modulation="qpsk", alpha=1.0, base_m=None, base_s=None)   # 基本層 = B200M の基本層割り当て (保護は上位 protect_k bit)
-    lay, lb = Layout(p), Layout(base)
-    t = Transmitter(p)
-    assert lay.n_strong == lb.n_tx                          # 基本層 = B200M の基本層割り当ての送信ビット数
-    assert 2 * t.nsym >= lay.n_strong                       # 強い位置 (象限ビット) に全部入る
-    assert t.nsym == Transmitter(base).nsym                 # 帯域幅 (シンボル数) は基本層を QPSK で送るのと同じ
+    lay, t = Layout(p), Transmitter(p)
+    base_bits = sum(p.ncoef(k) * p.base_bits("M", k) for k in range(p.nbands))
+    assert lay.n_base_bits == base_bits
+    assert lay.n_tx == 2 * lay.n_strong == 4 * t.digital_nsym   # 位相部 (強い位置) と振幅部が同数で、隙間なく並ぶ
+    weak_ext = lay.coef_stream_idx >= lay.n_strong               # 拡張層の仮数bit
+    assert weak_ext.sum() == lay.n_coef_bits - base_bits
+    # 拡張層 (弱い位置の仮数) をすべて壊しても、基本層だけで元の音の骨格が復号できる
     x = _signal(p.block * 40, p.fs)
     x[:, 1] = x[:, 0]
-    y, st = receive(p, Transmitter(p).run(x), None, len(x), 0)
-    yb, _ = receive(base, Transmitter(base).run(x), None, len(x), 0)
-    assert st["plc_samples"] == 0
-    assert metrics.snr_db(x, y) > metrics.snr_db(x, yb) + 20
+    rng = np.random.default_rng(3)
+    full, damaged = [], []
+    for i in range(0, len(x), p.block):
+        bd = encode_block(x[i:i + p.block], p)
+        frame = lay.pack(bd, 0, 0)
+        bad = frame.copy()
+        bad[lay.coef_stream_idx[weak_ext]] = rng.integers(0, 2, int(weak_ext.sum()))
+        recovered, _ = lay.unpack(1.0 - 2.0 * bad, bad)
+        assert recovered is not None
+        full.append(decode_block(bd, p))
+        damaged.append(decode_block(recovered, p))
+    full, damaged = np.concatenate(full), np.concatenate(damaged)
+    assert metrics.snr_db(x, damaged) > 4.0
+    assert metrics.snr_db(x, full) > metrics.snr_db(x, damaged) + 20
 
 
-def test_b200_soft_postfilter_preserves_high_side_signal():
+def test_b200_link_preserves_high_side_signal():
     """帯域圧縮後も高域Sのレベルを保ち、基本層を減らしたY系の差を検出する。"""
     from gracefm import channel, wavio
     from gracefm.codec import haar_forward
@@ -341,19 +309,7 @@ def test_b200_soft_postfilter_preserves_high_side_signal():
         level_change_db = 10 * np.log10(power_out / power_ref)
         snr_db = 10 * np.log10(power_ref / error)
         assert abs(level_change_db) < 1.0
-        assert snr_db > 8.0
-
-
-def test_side_component_bypasses_optional_postfilter():
-    p = PROFILES["B200"]
-    x = _signal(p.block * 12, p.fs)
-    frames = Transmitter(p).run(x)
-    filtered, _ = receive(p, frames, None, len(x), 0, postfilter=True)
-    plain, _ = receive(p, frames, None, len(x), 0, postfilter=False)
-    side_filtered = (filtered[:, 0] - filtered[:, 1]) / 2
-    side_plain = (plain[:, 0] - plain[:, 1]) / 2
-    assert np.allclose(side_filtered, side_plain, atol=1e-12)
-    assert not np.allclose(filtered, plain)  # M の任意フィルタは動作している
+        assert snr_db > 3.0                      # S高域は3bitなので低めだが、レベルは保つ
 
 
 def test_encryption():

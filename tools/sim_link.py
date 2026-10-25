@@ -26,6 +26,7 @@ import numpy as np
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from gracefm import metrics, modem, wavio  # noqa: E402
+from gracefm.postfilter import OUT_FS, postfilter  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 from gracefm.timing import min_latency  # noqa: E402
 from gracefm.txrx import Transmitter, receive  # noqa: E402
@@ -41,14 +42,14 @@ def channel(frames, snr_db, loss, rng):
     return out
 
 
-def run_once(x, p, snr_a, snr_b, loss, single, postfilter, seed, power="per-stream"):
+def run_once(x, p, snr_a, snr_b, loss, single, seed, power="per-stream"):
     """power="total" なら 2系統の各 Es/N0 を 10log10(2) 下げる (合計電力固定)"""
     rng = np.random.default_rng(seed)
     off = p.block // 2
     split = 0.0 if (single or power == "per-stream") else 10 * np.log10(2)
     fa = channel(Transmitter(p, 0, 0).run(x), snr_a - split, loss, rng)
     fb = None if single else channel(Transmitter(p, 1, off).run(x), snr_b - split, loss, rng)
-    return receive(p, fa, fb, len(x), off, postfilter)
+    return receive(p, fa, fb, len(x), off)
 
 
 def main():
@@ -61,7 +62,7 @@ def main():
     ap.add_argument("--snr-b", type=float)
     ap.add_argument("--loss", type=float, default=0.0, help="系統ごとのフレーム欠落率")
     ap.add_argument("--single", action="store_true", help="系統 A だけで送る")
-    ap.add_argument("--no-postfilter", action="store_true")
+    ap.add_argument("--no-postfilter", action="store_true", help="出力にポストフィルタ (48 kHz / int32) を使わない")
     ap.add_argument("--seconds", type=float, default=0, help="先頭から何秒を使うか (0 = 全部)")
     ap.add_argument("--sweep", action="store_true", help="SNR を振って表を出す")
     ap.add_argument("--seed", type=int, default=1)
@@ -99,7 +100,7 @@ def main():
                                            ("2系統 + 欠落5% (各系統同じ)", False, 0.05, "per-stream")]:
             row = []
             for s in snrs:
-                y, _ = run_once(x, p, s, s, loss, single, not args.no_postfilter, args.seed, power)
+                y, _ = run_once(x, p, s, s, loss, single, args.seed, power)
                 row.append(report(y)[0])
             print(f"  {label:30s} " + " ".join(f"{v:8.2f}" for v in row), flush=True)
         print("  (帯域指標。誤りなしの値は tools/codec_wav.py で確認できる)")
@@ -107,7 +108,7 @@ def main():
 
     sa = args.snr if args.snr_a is None else args.snr_a
     sb = args.snr if args.snr_b is None else args.snr_b
-    y, st = run_once(x, p, sa, sb, args.loss, args.single, not args.no_postfilter, args.seed,
+    y, st = run_once(x, p, sa, sb, args.loss, args.single, args.seed,
                      args.power)
     for k in ("A", "B"):
         if k in st:
@@ -118,7 +119,10 @@ def main():
     m, seg = report(y)
     print(f"  波形SNR {metrics.snr_db(x, y):.2f}dB  セグメンタルSNR {seg:.1f}dB  帯域指標 {m:.2f}")
     if args.output:
-        wavio.write(args.output, y, p.fs)
+        if args.no_postfilter:
+            wavio.write(args.output, y, p.fs)
+        else:
+            wavio.write_int32(args.output, postfilter(y, p.fs), OUT_FS)
 
 
 if __name__ == "__main__":

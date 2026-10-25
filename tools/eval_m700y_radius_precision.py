@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare 10/12-bit continuous-radius variants against the standard 8-bit M700Y."""
+"""Compare 10/12-bit continuous-radius variants against the standard 7-bit M700Y."""
 
 import argparse
 import json
@@ -52,8 +52,10 @@ def source_audio(source):
 def variant(bits):
     if bits not in (8, 10, 12):
         raise ValueError("this evaluation covers 8, 10, and 12 bits")
-    return make_hybrid(PROFILES["M700"], f"M700Y-R{bits}", PROFILES["M700Y"].pid,
-                       mantissa_bits=bits, experimental_tag=3)
+    standard = PROFILES["M700Y"]
+    return make_hybrid(PROFILES["M700"], f"M700Y-R{bits}", standard.pid,
+                       mantissa_bits=bits, experimental_tag=3,
+                       channels=standard.hybrid_channels, bits_s=standard.bits_s)
 
 
 def main():
@@ -73,7 +75,7 @@ def main():
 
     baseline = PROFILES["M700Y"]
     report_path = args.json
-    report = {"description": "10 s stereo, single main carrier, AWGN seed 1; same 48 M-hybrid symbols and FEC top bit",
+    report = {"description": "10 s stereo, single main carrier, AWGN seed 1; same hybrid symbols (M and S high bands) and FEC-protected top bit",
               "reference_profile": baseline.name,
               "reference_budget": budget(baseline), "variants": {}, "comparison": []}
     if args.resume and os.path.exists(report_path):

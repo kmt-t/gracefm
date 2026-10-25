@@ -49,18 +49,19 @@ def test_all_profiles_roundtrip_and_attenuator_crc():
     for p in PROFILES.values():
         x = rng.uniform(-0.6, 0.6, (p.block, 2))
         tx = Transmitter(p)
-        decoded, valid = StreamDecoder(p, postfilter=False).run([tx.frame(x)], p.block)
+        decoded, valid = StreamDecoder(p).run([tx.frame(x)], p.block)
         expected = decode_block(encode_block(x, p), p)
         assert valid.all() and np.allclose(decoded, expected), p.name
         lay = tx.layout
         packed = lay.pack(encode_block(x, p), 0, 0)
-        body = fec.viterbi_decode(1 - 2 * packed[:lay.n_coded], lay.n_prot_crc)
+        body = lay.header_info(packed)
         first = lay.header_bits + sum(p.exponent_bits(ch, k) for ch, k in lay.exp_items)
         assert lay.attn_items
         for index in {first, first + len(lay.attn_items) - 1}:
             damaged = body.copy()
             damaged[index] ^= 1
-            recovered, header = lay.unpack(1 - 2 * fec.conv_encode(damaged), packed[lay.n_coded:])
+            frame = lay.with_header(packed, damaged)
+            recovered, header = lay.unpack(1.0 - 2.0 * frame, frame)
             if index in lay.high_prot_indices:
                 assert recovered is not None and header['high_ok'] is False
             else:
@@ -75,18 +76,47 @@ def test_layer_assignment_matches_physical_positions():
             lay = HybridLayout(p) if p.hybrid else Layout(p, encrypted=encrypted)
             n = modem.n_symbols(lay.n_tx, lay.n_strong, p.modulation)
             assert lay.n_strong == 2 * n, p.name
-            for index, (ch, k, j, pos) in enumerate(lay.unp_items, lay.n_coded):
+            for index, (ch, k, j, pos) in zip(lay.coef_stream_idx, lay.coef_items):
                 width = (p.bits_m if ch == 'M' else p.bits_s)[k]
-                assert (index < 2 * n) == (width - pos <= p.base_bits(ch, k, j)), (p.name, ch, k, j, pos)
+                assert (index < 2 * n) == (width - pos <= p.base_bits(ch, k)), (p.name, ch, k, j, pos)
 
 
 def test_b200y_stereo_side_uses_qam_strong_positions():
     p = PROFILES['B200Y']
-    assert p.hybrid_channels == ('M',) and p.bits_s == (7, 6, 5, 2, 2, 0, 2)
-    assert p.base_s == (1, 1, 1, 1, 1, 0, 1)
+    assert p.hybrid_channels == ('M', 'S') and p.bits_s == (11, 11, 11, 11, 7, 7, 7)
+    assert p.base_s[:5] == (5, 5, 5, 5, 3)
     lay = HybridLayout(p)
-    assert any(ch == 'S' for ch, *_ in lay.unp_items)
+    assert any(ch == 'S' for ch, *_ in lay.coef_items)
     assert lay.n_strong == 2 * modem.n_symbols(lay.n_tx, lay.n_strong, p.modulation)
+
+
+def test_layers_are_even_and_balanced():
+    """位相部 (基本層の仮数＋パリティ) と振幅部 (拡張層) はどちらも2の倍数で、強い位置と弱い位置の数が釣り合う。
+    QPSKは仮数幅とパリティの和が2の倍数。"""
+    from gracefm.layers import balanced
+    for p in PROFILES.values():
+        for ch, widths, base in (('M', p.bits_m, p.base_m), ('S', p.bits_s, p.base_s)):
+            for k, width in enumerate(widths):
+                if not width or p.hybrid_band(ch, k):
+                    continue
+                assert (width + p.protect_bits(k)) % 2 == 0, (p.name, ch, k)
+                if p.layered:
+                    ext = width - base[k]                              # 位相部 = 基本層の仮数 + パリティ
+                    assert (base[k] + p.protect_bits(k)) % 2 == 0 and ext % 2 == 0, (p.name, ch, k)
+                    assert base[k] >= max(1, p.protect_bits(k)) and ext >= 2
+        if not p.layered:
+            continue
+        assert (balanced(p).base_m, balanced(p).base_s) == (p.base_m, p.base_s), p.name
+        lay = HybridLayout(p) if p.hybrid else Layout(p)
+        for ch, widths, base in (('M', p.bits_m, p.base_m), ('S', p.bits_s, p.base_s)):
+            for k, width in enumerate(widths):
+                if width and not p.hybrid_band(ch, k):
+                    # 係数をシンボル単位で分ける: 位相部 (基本層 + パリティ) = 振幅部 (拡張層)、仮数幅 = 4N - K
+                    assert base[k] + p.protect_bits(k) == width - base[k], (p.name, ch, k)
+        assert lay.n_tx == 2 * lay.n_strong
+        # ヘッダ・終端・パリティはいずれも位相部と振幅部に同数ずつ入るので、詰め物は偶数そろえの1個以内
+        n_other = lay.n_tx - lay.n_coef_bits - lay.n_top
+        assert n_other - lay.n_header - lay.n_tail - lay.n_ytail <= 2, p.name
 
 
 def test_other_format_identifiers_are_rejected_even_with_matching_id():
@@ -99,13 +129,39 @@ def test_other_format_identifiers_are_rejected_even_with_matching_id():
             lay = cls(old)
             packed = lay.pack(encode_block(x, old), 0, 1)
             # The format identifier is fixed for this implementation.
-            assert current.unpack(1 - 2 * packed[:current.n_coded], packed[current.n_coded:]) == (None, None)
+            assert current.unpack(1.0 - 2.0 * packed, packed) == (None, None)
 
 
 def test_hybrid_factory_matches_catalog():
     for base, name in [('B200M', 'B200MY'), ('M700M', 'M700MY'), ('M700', 'M700Y')]:
         p = PROFILES[name]
-        assert make_hybrid(PROFILES[base], name, p.pid) == p
+        assert make_hybrid(PROFILES[base], name, p.pid, channels=p.hybrid_channels, bits_m=p.bits_m, bits_s=p.bits_s) == p
+
+
+def test_parity_next_to_coefficients_corrects_top_mantissa_bits():
+    """係数ごとに先頭のシンボルがパリティ付き。上位K bitの誤りをパリティで訂正する。"""
+    for name in ('B200M', 'M700'):
+        p = PROFILES[name]
+        lay = Layout(p)
+        bd = encode_block(np.random.default_rng(7).uniform(-0.5, 0.5, (p.block, 2)), p)
+        frame = lay.pack(bd, 0, 3)
+        assert lay.n_top == sum(p.protect_bits(k) * p.ncoef(k) for bits in (p.bits_m, p.bits_s)
+                                for k, w in enumerate(bits) if w)
+        assert lay.n_parity == lay.n_top + 12
+        # 強い位置の列は係数ごとに「パリティ K bit | 基本層」。係数の先頭にだけパリティがあり、続くbitにはない。
+        first = lay.coef_items[lay.top_coef_idx[0]]
+        assert 0 < lay.top_stream_idx[0] - lay.parity_idx[0] <= p.protect_bits(first[1])   # パリティは、その係数の最上位bitの直前
+        assert lay.top_stream_idx[1] > lay.top_stream_idx[0] + 1 or p.protect_bits(first[1]) > 1
+        soft = 1.0 - 2.0 * frame
+        flipped = lay.top_stream_idx[np.random.default_rng(8).choice(lay.n_top, 6, replace=False)]
+        bits = frame.copy()
+        bits[flipped] ^= 1
+        soft = 1.0 - 2.0 * bits
+        soft[flipped] *= 0.3                           # 誤ったbitは信頼度が低い
+        recovered, header = lay.unpack(soft, bits)
+        assert recovered is not None and header['high_ok']
+        assert np.allclose(decode_block(recovered, p), decode_block(bd, p)), name
+        assert np.array_equal(header['top_bits'], frame[lay.top_stream_idx])
 
 
 def test_high_crc_erases_only_h1_h2_in_receiver():
@@ -115,16 +171,16 @@ def test_high_crc_erases_only_h1_h2_in_receiver():
     tx = Transmitter(p)
     lay = tx.layout
     packed = lay.pack(encode_block(x, p), 0, 0)
-    protected = fec.viterbi_decode(1 - 2 * packed[:lay.n_coded], lay.n_prot_crc)
+    protected = lay.header_info(packed)
 
     def symbols(changed):
-        bits = np.concatenate([fec.conv_encode(changed), packed[lay.n_coded:]])
+        bits = lay.with_header(packed, changed)
         buf = np.zeros(tx.digital_nsym * modem.bits_per_symbol(p.modulation), np.int64)
         buf[:len(bits)] = bits
         return modem.modulate(buf ^ modem.prbs(len(buf)), tx.digital_nsym, p.modulation, p.alpha)
 
     for soft in (False, True):
-        decoder = StreamDecoder(p, postfilter=False, soft_decode=soft)
+        decoder = StreamDecoder(p, soft_decode=soft)
         good, ok = decoder.decode(symbols(protected))
         assert ok
         high_damaged = protected.copy()
@@ -145,12 +201,6 @@ def test_high_crc_erases_only_h1_h2_in_receiver():
         core_damaged[lay.core_prot_indices[-1]] ^= 1
         _, ok = decoder.decode(symbols(core_damaged))
         assert not ok and decoder.stats['crc_fail'] == 1
-    filtered, ok = StreamDecoder(p, postfilter=True).decode(symbols(high_damaged))
-    assert ok
-    for channel in (0, 1):
-        bands = haar_forward(filtered[:, channel], p.levels)
-        assert np.allclose(bands[5], 0, atol=1e-10)
-        assert np.allclose(bands[6], 0, atol=1e-10)
 
 
 def test_hybrid_high_crc_keeps_lower_hybrid_band():
@@ -161,14 +211,14 @@ def test_hybrid_high_crc_keeps_lower_hybrid_band():
     original = tx.frame(x)
     lay = tx.layout
     packed = lay.pack(encode_block(x, p), 0, 0)
-    protected = fec.viterbi_decode(1 - 2 * packed[:lay.n_coded], lay.n_prot_crc)
+    protected = lay.header_info(packed)
     protected[lay.high_prot_indices[0]] ^= 1
-    bits = np.concatenate([fec.conv_encode(protected), packed[lay.n_coded:]])
+    bits = lay.with_header(packed, protected)
     buf = np.zeros(tx.digital_nsym * modem.bits_per_symbol(p.modulation), np.int64)
     buf[:len(bits)] = bits
     digital = modem.modulate(buf ^ modem.prbs(len(buf)), tx.digital_nsym, p.modulation, p.alpha)
     damaged = np.concatenate([digital, original[len(modem.PREAMBLE) + tx.digital_nsym:]])
-    decoder = StreamDecoder(p, postfilter=False)
+    decoder = StreamDecoder(p)
     good, ok = decoder.decode(original)
     assert ok
     recovered, ok = decoder.decode(damaged)
@@ -181,11 +231,12 @@ def test_hybrid_high_crc_keeps_lower_hybrid_band():
         assert np.allclose(r[6], 0, atol=1e-10)
 
 
-def test_broadcast_main_occupied_bandwidth_is_near_180_khz():
+def test_broadcast_main_occupied_bandwidth():
     from scipy.signal import welch
     from gracefm.pulse import shape
     audio = np.random.default_rng(2026).uniform(-0.4, 0.4, (64 * 200, 2))
-    for name in ('B200M', 'B200'):
+    expected = {'B200M': 123_000, 'B200': 176_500}     # 99%占有帯域 (ランダム音声での実測)
+    for name, reference in expected.items():
         p = PROFILES[name]
         tx = Transmitter(p)
         samples = shape(np.concatenate(tx.run(audio)), beta=p.pulse_beta,
@@ -196,7 +247,7 @@ def test_broadcast_main_occupied_bandwidth_is_near_180_khz():
         freq, power = freq[order], power[order]
         cumulative = np.cumsum(power) / np.sum(power)
         occupied = freq[np.searchsorted(cumulative, 0.995)] - freq[np.searchsorted(cumulative, 0.005)]
-        assert 175_000 <= occupied <= 185_000, (name, occupied)
+        assert abs(occupied - reference) <= 4_000 and occupied <= 180_000, (name, occupied)
 
 
 if __name__ == '__main__':

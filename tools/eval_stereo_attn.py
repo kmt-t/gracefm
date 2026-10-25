@@ -65,7 +65,7 @@ def source_clips(seconds):
 
 
 def roundtrip(x, p):
-    """Vectorized codec roundtrip without the optional postfilter."""
+    """Vectorized codec roundtrip."""
     ms = {"M": ((x[:, 0] + x[:, 1]) / 2).reshape(-1, p.block),
           "S": ((x[:, 0] - x[:, 1]) / 2).reshape(-1, p.block)}
     decoded = {}
@@ -87,7 +87,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--seconds", type=float, default=5.0)
     ap.add_argument("--perceptual-seconds", type=float, default=0.0,
-                    help="postfilter 後の L/R ViSQOL と波形SNRを別途測る秒数")
+                    help="L/R ViSQOL と波形SNRを別途測る秒数")
     ap.add_argument("--rf-seconds", type=float, default=0.0,
                     help="RRC パルス成形後の 99%% 占有帯域を測る秒数")
     ap.add_argument("--json", type=Path)
@@ -178,7 +178,7 @@ def main():
     if args.json:
         args.json.parent.mkdir(parents=True, exist_ok=True)
         args.json.write_text(json.dumps(dict(seconds=args.seconds, sample_rate_hz=32000,
-                                             quantization_postfilter=False, rows=rows,
+                                             rows=rows,
                                              perceptual_seconds=args.perceptual_seconds,
                                              perceptual=perceptual,
                                              rf_seconds=args.rf_seconds, rf=rf), indent=2) + "\n")

@@ -3,20 +3,19 @@
 
 送信: 同じ音声を 2系統で送る。系統 B はブロックの格子を半ブロックずらす (先頭に block/2 サンプルの 0)。
       2系統は大きく離れた別の周波数で送り、欠落やフェージングを独立にする。
-受信: 系統ごとに 復調 → 軟判定ビタビ → CRC 判定 → 復号 → ポストフィルタ。
+受信: 系統ごとに 復調 → 軟判定ビタビ → CRC 判定 → 復号。
       基本CRC不一致はフレーム欠落。H1/H2 CRCだけの不一致は高域を消去して低中域を採用する。
       2系統の合成: 半ブロック単位で、両方届いた区間は帯域ごとに融合 (gracefm/fusion.py。各系統の係数の
       誤差分散による逆分散重み) / 片方だけなら片方 / どちらも無ければ PLC。
 """
 import numpy as np
 
-from . import fusion, modem, plc
-from .codec import (attenuator_expanded, cells, decode_coeffs, encode_block, exp_range,
+from . import fec, fusion, modem, plc
+from .codec import (attenuator_expanded, decode_coeffs, encode_block, exp_range,
                     haar_inverse, ms_to_lr, offset_of, qmax_of, qmin_of)
 from .framing import HybridLayout, Layout
 from .crypto import unwrap_counter
 from .kalman import StreamBandKalman
-from .postfilter import PAD, PostFilter
 from .profiles import Profile
 
 
@@ -52,8 +51,8 @@ class Transmitter:
         if not self.p.hybrid:
             return digital
         mask = modem.prbs(len(buf) + 3 * self.layout.n_hybrid)[len(buf):]
-        high = modem.hybrid_modulate(self.layout.hybrid_u(bd), self.p.hybrid_amplitude,
-                                     mask, self.p.hybrid_bits - 2)
+        u, parity, _ = self.layout.hybrid_parts(bd)
+        high = modem.hybrid_modulate(u, parity, self.p.hybrid_amplitude, mask, self.p.hybrid_bits - 1)
         return np.concatenate([digital, high])
 
     def run(self, x):
@@ -69,19 +68,17 @@ class Transmitter:
 
 
 class StreamDecoder:
-    def __init__(self, profile: Profile, postfilter=True, pf_iters=None, soft_decode=True, eps=0.02,
+    def __init__(self, profile: Profile, soft_decode=True,
                  kalman_bands=None, kalman_order=2, cipher=None, hybrid_phase_only=False):
         """
         soft_decode=True: 非保護ビットを硬判定せず、事後確率で重み付けした仮数の期待値で復号する
                           (modem.bit_probs。保護部は CRC が通った確定値)。False なら硬判定 (比較用)。
-        eps: ポストフィルタの量子化区間を広げるとき、事後確率が eps〜1-eps のビットを「どちらもあり得る」とみなす
         """
         if profile.hybrid and cipher is not None:
             raise ValueError("実験用ハイブリッドプロファイルはAES-CTR暗号化に未対応です")
         self.p = profile
         self.hybrid_phase_only = hybrid_phase_only
         self.soft_decode = soft_decode
-        self.eps = eps
         # 系統ごとの帯域カルマン (軟判定のときだけ)。kalman_bands = 帯域番号のリスト / "all" / None
         kb = None if kalman_bands is None else (None if kalman_bands == "all" else list(kalman_bands))
         self.kf = (StreamBandKalman(profile.nbands, kb, kalman_order)
@@ -90,29 +87,33 @@ class StreamDecoder:
         self.last_frame_no = -1
         self.layout = HybridLayout(profile) if profile.hybrid else Layout(profile, encrypted=cipher is not None)
         self.digital_nsym = modem.n_symbols(self.layout.n_tx, self.layout.n_strong, profile.modulation)
-        iters = profile.pf_iters if pf_iters is None else pf_iters
-        self.pf = PostFilter(profile.levels, iters, profile.block) if postfilter else None
-        self.last_ok = False
         self.stats = {"frames": 0, "lost": 0, "crc_fail": 0, "high_crc_fail": 0}
         self.last_r = (np.nan, np.nan)          # 直前フレームの誤差分散の見積もり (M, S)
         self.hybrid_variance = {}
 
-    def _recover_hybrid(self, sym, bd, high_ok=True):
+    def _hybrid_mask(self):
+        lay = self.layout
+        digital_bits = self.digital_nsym * modem.bits_per_symbol(self.p.modulation)
+        return modem.prbs(digital_bits + 3 * lay.n_hybrid)[digital_bits:]
+
+    def _hybrid_phase(self, sym):
+        """専用シンボルの位相から、最上位bitとパリティの軟値を得る (ヘッダ部の復号に渡す)"""
+        start = len(modem.PREAMBLE) + self.digital_nsym
+        llr_msb, llr_par, _ = modem.hybrid_phase_llr(sym[start:], self.p.hybrid_amplitude, self._hybrid_mask(),
+                                                     sym[:len(modem.PREAMBLE)], self.p.hybrid_bits - 1)
+        return llr_msb, llr_par
+
+    def _recover_hybrid(self, sym, bd, hdr, high_ok=True):
         lay, p = self.layout, self.p
         start = len(modem.PREAMBLE) + self.digital_nsym
         if len(sym) != start + lay.n_hybrid:
             raise ValueError("ハイブリッドフレームのシンボル数が一致しません")
         b = p.hybrid_bits
-        protected_u = np.array([int(bd.mant[ch][k][j]) + offset_of(b, p, ch, k)
-                                for ch, k, j in lay.hybrid_items], np.int64)
-        top = protected_u >> (b - 1)
-        second = (protected_u >> (b - 2)) & 1 if p.protect_k >= 2 else None
-        digital_bits = self.digital_nsym * modem.bits_per_symbol(p.modulation)
-        mask = modem.prbs(digital_bits + 3 * lay.n_hybrid)[digital_bits:]
-        u, var, sigma2 = modem.hybrid_demodulate(sym[start:], top, p.hybrid_amplitude,
-                                                 mask, sym[:len(modem.PREAMBLE)], b - 2,
-                                                 self.hybrid_phase_only,
-                                                 protected_second=second)
+        msb = hdr["y_msb"]                          # CRCを通った (パリティで訂正した) 最上位bit
+        parity = fec.rsc_parity(msb)[0][:len(msb)]
+        u, var, sigma2 = modem.hybrid_demodulate(sym[start:], msb, parity, p.hybrid_amplitude,
+                                                 self._hybrid_mask(), sym[:len(modem.PREAMBLE)], b - 1,
+                                                 self.hybrid_phase_only)
         self.hybrid_variance = {}
         for i, (ch, k, j) in enumerate(lay.hybrid_items):
             if k >= 5 and not high_ok:
@@ -125,7 +126,7 @@ class StreamDecoder:
         self.stats["hybrid_axis_noise_variance_sum"] = self.stats.get("hybrid_axis_noise_variance_sum", 0.0) + sigma2
         self.stats["hybrid_frames"] = self.stats.get("hybrid_frames", 0) + 1
 
-    def error_variance(self, bd, soft_unp):
+    def error_variance(self, bd, soft_coef):
         """
         受信座標からの補助情報: このフレームの復号音声に乗りうる誤差の分散 (1サンプルあたり, M と S)。
         非保護ビットごとに、軟判定値の大きさから誤っている確率 q を求め (QPSK の 1軸ぶんの雑音分散は
@@ -147,47 +148,41 @@ class StreamDecoder:
                     steps[o:o + n] = 2.0 ** (bd.eidx[ch][k] + emin - a)
                     qn[ci] += np.sum(steps[o:o + n] ** 2) / 12
         tot = qn.copy()
-        if p.modulation == "qpsk" and lay.n_unp:
+        if p.modulation == "qpsk" and lay.n_coef_bits:
             a = 1 / np.sqrt(2)
             sig2 = max(float(np.mean((np.abs(self._axis) - a) ** 2)), 1e-6)
-            q = 1.0 / (1.0 + np.exp(np.minimum(2 * a * np.abs(soft_unp) / sig2, 60.0)))
-            e = q * (2.0 ** lay.unp_pos * steps[lay.unp_flat]) ** 2
-            tot += np.bincount(lay.unp_ch, weights=e, minlength=2)
+            q = 1.0 / (1.0 + np.exp(np.minimum(2 * a * np.abs(soft_coef) / sig2, 60.0)))
+            e = q * (2.0 ** lay.coef_pos * steps[lay.coef_flat]) ** 2
+            tot += np.bincount(lay.coef_ch, weights=e, minlength=2)
         return tot / p.block
 
-    def soft_coeffs(self, bd, p1_unp, high_ok=True):
+    def soft_coeffs(self, bd, p1_coef, high_ok=True):
         """
         軟判定の復号: 非保護ビットを 0/1 に丸めず、1 である事後確率 p1 をそのままビットの値として使う。
-        ビットどうしは独立とみなし、仮数の期待値・事後分散・取り得る区間を閉じた式で求める:
+        ビットどうしは独立とみなし、仮数の期待値と事後分散を閉じた式で求める:
           期待値   E[u] = 硬判定の u + Σ (p1 - 硬判定ビット)·2^pos
           事後分散 Σ p1 (1 - p1)·4^pos
-          区間     事後確率が eps〜1-eps のビットは 0 と 1 のどちらもあり得るとして、量子化区間をその範囲まで広げる
-        返り値: (帯域係数, 量子化区間, 誤差分散 (M, S) / 1サンプル)
+        返り値: (帯域係数, 誤差分散 (M, S) / 1サンプル)
         """
         p, lay = self.p, self.layout
-        hard = (p1_unp > 0.5).astype(float)
-        w = 2.0 ** lay.unp_pos
-        du = np.bincount(lay.unp_flat, weights=(p1_unp - hard) * w, minlength=lay.n_coef)
-        var = np.bincount(lay.unp_flat, weights=p1_unp * (1 - p1_unp) * w * w, minlength=lay.n_coef)
-        unc = (p1_unp > self.eps) & (p1_unp < 1 - self.eps)
-        dn = np.bincount(lay.unp_flat, weights=unc * hard * w, minlength=lay.n_coef)
-        up = np.bincount(lay.unp_flat, weights=unc * (1 - hard) * w, minlength=lay.n_coef)
-        coefs, cell = {}, {}
+        hard = (p1_coef > 0.5).astype(float)
+        w = 2.0 ** lay.coef_pos
+        du = np.bincount(lay.coef_flat, weights=(p1_coef - hard) * w, minlength=lay.n_coef)
+        var = np.bincount(lay.coef_flat, weights=p1_coef * (1 - p1_coef) * w * w, minlength=lay.n_coef)
+        coefs = {}
         R = np.zeros(2)
         rb = np.full((2, 2, p.nbands), np.inf)          # (前半/後半, M/S, 帯域) の係数あたりの誤差分散
         for ci, (ch, bits) in enumerate((("M", p.bits_m), ("S", p.bits_s))):
-            coefs[ch], cell[ch] = [], []
+            coefs[ch] = []
             for k, b in enumerate(bits):
                 n = p.ncoef(k)
                 if k >= 5 and not high_ok:
                     coefs[ch].append(np.zeros(n))
-                    cell[ch].append((np.zeros(n), np.zeros(n)))
                     if self.kf is not None and b:
                         self.kf.predict_only(ch, k, n)
                     continue
                 if b == 0:
                     coefs[ch].append(np.zeros(n))
-                    cell[ch].append(None)
                     continue
                 o = lay.coef_offset[(ch, k)]
                 qmax = qmax_of(b)
@@ -199,21 +194,16 @@ class StreamDecoder:
                 z = np.clip(m + du[o:o + n], qmin, qmax) * step
                 extra = self.hybrid_variance.get((ch, k), 0)
                 rv = (var[o:o + n] + extra + 1.0 / 12) * step ** 2
-                spread = 2 * np.sqrt(extra)
-                lo, _ = cells(np.clip(np.round(m - dn[o:o + n] - spread), qmin, qmax).astype(np.int64), e, k, b, p, ch, bd.attn[ch][k])
-                _, hi = cells(np.clip(np.round(m + up[o:o + n] + spread), qmin, qmax).astype(np.int64), e, k, b, p, ch, bd.attn[ch][k])
                 if self.kf is not None:
                     z, rv = self.kf.update(ch, k, z, rv, scale=qmax * step)
-                    lo, hi = np.minimum(lo, z), np.maximum(hi, z)   # 区間は予測で動いた値も含める
                 coefs[ch].append(z)
-                cell[ch].append((lo, hi))
                 R[ci] += np.sum(rv)
                 if n >= 2:
                     rb[0, ci, k], rb[1, ci, k] = np.mean(rv[: n // 2]), np.mean(rv[n // 2:])
                 else:
                     rb[:, ci, k] = rv[0]
         self.last_rb = rb
-        return coefs, cell, R / p.block
+        return coefs, R / p.block
 
     def decode(self, sym):
         """sym: 1フレームの受信シンボル (届かなければ None) → ((block, 2), 有効か)"""
@@ -226,17 +216,18 @@ class StreamDecoder:
         if sym is not None and len(sym) != expected_symbols:
             sym = None
         digital_sym = sym[:len(modem.PREAMBLE) + self.digital_nsym] if sym is not None and p.hybrid else sym
+        y_soft = self._hybrid_phase(sym) if sym is not None and p.hybrid else None
         if sym is None:
             self.stats["lost"] += 1
         elif self.soft_decode:
             p1, llr = modem.bit_probs(digital_sym, lay.n_tx, p.modulation, p.alpha)
             s = modem.prbs(lay.n_tx).astype(bool)        # スクランブルを戻す
             p1, llr = np.where(s, 1 - p1, p1), np.where(s, -llr, llr)
-            bd, hdr = lay.unpack(llr[: lay.n_coded], (p1[lay.n_coded:] > 0.5).astype(np.int64), self._ks_for)
-            if bd is not None and self.cipher is not None:  # 非保護部の事後確率も暗号を戻す
+            bd, hdr = lay.unpack(llr, (p1 > 0.5).astype(np.int64), self._ks_for, y_soft=y_soft)
+            p1_coef = p1[lay.coef_stream_idx]
+            if bd is not None and self.cipher is not None:  # 仮数bitの事後確率も暗号を戻す
                 ku = hdr["ks"][lay.n_body:].astype(bool)
-                p1 = p1.copy()
-                p1[lay.n_coded:] = np.where(ku, 1 - p1[lay.n_coded:], p1[lay.n_coded:])
+                p1_coef = np.where(ku, 1 - p1_coef, p1_coef)
             if bd is None:
                 self.stats["crc_fail"] += 1
         else:
@@ -245,12 +236,17 @@ class StreamDecoder:
             soft = soft * (1 - 2 * sc)
             hard = hard ^ modem.prbs(len(hard))
             self._axis = soft
-            bd, hdr = lay.unpack(soft[: lay.n_coded], hard[lay.n_coded:], self._ks_for)
-            p1 = hard.astype(float)
+            # 弱い位置 (振幅部) には軟値が無いので、硬判定に小さな信頼度をつけて渡す
+            weak_conf = 0.3 * max(float(np.median(np.abs(soft))), 1e-6)
+            soft = np.concatenate([soft, weak_conf * (1.0 - 2.0 * hard[len(soft):])])
+            bd, hdr = lay.unpack(soft, hard, self._ks_for, y_soft=y_soft)
+            p1_coef = hard.astype(float)[lay.coef_stream_idx]
             if bd is None:
                 self.stats["crc_fail"] += 1
+        if bd is not None and lay.n_top:                  # パリティで訂正した上位K bitを確定値にする
+            p1_coef = np.array(p1_coef, float)
+            p1_coef[lay.top_coef_idx] = hdr["top_bits"]
         if bd is None:
-            self.last_ok = False
             self.last_r = (np.nan, np.nan)
             self.last_rb = None
             if self.kf is not None:
@@ -263,14 +259,14 @@ class StreamDecoder:
         if not high_ok:
             self.stats["high_crc_fail"] += 1
         if p.hybrid:
-            self._recover_hybrid(sym, bd, high_ok)
+            self._recover_hybrid(sym, bd, hdr, high_ok)
         if self.soft_decode or p.hybrid:
-            coefs, cell, R = self.soft_coeffs(bd, p1[lay.n_coded:lay.n_tx], high_ok)
+            coefs, R = self.soft_coeffs(bd, p1_coef, high_ok)
             self.last_r = tuple(R)
         else:
-            self.last_r = tuple(self.error_variance(bd, soft[lay.n_coded:lay.n_tx]))
+            self.last_r = tuple(self.error_variance(bd, soft[lay.coef_stream_idx] if p.modulation == "qpsk" else None))
             self.last_rb = None
-            coefs, cell = decode_coeffs(bd, p)
+            coefs = decode_coeffs(bd, p)
             if not high_ok:
                 self.last_rb = np.broadcast_to(np.asarray(self.last_r)[None, :, None],
                                                (2, 2, p.nbands)).copy()
@@ -278,17 +274,7 @@ class StreamDecoder:
                 for ch in ("M", "S"):
                     for k in (5, 6):
                         coefs[ch][k] = np.zeros(p.ncoef(k))
-                        cell[ch][k] = (np.zeros(p.ncoef(k)), np.zeros(p.ncoef(k)))
-        out = {}
-        for ch in ("M", "S"):
-            if self.pf is None or ch == "S":
-                out[ch] = haar_inverse(coefs[ch])
-            else:
-                if not self.last_ok:
-                    y0 = haar_inverse(coefs[ch])
-                    self.pf.reset_history(ch, np.full(PAD, y0[0]))
-                out[ch] = self.pf.process(ch, coefs[ch], cell[ch])
-        self.last_ok = True
+        out = {ch: haar_inverse(coefs[ch]) for ch in ("M", "S")}
         return ms_to_lr(out["M"], out["S"]), True
 
     def _ks_for(self, header):
@@ -321,7 +307,7 @@ class StreamDecoder:
         return y[offset:offset + n], v[offset:offset + n]
 
 
-def receive(profile: Profile, framesA, framesB, n, offset_b, postfilter=True, plc_order=32,
+def receive(profile: Profile, framesA, framesB, n, offset_b, plc_order=32,
             return_streams=False, soft_decode=True, profile_b=None,
             kalman_bands=None, kalman_order=2, cipher=None, hybrid_phase_only=False):
     """
@@ -333,13 +319,13 @@ def receive(profile: Profile, framesA, framesB, n, offset_b, postfilter=True, pl
     """
     pb = profile if profile_b is None else profile_b
     assert pb.fs == profile.fs and pb.block == profile.block
-    dA = StreamDecoder(profile, postfilter, soft_decode=soft_decode, kalman_bands=kalman_bands,
+    dA = StreamDecoder(profile, soft_decode=soft_decode, kalman_bands=kalman_bands,
                        kalman_order=kalman_order, cipher=cipher,
                        hybrid_phase_only=hybrid_phase_only)
     yA, vA = dA.run(framesA, n, 0)
     stats = {"A": dA.stats}
     if framesB is not None:
-        dB = StreamDecoder(pb, postfilter, soft_decode=soft_decode, kalman_bands=kalman_bands,
+        dB = StreamDecoder(pb, soft_decode=soft_decode, kalman_bands=kalman_bands,
                            kalman_order=kalman_order, cipher=cipher,
                            hybrid_phase_only=hybrid_phase_only)
         yB, vB = dB.run(framesB, n, offset_b)

@@ -2,21 +2,21 @@
   "power_main": 0.75,
   "power_secondary": 0.25,
   "seed": 1,
-  "main_profile_signature": "Profile(pid=8, name='M700', fs=48000, block=64, levels=6, bits_m=(16, 14, 13, 12, 11, 9, 7), bits_s=(12, 9, 8, 9, 7, 5, 3), exp_bits=4, protect_k=2, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=(2, 2, 2, 2, 2, 2, 2), base_s=(2, 2, 2, 2, 2, 2, 2), base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 0, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M', 'S'), experimental_tag=3)",
-  "secondary_profile_signature": "Profile(pid=11, name='SUB100-48K', fs=48000, block=64, levels=6, bits_m=(9, 8, 7, 6, 4, 0, 0), bits_s=(5, 4, 3, 0, 0, 0, 0), exp_bits=4, protect_k=1, modulation='qpsk', alpha=1.0, pulse_beta=0.25, pulse_span=16, pf_iters=4, base_m=None, base_s=None, base_extra=(), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 4, 0, 0), attn_group_s=(0, 0, 2, 0, 0, 0, 0), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=8, hybrid_channels=('M', 'S'), experimental_tag=3)",
+  "main_profile_signature": "Profile(pid=8, name='M700', fs=48000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 7, 7), bits_s=(7, 7, 7, 7, 7, 7, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 5, 3, 3), base_s=(3, 3, 3, 3, 3, 3, 0), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 0, 4), attn_group_s=(0, 0, 0, 0, 0, 4, 0), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
+  "secondary_profile_signature": "Profile(pid=11, name='SUB100-48K', fs=48000, block=64, levels=6, bits_m=(9, 7, 5, 5, 3, 0, 0), bits_s=(7, 5, 3, 3, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qpsk', alpha=1.0, pulse_beta=0.25, pulse_span=16, base_m=None, base_s=None, exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 4, 0, 0), attn_group_s=(0, 0, 0, 4, 0, 0, 0), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
   "samples": [
     {
       "file": "demo__48k__M700+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "a1c310aab361dca8a009af2535828b983bf6c57ec8c7923ce3c5338e35dbcace",
+      "sha256": "754b25a2b876d346d08d4907250edd3e9d550d34c562259ada3a24fc9c842fdf",
       "link": {
-        "esn0_main": 23.914739664228065,
-        "esn0_sub": 23.24221658325915
+        "esn0_main": 25.451551399914898,
+        "esn0_sub": 23.053948010664314
       },
       "measurements": {
-        "snr_db": 38.81017156232656,
-        "low_0_6khz": 53.48266088607272,
-        "high_6_24khz": 17.404520703006433,
-        "visqol_moslqo": 4.597371891548561,
+        "snr_db": 25.522791545808573,
+        "low_0_6khz": 63.54219838631633,
+        "high_6_24khz": 3.9682155993592105,
+        "visqol_moslqo": 4.712119575091306,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
@@ -25,16 +25,16 @@
     },
     {
       "file": "demo__48k__M700+SUB100-48K__awgn-cn0-75dBHz.flac",
-      "sha256": "3f80691a4efb8bf815e43a6427924b3833c0a553322219316e03bf210a5af22f",
+      "sha256": "759064a7676f2d4e43113b9fa7878553a89680c93a30e27e54afcf0380a18520",
       "link": {
-        "esn0_main": 18.914739664228065,
-        "esn0_sub": 18.24221658325915
+        "esn0_main": 20.451551399914898,
+        "esn0_sub": 18.053948010664314
       },
       "measurements": {
-        "snr_db": 32.898126008507,
-        "low_0_6khz": 48.01783934818414,
-        "high_6_24khz": 11.477606298356644,
-        "visqol_moslqo": 3.2114703446853206,
+        "snr_db": 25.48854016404767,
+        "low_0_6khz": 53.59787696430231,
+        "high_6_24khz": 3.9399538954931757,
+        "visqol_moslqo": 4.232551158339103,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
@@ -43,16 +43,16 @@
     },
     {
       "file": "demo__48k__M700+SUB100-48K__awgn-cn0-70dBHz.flac",
-      "sha256": "c8bdcd5fe43265de49fedb888f9697036c443d0aa83186099b4ce228bf3951f7",
+      "sha256": "6dc825ecd783a15c541db40cdaa85402d8dea692e63e13c901c673d2a822af0a",
       "link": {
-        "esn0_main": 13.914739664228065,
-        "esn0_sub": 13.24221658325915
+        "esn0_main": 15.451551399914898,
+        "esn0_sub": 13.053948010664314
       },
       "measurements": {
-        "snr_db": 29.543022777565607,
-        "low_0_6khz": 45.38724993419059,
-        "high_6_24khz": 8.101526654769266,
-        "visqol_moslqo": 2.56185171449502,
+        "snr_db": 25.399319767726013,
+        "low_0_6khz": 49.95893884961039,
+        "high_6_24khz": 3.8591826200224,
+        "visqol_moslqo": 3.474393223680787,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
@@ -61,16 +61,16 @@
     },
     {
       "file": "demo__48k__M700+SUB100-48K__awgn-cn0-65dBHz.flac",
-      "sha256": "d577e967688370a64dbe429d81984d9c98d429642e2484d1d8307609fc87db39",
+      "sha256": "6348066fc87dcbfbd18afbdd38dd1c4cc69738281e4819a7eeea33d5dfe64cb1",
       "link": {
-        "esn0_main": 8.914739664228065,
-        "esn0_sub": 8.24221658325915
+        "esn0_main": 10.451551399914898,
+        "esn0_sub": 8.053948010664314
       },
       "measurements": {
-        "snr_db": 25.79548067078385,
-        "low_0_6khz": 29.461721462960313,
-        "high_6_24khz": 6.657945520052676,
-        "visqol_moslqo": 2.3015349673233167,
+        "snr_db": 25.08862915788694,
+        "low_0_6khz": 37.83332622035177,
+        "high_6_24khz": 3.7688722203736713,
+        "visqol_moslqo": 2.7297086044563863,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,

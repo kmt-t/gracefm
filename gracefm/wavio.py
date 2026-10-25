@@ -32,6 +32,11 @@ def write(path, x, fs):
     wavfile.write(path, fs, np.clip(x, -1.0, 1.0).astype(np.float32))
 
 
+def write_int32(path, x, fs):
+    """int32 PCM の WAV で書き出す (x は int32)"""
+    wavfile.write(path, fs, np.asarray(x, np.int32))
+
+
 def write_pcm24(path, x, fs):
     """24bit 整数 PCM で書き出す (リトルエンディアン, 標準の WAVE ヘッダ)"""
     x = np.atleast_2d(np.asarray(x, float).T).T

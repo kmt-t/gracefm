@@ -4,99 +4,99 @@
   "bw_minus30dB_kHz": 111.0
  },
  "B200M": {
-  "occupied_99_kHz": 179.2,
-  "bw_minus30dB_kHz": 203.8,
-  "symbol_rate_ksps": 163.0,
+  "occupied_99_kHz": 122.8,
+  "bw_minus30dB_kHz": 138.9,
+  "symbol_rate_ksps": 111.5,
   "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
  "B200MY": {
-  "occupied_99_kHz": 161.9,
-  "bw_minus30dB_kHz": 183.5,
-  "symbol_rate_ksps": 147.0,
+  "occupied_99_kHz": 88.9,
+  "bw_minus30dB_kHz": 100.3,
+  "symbol_rate_ksps": 81.0,
   "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
  "B200": {
-  "occupied_99_kHz": 179.4,
-  "bw_minus30dB_kHz": 194.3,
-  "symbol_rate_ksps": 177.0,
+  "occupied_99_kHz": 176.5,
+  "bw_minus30dB_kHz": 190.4,
+  "symbol_rate_ksps": 173.5,
   "modulation": "qam16h",
   "rrc_beta": 0.1,
   "rrc_span_symbols": 32
  },
  "B200Y": {
-  "occupied_99_kHz": 159.8,
-  "bw_minus30dB_kHz": 172.3,
-  "symbol_rate_ksps": 157.0,
+  "occupied_99_kHz": 136.1,
+  "bw_minus30dB_kHz": 146.8,
+  "symbol_rate_ksps": 134.0,
   "modulation": "qam16h",
   "rrc_beta": 0.1,
   "rrc_span_symbols": 32
  },
  "SUB50M": {
-  "occupied_99_kHz": 70.1,
-  "bw_minus30dB_kHz": 79.1,
-  "symbol_rate_ksps": 64.0,
+  "occupied_99_kHz": 70.9,
+  "bw_minus30dB_kHz": 79.4,
+  "symbol_rate_ksps": 64.5,
   "modulation": "qpsk",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
  "SUB100": {
-  "occupied_99_kHz": 120.5,
-  "bw_minus30dB_kHz": 135.2,
-  "symbol_rate_ksps": 109.0,
+  "occupied_99_kHz": 109.0,
+  "bw_minus30dB_kHz": 122.0,
+  "symbol_rate_ksps": 99.5,
   "modulation": "qpsk",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
  "M700M": {
-  "occupied_99_kHz": 199.9,
-  "bw_minus30dB_kHz": 226.9,
-  "symbol_rate_ksps": 181.5,
+  "occupied_99_kHz": 170.7,
+  "bw_minus30dB_kHz": 193.5,
+  "symbol_rate_ksps": 155.2,
   "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
  "M700": {
-  "occupied_99_kHz": 334.8,
-  "bw_minus30dB_kHz": 376.5,
-  "symbol_rate_ksps": 304.5,
+  "occupied_99_kHz": 235.9,
+  "bw_minus30dB_kHz": 265.1,
+  "symbol_rate_ksps": 213.8,
   "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
  "M700MY": {
-  "occupied_99_kHz": 246.6,
-  "bw_minus30dB_kHz": 279.4,
-  "symbol_rate_ksps": 223.5,
+  "occupied_99_kHz": 133.8,
+  "bw_minus30dB_kHz": 151.2,
+  "symbol_rate_ksps": 121.5,
   "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
  "M700Y": {
-  "occupied_99_kHz": 383.0,
-  "bw_minus30dB_kHz": 427.7,
-  "symbol_rate_ksps": 346.5,
+  "occupied_99_kHz": 184.4,
+  "bw_minus30dB_kHz": 208.4,
+  "symbol_rate_ksps": 168.0,
   "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
  "SUB100-48K": {
-  "occupied_99_kHz": 130.8,
-  "bw_minus30dB_kHz": 147.2,
-  "symbol_rate_ksps": 118.5,
+  "occupied_99_kHz": 136.3,
+  "bw_minus30dB_kHz": 153.2,
+  "symbol_rate_ksps": 123.8,
   "modulation": "qpsk",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
  "audio_error_snr_dB": {
-  "B200": 61.1,
-  "B200Y": 51.0,
-  "SUB100": 29.4,
-  "M700": 58.7,
-  "M700M": 58.7,
-  "M700基本層": 13.2
+  "B200": 63.6,
+  "B200Y": 64.8,
+  "SUB100": 28.4,
+  "M700": 62.0,
+  "M700M": 62.0,
+  "M700基本層": 31.0
  }
 }

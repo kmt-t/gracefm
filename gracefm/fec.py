@@ -7,7 +7,7 @@
      c1[t] = u[t] ^ u[t-1] ^ u[t-2] ^ u[t-3] ^ u[t-6]
   符号化ビットの順序: c0[0], c1[0], c0[1], c1[1], ...
 復号: 軟判定ビタビ (軟値が正なら 0 らしい)。
-CRC: CRC-16-CCITT (多項式 0x1021, 初期値 0xFFFF), MSB から。
+CRC: ヘッダの基本CRCは12bit (多項式 0x80F)、高域CRCは10bit (多項式 0x233)、初期値は全ビット1、MSB から。crc16 は 16bit CCITT (0x1021)。
 """
 import numpy as np
 
@@ -70,11 +70,66 @@ def viterbi_decode(soft, nbits):
     return bits[:nbits]
 
 
-def crc16(bits):
-    reg = 0xFFFF
+def crc(bits, width, poly):
+    """width bit の CRC (MSB から。初期値は全ビット1)"""
+    mask = (1 << width) - 1
+    reg = mask
     for b in np.asarray(bits, np.int64):
-        top = (reg >> 15) & 1
-        reg = (reg << 1) & 0xFFFF
+        top = (reg >> (width - 1)) & 1
+        reg = (reg << 1) & mask
         if top ^ int(b):
-            reg ^= 0x1021
-    return np.array([(reg >> (15 - i)) & 1 for i in range(16)], np.int64)
+            reg ^= poly
+    return np.array([(reg >> (width - 1 - i)) & 1 for i in range(width)], np.int64)
+
+
+def crc16(bits):
+    return crc(bits, 16, 0x1021)
+
+
+# ヘッダの検査 (フレームが短いので 10〜12 bit で足りる)
+CRC_CORE = (12, 0x80F)       # 基本CRC: x^12 + x^11 + x^3 + x^2 + x + 1
+CRC_HIGH = (10, 0x233)       # 高域CRC: x^10 + x^9 + x^5 + x^4 + x + 1
+
+
+def crc_core(bits):
+    return crc(bits, *CRC_CORE)
+
+
+def crc_high(bits):
+    return crc(bits, *CRC_HIGH)
+
+
+# ---------------------------------------------------------------- 系統符号 (パリティだけを送る)
+# 同じ (133,171) の符号語集合を、情報ビット x を符号語の第1系列 c0 として送る再帰形で使う。
+# 情報ビット x は別の場所 (Haar係数部) に置き、ここでは第2系列 c1 (パリティ) と終端の 6 ビットだけを作る。
+#   u[t] = x[t] ^ u[t-2] ^ u[t-3] ^ u[t-5] ^ u[t-6]      (c0[t] = x[t] になる入力 u)
+#   c1[t] = u[t] ^ u[t-1] ^ u[t-2] ^ u[t-3] ^ u[t-6]
+# 終端は u = 0 を 6 ビット続け、そのとき c0 になる x の 6 ビット (tail) も送る。
+
+def _rsc_inputs(x):
+    n = len(x)
+    u = np.zeros(n + K - 1, np.int64)
+    for t in range(n):
+        u[t] = x[t] ^ (u[t - 2] if t >= 2 else 0) ^ (u[t - 3] if t >= 3 else 0) \
+            ^ (u[t - 5] if t >= 5 else 0) ^ (u[t - 6] if t >= 6 else 0)
+    return u
+
+
+def rsc_parity(x):
+    """x: 情報ビット (n,) → (パリティ (n+6,), 終端の x (6,))"""
+    x = np.asarray(x, np.int64)
+    n = len(x)
+    u = _rsc_inputs(x)
+    c = conv_encode(u[:n])           # u[:n] を (133,171) で符号化 → c0 は x に一致する
+    assert np.array_equal(c[0::2][:n], x)
+    return c[1::2], c[0::2][n:]
+
+
+def rsc_decode(x_soft, parity_soft, tail_soft):
+    """x_soft (n,), parity_soft (n+6,), tail_soft (6,): 軟値 (正 = 0 らしい) → 訂正後の情報ビット (n,)"""
+    n = len(x_soft)
+    r = np.empty(2 * (n + K - 1))
+    r[0::2] = np.concatenate([np.asarray(x_soft, float), np.asarray(tail_soft, float)])
+    r[1::2] = np.asarray(parity_soft, float)
+    u = viterbi_decode(r, n)
+    return conv_encode(u)[0::2][:n]

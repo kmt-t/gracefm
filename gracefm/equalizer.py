@@ -67,7 +67,7 @@ def through_matched_channel(frames, profile: Profile, esn0_db, paths=(),
 
 
 def header_training_symbols(profile: Profile, stream_id: int, frame_no: int, encrypted=False):
-    """Preamble and expected header symbols, with known QAM signs only.
+    """Preamble and expected header symbols (the parity-carrying phase of the first symbols), with known QAM signs only.
 
     The frame counter must already be tracked for the header to be usable as
     training. QAM position bits are payload; their axis amplitude is replaced
@@ -78,8 +78,10 @@ def header_training_symbols(profile: Profile, stream_id: int, frame_no: int, enc
     header = (_bits(profile.pid, 4) + _bits(stream_id, 1) +
               [int(encrypted)] + tag +
               _bits(frame_no & ((1 << (width - 8)) - 1), width - 8))
-    coded = fec.conv_encode(np.asarray(header, np.int64))[:2 * width]
-    hp = coded ^ modem.prbs(len(coded))
+    # ヘッダのパリティは因果的 (t 番目のパリティは先頭 t+1 bit だけで決まる) なので、先頭のヘッダ bit 数ぶんの
+    # パリティ = 先頭の width/2 シンボルの象限 (位相部) は、既知のヘッダだけから分かる。
+    parity = fec.rsc_parity(np.asarray(header, np.int64))[0][:width]
+    hp = parity ^ modem.prbs(len(parity))
     half_axis = modem.HALF_AXIS_POINTS[profile.modulation]
     amplitude = float(np.mean(modem._axis_pos(half_axis, profile.alpha if half_axis > 1 else 1.0)))
     axis = (1 - 2 * hp) * amplitude
@@ -165,16 +167,8 @@ def _slice_constellation(values, profile: Profile):
         src = np.asarray(values).reshape(-1, frame_len)
         dst = result.reshape(-1, frame_len)
         high = src[:, len(modem.PREAMBLE) + digital:]
-        lower_bits = profile.hybrid_bits - 2
-        levels = 1 << lower_bits
-        center = (levels - 1) / 2
-        phase = np.mod(np.rint((np.angle(high) - np.pi / 4) / (np.pi / 2)).astype(np.int64), 4)
-        scale = modem.hybrid_scale(profile.hybrid_amplitude, lower_bits)
-        radial = np.clip(np.rint((np.abs(high) * scale - 1) / profile.hybrid_amplitude + center),
-                         0, levels - 1).astype(np.int64)
-        dst[:, len(modem.PREAMBLE) + digital:] = modem.hybrid_modulate(
-            (phase * levels + radial).ravel(), profile.hybrid_amplitude,
-            lower_bits=lower_bits).reshape(high.shape)
+        dst[:, len(modem.PREAMBLE) + digital:] = modem.hybrid_slice(
+            high, profile.hybrid_amplitude, profile.hybrid_bits - 1).reshape(high.shape)
     return result
 
 

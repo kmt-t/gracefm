@@ -78,7 +78,7 @@ def budget(p):
                 hybrid_bits=p.hybrid_bits if p.hybrid else None,
                 hybrid_amplitude=p.hybrid_amplitude if p.hybrid else None,
                 protected_before_crc_bits=lay.n_prot, protected_with_crc_bits=lay.n_prot_crc,
-                fec_coded_bits=lay.n_coded, low_digital_unprotected_bits=lay.n_unp,
+                fec_coded_bits=lay.n_coded, low_digital_unprotected_bits=lay.n_coef_bits,
                 digital_symbols=tx.digital_nsym, hybrid_symbols=lay.n_hybrid if p.hybrid else 0,
                 preamble_symbols=len(modem.PREAMBLE),
                 total_symbols_per_frame=tx.nsym + len(modem.PREAMBLE),

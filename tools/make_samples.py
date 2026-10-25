@@ -8,7 +8,7 @@ samples/ のサンプル FLAC と、その説明 (samples/README.md) を作る�
 
 試験信号 (demo) はこのスクリプトの中で合成する。放送用は32kHz、モニター用は48kHz、各10秒。
 通信路込みのサンプルは採用構成 (主系 = 階層16QAM の B200M / B200、副系 = SUB50M / SUB100、帯域ごとの融合、
-軟判定の復号、ポストフィルタ4回) で、同じ受信電力のアナログFM (モノラル) も並べる。
+軟判定の復号) で、同じ受信電力のアナログFM (モノラル) も並べる。
 """
 import argparse
 import os
@@ -25,7 +25,6 @@ from base_layer_sample import base_layer_audio
 from gracefm import channel, metrics, wavio  # noqa: E402
 from gracefm.analog_fm import AnalogFM  # noqa: E402
 from gracefm.codec import decode_coeffs, encode_block, haar_inverse, ms_to_lr  # noqa: E402
-from gracefm.postfilter import PostFilter  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "samples")
@@ -77,19 +76,14 @@ def make_demo(fs=48000, dur=10.0, seed=0):
     return x * (0.89 / np.abs(x).max())
 
 
-def codec(x, p, postfilter=True):
+def codec(x, p):
     n = len(x)
     nfr = int(np.ceil(n / p.block))
     xp = np.pad(x, ((0, nfr * p.block - n), (0, 0)))
-    pf = PostFilter(p.levels, p.pf_iters, p.block) if postfilter else None
     out = np.zeros_like(xp)
     for i in range(nfr):
-        coefs, cell = decode_coeffs(encode_block(xp[i * p.block:(i + 1) * p.block], p), p)
-        if pf is None:
-            M, S = haar_inverse(coefs["M"]), haar_inverse(coefs["S"])
-        else:
-            M, S = pf.process("M", coefs["M"], cell["M"]), haar_inverse(coefs["S"])
-        out[i * p.block:(i + 1) * p.block] = ms_to_lr(M, S)
+        coefs = decode_coeffs(encode_block(xp[i * p.block:(i + 1) * p.block], p), p)
+        out[i * p.block:(i + 1) * p.block] = ms_to_lr(haar_inverse(coefs["M"]), haar_inverse(coefs["S"]))
     return out[:n]
 
 

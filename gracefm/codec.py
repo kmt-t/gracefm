@@ -155,35 +155,6 @@ def dequantize(m, eidx, k, b, profile: Profile, ch="M", attn=None):
     return m * step
 
 
-def cells(m, eidx, k, b, profile: Profile, ch="M", attn=None):
-    """
-    各係数について、元の係数が取り得る区間 [lo, hi] (量子化器の逆像。ポストフィルタの射影に使う)。
-
-    飽和していない値 (|m| < qmax): 丸めの区間 [(m - 0.5)·step, (m + 0.5)·step]。
-    飽和した値 (通常 m = ±qmax、実験高域の負端は qmin): エンコーダは指数として e0 = ceil(log2(peak / qmax)) か、クリップを許す
-      e0 - 1 のどちらかを選ぶ (quantize)。デコーダはどちらか区別できないので両方を含める。
-      e0 のとき |c| <= qmax·step、e0 - 1 のとき |c| <= 2·qmax·step。さらに入力 |x| <= 1 から
-      |c| <= 2^(lev/2) (exp_range の gain)。よって m = +qmax の区間は
-      [(qmax - 0.5)·step, min(2·qmax·step, gain)] (m = -qmax は符号を反転)。
-    指数は emax で頭打ちにならないよう emax を決めているので、合法な入力ではこの区間は必ず元の係数を含む
-    (tests/test_gracefm.py::test_cells_contain_original)。
-    """
-    emin, _ = exp_range(k, b, profile, ch)
-    qmax = qmax_of(b)
-    qmin = qmin_of(b, profile, ch, k)
-    gain = 2.0 ** (band_level(k, profile.levels) / 2)
-    step = _step(m, eidx, emin)
-    if attn is not None:
-        step = step * np.exp2(-attenuator_expanded(attn, profile.attenuator_group(ch, k), np.shape(m)[-1]))
-    lo = (m - 0.5) * step
-    hi = (m + 0.5) * step
-    top = np.minimum((4 if attn is not None else 2) * qmax * step, gain)
-    bottom = np.minimum((4 if attn is not None else 2) * -qmin * step, gain)
-    hi = np.where(m == qmax, top, hi)
-    lo = np.where(m == qmin, -bottom, lo)
-    return lo, hi
-
-
 # ---------------------------------------------------------------- ブロック単位のエンコーダ / デコーダ
 
 class BlockData:
@@ -216,22 +187,17 @@ def encode_block(x, profile: Profile, clip_opt=True) -> BlockData:
 
 
 def decode_coeffs(bd: BlockData, profile: Profile):
-    """BlockData → {ch: [帯域係数]}, {ch: [(lo, hi) or None]}"""
-    coefs, cell = {}, {}
+    """BlockData → {ch: [帯域係数]}"""
+    coefs = {}
     for ch, bits in (("M", profile.bits_m), ("S", profile.bits_s)):
-        coefs[ch], cell[ch] = [], []
+        coefs[ch] = []
         for k, b in enumerate(bits):
             n = profile.ncoef(k)
             if b == 0:
                 coefs[ch].append(np.zeros(n))
-                cell[ch].append(None)
                 continue
-            m = bd.mant[ch][k]
-            e = np.int64(bd.eidx[ch][k])
-            a = bd.attn[ch][k]
-            coefs[ch].append(dequantize(m, e, k, b, profile, ch, a))
-            cell[ch].append(cells(m, e, k, b, profile, ch, a))
-    return coefs, cell
+            coefs[ch].append(dequantize(bd.mant[ch][k], np.int64(bd.eidx[ch][k]), k, b, profile, ch, bd.attn[ch][k]))
+    return coefs
 
 
 def ms_to_lr(M, S):
@@ -240,5 +206,5 @@ def ms_to_lr(M, S):
 
 def decode_block(bd: BlockData, profile: Profile):
     """BlockData → (block, 2) L/R"""
-    coefs, _ = decode_coeffs(bd, profile)
+    coefs = decode_coeffs(bd, profile)
     return ms_to_lr(haar_inverse(coefs["M"]), haar_inverse(coefs["S"]))
