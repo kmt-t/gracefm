@@ -85,7 +85,7 @@ def job(a):
             v = st["vA"] | st["vB"]
         else:
             yA, v = txrx.StreamDecoder(pm).run(fa, len(x), 0)
-            y = yA * v[:, None] if cfg.endswith("無音") else plc.conceal(yA, v, fs, order=32)
+            y = yA * v[:, None] if cfg.endswith("無音") else plc.conceal(yA, v, fs)
         L = runs(v)
         if cfg.endswith("無音"):
             muted = (~v).mean() * 100

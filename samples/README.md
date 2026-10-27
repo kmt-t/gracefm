@@ -18,7 +18,7 @@
 | demo | B200+SUB100 | awgn-cn0-66dBHz | [再生](demo__32k__B200+SUB100__awgn-cn0-66dBHz.flac) | 41.59 |
 | demo | B200+SUB100 | awgn-cn0-80dBHz | [再生](demo__32k__B200+SUB100__awgn-cn0-80dBHz.flac) | 62.27 |
 | demo | B200+SUB100 | main-fade-10dB-cn0-66dBHz | [再生](demo__32k__B200+SUB100__main-fade-10dB-cn0-66dBHz.flac) | 25.78 |
-| demo | B200+SUB100 | rayleigh-cn0-60dBHz | [再生](demo__32k__B200+SUB100__rayleigh-cn0-60dBHz.flac) | 13.80 |
+| demo | B200+SUB100 | rayleigh-cn0-60dBHz | [再生](demo__32k__B200+SUB100__rayleigh-cn0-60dBHz.flac) | 11.75 |
 | demo | B200Y | codec | [再生](demo__32k__B200Y__codec.flac) | 62.94 |
 | demo | B200 | codec | [再生](demo__32k__B200__codec.flac) | 62.17 |
 | fishin | B200M+SUB50M | awgn-cn0-54dBHz | [再生](fishin__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac) | 12.41 |
@@ -27,7 +27,7 @@
 | fishin | B200M+SUB50M | awgn-cn0-66dBHz | [再生](fishin__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac) | 33.89 |
 | fishin | B200M+SUB50M | awgn-cn0-80dBHz | [再生](fishin__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac) | 57.34 |
 | fishin | B200M+SUB50M | main-fade-10dB-cn0-66dBHz | [再生](fishin__32k__B200M+SUB50M__main-fade-10dB-cn0-66dBHz.flac) | 16.48 |
-| fishin | B200M+SUB50M | rayleigh-cn0-60dBHz | [再生](fishin__32k__B200M+SUB50M__rayleigh-cn0-60dBHz.flac) | 14.49 |
+| fishin | B200M+SUB50M | rayleigh-cn0-60dBHz | [再生](fishin__32k__B200M+SUB50M__rayleigh-cn0-60dBHz.flac) | 14.25 |
 | fishin | B200M | codec | [再生](fishin__32k__B200M__codec.flac) | 57.32 |
 | fishin | FM | awgn-cn0-54dBHz | [再生](fishin__32k__FM__awgn-cn0-54dBHz.flac) | 4.02 |
 | fishin | FM | awgn-cn0-57dBHz | [再生](fishin__32k__FM__awgn-cn0-57dBHz.flac) | 11.42 |
@@ -42,7 +42,7 @@
 | vibeace | B200M+SUB50M | awgn-cn0-66dBHz | [再生](vibeace__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac) | 42.65 |
 | vibeace | B200M+SUB50M | awgn-cn0-80dBHz | [再生](vibeace__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac) | 66.07 |
 | vibeace | B200M+SUB50M | main-fade-10dB-cn0-66dBHz | [再生](vibeace__32k__B200M+SUB50M__main-fade-10dB-cn0-66dBHz.flac) | 26.54 |
-| vibeace | B200M+SUB50M | rayleigh-cn0-60dBHz | [再生](vibeace__32k__B200M+SUB50M__rayleigh-cn0-60dBHz.flac) | 18.23 |
+| vibeace | B200M+SUB50M | rayleigh-cn0-60dBHz | [再生](vibeace__32k__B200M+SUB50M__rayleigh-cn0-60dBHz.flac) | 17.22 |
 | vibeace | B200M | codec | [再生](vibeace__32k__B200M__codec.flac) | 65.78 |
 | vibeace | FM | awgn-cn0-54dBHz | [再生](vibeace__32k__FM__awgn-cn0-54dBHz.flac) | 2.81 |
 | vibeace | FM | awgn-cn0-57dBHz | [再生](vibeace__32k__FM__awgn-cn0-57dBHz.flac) | 10.20 |

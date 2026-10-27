@@ -42,7 +42,7 @@ def extrapolate(hist, n, order):
     return out
 
 
-def conceal(y, valid, fs, order=32, hist_len=1024, hold_ms=10.0, fade_ms=20.0, xfade=16):
+def conceal(y, valid, fs, order=16, hist_len=128, hold_ms=10.0, fade_ms=20.0, xfade=16):
     """y: (n, ch), valid: (n,) bool → 欠落区間を埋めた y"""
     out = y.copy()
     out[~valid] = 0.0

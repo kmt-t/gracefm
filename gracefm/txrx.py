@@ -311,7 +311,7 @@ class StreamDecoder:
         return y[offset:offset + n], v[offset:offset + n]
 
 
-def receive(profile: Profile, framesA, framesB, n, offset_b, plc_order=32,
+def receive(profile: Profile, framesA, framesB, n, offset_b, plc_order=16,
             return_streams=False, soft_decode=True, profile_b=None,
             cipher=None, hybrid_phase_only=False):
     """

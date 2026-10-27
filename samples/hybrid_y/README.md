@@ -12,14 +12,14 @@
 
 | 音源 | 構成 | 条件 | 試聴 | 波形SNR dB |
 |---|---|---|---|---:|
-| demo | B200Y+SUB100 | awgn-cn0-54dBHz | [再生](demo__32k__B200Y+SUB100__awgn-cn0-54dBHz.flac) | 14.91 |
+| demo | B200Y+SUB100 | awgn-cn0-54dBHz | [再生](demo__32k__B200Y+SUB100__awgn-cn0-54dBHz.flac) | 14.85 |
 | demo | B200Y+SUB100 | awgn-cn0-57dBHz | [再生](demo__32k__B200Y+SUB100__awgn-cn0-57dBHz.flac) | 21.07 |
 | demo | B200Y+SUB100 | awgn-cn0-60dBHz | [再生](demo__32k__B200Y+SUB100__awgn-cn0-60dBHz.flac) | 31.83 |
 | demo | B200Y+SUB100 | awgn-cn0-66dBHz | [再生](demo__32k__B200Y+SUB100__awgn-cn0-66dBHz.flac) | 37.25 |
 | demo | B200Y+SUB100 | awgn-cn0-80dBHz | [再生](demo__32k__B200Y+SUB100__awgn-cn0-80dBHz.flac) | 50.59 |
 | demo | B200Y+SUB100 | main-fade-10dB-cn0-66dBHz | [再生](demo__32k__B200Y+SUB100__main-fade-10dB-cn0-66dBHz.flac) | 26.06 |
 | demo | B200Y+SUB100 | phase-only-awgn-cn0-66dBHz | [再生](demo__32k__B200Y+SUB100__phase-only-awgn-cn0-66dBHz.flac) | 28.06 |
-| demo | B200Y+SUB100 | rayleigh-cn0-60dBHz | [再生](demo__32k__B200Y+SUB100__rayleigh-cn0-60dBHz.flac) | 13.63 |
+| demo | B200Y+SUB100 | rayleigh-cn0-60dBHz | [再生](demo__32k__B200Y+SUB100__rayleigh-cn0-60dBHz.flac) | 12.07 |
 | demo | B200Y | codec | [再生](demo__32k__B200Y__codec.flac) | 62.94 |
 | demo | B200Y | ideal | [再生](demo__32k__B200Y__ideal.flac) | 62.94 |
 | fishin | B200MY+SUB50M | awgn-cn0-54dBHz | [再生](fishin__32k__B200MY+SUB50M__awgn-cn0-54dBHz.flac) | 13.26 |
@@ -29,7 +29,7 @@
 | fishin | B200MY+SUB50M | awgn-cn0-80dBHz | [再生](fishin__32k__B200MY+SUB50M__awgn-cn0-80dBHz.flac) | 40.73 |
 | fishin | B200MY+SUB50M | main-fade-10dB-cn0-66dBHz | [再生](fishin__32k__B200MY+SUB50M__main-fade-10dB-cn0-66dBHz.flac) | 17.86 |
 | fishin | B200MY+SUB50M | phase-only-awgn-cn0-66dBHz | [再生](fishin__32k__B200MY+SUB50M__phase-only-awgn-cn0-66dBHz.flac) | 15.80 |
-| fishin | B200MY+SUB50M | rayleigh-cn0-60dBHz | [再生](fishin__32k__B200MY+SUB50M__rayleigh-cn0-60dBHz.flac) | 14.81 |
+| fishin | B200MY+SUB50M | rayleigh-cn0-60dBHz | [再生](fishin__32k__B200MY+SUB50M__rayleigh-cn0-60dBHz.flac) | 14.63 |
 | fishin | B200MY | codec | [再生](fishin__32k__B200MY__codec.flac) | 52.63 |
 | fishin | B200MY | ideal | [再生](fishin__32k__B200MY__ideal.flac) | 52.63 |
 | vibeace | B200MY+SUB50M | awgn-cn0-54dBHz | [再生](vibeace__32k__B200MY+SUB50M__awgn-cn0-54dBHz.flac) | 18.28 |
@@ -39,7 +39,7 @@
 | vibeace | B200MY+SUB50M | awgn-cn0-80dBHz | [再生](vibeace__32k__B200MY+SUB50M__awgn-cn0-80dBHz.flac) | 52.68 |
 | vibeace | B200MY+SUB50M | main-fade-10dB-cn0-66dBHz | [再生](vibeace__32k__B200MY+SUB50M__main-fade-10dB-cn0-66dBHz.flac) | 29.34 |
 | vibeace | B200MY+SUB50M | phase-only-awgn-cn0-66dBHz | [再生](vibeace__32k__B200MY+SUB50M__phase-only-awgn-cn0-66dBHz.flac) | 29.06 |
-| vibeace | B200MY+SUB50M | rayleigh-cn0-60dBHz | [再生](vibeace__32k__B200MY+SUB50M__rayleigh-cn0-60dBHz.flac) | 19.77 |
+| vibeace | B200MY+SUB50M | rayleigh-cn0-60dBHz | [再生](vibeace__32k__B200MY+SUB50M__rayleigh-cn0-60dBHz.flac) | 18.23 |
 | vibeace | B200MY | codec | [再生](vibeace__32k__B200MY__codec.flac) | 62.88 |
 | vibeace | B200MY | ideal | [再生](vibeace__32k__B200MY__ideal.flac) | 62.88 |
 
