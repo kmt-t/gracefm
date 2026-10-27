@@ -24,7 +24,7 @@
 
 **[プロファイル設定マトリクス](docs/PROFILES.md)** に、ID、サンプリング周波数、変調、FEC、M/Sの仮数全幅・基本層・拡張層、係数別昇格、区間アッテネータ、指数幅・オフセット、RRC、伝送予算を同じ項目で掲載する。設定元 `gracefm/profiles.py` から自動生成し、表と実装の不一致をチェックできる。
 
-- 階層方式は、係数をシンボル単位で分け、位相部（強い象限位置）に置く仮数bitが基本層、振幅部（弱い位置）に置く仮数bitが拡張層。位相部には基本層の仮数とパリティが入り、位相部と振幅部はどちらも2の倍数（K=1ならNシンボルで基本層 2N−1、拡張層 2N、全幅 4N−1）。仮数幅は主系で11/7/3 bit、QPSK副系で9〜3 bit。強い位置と弱い位置の数が釣り合うよう `gracefm/layers.py` が配分を決め（ヘッダ分だけ一部の帯域で基本層が小さくなる）、`python tools/design_layers.py` で再計算できる。係数の先頭シンボルが「パリティ＋最上位bit」、以降のシンボルにはパリティがない。
+- 階層方式は、係数をシンボル単位で分け、位相部（強い象限位置）に置く仮数bitが基本層、振幅部（弱い位置）に置く仮数bitが拡張層。位相部には基本層の仮数とパリティが入り、位相部と振幅部はどちらも2の倍数（K=1ならNシンボルで基本層 2N−1、拡張層 2N、全幅 4N−1）。仮数幅は主系で11/7/3 bit、QPSK副系で9〜3 bit。強い位置と弱い位置の数が釣り合うよう `gracefm/layers.py` が配分を決め（ヘッダ分だけ一部の帯域で基本層が小さくなる）、`python tools/report/design_layers.py` で再計算できる。係数の先頭シンボルが「パリティ＋最上位bit」、以降のシンボルにはパリティがない。
 - フレームは**ヘッダ**と**Haar係数部**に分ける。FECは「位相部にパリティ、振幅部にデータ」を置く系統符号で、1シンボルが「パリティ2bit｜データ2bit」になる。ヘッダ（ヘッダ・指数・区間アッテネータ・CRC）はこの形で符号化し、係数は各係数の先頭シンボルが「パリティ＋最上位bit｜次の2bit」、以降のシンボルにはパリティがない。残りの仮数はFEC・CRCなし。
 - パリティが守る上位bit数Kは全帯域で1。QPSKには音声の基本層／拡張層の区分がない。
 - Yの高域Mは7bit（最上位bit＋パリティが位相、残り6bitが半径）の専用シンボルで、仮数がHaar係数部に無い。通常デジタル層の区分は適用しない。
@@ -47,24 +47,24 @@
 
 ```sh
 pip install -r requirements.txt
-python tools/codec_wav.py 入力.wav 出力.wav --profile B200
-python tools/sim_link.py 入力.wav 出力.wav --profile B200M --snr 8 --single
-python tools/regenerate_samples.py     # 現行音源・評価値・試聴ページを一括再生成（評価依存が必要）
-python tools/design_layers.py           # 基本層・拡張層の配分を再計算して現行値と比較
-python tools/profile_matrix.py          # 設定表と計算予算を更新
-python tools/profile_matrix.py --check  # 実装との一致を確認
+python tools/sim/codec_wav.py 入力.wav 出力.wav --profile B200
+python tools/sim/sim_link.py 入力.wav 出力.wav --profile B200M --snr 8 --single
+python tools/samples/regenerate_samples.py     # 現行音源・評価値・試聴ページを一括再生成（評価依存が必要）
+python tools/report/design_layers.py           # 基本層・拡張層の配分を再計算して現行値と比較
+python tools/report/profile_matrix.py          # 設定表と計算予算を更新
+python tools/report/profile_matrix.py --check  # 実装との一致を確認
 python tests/test_profiles.py
 python tests/test_gracefm.py
 python tests/test_hybrid.py
 python tests/test_equalizer.py
 ```
 
-評価を実行するツールは現行プロファイル名で動作する。音質評価の追加依存は `requirements-eval.txt`。音源・試聴評価JSON・試聴ページは現行版へ置き換える。各ツールの `--help` を参照。
+評価を実行するツールは現行プロファイル名で動作する。各ツールの `--help` を参照。
 
 ## 構成
 
 - `gracefm/`：プロファイル・音声符号化・変復調・FEC・融合・PLC・時刻モデル。
-- `tools/`：WAV変換、シミュレーション、設定表生成、評価。
+- `tools/`：`sim/`（WAV変換・シミュレーション）、`report/`（設定表・スペクトル・基本層の生成）、`samples/`（試聴音源の生成と検証）、`eval/`（評価）。
 - `tests/`：プロファイル、アッテネータ保護、実配置、送受信、等化の検証。
 - `docs/`：現行仕様、設定表、評価結果。
 - `samples/`：現行仕様で生成した試聴音源と出典。

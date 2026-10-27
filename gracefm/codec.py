@@ -208,3 +208,14 @@ def decode_block(bd: BlockData, profile: Profile):
     """BlockData → (block, 2) L/R"""
     coefs = decode_coeffs(bd, profile)
     return ms_to_lr(haar_inverse(coefs["M"]), haar_inverse(coefs["S"]))
+
+
+def roundtrip(x, profile: Profile):
+    """通信路なしの符号化と復号 (ブロックごと)。x は (n, 2) の L/R"""
+    nfr = int(np.ceil(len(x) / profile.block))
+    xp = np.pad(x, ((0, nfr * profile.block - len(x)), (0, 0)))
+    out = np.zeros_like(xp)
+    for i in range(nfr):
+        out[i * profile.block:(i + 1) * profile.block] = decode_block(
+            encode_block(xp[i * profile.block:(i + 1) * profile.block], profile), profile)
+    return out[:len(x)]

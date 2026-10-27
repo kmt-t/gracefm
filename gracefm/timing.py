@@ -68,17 +68,6 @@ def min_latency(profile: Profile, two_streams=True, tm: Timing = Timing(), nunit
     return need
 
 
-def breakdown(profile: Profile, two_streams=True, tm: Timing = Timing()):
-    """遅延の内訳 [ms] (表示用)"""
-    B = profile.block / profile.fs * 1000
-    total = min_latency(profile, two_streams, tm) * 1000
-    filt = max(tm.t_filt, tm.t_filt_b if two_streams and tm.t_filt_b is not None else tm.t_filt)
-    wait = total - (2 * B + (tm.t_enc + filt + tm.t_dec + tm.t_out) * 1000)
-    return {"蓄積 (ブロック長)": B, "送信の直列化": B, "符号化": tm.t_enc * 1000,
-            "フィルタ": filt * 1000, "復号": tm.t_dec * 1000, "融合・出力": tm.t_out * 1000,
-            "系統Bの待ち": max(wait, 0.0), "合計": total}
-
-
 def rrc_equalizer_delay(profile: Profile, lookahead_symbols=0):
     """Transmit plus receive RRC group delay and FIR equalizer lookahead [s]."""
     from .channel import symbol_rate

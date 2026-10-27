@@ -1,6 +1,6 @@
 # 現行プロファイル設定マトリクス
 
-`gracefm/profiles.py` の `PROFILE_MATRIX` から生成。更新は `python tools/profile_matrix.py`、一致確認は `--check`。アルゴリズムと測定条件は[技術論文](SPEC.md)を参照。
+`gracefm/profiles.py` の `PROFILE_MATRIX` から生成。更新は `python tools/report/profile_matrix.py`、一致確認は `--check`。アルゴリズムと測定条件は[技術論文](SPEC.md)を参照。
 
 全登録プロファイルに区間アッテネータを標準装備する。名前の数字は系列名であり、現在の実ビットレートは下表を参照。
 

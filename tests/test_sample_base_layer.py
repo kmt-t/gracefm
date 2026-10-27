@@ -4,10 +4,10 @@ from pathlib import Path
 import sys
 import numpy as np
 ROOT=Path(__file__).resolve().parents[1]
-sys.path.insert(0,str(ROOT));sys.path.insert(0,str(ROOT/'tools'))
+sys.path.insert(0,str(ROOT))
 from gracefm.codec import encode_block, offset_of
 from gracefm.profiles import PROFILES
-from base_layer_sample import BaseLayerDecoder,base_layer_audio
+from tools.eval.base_layer_sample import BaseLayerDecoder,base_layer_audio
 
 
 def test_erasing_extension_retains_basic_layer():

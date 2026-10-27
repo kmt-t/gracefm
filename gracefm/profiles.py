@@ -127,10 +127,6 @@ class Profile:
             return (self.bits_m if ch == "M" else self.bits_s)[k]
         return (self.base_m if ch == "M" else self.base_s)[k]
 
-    def phase_bits(self, ch: str, k: int) -> int:
-        """帯域の位相部 (強い2位置) に入る係数あたりのビット数 = 基本層の仮数 + パリティ"""
-        return self.base_bits(ch, k) + (self.protect_bits(k) if self.bits_for(ch)[k] else 0)
-
     def bits_for(self, ch: str):
         return self.bits_m if ch == "M" else self.bits_s
 
