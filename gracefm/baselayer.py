@@ -1,4 +1,4 @@
-"""Render the actual basic layer, retaining coefficient-specific promotions."""
+"""基本層だけを復号する (拡張層の事後確率を 0.5 に置き、係数ごとの昇格を保つ)。"""
 import copy
 import numpy as np
 from gracefm.codec import offset_of
@@ -22,7 +22,7 @@ class BaseLayerDecoder(StreamDecoder):
 
 
 def base_layer_audio(audio, profile):
-    if not profile.layered or profile.hybrid:
+    if not profile.layered or profile.has_y:
         raise ValueError('a conventional layered profile is required')
     decoder = BaseLayerDecoder(profile)
     output, valid = decoder.run(Transmitter(profile).run(audio), len(audio))

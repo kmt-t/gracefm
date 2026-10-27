@@ -14,7 +14,7 @@ from scipy.interpolate import CubicSpline
 from scipy.signal import fftconvolve
 
 from . import fec, modem
-from .framing import HybridLayout, Layout, _bits
+from .framing import YLayout, Layout, _bits
 from .profiles import Profile
 from .pulse import rrc_taps
 
@@ -74,7 +74,7 @@ def header_training_symbols(profile: Profile, stream_id: int, frame_no: int, enc
     by its equally likely mean, and decision-directed training refines it.
     """
     width = Layout(profile, encrypted=encrypted).header_bits
-    tag = _bits(profile.experimental_tag, 2)
+    tag = _bits(profile.format_id, 2)
     header = (_bits(profile.pid, 4) + _bits(stream_id, 1) +
               [int(encrypted)] + tag +
               _bits(frame_no & ((1 << (width - 8)) - 1), width - 8))
@@ -158,17 +158,17 @@ def _slice_constellation(values, profile: Profile):
     for v, out in ((values.real, result.real), (values.imag, result.imag)):
         nearest = points[np.abs(np.abs(v)[:, None] - points).argmin(axis=1)]
         out[:] = np.where(v < 0, -nearest, nearest)
-    if profile.hybrid:
-        lay = HybridLayout(profile)
+    if profile.has_y:
+        lay = YLayout(profile)
         digital = modem.n_symbols(lay.n_tx, lay.n_strong, profile.modulation)
-        frame_len = len(modem.PREAMBLE) + digital + lay.n_hybrid
+        frame_len = len(modem.PREAMBLE) + digital + lay.n_y
         if len(result) % frame_len:
             raise ValueError("等化器の入力がフレーム長の整数倍ではありません")
         src = np.asarray(values).reshape(-1, frame_len)
         dst = result.reshape(-1, frame_len)
         high = src[:, len(modem.PREAMBLE) + digital:]
-        dst[:, len(modem.PREAMBLE) + digital:] = modem.hybrid_slice(
-            high, profile.hybrid_amplitude, profile.hybrid_bits - 1).reshape(high.shape)
+        dst[:, len(modem.PREAMBLE) + digital:] = modem.y_slice(
+            high, profile.y_amplitude, profile.y_bits - 1).reshape(high.shape)
     return result
 
 

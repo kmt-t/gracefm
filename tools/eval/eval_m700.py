@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-モニター用 (48kHz) の主系M700MとM700（いずれも階層16QAM）を、同じ C/N0 で比べる。
+48 kHz の主系 M700M と M700（いずれも階層16QAM）を、同じ C/N0 で比べる。
 
   python tools/eval/eval_m700.py --json docs/results/m700_eval.json
 
@@ -18,7 +18,8 @@ import numpy as np
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 sys.path.insert(0, ROOT)
 
-from gracefm import channel, metrics, wavio  # noqa: E402
+from gracefm import channel  # noqa: E402
+from tools.common import metrics, wavio  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 
 CONFIGS = [("M700M (階層16QAM)", "M700M", None),

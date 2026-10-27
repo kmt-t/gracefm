@@ -15,7 +15,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from gracefm import metrics, wavio  # noqa: E402
+from tools.common import metrics, wavio  # noqa: E402
 from gracefm.codec import decode_coeffs, encode_block, haar_inverse, ms_to_lr  # noqa: E402
 from gracefm.postfilter import OUT_FS, postfilter  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402

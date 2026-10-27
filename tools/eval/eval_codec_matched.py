@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 from tools.eval.codec_benchmark_io import aptx_roundtrip, heaac_roundtrip, source  # noqa: E402
-from gracefm import metrics, wavio  # noqa: E402
+from tools.common import metrics, wavio  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 from gracefm.codec import roundtrip as codec  # noqa: E402
 

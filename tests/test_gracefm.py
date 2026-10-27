@@ -211,7 +211,7 @@ def test_two_streams_survive_single_stream_loss():
 
 def test_low_rate_sub_stream():
     """副系が主系より低いビットレートでも融合でき、雑音なしなら主系の音質を落とさない"""
-    from gracefm import metrics
+    from tools.common import metrics
     p, ps = PROFILES["B200M"], PROFILES["SUB50M"]
     x = _signal(p.block * 40, p.fs)
     x[:, 1] = x[:, 0]
@@ -227,7 +227,7 @@ def test_low_rate_sub_stream():
 
 def test_layered_profile():
     """階層化: 基本層は元のプロファイルと同じビットで強い位置に収まり、雑音なしなら全ビットで復号できる"""
-    from gracefm import metrics
+    from tools.common import metrics
     from dataclasses import replace
     p = PROFILES["B200M"]
     lay, t = Layout(p), Transmitter(p)
@@ -257,7 +257,8 @@ def test_layered_profile():
 
 def test_b200_link_preserves_high_side_signal():
     """帯域圧縮後も高域Sのレベルを保ち、基本層を減らしたY系の差を検出する。"""
-    from gracefm import channel, wavio
+    from gracefm import channel
+    from tools.common import wavio
     from gracefm.codec import haar_forward
 
     p = PROFILES["B200"]
@@ -284,7 +285,7 @@ def test_b200_link_preserves_high_side_signal():
 
 def test_encryption():
     """暗号化: 正しい鍵なら暗号化なしと同じ音、違う鍵なら復号できない。24bit のフレーム番号の周回も復元できる"""
-    from gracefm import metrics
+    from tools.common import metrics
     from gracefm.crypto import StreamCipher, unwrap_counter
     p = PROFILES["B200M"]
     x = _signal(p.block * 30, p.fs)
