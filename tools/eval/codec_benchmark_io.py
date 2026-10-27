@@ -99,10 +99,6 @@ def heaac_roundtrip(x, aot, bitrate, fdkaac, ffmpeg):
     return y, size, delay
 
 
-def heaacv2_roundtrip(x, bitrate, fdkaac, ffmpeg):
-    return heaac_roundtrip(x, 29, bitrate, fdkaac, ffmpeg)
-
-
 def prepare(entry, seconds):
     """ライセンス確認済みの原音から、32 kHz・モノラルを2チャンネルに複製した評価区間 (ピーク0.89) を作る"""
     path = ROOT / "eval_audio" / entry["file"]

@@ -21,16 +21,12 @@ class Profile:
     exp_bits: int = 4           # 帯域ごとの共有指数のビット数 (16段 × 約6dB)
     protect_k: int = 1          # ヘッダ部に入れてFECで保護する仮数の上位ビット数 (帯域 k=0..4。protect_k_high が None なら全帯域)
     protect_k_high: Optional[int] = None   # 高域 H2/H1 (k=5,6) だけ別の保護bit数にするとき
-    modulation: str = "qpsk"    # "qpsk" | "qam16h" | "qam64h"
+    modulation: str = "qpsk"    # "qpsk" | "qam16h"
     alpha: float = 1.0          # 階層 QAM の象限間距離パラメータ (1 = 通常の QAM)
     pulse_beta: float = 0.25    # スペクトル評価用 RRC パルスのロールオフ
     pulse_span: int = 16        # 同パルスの長さ [シンボル]
     base_m: Optional[Tuple[int, ...]] = None   # 階層化したときの基本層 (位相部に置くHaar係数の仮数bit。パリティを除く) のビット数 (None = 階層化なし)
     base_s: Optional[Tuple[int, ...]] = None   # 同 S。基本層を超えるbit (拡張層) は変調の弱い位置に入る
-    exp_bits_m: Optional[Tuple[int, ...]] = None  # 評価用: M の帯域別指数幅。None は exp_bits を使う
-    exp_bits_s: Optional[Tuple[int, ...]] = None  # 評価用: S の帯域別指数幅
-    exp_offset_m: Optional[Tuple[int, ...]] = None  # 評価用: M の固定指数オフセット emin
-    exp_offset_s: Optional[Tuple[int, ...]] = None  # 評価用: S の固定指数オフセット emin
     attn_group_m: Optional[Tuple[int, ...]] = None  # 0=無効、正数=その係数数ごとに1bit
     attn_group_s: Optional[Tuple[int, ...]] = None
     hybrid_start_k: Optional[int] = None  # 実験方式: この帯域から 1係数/複素シンボル
@@ -46,14 +42,10 @@ class Profile:
             raise ValueError("RRC パルスのロールオフは (0, 1]、長さは正の偶数にしてください")
         if len(self.bits_m) != self.nbands or len(self.bits_s) != self.nbands:
             raise ValueError("仮数ビット割当の長さが帯域数と一致しません")
-        for field in ("exp_bits_m", "exp_bits_s", "exp_offset_m", "exp_offset_s", "attn_group_m", "attn_group_s"):
+        for field in ("attn_group_m", "attn_group_s"):
             values = getattr(self, field)
             if values is not None and len(values) != self.nbands:
                 raise ValueError(f"{field} は {self.nbands} 帯域ぶん必要です")
-        for field in ("exp_bits_m", "exp_bits_s"):
-            values = getattr(self, field)
-            if values is not None and any(not 1 <= v <= 8 for v in values):
-                raise ValueError(f"{field} は 1〜8 bit にしてください")
         for ch, bits in (("M", self.bits_m), ("S", self.bits_s)):
             for k, b in enumerate(bits):
                 group = self.attenuator_group(ch, k)
@@ -101,14 +93,6 @@ class Profile:
     def hybrid(self) -> bool:
         return self.hybrid_start_k is not None
 
-    def exponent_bits(self, ch: str, k: int) -> int:
-        values = self.exp_bits_m if ch == "M" else self.exp_bits_s
-        return self.exp_bits if values is None else values[k]
-
-    def exponent_offset(self, ch: str, k: int) -> Optional[int]:
-        values = self.exp_offset_m if ch == "M" else self.exp_offset_s
-        return None if values is None else values[k]
-
     def attenuator_group(self, ch: str, k: int) -> int:
         values = self.attn_group_m if ch == "M" else self.attn_group_s
         return 0 if values is None else values[k]
@@ -126,9 +110,6 @@ class Profile:
         if not self.layered:
             return (self.bits_m if ch == "M" else self.bits_s)[k]
         return (self.base_m if ch == "M" else self.base_s)[k]
-
-    def bits_for(self, ch: str):
-        return self.bits_m if ch == "M" else self.bits_s
 
     def protect_bits(self, k: int) -> int:
         """帯域 k の仮数上位のうち、ヘッダ部に入れて FEC で保護するbit数"""
@@ -162,7 +143,7 @@ class Profile:
         for ch, bits in (("M", self.bits_m), ("S", self.bits_s)):
             for k, b in enumerate(bits):
                 if b > 0:
-                    tot += self.exponent_bits(ch, k) + self.attenuator_bits(ch, k) + self.ncoef(k) * b
+                    tot += self.exp_bits + self.attenuator_bits(ch, k) + self.ncoef(k) * b
         return tot
 
     def audio_kbps(self) -> float:
@@ -172,13 +153,6 @@ class Profile:
 def band_level(k: int, levels: int) -> int:
     """係数群 k の分解段数（k=0 は低域近似、k=1..levels は詳細帯域）。"""
     return levels if k == 0 else levels + 1 - k
-
-
-def band_edges(fs: int, levels: int):
-    edges = [(0.0, fs / 2 ** (levels + 1))]
-    for k in range(1, levels + 1):
-        edges.append((fs / 2 ** (levels + 2 - k), fs / 2 ** (levels + 1 - k)))
-    return edges
 
 
 def default_split(widths, protect_bits):
@@ -261,8 +235,6 @@ PROFILE_MATRIX = (
         base_s=(0, 0, 0, 0, 0, 0, 0),
         attn_group_m=(0, 0, 0, 0, 0, 0, 4),
         attn_group_s=(0, 0, 0, 0, 0, 0, 0),
-        exp_offset_m=None,
-        exp_offset_s=None,
         pulse_beta=0.25,
         pulse_span=16,
         hybrid_start_k=None,
@@ -284,8 +256,6 @@ PROFILE_MATRIX = (
         base_s=(5, 5, 3, 3, 3, 3, 3),
         attn_group_m=(0, 0, 0, 0, 0, 0, 4),
         attn_group_s=(0, 0, 0, 0, 0, 0, 4),
-        exp_offset_m=None,
-        exp_offset_s=None,
         pulse_beta=0.1,
         pulse_span=32,
         hybrid_start_k=None,
@@ -307,8 +277,6 @@ PROFILE_MATRIX = (
         base_s=(0, 0, 0, 0, 0, 0, 0),
         attn_group_m=(0, 0, 0, 0, 0, 4, 8),
         attn_group_s=(0, 0, 0, 0, 0, 0, 0),
-        exp_offset_m=None,
-        exp_offset_s=None,
         pulse_beta=0.25,
         pulse_span=16,
         hybrid_start_k=5,
@@ -330,8 +298,6 @@ PROFILE_MATRIX = (
         base_s=(5, 5, 5, 5, 3, 1, 1),
         attn_group_m=(0, 0, 0, 0, 0, 4, 8),
         attn_group_s=(0, 0, 0, 0, 0, 4, 8),
-        exp_offset_m=None,
-        exp_offset_s=None,
         pulse_beta=0.1,
         pulse_span=32,
         hybrid_start_k=5,
@@ -353,8 +319,6 @@ PROFILE_MATRIX = (
         base_s=None,
         attn_group_m=(0, 0, 0, 0, 4, 0, 0),
         attn_group_s=(0, 0, 0, 0, 0, 0, 0),
-        exp_offset_m=None,
-        exp_offset_s=None,
         pulse_beta=0.25,
         pulse_span=16,
         hybrid_start_k=None,
@@ -376,8 +340,6 @@ PROFILE_MATRIX = (
         base_s=None,
         attn_group_m=(0, 0, 0, 0, 4, 0, 0),
         attn_group_s=(0, 0, 0, 0, 4, 0, 0),
-        exp_offset_m=None,
-        exp_offset_s=None,
         pulse_beta=0.25,
         pulse_span=16,
         hybrid_start_k=None,
@@ -399,8 +361,6 @@ PROFILE_MATRIX = (
         base_s=(0, 0, 0, 0, 0, 0, 0),
         attn_group_m=(0, 0, 0, 0, 0, 0, 4),
         attn_group_s=(0, 0, 0, 0, 0, 0, 0),
-        exp_offset_m=None,
-        exp_offset_s=None,
         pulse_beta=0.25,
         pulse_span=16,
         hybrid_start_k=None,
@@ -422,8 +382,6 @@ PROFILE_MATRIX = (
         base_s=(3, 3, 3, 3, 3, 3, 1),
         attn_group_m=(0, 0, 0, 0, 0, 0, 4),
         attn_group_s=(0, 0, 0, 0, 0, 0, 4),
-        exp_offset_m=None,
-        exp_offset_s=None,
         pulse_beta=0.25,
         pulse_span=16,
         hybrid_start_k=None,
@@ -445,8 +403,6 @@ PROFILE_MATRIX = (
         base_s=(0, 0, 0, 0, 0, 0, 0),
         attn_group_m=(0, 0, 0, 0, 0, 4, 8),
         attn_group_s=(0, 0, 0, 0, 0, 0, 0),
-        exp_offset_m=None,
-        exp_offset_s=None,
         pulse_beta=0.25,
         pulse_span=16,
         hybrid_start_k=5,
@@ -468,8 +424,6 @@ PROFILE_MATRIX = (
         base_s=(3, 3, 3, 3, 3, 1, 1),
         attn_group_m=(0, 0, 0, 0, 0, 4, 8),
         attn_group_s=(0, 0, 0, 0, 0, 4, 8),
-        exp_offset_m=None,
-        exp_offset_s=None,
         pulse_beta=0.25,
         pulse_span=16,
         hybrid_start_k=5,
@@ -491,8 +445,6 @@ PROFILE_MATRIX = (
         base_s=None,
         attn_group_m=(0, 0, 0, 0, 4, 0, 0),
         attn_group_s=(0, 0, 0, 4, 0, 0, 0),
-        exp_offset_m=None,
-        exp_offset_s=None,
         pulse_beta=0.25,
         pulse_span=16,
         hybrid_start_k=None,

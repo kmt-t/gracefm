@@ -5,8 +5,8 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from gracefm import fec, modem  # noqa: E402
-from gracefm.codec import decode_block, decode_coeffs, encode_block, haar_forward, offset_of  # noqa: E402
+from gracefm import modem  # noqa: E402
+from gracefm.codec import decode_block, decode_coeffs, encode_block, haar_forward  # noqa: E402
 from gracefm.framing import HybridLayout, Layout  # noqa: E402
 from gracefm.profiles import PROFILES, make_hybrid  # noqa: E402
 from gracefm.txrx import StreamDecoder, Transmitter, receive  # noqa: E402
@@ -134,7 +134,7 @@ def test_broadcast_y_two_high_m_bands_have_protected_attenuator_bytes():
         assert np.array_equal(restored.attn["M"][6], bd.attn["M"][6])
 
         protected = layout.header_info(packed)
-        first_attn = layout.header_bits + sum(p.exponent_bits(ch, k) for ch, k in layout.exp_items)
+        first_attn = layout.header_bits + sum(p.exp_bits for ch, k in layout.exp_items)
         protected[layout.high_prot_indices[0]] ^= 1
         corrupted = layout.with_header(packed, protected)
         recovered, header = layout.unpack(1.0 - 2.0 * corrupted, corrupted)
@@ -232,7 +232,7 @@ def test_m700_y_profiles_preserve_channel_mode_and_experimental_identity():
         assert y.hybrid_bits == 7
         assert y.fs == 48000 and y.block == 64 and y.hybrid_start_k == 5
         # M700 は S の H1 (k=6) を 3bit で送り、Y 版 (M700Y) は S の k=6 も Y 帯域 (7bit) で送る
-        assert y.bits_s[:6] == old.bits_s[:6] and y.exp_offset_s == old.exp_offset_s
+        assert y.bits_s[:6] == old.bits_s[:6]
         assert y.attn_group_s[:5] == old.attn_group_s[:5]
         assert any(y.bits_s) == (old_name == "M700")
         assert y.pid != old.pid and y.experimental_tag == old.experimental_tag == 3
@@ -302,7 +302,7 @@ def test_monitor_y_bit_positions_preserve_s_codes():
     old = PROFILES["M700"]
     y_profile = PROFILES["M700Y"]
     assert y_profile.bits_s[:6] == old.bits_s[:6] and y_profile.bits_s[6] == 7 and old.bits_s[6] == 3
-    assert y_profile.exp_offset_s == old.exp_offset_s and y_profile.attn_group_s[:5] == old.attn_group_s[:5]
+    assert y_profile.attn_group_s[:5] == old.attn_group_s[:5]
     assert y_profile.base_s[:5] == (3, 3, 3, 3, 3)
     assert y_profile.base_m == (5, 5, 5, 5, 5, 1, 1)
     assert BY_HEADER[(y_profile.pid, y_profile.experimental_tag)] is y_profile
