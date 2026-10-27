@@ -28,4 +28,4 @@
 
 保存場所は、32 kHzの主系・副系音声がこのディレクトリ、48 kHzは `monitor/`、Y系は `hybrid_y/` と `monitor_y/`。同じ原音が各評価フォルダに複製されている場合は同じ名前を使う。
 
-生成ツールは `tools/sample_names.py` の共通関数で命名する。旧版の音声・試聴ページ・改名対応表は保持せず、履歴はGitで管理する。現行音声の全設定・保存後の波形SNR・SHA-256は [音源一覧JSON](../docs/results/samples.json) に記録する。名前は主要条件を示すものであり、乱数seed・全設定は評価JSONを参照する。
+生成ツールは `tools/sample_names.py` の共通関数で命名する。現行音声の全設定・保存後の波形SNR・SHA-256は [音源一覧JSON](../docs/results/samples.json) に記録する。名前は主要条件を示すものであり、乱数seed・全設定は評価JSONを参照する。
