@@ -55,7 +55,7 @@ def render():
                     base.append('—');ext.append('—')
                 else:
                     base.append(p.base_bits(ch,k));ext.append(b-p.base_bits(ch,k))
-            exps=[p.exponent_bits(ch,k) if b else '—' for k,b in enumerate(bits)]
+            exps=[p.exp_bits if b else '—' for k,b in enumerate(bits)]
             offsets=[exp_range(k,b,p,ch)[0] if b else '—' for k,b in enumerate(bits)]
             lines.append(f'| {p.pid} | {p.name} | {ch} | {vector(bits)} | {vector(base)} | {vector(ext)} | {vector(p.attenuator_group(ch,k) for k in range(7))} | {vector(exps)} | {vector(offsets)} |')
     lines += ['', 'YはMのみ、標準7bit（位相＝最上位bit＋パリティ、半径6bit）、半径間隔は `0.08 * 7.5 / 31.5`。Y帯域の仮数は仮数bitに入らず専用シンボルで送り、位相に最上位bitとそのパリティを載せてFEC保護する（終端bitだけヘッダ側）。Yの暗号化は未対応。', '',

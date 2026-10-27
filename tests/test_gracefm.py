@@ -8,7 +8,7 @@ import numpy as np
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from gracefm import fec, modem  # noqa: E402
-from gracefm.codec import (decode_block, decode_coeffs, encode_block, haar_forward,  # noqa: E402
+from gracefm.codec import (decode_block, encode_block, haar_forward,  # noqa: E402
                         haar_inverse)
 from gracefm.framing import Layout  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
@@ -59,26 +59,6 @@ def test_frame_roundtrip_bit_exact():
         assert np.allclose(decode_block(bd2, p), decode_block(bd, p)), name
 
 
-def test_band_exponents_use_fixed_offsets_and_variable_widths():
-    from gracefm.codec import exp_range
-
-    base = PROFILES["B200M"]
-    widths = (4, 3, 4, 3, 4, 3, 4)
-    offsets = tuple(exp_range(k, b, base)[1] - (2 ** widths[k] - 1)
-                    for k, b in enumerate(base.bits_m))
-    p = replace(base, exp_bits_m=widths, exp_offset_m=offsets)
-    x = _signal(p.block, p.fs)
-    bd = encode_block(x, p)
-    lay = Layout(p)
-    assert lay.n_prot == Layout(base).n_prot - 3
-    for k, b in enumerate(p.bits_m):
-        assert exp_range(k, b, p) == (offsets[k], offsets[k] + 2 ** widths[k] - 1)
-    frame = lay.pack(bd, 1, 5)
-    decoded, header = lay.unpack(1.0 - 2.0 * frame, frame)
-    assert header["pid"] == p.pid
-    assert np.allclose(decode_block(decoded, p), decode_block(bd, p))
-
-
 def test_attenuator_roundtrip():
     from gracefm.codec import dequantize, quantize, quantize_attenuated
     base = replace(PROFILES["B200M"], attn_group_m=(0,) * 7)
@@ -114,15 +94,6 @@ def test_attenuator_roundtrip():
         err1 = np.sum((c - dequantize(m1, e1, 6, p.bits_m[6], p, attn=a1)) ** 2)
         assert err1 <= err0 + 1e-20
 
-    # 指数幅を帯域ごとに減らした同レート案でも、区間ビットの位置が一致する。
-    narrow = replace(p, exp_bits_m=(3, 3, 3, 3, 2, 3, 3),
-                     exp_offset_m=(-18, -18, -19, -20, -17, -20, -18))
-    assert Layout(narrow).n_prot_crc == Layout(base).n_prot_crc
-    bd = encode_block(_signal(narrow.block, narrow.fs) * 0.01, narrow)
-    lay = Layout(narrow)
-    frame = lay.pack(bd, 0, 1)
-    recovered, _ = lay.unpack(1.0 - 2.0 * frame, frame)
-    assert np.allclose(decode_block(recovered, narrow), decode_block(bd, narrow))
 
 
 def test_adopted_attenuator_profile_end_to_end():
@@ -158,7 +129,7 @@ def test_broadcast_joint_stereo_attenuators():
 
 
 def test_modem_noiseless():
-    for mod in ("qpsk", "qam16h", "qam64h"):
+    for mod in ("qpsk", "qam16h"):
         bits = np.random.default_rng(4).integers(0, 2, 600)
         nsym = modem.n_symbols(600, 200, mod)
         soft, hard = modem.demodulate(modem.modulate(bits, nsym, mod, 2.0), 600, mod, 2.0)

@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from gracefm import fec, modem
+from gracefm import modem
 from gracefm.codec import encode_block, decode_block
 from gracefm.framing import Layout, HybridLayout
 from gracefm.profiles import PROFILES, BY_ID, BY_HEADER, make_hybrid
@@ -55,7 +55,7 @@ def test_all_profiles_roundtrip_and_attenuator_crc():
         lay = tx.layout
         packed = lay.pack(encode_block(x, p), 0, 0)
         body = lay.header_info(packed)
-        first = lay.header_bits + sum(p.exponent_bits(ch, k) for ch, k in lay.exp_items)
+        first = lay.header_bits + sum(p.exp_bits for ch, k in lay.exp_items)
         assert lay.attn_items
         for index in {first, first + len(lay.attn_items) - 1}:
             damaged = body.copy()

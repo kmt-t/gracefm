@@ -78,12 +78,12 @@ class Layout:
                     strong.extend(("C", ch, k, j, b - 1 - rank) for rank in range(base))
                     weak.extend(("C", ch, k, j, b - 1 - rank) for rank in range(base, b))
         self.n_top = len(top_item)
-        self.n_prot = (self.header_bits + sum(p.exponent_bits(ch, k) for ch, k in self.exp_items)
+        self.n_prot = (self.header_bits + sum(p.exp_bits for ch, k in self.exp_items)
                        + len(self.attn_items))
         self.n_body = self.n_prot - self.header_bits      # 暗号化するヘッダの内容のビット数
         core, high = list(range(self.header_bits)), []
         bit = self.header_bits
-        for items, widths in ((self.exp_items, (p.exponent_bits(ch, k) for ch, k in self.exp_items)),
+        for items, widths in ((self.exp_items, (p.exp_bits for ch, k in self.exp_items)),
                               (self.attn_items, (1 for _ in self.attn_items))):
             for item, width in zip(items, widths):
                 (high if item[1] >= 5 else core).extend(range(bit, bit + width))
@@ -225,7 +225,7 @@ class Layout:
         prot = list(hdr)
         bits_of = {"M": p.bits_m, "S": p.bits_s}
         for ch, k in self.exp_items:
-            prot += _bits(bd.eidx[ch][k], p.exponent_bits(ch, k))
+            prot += _bits(bd.eidx[ch][k], p.exp_bits)
         for ch, k, j in self.attn_items:
             prot.append(int(bd.attn[ch][k][j]))
         prot = np.array(prot, np.int64)
@@ -318,7 +318,7 @@ class Layout:
         u = {ch: [np.zeros(p.ncoef(k), np.int64) if bits_of[ch][k] > 0 else None
                   for k in range(p.nbands)] for ch in ("M", "S")}
         for ch, k in self.exp_items:
-            width = p.exponent_bits(ch, k)
+            width = p.exp_bits
             eidx[ch][k] = val(body[i:i + width])
             i += width
         for ch, k in self.exp_items:

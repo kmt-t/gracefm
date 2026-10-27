@@ -63,10 +63,8 @@ def exp_range(k, b, profile: Profile, ch="M"):
     lev = band_level(k, profile.levels)
     gain = 2.0 ** (lev / 2)                     # その帯域で取りうる最大振幅 (入力 |x|<=1)
     emax = int(np.ceil(np.log2(gain * 2.0 / qmax_of(b))))
-    width = profile.exponent_bits(ch, k)
-    offset = profile.exponent_offset(ch, k)
-    emin = emax - (2 ** width - 1) if offset is None else offset
-    return emin, emin + (2 ** width - 1)
+    emin = emax - (2 ** profile.exp_bits - 1)
+    return emin, emax
 
 
 def quantize(c, k, b, profile: Profile, clip_opt=True, ch="M"):

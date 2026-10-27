@@ -20,16 +20,10 @@ SOURCES = [
     ('piano', '"Emotional piano" by triangelx', 'https://commons.wikimedia.org/wiki/File:Emotional_piano.wav', 'CC0 1.0'),
     ('percussion', '"Ceramic Djembe" by RutgerMuller', 'https://commons.wikimedia.org/wiki/File:Ceramic_Djembe.wav', 'CC0 1.0'),
 ]
-CASE_TEXT = {'codec': 'コーデックだけ（通信路なし）', 'rayleigh60': 'レイリーフェージング C/N0 60（系統ごとに独立）',
-             'main_minus10db66': '主系の周波数だけ10dB低下 C/N0 66'}
 
 
 def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
-
-
-def case_text(case):
-    return CASE_TEXT.get(case) or f'白色雑音 C/N0 {case[4:]}（C/N {cn(int(case[4:])):.1f} dB）'
 
 
 def expected():

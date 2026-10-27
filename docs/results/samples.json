@@ -4,21 +4,20 @@
   "seed": 1,
   "code_sha256": {
     "gracefm/__init__.py": "8abf7535ba210c9045bd2224ca4de812ba291c5c84d743fb34cd480f31d46ea8",
-    "gracefm/analog_am.py": "81a26adfb79a79bbf2ee8fc306a9a905a792e941d575aac85005a3e2f9adbfec",
     "gracefm/analog_fm.py": "57cbbfd1a22a81332b4e631598a1342c795b5dbc8a84f3be7746f54f765c693a",
     "gracefm/channel.py": "77fc9d05c3f43761eb5c4642a5a9640e0f3266cc163d913b96893b814d8bb38f",
-    "gracefm/codec.py": "89d1b48f741fece58dd12e0938e68366da3181f76e6699154c8a24843c7a7825",
+    "gracefm/codec.py": "040abacd8cd36d7c2019d686a169550c8a775f2b1aa89290e51f8297205b094d",
     "gracefm/crypto.py": "9fde6b9a6831796884dfbfae0797507b297a9c1cb41c1ebd65c6ec0411698841",
     "gracefm/equalizer.py": "6b0832e01d252a64137adf8ff4ea1f72d314be8966cbecf480706bfc134fedb0",
     "gracefm/fec.py": "6163136beafb127749c8385e1941f6b8a9e734ba6528d845c2fc67c07bbb8e54",
-    "gracefm/framing.py": "62c73fce4a4b865a57f31828ea2acfc12a62759f8fa85db0378aaa57e6d858b6",
+    "gracefm/framing.py": "54bffb802a38d8c402beec5605485beccd96304616ed2f6a695edcae282c3888",
     "gracefm/fusion.py": "2159d0f51b033290f2d9197097919a86861e37eeec8685773174b4dad2f7997a",
     "gracefm/layers.py": "511b5889beb487b1970b090ce551ab3baf6a33f8048bf199627cfe241022de4f",
     "gracefm/metrics.py": "de0251384d4a828e283a403a9491920edc868d4157eefbac2ec7b36c6d031727",
-    "gracefm/modem.py": "e313385c5c5549294b344460971ce51b67b8e1297ef9bafb29f4f714824d5585",
+    "gracefm/modem.py": "4783888ce40ff74035fbacb9f5e29054481263052a641a50010009df22f11589",
     "gracefm/plc.py": "1e9d3df089bfa2ba3a779830fdfe81796aba44fbbb3f38340b026ce56bad8193",
     "gracefm/postfilter.py": "facfcac030606c340dfe5514932364a54c04def96eeb240fc725922c702b6f3e",
-    "gracefm/profiles.py": "af565d24e71815db0dc69da96315b359edf6ecb4b710ba2c2c2c3774544e84cb",
+    "gracefm/profiles.py": "4850c0bb78af5f7ab70ea1f857e9f71d8ddcc0175c07c2c2bcf3cda8ce852a03",
     "gracefm/pulse.py": "b309a72a20f4c92342f19ff35e64695d2be72186bfc72fa57356ed04fa579e6e",
     "gracefm/timing.py": "1d1cd824e202e3d20b2c35dd3facf83a0be9a69f150726ac3922bd66e0cd1f22",
     "gracefm/txrx.py": "b0e0a2a8e86fb7dcab5e9eae801519439f59f67023f6fb3e1374427d1f2389d2",
@@ -26,19 +25,19 @@
     "tools/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/eval/base_layer_sample.py": "ab23566db28f4bdaa96e29b99eb5850fbdf9ff3a57a9add8609d12da9c4e073d",
-    "tools/eval/codec_benchmark_io.py": "126f1256aa85a8bcb95d9289a3b2712251f1b88fd3c9051dc91b53d128cb85c6",
+    "tools/eval/codec_benchmark_io.py": "d71c3967bbba92e84a8e3e9003ca0c172f336b7239a4bb0201ebbd403f2f8f10",
     "tools/eval/eval_codec_matched.py": "294a7f3bfbb72c1e1b4bd82725e2ce500149747ded70d02a9f069cb0539f3552",
     "tools/eval/eval_ghost.py": "47b81d7d618046d78b1cfa66f66b19aa56f29a038c73a5ec94281f7e24830518",
     "tools/eval/eval_m700.py": "668e950b0acb84d5db86a896e35e600a0afc31ceefeaa70c1353ff865cdaf0cf",
     "tools/eval/fetch_lossless_benchmark_audio.py": "8e5c80600a854e83ca021910e733ba15a14e83818e5f3b99e2391da9681f3433",
     "tools/report/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/report/design_layers.py": "987efe86859ae15a356ef5b958f81645d26b8faaefe6f28d97e2ab060aee626b",
-    "tools/report/profile_matrix.py": "b475844cece8dd7385d37e810b0c4a40d6d8fb75b86866c7caad4ac9e36f2609",
+    "tools/report/profile_matrix.py": "d918df834ad286020965173e6378eeea59d6226f6e751f6986682134f13a0a91",
     "tools/report/spectrum.py": "3d3e2ac6da43298cd0e7197bd760301130b702e03e0a9a545d85cb244d5aaa53",
     "tools/samples/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/samples/make_samples.py": "97d5fbc85f9758c34d4de6e460e3692359d9003208d2ab4953baac26b5c8a9ca",
     "tools/samples/regenerate_samples.py": "98051d2011652d696b9fe232e76128b84bb8e8d89f749fab7f239083f530c7f3",
-    "tools/samples/sample_catalog.py": "4ce9589261ada72d33728cdf61de7966ccee16b2dfdae3dd0564165ac8231d3d",
+    "tools/samples/sample_catalog.py": "1e2fc1f378b08d3b21a650c3f9f4a0c830bdcdb83418fb55a153114d325ed342",
     "tools/samples/sample_names.py": "17a092c6b41854eab30d5a8f1ba1ddd8c241a5646ed9921ecb8386ce4ae28a89",
     "tools/sim/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/sim/codec_wav.py": "62c14b82166118f526bc25903e51d83d0f1814605e4ba21cfebd08336aeaea07",
@@ -107,10 +106,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -203,10 +198,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -299,10 +290,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -395,10 +382,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -491,10 +474,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -587,10 +566,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -683,10 +658,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -779,10 +750,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -875,10 +842,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -939,10 +902,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -1035,10 +994,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -1099,10 +1054,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -1195,10 +1146,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -1259,10 +1206,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -1355,10 +1298,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -1419,10 +1358,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -1515,10 +1450,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -1579,10 +1510,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -1675,10 +1602,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -1739,10 +1662,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -1835,10 +1754,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -1899,10 +1814,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -1995,10 +1906,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -2091,10 +1998,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -2187,10 +2090,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -2283,10 +2182,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -2379,10 +2274,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -2475,10 +2366,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -2571,10 +2458,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -2667,10 +2550,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -2763,10 +2642,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -2827,10 +2702,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -2923,10 +2794,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -2987,10 +2854,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -3083,10 +2946,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -3147,10 +3006,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -3243,10 +3098,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -3307,10 +3158,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -3403,10 +3250,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -3467,10 +3310,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -3563,10 +3402,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -3627,10 +3462,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -3723,10 +3554,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -3787,10 +3614,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -3988,10 +3811,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -4084,10 +3903,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -4180,10 +3995,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -4276,10 +4087,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -4372,10 +4179,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -4468,10 +4271,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -4564,10 +4363,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -4660,10 +4455,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -4756,10 +4547,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -4820,10 +4607,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -4916,10 +4699,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -4980,10 +4759,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -5076,10 +4851,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -5140,10 +4911,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -5236,10 +5003,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -5300,10 +5063,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -5396,10 +5155,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -5460,10 +5215,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -5556,10 +5307,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -5620,10 +5367,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -5716,10 +5459,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -5780,10 +5519,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -5876,10 +5611,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -5972,10 +5703,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -6068,10 +5795,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -6164,10 +5887,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -6260,10 +5979,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -6356,10 +6071,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -6452,10 +6163,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -6548,10 +6255,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -6644,10 +6347,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -6708,10 +6407,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -6804,10 +6499,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -6868,10 +6559,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -6964,10 +6651,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -7028,10 +6711,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -7124,10 +6803,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -7188,10 +6863,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -7284,10 +6955,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -7348,10 +7015,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -7444,10 +7107,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -7508,10 +7167,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -7604,10 +7259,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -7668,10 +7319,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -7764,10 +7411,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -7860,10 +7503,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -7956,10 +7595,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -8052,10 +7687,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -8148,10 +7779,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -8244,10 +7871,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -8340,10 +7963,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -8436,10 +8055,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -8532,10 +8147,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -8596,10 +8207,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -8692,10 +8299,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -8756,10 +8359,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -8852,10 +8451,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -8916,10 +8511,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -9012,10 +8603,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -9076,10 +8663,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -9172,10 +8755,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -9236,10 +8815,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -9332,10 +8907,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -9396,10 +8967,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -9492,10 +9059,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -9556,10 +9119,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -9652,10 +9211,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -9748,10 +9303,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -9844,10 +9395,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -9940,10 +9487,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -10036,10 +9579,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -10132,10 +9671,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -10228,10 +9763,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -10324,10 +9855,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -10420,10 +9947,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -10484,10 +10007,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -10580,10 +10099,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -10644,10 +10159,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -10740,10 +10251,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -10804,10 +10311,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -10900,10 +10403,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -10964,10 +10463,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -11060,10 +10555,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -11124,10 +10615,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -11220,10 +10707,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -11284,10 +10767,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -11380,10 +10859,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -11444,10 +10919,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -11645,10 +11116,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -11741,10 +11208,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -11837,10 +11300,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -11933,10 +11392,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -12029,10 +11484,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -12125,10 +11576,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -12221,10 +11668,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -12317,10 +11760,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -12413,10 +11852,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -12477,10 +11912,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -12573,10 +12004,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -12637,10 +12064,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -12733,10 +12156,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -12797,10 +12216,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -12893,10 +12308,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -12957,10 +12368,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -13053,10 +12460,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -13117,10 +12520,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -13213,10 +12612,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -13277,10 +12672,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -13373,10 +12764,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -13437,10 +12824,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -13533,10 +12916,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -13629,10 +13008,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -13725,10 +13100,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -13821,10 +13192,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -13917,10 +13284,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -14013,10 +13376,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -14109,10 +13468,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -14205,10 +13560,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -14301,10 +13652,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -14365,10 +13712,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -14461,10 +13804,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -14525,10 +13864,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -14621,10 +13956,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -14685,10 +14016,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -14781,10 +14108,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -14845,10 +14168,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -14941,10 +14260,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -15005,10 +14320,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -15101,10 +14412,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -15165,10 +14472,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -15261,10 +14564,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -15325,10 +14624,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -15421,10 +14716,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -15517,10 +14808,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -15613,10 +14900,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -15709,10 +14992,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -15805,10 +15084,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -15901,10 +15176,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -15997,10 +15268,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -16093,10 +15360,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -16189,10 +15452,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -16253,10 +15512,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -16349,10 +15604,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -16413,10 +15664,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -16509,10 +15756,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -16573,10 +15816,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -16669,10 +15908,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -16733,10 +15968,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -16829,10 +16060,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -16893,10 +16120,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -16989,10 +16212,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -17053,10 +16272,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -17149,10 +16364,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -17213,10 +16424,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -17309,10 +16516,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -17405,10 +16608,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -17501,10 +16700,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -17597,10 +16792,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -17693,10 +16884,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -17789,10 +16976,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -17885,10 +17068,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -17981,10 +17160,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -18077,10 +17252,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -18141,10 +17312,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -18237,10 +17404,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -18301,10 +17464,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -18397,10 +17556,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -18461,10 +17616,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -18557,10 +17708,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -18621,10 +17768,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -18717,10 +17860,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -18781,10 +17920,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -18877,10 +18012,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -18941,10 +18072,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -19037,10 +18164,6 @@
             0,
             0
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -19101,10 +18224,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -19302,10 +18421,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -19398,10 +18513,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -19494,10 +18605,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -19590,10 +18697,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -19686,10 +18789,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -19782,10 +18881,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -19878,10 +18973,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -19974,10 +19065,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -20070,10 +19157,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -20134,10 +19217,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -20230,10 +19309,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -20294,10 +19369,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -20390,10 +19461,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -20454,10 +19521,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -20550,10 +19613,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -20614,10 +19673,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -20710,10 +19765,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -20774,10 +19825,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -20870,10 +19917,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -20934,10 +19977,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -21030,10 +20069,6 @@
             3,
             3
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -21094,10 +20129,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -21190,10 +20221,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -21286,10 +20313,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -21382,10 +20405,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -21478,10 +20497,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -21574,10 +20589,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -21670,10 +20681,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -21766,10 +20773,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -21862,10 +20865,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -21958,10 +20957,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -22022,10 +21017,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -22118,10 +21109,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -22182,10 +21169,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -22278,10 +21261,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -22342,10 +21321,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -22438,10 +21413,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -22502,10 +21473,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -22598,10 +21565,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -22662,10 +21625,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -22758,10 +21717,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -22822,10 +21777,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -22918,10 +21869,6 @@
             1,
             1
           ],
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,
@@ -22982,10 +21929,6 @@
           "pulse_span": 16,
           "base_m": null,
           "base_s": null,
-          "exp_bits_m": null,
-          "exp_bits_s": null,
-          "exp_offset_m": null,
-          "exp_offset_s": null,
           "attn_group_m": [
             0,
             0,

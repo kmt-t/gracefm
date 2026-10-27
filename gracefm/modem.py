@@ -4,7 +4,6 @@
 QPSK (基本): 1シンボル = 2bit。ビット列を (I, Q, I, Q, ...) の順に各軸へ。bit0 → +, bit1 → −。
 階層 QAM (オプション): 各軸の点 = ±(α, α+2, ...), α=1 で通常の QAM。
   16QAM: 1軸 = 符号 (HP) 1bit + 位置 (LP1) 1bit
-  64QAM: 1軸 = 符号 (HP) 1bit + 位置 (LP1, LP2) 2bit (グレイ符号)
   ビット列は「全シンボルの HP 位置 → 全シンボルの LP1 位置 → LP2 位置」の順に埋める
   (送信順の前方ほど強い位置に入る。保護部の符号化ビットは必ず HP 位置に収まる長さにする)。
 平均シンボルエネルギーは 1。フレーム先頭に既知のプリアンブル (QPSK 16シンボル) を付ける。
@@ -16,7 +15,7 @@ import numpy as np
 PREAMBLE = np.array([1, 1, 1, -1, -1, 1, 1, -1, 1, -1, -1, -1, 1, 1, -1, 1], float)
 PREAMBLE = (PREAMBLE + 1j * np.roll(PREAMBLE, 5)) / np.sqrt(2)
 
-HALF_AXIS_POINTS = {"qpsk": 1, "qam16h": 2, "qam64h": 4}
+HALF_AXIS_POINTS = {"qpsk": 1, "qam16h": 2}
 
 _PRBS_CACHE = np.zeros(0, np.int64)
 
