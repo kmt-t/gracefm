@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""試聴音声の一式を検証し、索引 (docs/results/samples.json) と samples/README.md を作る。"""
+"""試聴音声の一式を検証し、索引 (samples/index.json) と samples/README.md を作る。"""
 import hashlib
 import json
 from dataclasses import asdict
@@ -11,7 +11,7 @@ import soundfile as sf
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from gracefm import metrics, wavio
+from tools.common import metrics, wavio
 from gracefm.profiles import PROFILES
 from tools.samples.make_samples import CASES, CN0_LIST, FORMS, FS, MATERIALS, SUBS, cn, source_name
 from tools.samples.sample_names import reference_name, sample_name
@@ -69,7 +69,7 @@ def build():
     code = {str(p.relative_to(ROOT)): digest(p) for d in ('gracefm', 'tools') for p in sorted((ROOT / d).rglob('*.py'))}
     report = dict(description='10-second listening samples; decoded FLAC measurements, not RF capture',
                   expected_sample_count=len(rows), seed=1, code_sha256=code, samples=entries)
-    destination = ROOT / 'docs/results/samples.json'
+    destination = ROOT / 'samples' / 'index.json'
     destination.write_text(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False) + '\n')
     write_readme(entries)
     print(destination, len(entries), 'validated samples')
@@ -79,7 +79,7 @@ def write_readme(entries):
     by = {(e['material'], e['form'], e['configuration'], e['condition']): e for e in entries}
     lines = ['# サンプル音声（GraceFM）', '',
              'ファイル名の読み方は[命名規則](NAMING.md)。各10秒・32 kHz、劣化音は24bit FLAC。`tools/samples/make_samples.py` で生成し、'
-             '`tools/samples/sample_catalog.py` で検証してこのファイルを書く。設定・測定値・SHA-256は[音源一覧JSON](../docs/results/samples.json)。', '',
+             '`tools/samples/sample_catalog.py` で検証してこのファイルを書く。設定・測定値・SHA-256は[音源一覧JSON](index.json)。', '',
              '## マトリクス', '',
              '素材 3（demo・piano・percussion）× 形 2（モノラル・ステレオ）。モノラル形は (L+R)/2、ステレオ形は原音のまま。'
              '2系統は主系・副系とも独立のチャンネルで、電力を分け合わない（C/N0は同じ値）。', '',

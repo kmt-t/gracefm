@@ -144,7 +144,7 @@ def awgn(sym, snr_db, rng):
                   + 1j * rng.normal(0, np.sqrt(n0 / 2), sym.shape))
 
 
-def hybrid_scale(amplitude, lower_bits=6):
+def y_scale(amplitude, lower_bits=6):
     """全点の平均シンボルエネルギーを1にする半径の倍率。"""
     levels = 1 << lower_bits
     radii = 1 + amplitude * (np.arange(levels) - (levels - 1) / 2)
@@ -157,13 +157,13 @@ _QUADRANT = np.array([0, 1, 3, 2])          # 2*最上位bit + パリティ → 
 _QUADRANT_BITS = np.argsort(_QUADRANT)      # 象限番号 → 2*最上位bit + パリティ
 
 
-def hybrid_modulate(u, parity, amplitude=0.08, scramble=None, lower_bits=6):
+def y_modulate(u, parity, amplitude=0.08, scramble=None, lower_bits=6):
     """u = 最上位bit·2^lower_bits + 半径の段 (0〜2^(lower_bits+1)-1)、parity = 最上位bitのパリティ (0/1)。"""
     u = np.asarray(u, np.int64)
     parity = np.asarray(parity, np.int64)
     levels = 1 << lower_bits
     if np.any((u < 0) | (u >= 2 * levels)) or np.any((parity < 0) | (parity > 1)):
-        raise ValueError("ハイブリッド仮数またはパリティが範囲外です")
+        raise ValueError("Y仮数またはパリティが範囲外です")
     msb, L = u // levels, u % levels
     if scramble is not None:
         mask = np.asarray(scramble, np.int64).reshape(-1, 3)
@@ -173,15 +173,15 @@ def hybrid_modulate(u, parity, amplitude=0.08, scramble=None, lower_bits=6):
         parity = parity ^ mask[:, 1]
         L = np.where(mask[:, 2] != 0, levels - 1 - L, L)
     theta = np.pi / 4 + _QUADRANT[2 * msb + parity] * np.pi / 2
-    radius = (1 + amplitude * (L - (levels - 1) / 2)) / hybrid_scale(amplitude, lower_bits)
+    radius = (1 + amplitude * (L - (levels - 1) / 2)) / y_scale(amplitude, lower_bits)
     return radius * np.exp(1j * theta)
 
 
-def _hybrid_candidates(y, amplitude, lower_bits):
+def _y_candidates(y, amplitude, lower_bits):
     """4つの象限それぞれを仮定したときの (射影した半径, 接線方向の誤差, 二乗誤差)。"""
     levels = 1 << lower_bits
     center = (levels - 1) / 2
-    scale = hybrid_scale(amplitude, lower_bits)
+    scale = y_scale(amplitude, lower_bits)
     rmin, rmax = (1 - center * amplitude) / scale, (1 + center * amplitude) / scale
     unit = np.exp(1j * (np.pi / 4 + np.arange(4) * np.pi / 2))
     rotated = y[:, None] * np.conj(unit)[None, :]
@@ -190,7 +190,7 @@ def _hybrid_candidates(y, amplitude, lower_bits):
     return proj, tangent, err2, scale, center
 
 
-def _hybrid_sigma2(y, tangent, err2, preamble):
+def _y_sigma2(y, tangent, err2, preamble):
     """既知プリアンブルと、最良の象限での接線方向の残差から、複素雑音の1軸分散を推定する。"""
     best = np.argmin(err2, axis=1)
     pilot_var = 0.0 if preamble is None else float(np.mean(np.abs(np.asarray(preamble) - PREAMBLE) ** 2) / 2)
@@ -198,14 +198,14 @@ def _hybrid_sigma2(y, tangent, err2, preamble):
     return max(1e-10, (pilot_var + tangent_var) / 2)
 
 
-def hybrid_phase_llr(symbols, amplitude=0.08, scramble=None, preamble=None, lower_bits=6):
+def y_phase_llr(symbols, amplitude=0.08, scramble=None, preamble=None, lower_bits=6):
     """専用シンボルの位相だけから、最上位bitとパリティの対数尤度比 (正 = 0 らしい) と1軸の雑音分散を返す。"""
     y = np.asarray(symbols, complex)
     mask = np.zeros((len(y), 3), np.int64) if scramble is None else np.asarray(scramble, np.int64).reshape(-1, 3)
     if len(mask) != len(y):
         raise ValueError("スクランブル長が係数数と一致しません")
-    _, tangent, err2, _, _ = _hybrid_candidates(y, amplitude, lower_bits)
-    sigma2 = _hybrid_sigma2(y, tangent, err2, preamble)
+    _, tangent, err2, _, _ = _y_candidates(y, amplitude, lower_bits)
+    sigma2 = _y_sigma2(y, tangent, err2, preamble)
     w = np.exp(-np.clip((err2 - err2.min(axis=1, keepdims=True)) / (2 * sigma2), 0, 700))
     w /= w.sum(axis=1, keepdims=True)
     sent = _QUADRANT_BITS[None, :]                       # (1, 4): 各象限で送られた 2*msb+parity
@@ -216,7 +216,7 @@ def hybrid_phase_llr(symbols, amplitude=0.08, scramble=None, preamble=None, lowe
     return np.log((1 - p_msb) / p_msb), np.log((1 - p_par) / p_par), sigma2
 
 
-def hybrid_demodulate(symbols, msb, parity, amplitude=0.08, scramble=None,
+def y_demodulate(symbols, msb, parity, amplitude=0.08, scramble=None,
                       preamble=None, lower_bits=6, phase_only=False):
     """
     最上位bitとパリティ (ヘッダ部のFECで確定した値) を使って象限を決め、半径の連続推定値と分散を返す。
@@ -230,11 +230,11 @@ def hybrid_demodulate(symbols, msb, parity, amplitude=0.08, scramble=None,
     mask = np.zeros((len(y), 3), np.int64) if scramble is None else np.asarray(scramble, np.int64).reshape(-1, 3)
     if len(mask) != len(y):
         raise ValueError("スクランブル長が係数数と一致しません")
-    proj, tangent, err2, scale, center = _hybrid_candidates(y, amplitude, lower_bits)
+    proj, tangent, err2, scale, center = _y_candidates(y, amplitude, lower_bits)
     levels = 1 << lower_bits
     quadrant = _QUADRANT[2 * (msb ^ mask[:, 0]) + (parity ^ mask[:, 1])]
     rows = np.arange(len(y))
-    sigma2 = _hybrid_sigma2(y, tangent, err2, preamble)
+    sigma2 = _y_sigma2(y, tangent, err2, preamble)
     obs_l = (proj[rows, quadrant] * scale - 1) / amplitude + center
     obs_l = np.where(mask[:, 2] != 0, levels - 1 - obs_l, obs_l)
     noise_l = sigma2 * scale ** 2 / amplitude ** 2
@@ -244,12 +244,12 @@ def hybrid_demodulate(symbols, msb, parity, amplitude=0.08, scramble=None,
     return msb * levels + l_est, np.full(len(y), gain * noise_l), sigma2
 
 
-def hybrid_slice(values, amplitude=0.08, lower_bits=6):
+def y_slice(values, amplitude=0.08, lower_bits=6):
     """受信点を最も近いY方式の信号点 (象限・半径の段) に判定する。スクランブルの影響を受けない。"""
     y = np.asarray(values, complex)
     levels = 1 << lower_bits
     center = (levels - 1) / 2
-    scale = hybrid_scale(amplitude, lower_bits)
+    scale = y_scale(amplitude, lower_bits)
     quadrant = np.mod(np.rint((np.angle(y) - np.pi / 4) / (np.pi / 2)).astype(np.int64), 4)
     radial = np.clip(np.rint((np.abs(y) * scale - 1) / amplitude + center), 0, levels - 1)
     radius = (1 + amplitude * (radial - center)) / scale

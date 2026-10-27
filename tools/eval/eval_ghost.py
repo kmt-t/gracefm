@@ -19,8 +19,9 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, ROOT)
 
-from gracefm import channel, metrics, wavio  # noqa: E402
-from gracefm.analog_fm import AnalogFM  # noqa: E402
+from gracefm import channel  # noqa: E402
+from tools.common import metrics, wavio  # noqa: E402
+from tools.common.analog_fm import AnalogFM  # noqa: E402
 from gracefm.equalizer import equalize_static, through_matched_channel  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 from gracefm.txrx import Transmitter, receive  # noqa: E402

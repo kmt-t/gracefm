@@ -10,7 +10,7 @@
   情報bit x = ヘッダ24bit | 指数 | 区間アッテネータ | 基本CRC 12 | 高域CRC 10※
   現行ヘッダ24bit: プロファイルID 4 | 系統ID 1 | 暗号化 1 (=0) | 形式識別子 2 | フレーム番号 16 (各 MSB から)
   タグ0の旧16bitヘッダは互換性検証用の明示的な設定でのみ使用する。
-  (暗号化するとき 32bit: プロファイルID 4 | 系統ID 1 | 暗号化 1 (=1) | 実験タグ 2 | フレーム番号 24)
+  (暗号化するとき 32bit: プロファイルID 4 | 系統ID 1 | 暗号化 1 (=1) | 形式識別子 2 | フレーム番号 24)
   現行カタログは全てタグ3・ヘッダ24bit。タグ0/1/2の旧フレームとは互換性がない。
   指数           : M の係数群 0→6, 続いて S の係数群 0→6 (0bit の群は無し)。k=0 は低域近似、k=1..6 は詳細帯域。各 exp_bits, MSB から
   区間アッテネータ: 全登録プロファイルに標準装備。M→S、帯域低→高、区間先頭→末尾の順に1bitずつ
@@ -25,7 +25,7 @@ Haar係数部 (ヘッダの直後。係数順 = 成分M→S、帯域 低→高�
   QPSKは全ビットが同じ位置種別なので、ヘッダ、終端、係数の順に並べるだけ (振幅部の列は空)。
   Y帯域の仮数は専用シンボルで送り、この列には入らない。専用シンボルは位相が「最上位bit｜そのパリティ」、半径が残りの仮数。
 仮数は通常 オフセットバイナリ u = m + qmax (b bit) で表す。
-実験用ハイブリッド高域だけ u = m + 2^(b-1) として全2^b値を使い、この帯域の仮数は専用シンボルで送る。
+Y高域だけ u = m + 2^(b-1) として全2^b値を使い、この帯域の仮数は専用シンボルで送る。
 送信順: [位相部の列 全体] [振幅部の列 全体] (階層16QAMでは、両者を同じ長さにそろえるために末尾へ0の詰めを入れる)
 暗号化するときは、ヘッダ以外のヘッダの内容と仮数bitをキーストリームとの XOR で暗号化してから
 CRC とパリティをかける (CRC とパリティは暗号文に対してかかるので、鍵がなくても誤りは検出・訂正できる。gracefm.crypto)。
@@ -44,14 +44,14 @@ def _bits(v, n):
 
 
 class Layout:
-    def __init__(self, profile: Profile, encrypted: bool = False, hybrid: bool = False):
+    def __init__(self, profile: Profile, encrypted: bool = False, with_y: bool = False):
         p = profile
         self.p = p
         self.encrypted = encrypted
-        self.header_bits = 32 if encrypted else (24 if p.experimental_tag else HEADER_BITS)
+        self.header_bits = 32 if encrypted else (24 if p.format_id else HEADER_BITS)
         self.exp_items = []         # (ch, k)
         self.attn_items = []        # (ch, k, group index)
-        self.hybrid_items = []      # (ch, k, j): Y帯域の係数 (専用シンボルで送る)
+        self.y_items = []      # (ch, k, j): Y帯域の係数 (専用シンボルで送る)
         for ch, bits in (("M", p.bits_m), ("S", p.bits_s)):
             for k, b in enumerate(bits):
                 if b > 0:
@@ -65,11 +65,11 @@ class Layout:
             for k, b in enumerate(bits):
                 if b == 0:
                     continue
-                in_hybrid = hybrid and p.hybrid_band(ch, k)
+                in_y = with_y and p.y_band(ch, k)
                 K, base = p.protect_bits(k), p.base_bits(ch, k)
                 for j in range(p.ncoef(k)):
-                    if in_hybrid:
-                        self.hybrid_items.append((ch, k, j))
+                    if in_y:
+                        self.y_items.append((ch, k, j))
                         continue
                     for rank in range(K):
                         strong.append(("P", len(top_item)))
@@ -94,7 +94,7 @@ class Layout:
         self.high_prot_indices = np.asarray(high, np.int64)
         self.core_top_indices = np.asarray([t for t, k in enumerate(top_k) if k < 5], np.int64)
         self.high_top_indices = np.asarray([t for t, k in enumerate(top_k) if k >= 5], np.int64)
-        y_k = [k for _, k, _ in self.hybrid_items]
+        y_k = [k for _, k, _ in self.y_items]
         self.core_y_indices = np.asarray([t for t, k in enumerate(y_k) if k < 5], np.int64)
         self.high_y_indices = np.asarray([t for t, k in enumerate(y_k) if k >= 5], np.int64)
         self.has_high_crc = bool(len(high) or len(self.high_top_indices) or len(self.high_y_indices))
@@ -103,7 +103,7 @@ class Layout:
         self.n_hdata = self.n_prot_crc                                  # ヘッダの情報bit (CRC込み)
         self.n_header = 2 * (self.n_hdata + T)                          # ヘッダが使う位置 (パリティ + データ)
         self.n_tail = 2 * T if self.n_top else 0                        # 上位K bit用の終端 (パリティ + 情報)
-        self.n_ytail = 2 * T if self.hybrid_items else 0                # Y帯域の最上位bit用の終端
+        self.n_ytail = 2 * T if self.y_items else 0                # Y帯域の最上位bit用の終端
         self.n_parity = self.n_top + self.n_tail + self.n_ytail         # 係数のパリティ (終端込み)
         self.n_block_a, self.n_block_b = self.n_header, self.n_parity
         self.n_coded = self.n_header + self.n_parity                    # 仮数以外が使う位置
@@ -113,7 +113,7 @@ class Layout:
         if self.n_top:
             strong_list += [("CP", i) for i in range(T)]
             weak_list += [("CT", i) for i in range(T)]
-        if self.hybrid_items:
+        if self.y_items:
             strong_list += [("YP", i) for i in range(T)]
             weak_list += [("YT", i) for i in range(T)]
         strong_list += strong
@@ -132,7 +132,7 @@ class Layout:
         self.hdata_idx = np.zeros(self.n_hdata, np.int64)
         self.htail_idx = np.zeros(T, np.int64)
         self.tail_idx = np.zeros(2 * T if self.n_top else 0, np.int64)      # 先頭 T = パリティ、後ろ T = 情報
-        self.ytail_idx = np.zeros(2 * T if self.hybrid_items else 0, np.int64)
+        self.ytail_idx = np.zeros(2 * T if self.y_items else 0, np.int64)
         self.parity_idx = np.zeros(self.n_top, np.int64)
         coef_items, coef_stream = [], []
         for pos, token in enumerate(stream_list):
@@ -199,15 +199,15 @@ class Layout:
                                ymsb[self.high_y_indices]])
         return core, high
 
-    def hybrid_u(self, bd: BlockData):
+    def y_u(self, bd: BlockData):
         """Y帯域の仮数 (オフセットバイナリ。最上位bitが位相、残りが半径の段)"""
-        return np.asarray([int(bd.mant[ch][k][j]) + offset_of(self.p.hybrid_bits, self.p, ch, k)
-                           for ch, k, j in self.hybrid_items], np.int64)
+        return np.asarray([int(bd.mant[ch][k][j]) + offset_of(self.p.y_bits, self.p, ch, k)
+                           for ch, k, j in self.y_items], np.int64)
 
-    def hybrid_parts(self, bd: BlockData):
+    def y_parts(self, bd: BlockData):
         """Y専用シンボルに載せる (u, 最上位bitのパリティ) と、ヘッダ部の終端bit (12個)"""
-        u = self.hybrid_u(bd)
-        msb = u >> (self.p.hybrid_bits - 1)
+        u = self.y_u(bd)
+        msb = u >> (self.p.y_bits - 1)
         parity, tail = fec.rsc_parity(msb)
         return u, parity[: len(u)], np.concatenate([parity[len(u):], tail])
 
@@ -215,7 +215,7 @@ class Layout:
     def pack(self, bd: BlockData, stream_id: int, counter: int, keystream=None):
         """keystream: 暗号化するとき、このフレームのキーストリーム (n_keystream ビット)"""
         p = self.p
-        tag = _bits(p.experimental_tag, 2)
+        tag = _bits(p.format_id, 2)
         if self.encrypted:
             hdr = _bits(p.pid, 4) + _bits(stream_id, 1) + [1] + tag + _bits(counter & 0xFFFFFF, 24)
         else:
@@ -235,9 +235,9 @@ class Layout:
             prot[self.header_bits:] ^= keystream[: self.n_body]
             coef = coef ^ keystream[self.n_body:]
         top = coef[self.top_coef_idx]
-        if self.hybrid_items:
-            y_u, _, y_tail = self.hybrid_parts(bd)
-            ymsb = y_u >> (p.hybrid_bits - 1)
+        if self.y_items:
+            y_u, _, y_tail = self.y_parts(bd)
+            ymsb = y_u >> (p.y_bits - 1)
         else:
             ymsb, y_tail = np.zeros(0, np.int64), np.zeros(0, np.int64)
         core, high = self._crc_inputs(prot, top, ymsb)
@@ -279,9 +279,9 @@ class Layout:
                                  soft[self.tail_idx[fec.K - 1:]])
         else:
             top = np.zeros(0, np.int64)
-        if self.hybrid_items:
+        if self.y_items:
             if y_soft is None:                         # 位相の情報が無ければ消失扱い
-                y_soft = (np.zeros(len(self.hybrid_items)), np.zeros(len(self.hybrid_items)))
+                y_soft = (np.zeros(len(self.y_items)), np.zeros(len(self.y_items)))
             msb_soft, parity_soft = (np.asarray(v, float) for v in y_soft)
             ymsb = fec.rsc_decode(msb_soft, np.concatenate([parity_soft, soft[self.ytail_idx[: fec.K - 1]]]),
                                   soft[self.ytail_idx[fec.K - 1:]])
@@ -298,7 +298,7 @@ class Layout:
         header = {"pid": val(hdr[0:4]), "stream": int(hdr[4]), "encrypted": bool(hdr[5]),
                   "counter": val(hdr[8: self.header_bits]), "high_ok": high_ok}
         if (header["pid"] != p.pid or header["encrypted"] != self.encrypted
-                or val(hdr[6:8]) != p.experimental_tag):
+                or val(hdr[6:8]) != p.format_id):
             return None, None
         coef_bits = bits[self.coef_stream_idx].copy()
         coef_bits[self.top_coef_idx] = top                 # 訂正後の上位K bit (暗号化時は暗号文)
@@ -325,8 +325,8 @@ class Layout:
             count = p.attenuator_bits(ch, k)
             attn[ch][k] = body[i:i + count].copy()
             i += count
-        for (ch, k, j), bit in zip(self.hybrid_items, ymsb):
-            u[ch][k][j] |= int(bit) << (p.hybrid_bits - 1)
+        for (ch, k, j), bit in zip(self.y_items, ymsb):
+            u[ch][k][j] |= int(bit) << (p.y_bits - 1)
         for (ch, k, j, pos), bit in zip(self.coef_items, coef_bits):
             u[ch][k][j] |= int(bit) << pos
         mant = {ch: [None if u[ch][k] is None else
@@ -337,11 +337,11 @@ class Layout:
         return bd, header
 
 
-class HybridLayout(Layout):
+class YLayout(Layout):
     """高域の仮数をHaar係数部から外し、1係数1複素シンボルの専用シンボルへ移す配置。"""
 
     def __init__(self, profile: Profile):
-        if not profile.hybrid:
-            raise ValueError("ハイブリッドプロファイルが必要です")
-        super().__init__(profile, hybrid=True)
-        self.n_hybrid = len(self.hybrid_items)
+        if not profile.has_y:
+            raise ValueError("Yプロファイルが必要です")
+        super().__init__(profile, with_y=True)
+        self.n_y = len(self.y_items)

@@ -28,13 +28,14 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib import font_manager  # noqa: E402
 
-from gracefm import channel, wavio  # noqa: E402
-from gracefm.analog_fm import AnalogFM  # noqa: E402
+from gracefm import channel  # noqa: E402
+from tools.common import wavio  # noqa: E402
+from tools.common.analog_fm import AnalogFM  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 from gracefm.pulse import shape  # noqa: E402
 from gracefm.txrx import Transmitter  # noqa: E402
 from gracefm.codec import roundtrip as codec  # noqa: E402
-from tools.samples.make_samples import make_demo  # noqa: E402
+from tools.common.demo_signal import make_demo  # noqa: E402
 
 for f in font_manager.findSystemFonts():
     if "NotoSansCJK" in f:
@@ -84,7 +85,7 @@ def main():
         ("放送モノラル主系（32kHz）とアナログFM", ["FM", "B200M", "B200MY"]),
         ("放送ステレオ主系（32kHz）", ["B200", "B200Y"]),
         ("放送の副系（32kHz）", ["SUB50M", "SUB100"]),
-        ("モニター（48kHz）", ["M700M", "M700", "M700MY", "M700Y", "SUB100-48K"]),
+        ("48 kHz 主系", ["M700M", "M700", "M700MY", "M700Y", "SUB100-48K"]),
     ]
     res = {}
     fig, axs = plt.subplots(len(groups), 1, figsize=(8, 12), facecolor=SURF)
@@ -110,7 +111,7 @@ def main():
                 res[n]["rrc_span_symbols"] = PROFILES[n].pulse_span
             ax.plot(f / 1e3, 10 * np.log10(P + 1e-30), color=COL[j], ls=LS[j], lw=1.6,
                     label=f"{label}  99%帯域 {obw / 1e3:.0f}kHz")
-        lim = 450 if "モニター" in title else 200
+        lim = 450 if "48 kHz" in title else 200
         ax.set_xlim(-lim, lim)
         ax.set_ylim(-110, -10)
         ax.set_title(title, loc="left", fontsize=11, color=INK)
@@ -127,8 +128,8 @@ def main():
     demo32 = wavio.resample(demo48, 48000, 32000)
     demo32 *= 0.89 / np.abs(demo32).max()
     agroups = [("放送（32kHz、demo の M）", demo32, 32000, ["B200", "B200Y", "SUB100"]),
-               ("モニター（48kHz、demo の M）", demo48, 48000, ["M700", "M700M", "M700基本層"])]
-    from tools.eval.base_layer_sample import base_layer_audio
+               ("48 kHz 主系（demo の M）", demo48, 48000, ["M700", "M700M", "M700基本層"])]
+    from gracefm.baselayer import base_layer_audio
     fig, axs = plt.subplots(2, 1, figsize=(8, 7), facecolor=SURF)
     for ax, (title, xx, fsa, names) in zip(axs, agroups):
         axes_style(ax)

@@ -31,7 +31,7 @@ def render():
         tx=Transmitter(p); l=tx.layout; ns=tx.nsym+16; rs=tx.symbol_rate()
         strong=l.n_coded+l.n_base_bits if p.layered else '—'
         weak=l.n_coef_bits-l.n_base_bits if p.layered else '—'
-        lines.append(f'| {p.pid} | {p.name} | {p.fs/1000:g} | {"M/S" if any(p.bits_s) else "M"} | {p.modulation} / {p.alpha:g} | {p.hybrid_start_k if p.hybrid else "—"} | {p.protect_bits(0)}/{p.protect_bits(5)} | {p.audio_kbps():g} | {2 if l.has_high_crc else 1} | {l.n_prot_crc} | {l.n_header} | {l.n_parity} | {l.n_coef_bits} | {strong} | {weak} | {ns} | {rs/1000:g} | {p.pulse_beta:g} / {p.pulse_span} | {rs*(1+p.pulse_beta)/1000:g} |')
+        lines.append(f'| {p.pid} | {p.name} | {p.fs/1000:g} | {"M/S" if any(p.bits_s) else "M"} | {p.modulation} / {p.alpha:g} | {p.y_start_k if p.has_y else "—"} | {p.protect_bits(0)}/{p.protect_bits(5)} | {p.audio_kbps():g} | {2 if l.has_high_crc else 1} | {l.n_prot_crc} | {l.n_header} | {l.n_parity} | {l.n_coef_bits} | {strong} | {weak} | {ns} | {rs/1000:g} | {p.pulse_beta:g} / {p.pulse_span} | {rs*(1+p.pulse_beta)/1000:g} |')
         budgets.append(dict(profile=asdict(p), header_bits=l.header_bits, crc_count=2 if l.has_high_crc else 1,
                             header_crc_bits=l.n_prot_crc, header_fec_bits=l.n_header, parity_bits=l.n_parity,
                             protect_bits_low=p.protect_bits(0), protect_bits_high=p.protect_bits(5),
@@ -51,7 +51,7 @@ def render():
                 lines.append(f'| {p.pid} | {p.name} | {ch} | — | — | — | — | — | — |'); continue
             base=[]; ext=[]
             for k,b in enumerate(bits):
-                if not b or p.hybrid_band(ch,k) or not p.layered:
+                if not b or p.y_band(ch,k) or not p.layered:
                     base.append('—');ext.append('—')
                 else:
                     base.append(p.base_bits(ch,k));ext.append(b-p.base_bits(ch,k))

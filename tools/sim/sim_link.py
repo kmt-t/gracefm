@@ -22,7 +22,8 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from gracefm import metrics, modem, wavio  # noqa: E402
+from gracefm import modem  # noqa: E402
+from tools.common import metrics, wavio  # noqa: E402
 from gracefm.postfilter import OUT_FS, postfilter  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 from gracefm.timing import min_latency  # noqa: E402

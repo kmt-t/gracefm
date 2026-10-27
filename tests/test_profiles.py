@@ -8,8 +8,8 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from gracefm import modem
 from gracefm.codec import encode_block, decode_block
-from gracefm.framing import Layout, HybridLayout
-from gracefm.profiles import PROFILES, BY_ID, BY_HEADER, make_hybrid
+from gracefm.framing import Layout, YLayout
+from gracefm.profiles import PROFILES, BY_ID, BY_HEADER, make_y_profile
 from gracefm.txrx import Transmitter, StreamDecoder
 
 
@@ -33,7 +33,7 @@ def test_catalog_ids_and_standard_attenuation():
     assert all(PROFILES[name].bits_s != (0,) * 7 for name in ('M700', 'M700Y'))
     assert not {'M700Q16', 'B150', 'B150M', 'S85M', 'B200M-A4', 'B200-A4'} & PROFILES.keys()
     for p in PROFILES.values():
-        assert p.experimental_tag == 3 and BY_ID[p.pid] is p
+        assert p.format_id == 3 and BY_ID[p.pid] is p
         assert BY_HEADER[p.pid, 3] is p
         for ch, widths in [('M', p.bits_m), ('S', p.bits_s)]:
             groups = [p.attenuator_group(ch, k) for k in range(p.nbands)]
@@ -72,8 +72,8 @@ def test_layer_assignment_matches_physical_positions():
     for p in PROFILES.values():
         if not p.layered:
             continue
-        for encrypted in ([False] if p.hybrid else [False, True]):
-            lay = HybridLayout(p) if p.hybrid else Layout(p, encrypted=encrypted)
+        for encrypted in ([False] if p.has_y else [False, True]):
+            lay = YLayout(p) if p.has_y else Layout(p, encrypted=encrypted)
             n = modem.n_symbols(lay.n_tx, lay.n_strong, p.modulation)
             assert lay.n_strong == 2 * n, p.name
             for index, (ch, k, j, pos) in zip(lay.coef_stream_idx, lay.coef_items):
@@ -83,9 +83,9 @@ def test_layer_assignment_matches_physical_positions():
 
 def test_b200y_stereo_side_uses_qam_strong_positions():
     p = PROFILES['B200Y']
-    assert p.hybrid_channels == ('M', 'S') and p.bits_s == (11, 11, 11, 11, 7, 7, 7)
+    assert p.y_channels == ('M', 'S') and p.bits_s == (11, 11, 11, 11, 7, 7, 7)
     assert p.base_s[:5] == (5, 5, 5, 5, 3)
-    lay = HybridLayout(p)
+    lay = YLayout(p)
     assert any(ch == 'S' for ch, *_ in lay.coef_items)
     assert lay.n_strong == 2 * modem.n_symbols(lay.n_tx, lay.n_strong, p.modulation)
 
@@ -97,7 +97,7 @@ def test_layers_are_even_and_balanced():
     for p in PROFILES.values():
         for ch, widths, base in (('M', p.bits_m, p.base_m), ('S', p.bits_s, p.base_s)):
             for k, width in enumerate(widths):
-                if not width or p.hybrid_band(ch, k):
+                if not width or p.y_band(ch, k):
                     continue
                 assert (width + p.protect_bits(k)) % 2 == 0, (p.name, ch, k)
                 if p.layered:
@@ -107,10 +107,10 @@ def test_layers_are_even_and_balanced():
         if not p.layered:
             continue
         assert (balanced(p).base_m, balanced(p).base_s) == (p.base_m, p.base_s), p.name
-        lay = HybridLayout(p) if p.hybrid else Layout(p)
+        lay = YLayout(p) if p.has_y else Layout(p)
         for ch, widths, base in (('M', p.bits_m, p.base_m), ('S', p.bits_s, p.base_s)):
             for k, width in enumerate(widths):
-                if width and not p.hybrid_band(ch, k):
+                if width and not p.y_band(ch, k):
                     # 係数をシンボル単位で分ける: 位相部 (基本層 + パリティ) = 振幅部 (拡張層)、仮数幅 = 4N - K
                     assert base[k] + p.protect_bits(k) == width - base[k], (p.name, ch, k)
         assert lay.n_tx == 2 * lay.n_strong
@@ -121,21 +121,21 @@ def test_layers_are_even_and_balanced():
 
 def test_other_format_identifiers_are_rejected_even_with_matching_id():
     for p in PROFILES.values():
-        cls = HybridLayout if p.hybrid else Layout
+        cls = YLayout if p.has_y else Layout
         current = cls(p)
         x = np.zeros((p.block, 2))
         for tag in (0, 1, 2):
-            old = replace(p, experimental_tag=tag)
+            old = replace(p, format_id=tag)
             lay = cls(old)
             packed = lay.pack(encode_block(x, old), 0, 1)
             # The format identifier is fixed for this implementation.
             assert current.unpack(1.0 - 2.0 * packed, packed) == (None, None)
 
 
-def test_hybrid_factory_matches_catalog():
+def test_y_factory_matches_catalog():
     for base, name in [('B200M', 'B200MY'), ('M700M', 'M700MY'), ('M700', 'M700Y')]:
         p = PROFILES[name]
-        assert make_hybrid(PROFILES[base], name, p.pid, channels=p.hybrid_channels, bits_m=p.bits_m, bits_s=p.bits_s) == p
+        assert make_y_profile(PROFILES[base], name, p.pid, channels=p.y_channels, bits_m=p.bits_m, bits_s=p.bits_s) == p
 
 
 def test_parity_next_to_coefficients_corrects_top_mantissa_bits():
@@ -203,7 +203,7 @@ def test_high_crc_erases_only_h1_h2_in_receiver():
         assert not ok and decoder.stats['crc_fail'] == 1
 
 
-def test_hybrid_high_crc_keeps_lower_hybrid_band():
+def test_y_high_crc_keeps_lower_y_band():
     from gracefm.codec import haar_forward
     p = PROFILES['B200Y']
     x = np.random.default_rng(43).uniform(-0.4, 0.4, (p.block, 2))
@@ -255,3 +255,13 @@ if __name__ == '__main__':
         if name.startswith('test_'):
             function()
             print('ok', name, flush=True)
+
+
+def test_base_layer_widths_match_layer_solver():
+    """登録プロファイルの基本層の幅は、強い位置と弱い位置の数が釣り合う解 (gracefm.layers) と一致する。"""
+    from gracefm.layers import solve
+    for p in PROFILES.values():
+        if not p.layered:
+            continue
+        base_m, base_s = solve(p)
+        assert (tuple(base_m), tuple(base_s)) == (tuple(p.base_m), tuple(p.base_s)), p.name

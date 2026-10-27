@@ -41,13 +41,9 @@ def qmax_of(b):
     return 2 ** (b - 1) - 1
 
 
-def hybrid_band(profile: Profile, ch: str, k: int) -> bool:
-    return profile.hybrid and ch in profile.hybrid_channels and k >= profile.hybrid_start_k
-
-
 def qmin_of(b, profile: Profile, ch: str, k: int):
-    """実験高域だけ負側に1値多い2の補数範囲を使い、全2^b点を利用する。"""
-    return -(1 << (b - 1)) if hybrid_band(profile, ch, k) else -qmax_of(b)
+    """Y帯域だけ負側に1値多い2の補数範囲を使い、全2^b点を利用する。"""
+    return -(1 << (b - 1)) if profile.y_band(ch, k) else -qmax_of(b)
 
 
 def offset_of(b, profile: Profile, ch: str, k: int):
@@ -71,7 +67,7 @@ def quantize(c, k, b, profile: Profile, clip_opt=True, ch="M"):
     """
     c: (..., ncoef) → (仮数 m (..., ncoef) int, 指数インデックス eidx (...) int)
     指数 e はブロックごとに共有。通常は m = clip(round(c / 2^e), -qmax, qmax)。
-    実験用ハイブリッド高域だけ負端を -2^(b-1) として全2^b値を使う。
+    Y高域だけ負端を -2^(b-1) として全2^b値を使う。
     clip_opt: 指数を 1 つ下げて少しクリップした方が誤差が小さければそちらを選ぶ
               (エンコーダ側だけの選択。デコーダは変わらない)。
     """

@@ -24,7 +24,6 @@
 
 **[プロファイル設定マトリクス](docs/PROFILES.md)** に、ID、サンプリング周波数、変調、FEC、M/Sの仮数全幅・基本層・拡張層、係数別昇格、区間アッテネータ、指数幅・オフセット、RRC、伝送予算を同じ項目で掲載する。設定元 `gracefm/profiles.py` から自動生成し、表と実装の不一致をチェックできる。
 
-- 階層方式は、係数をシンボル単位で分け、位相部（強い象限位置）に置く仮数bitが基本層、振幅部（弱い位置）に置く仮数bitが拡張層。位相部には基本層の仮数とパリティが入り、位相部と振幅部はどちらも2の倍数（K=1ならNシンボルで基本層 2N−1、拡張層 2N、全幅 4N−1）。仮数幅は主系で11/7/3 bit、QPSK副系で9〜3 bit。強い位置と弱い位置の数が釣り合うよう `gracefm/layers.py` が配分を決め（ヘッダ分だけ一部の帯域で基本層が小さくなる）、`python tools/report/design_layers.py` で再計算できる。係数の先頭シンボルが「パリティ＋最上位bit」、以降のシンボルにはパリティがない。
 - フレームは**ヘッダ**と**Haar係数部**に分ける。FECは「位相部にパリティ、振幅部にデータ」を置く系統符号で、1シンボルが「パリティ2bit｜データ2bit」になる。ヘッダ（ヘッダ・指数・区間アッテネータ・CRC）はこの形で符号化し、係数は各係数の先頭シンボルが「パリティ＋最上位bit｜次の2bit」、以降のシンボルにはパリティがない。残りの仮数はFEC・CRCなし。
 - パリティが守る上位bit数Kは全帯域で1。QPSKには音声の基本層／拡張層の区分がない。
 - Yの高域Mは7bit（最上位bit＋パリティが位相、残り6bitが半径）の専用シンボルで、仮数がHaar係数部に無い。通常デジタル層の区分は適用しない。
@@ -41,7 +40,7 @@
 
 [FM・aptX・HE-AAC・M700系比較](docs/COMPARISON.md)は方式ごとに条件と未測定項目を明示する。Y系の係数配置と伝送予算は[現行仕様](docs/SPEC.md)と[設定マトリクス](docs/PROFILES.md)を参照。
 
-[試聴音源](samples/README.md)は標準アッテネータを含む現行設定で再生成する。ファイル名は[命名規則](samples/NAMING.md)に統一し、現行音源だけを掲載する。[全音源の設定・測定値・ハッシュ](docs/results/samples.json)を参照。
+[試聴音源](samples/README.md)は標準アッテネータを含む現行設定で再生成する。ファイル名は[命名規則](samples/NAMING.md)に統一し、現行音源だけを掲載する。[全音源の設定・測定値・ハッシュ](samples/index.json)を参照。
 
 ## 使い方
 
@@ -50,12 +49,11 @@ pip install -r requirements.txt
 python tools/sim/codec_wav.py 入力.wav 出力.wav --profile B200
 python tools/sim/sim_link.py 入力.wav 出力.wav --profile B200M --snr 8 --single
 python tools/samples/regenerate_samples.py     # 現行音源・評価値・試聴ページを一括再生成（評価依存が必要）
-python tools/report/design_layers.py           # 基本層・拡張層の配分を再計算して現行値と比較
 python tools/report/profile_matrix.py          # 設定表と計算予算を更新
 python tools/report/profile_matrix.py --check  # 実装との一致を確認
 python tests/test_profiles.py
 python tests/test_gracefm.py
-python tests/test_hybrid.py
+python tests/test_y.py
 python tests/test_equalizer.py
 ```
 

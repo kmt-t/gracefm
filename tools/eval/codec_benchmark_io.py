@@ -6,7 +6,7 @@ import tempfile
 import numpy as np
 from scipy.signal import correlate
 
-from gracefm import wavio
+from tools.common import wavio
 
 ROOT = Path(__file__).resolve().parents[2]
 

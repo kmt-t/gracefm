@@ -68,14 +68,14 @@
           0,
           0
         ],
-        "hybrid_start_k": null,
-        "hybrid_amplitude": 0.019047619047619046,
-        "hybrid_bits": 7,
-        "hybrid_channels": [
+        "y_start_k": null,
+        "y_amplitude": 0.019047619047619046,
+        "y_bits": 7,
+        "y_channels": [
           "M",
           "S"
         ],
-        "experimental_tag": 3
+        "format_id": 3
       },
       "header_bits": 24,
       "crc_count": 2,
@@ -161,14 +161,14 @@
           0,
           4
         ],
-        "hybrid_start_k": null,
-        "hybrid_amplitude": 0.019047619047619046,
-        "hybrid_bits": 7,
-        "hybrid_channels": [
+        "y_start_k": null,
+        "y_amplitude": 0.019047619047619046,
+        "y_bits": 7,
+        "y_channels": [
           "M",
           "S"
         ],
-        "experimental_tag": 3
+        "format_id": 3
       },
       "header_bits": 24,
       "crc_count": 2,
@@ -254,14 +254,14 @@
           0,
           0
         ],
-        "hybrid_start_k": 5,
-        "hybrid_amplitude": 0.019047619047619046,
-        "hybrid_bits": 7,
-        "hybrid_channels": [
+        "y_start_k": 5,
+        "y_amplitude": 0.019047619047619046,
+        "y_bits": 7,
+        "y_channels": [
           "M",
           "S"
         ],
-        "experimental_tag": 3
+        "format_id": 3
       },
       "header_bits": 24,
       "crc_count": 2,
@@ -347,14 +347,14 @@
           4,
           8
         ],
-        "hybrid_start_k": 5,
-        "hybrid_amplitude": 0.019047619047619046,
-        "hybrid_bits": 7,
-        "hybrid_channels": [
+        "y_start_k": 5,
+        "y_amplitude": 0.019047619047619046,
+        "y_bits": 7,
+        "y_channels": [
           "M",
           "S"
         ],
-        "experimental_tag": 3
+        "format_id": 3
       },
       "header_bits": 24,
       "crc_count": 2,
@@ -424,14 +424,14 @@
           0,
           0
         ],
-        "hybrid_start_k": null,
-        "hybrid_amplitude": 0.019047619047619046,
-        "hybrid_bits": 7,
-        "hybrid_channels": [
+        "y_start_k": null,
+        "y_amplitude": 0.019047619047619046,
+        "y_bits": 7,
+        "y_channels": [
           "M",
           "S"
         ],
-        "experimental_tag": 3
+        "format_id": 3
       },
       "header_bits": 24,
       "crc_count": 1,
@@ -501,14 +501,14 @@
           0,
           0
         ],
-        "hybrid_start_k": null,
-        "hybrid_amplitude": 0.019047619047619046,
-        "hybrid_bits": 7,
-        "hybrid_channels": [
+        "y_start_k": null,
+        "y_amplitude": 0.019047619047619046,
+        "y_bits": 7,
+        "y_channels": [
           "M",
           "S"
         ],
-        "experimental_tag": 3
+        "format_id": 3
       },
       "header_bits": 24,
       "crc_count": 1,
@@ -594,14 +594,14 @@
           0,
           0
         ],
-        "hybrid_start_k": null,
-        "hybrid_amplitude": 0.019047619047619046,
-        "hybrid_bits": 7,
-        "hybrid_channels": [
+        "y_start_k": null,
+        "y_amplitude": 0.019047619047619046,
+        "y_bits": 7,
+        "y_channels": [
           "M",
           "S"
         ],
-        "experimental_tag": 3
+        "format_id": 3
       },
       "header_bits": 24,
       "crc_count": 2,
@@ -687,14 +687,14 @@
           0,
           4
         ],
-        "hybrid_start_k": null,
-        "hybrid_amplitude": 0.019047619047619046,
-        "hybrid_bits": 7,
-        "hybrid_channels": [
+        "y_start_k": null,
+        "y_amplitude": 0.019047619047619046,
+        "y_bits": 7,
+        "y_channels": [
           "M",
           "S"
         ],
-        "experimental_tag": 3
+        "format_id": 3
       },
       "header_bits": 24,
       "crc_count": 2,
@@ -780,14 +780,14 @@
           0,
           0
         ],
-        "hybrid_start_k": 5,
-        "hybrid_amplitude": 0.019047619047619046,
-        "hybrid_bits": 7,
-        "hybrid_channels": [
+        "y_start_k": 5,
+        "y_amplitude": 0.019047619047619046,
+        "y_bits": 7,
+        "y_channels": [
           "M",
           "S"
         ],
-        "experimental_tag": 3
+        "format_id": 3
       },
       "header_bits": 24,
       "crc_count": 2,
@@ -873,14 +873,14 @@
           4,
           8
         ],
-        "hybrid_start_k": 5,
-        "hybrid_amplitude": 0.019047619047619046,
-        "hybrid_bits": 7,
-        "hybrid_channels": [
+        "y_start_k": 5,
+        "y_amplitude": 0.019047619047619046,
+        "y_bits": 7,
+        "y_channels": [
           "M",
           "S"
         ],
-        "experimental_tag": 3
+        "format_id": 3
       },
       "header_bits": 24,
       "crc_count": 2,
@@ -950,14 +950,14 @@
           0,
           0
         ],
-        "hybrid_start_k": null,
-        "hybrid_amplitude": 0.019047619047619046,
-        "hybrid_bits": 7,
-        "hybrid_channels": [
+        "y_start_k": null,
+        "y_amplitude": 0.019047619047619046,
+        "y_bits": 7,
+        "y_channels": [
           "M",
           "S"
         ],
-        "experimental_tag": 3
+        "format_id": 3
       },
       "header_bits": 24,
       "crc_count": 1,

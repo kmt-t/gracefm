@@ -29,15 +29,15 @@ class Profile:
     base_s: Optional[Tuple[int, ...]] = None   # 同 S。基本層を超えるbit (拡張層) は変調の弱い位置に入る
     attn_group_m: Optional[Tuple[int, ...]] = None  # 0=無効、正数=その係数数ごとに1bit
     attn_group_s: Optional[Tuple[int, ...]] = None
-    hybrid_start_k: Optional[int] = None  # 実験方式: この帯域から 1係数/複素シンボル
-    hybrid_amplitude: float = 0.08 * 7.5 / 31.5  # 7bit時 (半径の段が64) の隣接半径間隔 (正規化前)
-    hybrid_bits: int = 7                  # 最上位bitは位相 (パリティと対)、残りは連続値で推定する半径
-    hybrid_channels: Tuple[str, ...] = ("M", "S")
-    experimental_tag: int = 3             # 2bitの形式識別子。値3はビット列11を表し、世代番号ではない。
+    y_start_k: Optional[int] = None  # Y: この帯域から 1係数/複素シンボル
+    y_amplitude: float = 0.08 * 7.5 / 31.5  # 7bit時 (半径の段が64) の隣接半径間隔 (正規化前)
+    y_bits: int = 7                  # 最上位bitは位相 (パリティと対)、残りは連続値で推定する半径
+    y_channels: Tuple[str, ...] = ("M", "S")
+    format_id: int = 3             # 2bitの形式識別子。値3はビット列11を表し、世代番号ではない。
 
     def __post_init__(self):
-        if not 0 <= self.pid < 16 or not 0 <= self.experimental_tag < 4:
-            raise ValueError("プロファイルIDは4bit、実験タグは2bitにしてください")
+        if not 0 <= self.pid < 16 or not 0 <= self.format_id < 4:
+            raise ValueError("プロファイルIDは4bit、形式識別子は2bitにしてください")
         if not 0 < self.pulse_beta <= 1 or self.pulse_span < 2 or self.pulse_span % 2:
             raise ValueError("RRC パルスのロールオフは (0, 1]、長さは正の偶数にしてください")
         if len(self.bits_m) != self.nbands or len(self.bits_s) != self.nbands:
@@ -57,7 +57,7 @@ class Profile:
         # 上位K bitのパリティ (K bit) と合わせて偶数になるよう、仮数幅は K と同じ偶奇にする。
         for ch, widths in (("M", self.bits_m), ("S", self.bits_s)):
             for k, width in enumerate(widths):
-                if width and not self.hybrid_band(ch, k) and (width + self.protect_bits(k)) % 2:
+                if width and not self.y_band(ch, k) and (width + self.protect_bits(k)) % 2:
                     raise ValueError("仮数幅とFEC保護bit数の和は2の倍数にしてください")
         if self.layered:
             for ch, widths in (("M", self.bits_m), ("S", self.bits_s)):
@@ -65,33 +65,33 @@ class Profile:
                 if len(base) != self.nbands:
                     raise ValueError("基本層の帯域数が不正です")
                 for k, width in enumerate(widths):
-                    if width == 0 or self.hybrid_band(ch, k):
+                    if width == 0 or self.y_band(ch, k):
                         continue
                     kk = self.protect_bits(k)
                     if (base[k] + kk) % 2 or (width - base[k]) % 2 \
                             or not max(kk, 1) <= base[k] <= width - 2:
                         raise ValueError("位相部は基本層の仮数とパリティの和、振幅部は拡張層で、どちらも2の倍数にしてください。"
                                          "基本層はFEC保護bit数以上、拡張層は2以上です")
-        if self.hybrid_start_k is not None:
-            if any(self.protect_bits(k) != 1 for k in range(self.hybrid_start_k, self.nbands)):
-                raise ValueError("ハイブリッド帯域は最上位1bitをパリティで守る必要があります (protect_bits = 1)")
-            if self.hybrid_start_k not in (4, 5, 6) or self.fs not in (32000, 48000) or self.block != 64:
-                raise ValueError("ハイブリッド境界は32/48kHz・64サンプルの帯域4, 5, 6から選んでください")
-            if not 5 <= self.hybrid_bits <= 16:
-                raise ValueError("ハイブリッド仮数幅は6〜16bitにしてください")
-            half = (2 ** (self.hybrid_bits - 1) - 1) / 2
-            if not 0 < self.hybrid_amplitude < 1 / half:
+        if self.y_start_k is not None:
+            if any(self.protect_bits(k) != 1 for k in range(self.y_start_k, self.nbands)):
+                raise ValueError("Y帯域は最上位1bitをパリティで守る必要があります (protect_bits = 1)")
+            if self.y_start_k not in (4, 5, 6) or self.fs not in (32000, 48000) or self.block != 64:
+                raise ValueError("Y境界は32/48kHz・64サンプルの帯域4, 5, 6から選んでください")
+            if not 5 <= self.y_bits <= 16:
+                raise ValueError("Y仮数幅は6〜16bitにしてください")
+            half = (2 ** (self.y_bits - 1) - 1) / 2
+            if not 0 < self.y_amplitude < 1 / half:
                 raise ValueError("半径の最小値が正になる変調度にしてください")
-            if not self.hybrid_channels or any(ch not in ("M", "S") for ch in self.hybrid_channels):
-                raise ValueError("ハイブリッド対象はM/Sから選んでください")
-            for ch in self.hybrid_channels:
+            if not self.y_channels or any(ch not in ("M", "S") for ch in self.y_channels):
+                raise ValueError("Y対象はM/Sから選んでください")
+            for ch in self.y_channels:
                 bits = self.bits_m if ch == "M" else self.bits_s
-                if any(b not in (0, self.hybrid_bits) for b in bits[self.hybrid_start_k:]):
-                    raise ValueError("ハイブリッド帯域の仮数幅が設定値と一致しません")
+                if any(b not in (0, self.y_bits) for b in bits[self.y_start_k:]):
+                    raise ValueError("Y帯域の仮数幅が設定値と一致しません")
 
     @property
-    def hybrid(self) -> bool:
-        return self.hybrid_start_k is not None
+    def has_y(self) -> bool:
+        return self.y_start_k is not None
 
     def attenuator_group(self, ch: str, k: int) -> int:
         values = self.attn_group_m if ch == "M" else self.attn_group_s
@@ -115,8 +115,8 @@ class Profile:
         """帯域 k の仮数上位のうち、ヘッダ部に入れて FEC で保護するbit数"""
         return self.protect_k if self.protect_k_high is None or k < 5 else self.protect_k_high
 
-    def hybrid_band(self, ch: str, k: int) -> bool:
-        return self.hybrid and ch in self.hybrid_channels and k >= self.hybrid_start_k
+    def y_band(self, ch: str, k: int) -> bool:
+        return self.has_y and ch in self.y_channels and k >= self.y_start_k
 
     @property
     def nbands(self) -> int:
@@ -168,18 +168,18 @@ def default_split(widths, protect_bits):
     return tuple(out)
 
 
-def make_hybrid(base: Profile, name: str, pid: int, start_k: int = 5,
+def make_y_profile(base: Profile, name: str, pid: int, start_k: int = 5,
                 amplitude: float = 0.08, mantissa_bits: int = 7,
-                channels: Tuple[str, ...] = ("M",), experimental_tag: int = 3,
+                channels: Tuple[str, ...] = ("M",), format_id: int = 3,
                 bits_m: Optional[Tuple[int, ...]] = None,
                 bits_s: Optional[Tuple[int, ...]] = None) -> Profile:
-    """対象成分の境界以上だけを実験方式にし、他の成分は既存主系のままにする。
+    """対象成分の境界以上だけをY(位相・半径シンボル)にし、他の成分は既存主系のままにする。
 
     amplitude は半径の段が64 (仮数7bit) のときの隣接半径間隔として指定し、幅変更時は最大変調度を保つ。
     bits_m / bits_s を指定すると、M / Sの仮数幅を主系と別の値にする (Y系だけ音質と帯域の釣り合いを変えるとき)。
     """
     if not 5 <= mantissa_bits <= 16:
-        raise ValueError("ハイブリッド仮数幅は5〜16bitにしてください")
+        raise ValueError("Y仮数幅は5〜16bitにしてください")
 
     def widths(ch, bits):
         return tuple(b if k < start_k or b == 0 or ch not in channels else mantissa_bits
@@ -208,10 +208,10 @@ def make_hybrid(base: Profile, name: str, pid: int, start_k: int = 5,
                 base_m=default_split(new_m, base.protect_bits) if base.layered else None,
                 base_s=default_split(new_s, base.protect_bits) if base.layered else None,
                 attn_group_m=attenuator_m, attn_group_s=attenuator_s,
-                hybrid_start_k=start_k,
-                hybrid_amplitude=amplitude * 7.5 / ((2 ** (mantissa_bits - 1) - 1) / 2),
-                hybrid_bits=mantissa_bits, hybrid_channels=channels,
-                experimental_tag=experimental_tag)
+                y_start_k=start_k,
+                y_amplitude=amplitude * 7.5 / ((2 ** (mantissa_bits - 1) - 1) / 2),
+                y_bits=mantissa_bits, y_channels=channels,
+                format_id=format_id)
     if not y.layered:
         return y
     from .layers import balanced      # Yの専用シンボル分だけ強弱の釣り合いが変わるので配分を取り直す
@@ -237,10 +237,10 @@ PROFILE_MATRIX = (
         attn_group_s=(0, 0, 0, 0, 0, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
-        hybrid_start_k=None,
-        hybrid_channels=('M', 'S'),
-        hybrid_bits=7,
-        hybrid_amplitude=0.019047619047619046,
+        y_start_k=None,
+        y_channels=('M', 'S'),
+        y_bits=7,
+        y_amplitude=0.019047619047619046,
     ),
     dict(
         pid=2,
@@ -258,10 +258,10 @@ PROFILE_MATRIX = (
         attn_group_s=(0, 0, 0, 0, 0, 0, 4),
         pulse_beta=0.1,
         pulse_span=32,
-        hybrid_start_k=None,
-        hybrid_channels=('M', 'S'),
-        hybrid_bits=7,
-        hybrid_amplitude=0.019047619047619046,
+        y_start_k=None,
+        y_channels=('M', 'S'),
+        y_bits=7,
+        y_amplitude=0.019047619047619046,
     ),
     dict(
         pid=3,
@@ -279,10 +279,10 @@ PROFILE_MATRIX = (
         attn_group_s=(0, 0, 0, 0, 0, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
-        hybrid_start_k=5,
-        hybrid_channels=('M', 'S'),
-        hybrid_bits=7,
-        hybrid_amplitude=0.019047619047619046,
+        y_start_k=5,
+        y_channels=('M', 'S'),
+        y_bits=7,
+        y_amplitude=0.019047619047619046,
     ),
     dict(
         pid=4,
@@ -300,10 +300,10 @@ PROFILE_MATRIX = (
         attn_group_s=(0, 0, 0, 0, 0, 4, 8),
         pulse_beta=0.1,
         pulse_span=32,
-        hybrid_start_k=5,
-        hybrid_channels=('M', 'S'),
-        hybrid_bits=7,
-        hybrid_amplitude=0.019047619047619046,
+        y_start_k=5,
+        y_channels=('M', 'S'),
+        y_bits=7,
+        y_amplitude=0.019047619047619046,
     ),
     dict(
         pid=5,
@@ -321,10 +321,10 @@ PROFILE_MATRIX = (
         attn_group_s=(0, 0, 0, 0, 0, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
-        hybrid_start_k=None,
-        hybrid_channels=('M', 'S'),
-        hybrid_bits=7,
-        hybrid_amplitude=0.019047619047619046,
+        y_start_k=None,
+        y_channels=('M', 'S'),
+        y_bits=7,
+        y_amplitude=0.019047619047619046,
     ),
     dict(
         pid=6,
@@ -342,10 +342,10 @@ PROFILE_MATRIX = (
         attn_group_s=(0, 0, 0, 0, 4, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
-        hybrid_start_k=None,
-        hybrid_channels=('M', 'S'),
-        hybrid_bits=7,
-        hybrid_amplitude=0.019047619047619046,
+        y_start_k=None,
+        y_channels=('M', 'S'),
+        y_bits=7,
+        y_amplitude=0.019047619047619046,
     ),
     dict(
         pid=7,
@@ -363,10 +363,10 @@ PROFILE_MATRIX = (
         attn_group_s=(0, 0, 0, 0, 0, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
-        hybrid_start_k=None,
-        hybrid_channels=('M', 'S'),
-        hybrid_bits=7,
-        hybrid_amplitude=0.019047619047619046,
+        y_start_k=None,
+        y_channels=('M', 'S'),
+        y_bits=7,
+        y_amplitude=0.019047619047619046,
     ),
     dict(
         pid=8,
@@ -384,10 +384,10 @@ PROFILE_MATRIX = (
         attn_group_s=(0, 0, 0, 0, 0, 0, 4),
         pulse_beta=0.25,
         pulse_span=16,
-        hybrid_start_k=None,
-        hybrid_channels=('M', 'S'),
-        hybrid_bits=7,
-        hybrid_amplitude=0.019047619047619046,
+        y_start_k=None,
+        y_channels=('M', 'S'),
+        y_bits=7,
+        y_amplitude=0.019047619047619046,
     ),
     dict(
         pid=9,
@@ -405,10 +405,10 @@ PROFILE_MATRIX = (
         attn_group_s=(0, 0, 0, 0, 0, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
-        hybrid_start_k=5,
-        hybrid_channels=('M', 'S'),
-        hybrid_bits=7,
-        hybrid_amplitude=0.019047619047619046,
+        y_start_k=5,
+        y_channels=('M', 'S'),
+        y_bits=7,
+        y_amplitude=0.019047619047619046,
     ),
     dict(
         pid=10,
@@ -426,10 +426,10 @@ PROFILE_MATRIX = (
         attn_group_s=(0, 0, 0, 0, 0, 4, 8),
         pulse_beta=0.25,
         pulse_span=16,
-        hybrid_start_k=5,
-        hybrid_channels=('M', 'S'),
-        hybrid_bits=7,
-        hybrid_amplitude=0.019047619047619046,
+        y_start_k=5,
+        y_channels=('M', 'S'),
+        y_bits=7,
+        y_amplitude=0.019047619047619046,
     ),
     dict(
         pid=11,
@@ -447,17 +447,17 @@ PROFILE_MATRIX = (
         attn_group_s=(0, 0, 0, 4, 0, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
-        hybrid_start_k=None,
-        hybrid_channels=('M', 'S'),
-        hybrid_bits=7,
-        hybrid_amplitude=0.019047619047619046,
+        y_start_k=None,
+        y_channels=('M', 'S'),
+        y_bits=7,
+        y_amplitude=0.019047619047619046,
     ),
 )
 
-PROFILES = {row["name"]: Profile(block=64, levels=6, experimental_tag=3, **row)
+PROFILES = {row["name"]: Profile(block=64, levels=6, format_id=3, **row)
             for row in PROFILE_MATRIX}
 BY_ID = {p.pid: p for p in PROFILES.values()}
-BY_HEADER = {(p.pid, p.experimental_tag): p for p in PROFILES.values()}
+BY_HEADER = {(p.pid, p.format_id): p for p in PROFILES.values()}
 if len(BY_ID) != len(PROFILES):
     raise ValueError("プロファイルIDが重複しています")
 for _profile in PROFILES.values():
