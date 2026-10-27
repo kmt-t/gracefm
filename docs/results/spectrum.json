@@ -60,9 +60,9 @@
   "rrc_span_symbols": 16
  },
  "M700": {
-  "occupied_99_kHz": 235.9,
-  "bw_minus30dB_kHz": 265.1,
-  "symbol_rate_ksps": 213.8,
+  "occupied_99_kHz": 260.4,
+  "bw_minus30dB_kHz": 291.6,
+  "symbol_rate_ksps": 234.8,
   "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
@@ -76,9 +76,9 @@
   "rrc_span_symbols": 16
  },
  "M700Y": {
-  "occupied_99_kHz": 184.4,
-  "bw_minus30dB_kHz": 208.4,
-  "symbol_rate_ksps": 168.0,
+  "occupied_99_kHz": 214.0,
+  "bw_minus30dB_kHz": 241.5,
+  "symbol_rate_ksps": 195.0,
   "modulation": "qam16h",
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
@@ -95,7 +95,7 @@
   "B200": 63.6,
   "B200Y": 64.8,
   "SUB100": 28.4,
-  "M700": 62.0,
+  "M700": 61.6,
   "M700M": 62.0,
   "M700基本層": 31.0
  }

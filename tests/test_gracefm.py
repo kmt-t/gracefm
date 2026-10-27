@@ -192,15 +192,14 @@ def test_postfilter_resamples_to_48k_int32():
 
 
 def test_latency_model():
-    """遅延モデル: 1系統・2系統(半ブロック単位) は 2ブロック、2系統(1ブロック単位) は 2.5ブロック。処理時間は加算"""
+    """遅延モデル: 1系統・2系統とも 2ブロック。処理時間は加算"""
     from gracefm.timing import Timing, min_latency
     for p in PROFILES.values():
         B = p.block / p.fs
-        assert np.isclose(min_latency(p, False, "half"), 2 * B)
-        assert np.isclose(min_latency(p, True, "half"), 2 * B)
-        assert np.isclose(min_latency(p, True, "block"), 2.5 * B)
+        assert np.isclose(min_latency(p, False), 2 * B)
+        assert np.isclose(min_latency(p, True), 2 * B)
         tm = Timing(t_enc=1e-4, t_filt=2e-4, t_dec=3e-4, t_out=4e-4)
-        assert np.isclose(min_latency(p, True, "half", tm), 2 * B + 1e-3)
+        assert np.isclose(min_latency(p, True, tm), 2 * B + 1e-3)
 
 
 def test_receiver_is_causal():
@@ -209,7 +208,7 @@ def test_receiver_is_causal():
     from gracefm.txrx import receive
     p = PROFILES["B200"]
     x = _signal(p.block * 24, p.fs)
-    off = p.block // 2
+    off = 0
     rng = np.random.default_rng(3)
     fa = [modem.awgn(f, 9.0, rng) for f in Transmitter(p, 0, 0).run(x)]
     fb = [modem.awgn(f, 9.0, rng) for f in Transmitter(p, 1, off).run(x)]
@@ -233,9 +232,9 @@ def test_two_streams_survive_single_stream_loss():
     p = PROFILES["B200"]
     x = _signal(p.block * 40, p.fs)
     fa = Transmitter(p, 0, 0).run(x)
-    fb = Transmitter(p, 1, p.block // 2).run(x)
+    fb = Transmitter(p, 1, 0).run(x)
     fa = [None if i % 3 == 0 else f for i, f in enumerate(fa)]       # A だけ 1/3 欠落
-    y, st = receive(p, fa, fb, len(x), p.block // 2)
+    y, st = receive(p, fa, fb, len(x), 0)
     assert st["plc_samples"] < p.block                               # B で埋まり PLC はほぼ不要
 
 
@@ -246,12 +245,12 @@ def test_low_rate_sub_stream():
     x = _signal(p.block * 40, p.fs)
     x[:, 1] = x[:, 0]
     fa = Transmitter(p, 0, 0).run(x)
-    fb = Transmitter(ps, 1, p.block // 2).run(x)
+    fb = Transmitter(ps, 1, 0).run(x)
     y1, _ = receive(p, fa, None, len(x), 0)
-    y2, _ = receive(p, fa, fb, len(x), p.block // 2, profile_b=ps)
+    y2, _ = receive(p, fa, fb, len(x), 0, profile_b=ps)
     assert metrics.snr_db(x, y2) > metrics.snr_db(x, y1) - 0.5
     fa = [None if i % 3 == 0 else f for i, f in enumerate(fa)]
-    y3, st = receive(p, fa, fb, len(x), p.block // 2, profile_b=ps)
+    y3, st = receive(p, fa, fb, len(x), 0, profile_b=ps)
     assert st["plc_samples"] < p.block                               # 主系の欠落を副系が埋める
 
 
@@ -301,7 +300,7 @@ def test_b200_link_preserves_high_side_signal():
     power_ref = sum(np.sum(a * a) for a in ref[5:])
     for name in ("B200",):
         current = PROFILES[name]
-        y, _, _ = channel.link(x, current, 66, sub="SUB100", power_main=0.5, seed=1)
+        y, _, _ = channel.link(x, current, 66, sub="SUB100", seed=1)
         s_out = (y[:, 0] - y[:, 1]) / 2
         out = haar_forward(s_out.reshape(-1, current.block), current.levels)
         power_out = sum(np.sum(a * a) for a in out[5:])

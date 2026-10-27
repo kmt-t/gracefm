@@ -4,7 +4,7 @@
 
 [命名規則](NAMING.md) · [設定表](../docs/PROFILES.md) · [全音源の設定・測定値・SHA-256](../docs/results/samples.json)
 
-32 kHzの2系統は電力50:50。48 kHzの `M700+SUB100-48K` は75:25。それ以外の48 kHz音声は主系1系統です。`codec` は通信路なし、`ideal` は雑音なしのシンボル送受信。AWGN等は同期既知のシミュレーションです。
+2系統は主系・副系とも独立のチャンネルで、電力を分け合わない（C/N0は同じ値）。それ以外の48 kHz音声は主系1系統です。`codec` は通信路なし、`ideal` は雑音なしのシンボル送受信。AWGN等は同期既知のシミュレーションです。
 
 `M700-base` は実際の基本層を保持し、拡張層の事後確率だけを0.5にした比較音源です。標準アッテネータを含みます。`R10` / `R12` はY仮数幅の比較条件です。
 
@@ -12,22 +12,22 @@
 
 | 音源 | 構成 | 条件 | 試聴 | 波形SNR dB |
 |---|---|---|---|---:|
-| demo | B200+SUB100 | awgn-cn0-54dBHz | [再生](demo__32k__B200+SUB100__awgn-cn0-54dBHz.flac) | 8.00 |
-| demo | B200+SUB100 | awgn-cn0-57dBHz | [再生](demo__32k__B200+SUB100__awgn-cn0-57dBHz.flac) | 15.34 |
-| demo | B200+SUB100 | awgn-cn0-60dBHz | [再生](demo__32k__B200+SUB100__awgn-cn0-60dBHz.flac) | 21.01 |
-| demo | B200+SUB100 | awgn-cn0-66dBHz | [再生](demo__32k__B200+SUB100__awgn-cn0-66dBHz.flac) | 40.11 |
-| demo | B200+SUB100 | awgn-cn0-80dBHz | [再生](demo__32k__B200+SUB100__awgn-cn0-80dBHz.flac) | 57.86 |
-| demo | B200+SUB100 | main-fade-10dB-cn0-66dBHz | [再生](demo__32k__B200+SUB100__main-fade-10dB-cn0-66dBHz.flac) | 25.76 |
-| demo | B200+SUB100 | rayleigh-cn0-60dBHz | [再生](demo__32k__B200+SUB100__rayleigh-cn0-60dBHz.flac) | 9.22 |
+| demo | B200+SUB100 | awgn-cn0-54dBHz | [再生](demo__32k__B200+SUB100__awgn-cn0-54dBHz.flac) | 15.59 |
+| demo | B200+SUB100 | awgn-cn0-57dBHz | [再生](demo__32k__B200+SUB100__awgn-cn0-57dBHz.flac) | 21.21 |
+| demo | B200+SUB100 | awgn-cn0-60dBHz | [再生](demo__32k__B200+SUB100__awgn-cn0-60dBHz.flac) | 32.52 |
+| demo | B200+SUB100 | awgn-cn0-66dBHz | [再生](demo__32k__B200+SUB100__awgn-cn0-66dBHz.flac) | 41.59 |
+| demo | B200+SUB100 | awgn-cn0-80dBHz | [再生](demo__32k__B200+SUB100__awgn-cn0-80dBHz.flac) | 62.27 |
+| demo | B200+SUB100 | main-fade-10dB-cn0-66dBHz | [再生](demo__32k__B200+SUB100__main-fade-10dB-cn0-66dBHz.flac) | 25.78 |
+| demo | B200+SUB100 | rayleigh-cn0-60dBHz | [再生](demo__32k__B200+SUB100__rayleigh-cn0-60dBHz.flac) | 13.80 |
 | demo | B200Y | codec | [再生](demo__32k__B200Y__codec.flac) | 62.94 |
 | demo | B200 | codec | [再生](demo__32k__B200__codec.flac) | 62.17 |
-| fishin | B200M+SUB50M | awgn-cn0-54dBHz | [再生](fishin__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac) | 9.82 |
-| fishin | B200M+SUB50M | awgn-cn0-57dBHz | [再生](fishin__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac) | 12.45 |
-| fishin | B200M+SUB50M | awgn-cn0-60dBHz | [再生](fishin__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac) | 19.18 |
-| fishin | B200M+SUB50M | awgn-cn0-66dBHz | [再生](fishin__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac) | 32.36 |
-| fishin | B200M+SUB50M | awgn-cn0-80dBHz | [再生](fishin__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac) | 55.34 |
-| fishin | B200M+SUB50M | main-fade-10dB-cn0-66dBHz | [再生](fishin__32k__B200M+SUB50M__main-fade-10dB-cn0-66dBHz.flac) | 14.00 |
-| fishin | B200M+SUB50M | rayleigh-cn0-60dBHz | [再生](fishin__32k__B200M+SUB50M__rayleigh-cn0-60dBHz.flac) | 10.47 |
+| fishin | B200M+SUB50M | awgn-cn0-54dBHz | [再生](fishin__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac) | 12.41 |
+| fishin | B200M+SUB50M | awgn-cn0-57dBHz | [再生](fishin__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac) | 19.08 |
+| fishin | B200M+SUB50M | awgn-cn0-60dBHz | [再生](fishin__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac) | 28.99 |
+| fishin | B200M+SUB50M | awgn-cn0-66dBHz | [再生](fishin__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac) | 33.89 |
+| fishin | B200M+SUB50M | awgn-cn0-80dBHz | [再生](fishin__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac) | 57.34 |
+| fishin | B200M+SUB50M | main-fade-10dB-cn0-66dBHz | [再生](fishin__32k__B200M+SUB50M__main-fade-10dB-cn0-66dBHz.flac) | 16.48 |
+| fishin | B200M+SUB50M | rayleigh-cn0-60dBHz | [再生](fishin__32k__B200M+SUB50M__rayleigh-cn0-60dBHz.flac) | 14.49 |
 | fishin | B200M | codec | [再生](fishin__32k__B200M__codec.flac) | 57.32 |
 | fishin | FM | awgn-cn0-54dBHz | [再生](fishin__32k__FM__awgn-cn0-54dBHz.flac) | 4.02 |
 | fishin | FM | awgn-cn0-57dBHz | [再生](fishin__32k__FM__awgn-cn0-57dBHz.flac) | 11.42 |
@@ -36,13 +36,13 @@
 | fishin | FM | awgn-cn0-80dBHz | [再生](fishin__32k__FM__awgn-cn0-80dBHz.flac) | 51.16 |
 | fishin | FM | main-fade-10dB-cn0-66dBHz | [再生](fishin__32k__FM__main-fade-10dB-cn0-66dBHz.flac) | 8.44 |
 | fishin | FM | rayleigh-cn0-60dBHz | [再生](fishin__32k__FM__rayleigh-cn0-60dBHz.flac) | 4.65 |
-| vibeace | B200M+SUB50M | awgn-cn0-54dBHz | [再生](vibeace__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac) | 12.98 |
-| vibeace | B200M+SUB50M | awgn-cn0-57dBHz | [再生](vibeace__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac) | 17.83 |
-| vibeace | B200M+SUB50M | awgn-cn0-60dBHz | [再生](vibeace__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac) | 27.65 |
-| vibeace | B200M+SUB50M | awgn-cn0-66dBHz | [再生](vibeace__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac) | 41.37 |
-| vibeace | B200M+SUB50M | awgn-cn0-80dBHz | [再生](vibeace__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac) | 63.05 |
-| vibeace | B200M+SUB50M | main-fade-10dB-cn0-66dBHz | [再生](vibeace__32k__B200M+SUB50M__main-fade-10dB-cn0-66dBHz.flac) | 23.28 |
-| vibeace | B200M+SUB50M | rayleigh-cn0-60dBHz | [再生](vibeace__32k__B200M+SUB50M__rayleigh-cn0-60dBHz.flac) | 13.67 |
+| vibeace | B200M+SUB50M | awgn-cn0-54dBHz | [再生](vibeace__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac) | 17.89 |
+| vibeace | B200M+SUB50M | awgn-cn0-57dBHz | [再生](vibeace__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac) | 27.97 |
+| vibeace | B200M+SUB50M | awgn-cn0-60dBHz | [再生](vibeace__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac) | 37.78 |
+| vibeace | B200M+SUB50M | awgn-cn0-66dBHz | [再生](vibeace__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac) | 42.65 |
+| vibeace | B200M+SUB50M | awgn-cn0-80dBHz | [再生](vibeace__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac) | 66.07 |
+| vibeace | B200M+SUB50M | main-fade-10dB-cn0-66dBHz | [再生](vibeace__32k__B200M+SUB50M__main-fade-10dB-cn0-66dBHz.flac) | 26.54 |
+| vibeace | B200M+SUB50M | rayleigh-cn0-60dBHz | [再生](vibeace__32k__B200M+SUB50M__rayleigh-cn0-60dBHz.flac) | 18.23 |
 | vibeace | B200M | codec | [再生](vibeace__32k__B200M__codec.flac) | 65.78 |
 | vibeace | FM | awgn-cn0-54dBHz | [再生](vibeace__32k__FM__awgn-cn0-54dBHz.flac) | 2.81 |
 | vibeace | FM | awgn-cn0-57dBHz | [再生](vibeace__32k__FM__awgn-cn0-57dBHz.flac) | 10.20 |

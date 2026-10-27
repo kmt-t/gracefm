@@ -57,12 +57,12 @@ def through(frames, esn0, gains, rng):
     return [modem.awgn(f, esn0 + 10 * np.log10(max(g, 1e-6)), rng) for f, g in zip(frames, gains)]
 
 
-def link(x, main, cn0, sub="auto", power_main=0.5, kind_main="awgn", kind_sub="awgn", seed=1, cipher=None,
+def link(x, main, cn0, sub="auto", cn0_sub=None, kind_main="awgn", kind_sub="awgn", seed=1, cipher=None,
          **rx_kw):
     """
-    送信 → 通信路 → 受信。送信電力の合計を C/N0 で与える。
-    main, sub: プロファイル名または Profile。sub="auto" なら DEFAULT_SUB、None なら 1系統 (全電力を主系に)。
-    power_main: 主系に回す電力の割合 (2系統のとき。既定は等分)。
+    送信 → 通信路 → 受信。主系と副系は別送信機・別周波数の独立したチャンネルで、電力を分け合わない。
+    cn0: 主系の C/N0。cn0_sub: 副系の C/N0 (既定は cn0 と同じ)。ノイズは主系・副系で独立。
+    main, sub: プロファイル名または Profile。sub="auto" なら DEFAULT_SUB、None なら 1系統。
     cipher: 暗号化するとき gracefm.crypto.StreamCipher (送受信で同じもの)。
     返り値: (音声, 受信の統計, {"esn0_main": .., "esn0_sub": ..})
     """
@@ -70,22 +70,20 @@ def link(x, main, cn0, sub="auto", power_main=0.5, kind_main="awgn", kind_sub="a
     if sub == "auto":
         sub = DEFAULT_SUB.get(pm.name)
     ps = (sub if isinstance(sub, Profile) else PROFILES[sub]) if sub else None
-    frac = power_main if ps else 1.0
     rng = np.random.default_rng(seed)
-    off = pm.block // 2
-    esm = cn0 + 10 * np.log10(frac) - 10 * np.log10(symbol_rate(pm))
+    esm = cn0 - 10 * np.log10(symbol_rate(pm))
     fa = Transmitter(pm, 0, 0, cipher=cipher).run(x)
     fa = through(fa, esm, fading_gains(len(fa), kind_main, np.random.default_rng(seed + 100)), rng)
     fb, ess = None, None
     if ps:
-        ess = cn0 + 10 * np.log10(1 - frac) - 10 * np.log10(symbol_rate(ps))
-        fb = Transmitter(ps, 1, off, cipher=cipher).run(x)
+        ess = (cn0 if cn0_sub is None else cn0_sub) - 10 * np.log10(symbol_rate(ps))
+        fb = Transmitter(ps, 1, 0, cipher=cipher).run(x)
         fb = through(fb, ess, fading_gains(len(fb), kind_sub, np.random.default_rng(seed + 200)), rng)
-    y, st = receive(pm, fa, fb, len(x), off, profile_b=ps, cipher=cipher, **rx_kw)
+    y, st = receive(pm, fa, fb, len(x), 0, profile_b=ps, cipher=cipher, **rx_kw)
     return y, st, {"esn0_main": esm, "esn0_sub": ess}
 
 
-def link_static_multipath(x, main, cn0, paths=(), sub="auto", power_main=0.5,
+def link_static_multipath(x, main, cn0, paths=(), sub="auto", cn0_sub=None,
                           frequency_spacing_hz=0.0, equalize=True, training_frames=100,
                           equalizer_taps=11, max_lookahead=4, decision_passes=2, seed=1,
                           cipher=None, **rx_kw):
@@ -103,11 +101,7 @@ def link_static_multipath(x, main, cn0, paths=(), sub="auto", power_main=0.5,
     if sub == "auto":
         sub = DEFAULT_SUB.get(pm.name)
     ps = (sub if isinstance(sub, Profile) else PROFILES[sub]) if sub else None
-    if ps is not None and not (0.0 < power_main < 1.0):
-        raise ValueError("power_main must be between zero and one")
-    frac = power_main if ps else 1.0
-    off = pm.block // 2
-    esm = cn0 + 10 * np.log10(frac) - 10 * np.log10(symbol_rate(pm))
+    esm = cn0 - 10 * np.log10(symbol_rate(pm))
     fa = Transmitter(pm, 0, 0, cipher=cipher).run(x)
     fa, _ = through_matched_channel(fa, pm, esm, paths, seed=seed)
     diagnostics = {}
@@ -117,13 +111,13 @@ def link_static_multipath(x, main, cn0, paths=(), sub="auto", power_main=0.5,
             decision_passes, encrypted=cipher is not None)
     fb, ess = None, None
     if ps:
-        ess = cn0 + 10 * np.log10(1 - frac) - 10 * np.log10(symbol_rate(ps))
-        fb = Transmitter(ps, 1, off, cipher=cipher).run(x)
+        ess = (cn0 if cn0_sub is None else cn0_sub) - 10 * np.log10(symbol_rate(ps))
+        fb = Transmitter(ps, 1, 0, cipher=cipher).run(x)
         fb, _ = through_matched_channel(fb, ps, ess, paths, frequency_spacing_hz, seed + 1)
         if equalize:
             fb, diagnostics["sub"] = equalize_static(
                 fb, ps, 1, training_frames, equalizer_taps, max_lookahead,
                 decision_passes, encrypted=cipher is not None)
-    y, st = receive(pm, list(fa), None if fb is None else list(fb), len(x), off,
+    y, st = receive(pm, list(fa), None if fb is None else list(fb), len(x), 0,
                     profile_b=ps, cipher=cipher, **rx_kw)
     return y, st, {"esn0_main": esm, "esn0_sub": ess, "equalizer": diagnostics}

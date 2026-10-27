@@ -64,7 +64,7 @@ def generate(audio, profile, secondary, case):
         output, stats = receive(profile, frames, None, len(audio), 0)
         return output, stats, {"esn0_main": None, "esn0_sub": None}
     cn0 = int("".join(c for c in case if c.isdigit())[-2:])
-    options = dict(sub=secondary, power_main=0.5, seed=1)
+    options = dict(sub=secondary, seed=1)
     if case.startswith("awgn"):
         return channel.link(audio, profile, cn0, **options)
     if case == "phase_only66":
@@ -99,9 +99,8 @@ def main():
         "version": 2,
         "description": "GraceFM Y-profile listening samples; synced-symbol simulation, not RF capture",
         "sample_rate_hz": 32000, "seconds": args.seconds, "seed": 1,
-        "baseline_match": "tools/make_samples.py: 10s, input peak 0.89, C/N0 80/66/60/57/54, seed 1, main/sub 50:50",
-        "noisy_link": {"secondary": "SUB50M or SUB100", "power_main": 0.5,
-                       "power_secondary": 0.5, "phase_only_on_main": True},
+        "baseline_match": "tools/make_samples.py: 10s, input peak 0.89, C/N0 80/66/60/57/54, seed 1, main/sub 独立チャンネル（電力は分け合わない）",
+        "noisy_link": {"secondary": "SUB50M or SUB100", "phase_only_on_main": True},
         "sources": {}, "samples": [],
     }
     if args.resume and os.path.exists(args.json):

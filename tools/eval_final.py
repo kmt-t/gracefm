@@ -24,11 +24,9 @@ from gracefm import channel, metrics, wavio  # noqa: E402
 from gracefm.analog_fm import AnalogFM  # noqa: E402
 
 MONO = [("FM", None), ("B200M", dict(main="B200M", sub=None)),
-        ("B200M+SUB50M 50:50", dict(main="B200M", sub="SUB50M", power_main=0.5)),
-        ("B200M+SUB50M 75:25", dict(main="B200M", sub="SUB50M", power_main=0.75))]
+        ("B200M+SUB50M", dict(main="B200M", sub="SUB50M"))]
 STEREO = [("B200Y", dict(main="B200Y", sub=None)), ("B200", dict(main="B200", sub=None)),
-          ("B200+SUB100 50:50", dict(main="B200", sub="SUB100", power_main=0.5)),
-          ("B200+SUB100 75:25", dict(main="B200", sub="SUB100", power_main=0.75))]
+          ("B200+SUB100", dict(main="B200", sub="SUB100"))]
 
 
 def job(a):
@@ -49,7 +47,7 @@ def job(a):
             plc = 0.0
         else:
             two = cfg.get("sub") is not None
-            y, st, _ = channel.link(x, cfg["main"], cn0, sub=cfg.get("sub"), power_main=cfg.get("power_main", 0.5),
+            y, st, _ = channel.link(x, cfg["main"], cn0, sub=cfg.get("sub"),
                                     kind_main=kind, kind_sub="awgn" if kind == "fade10" else kind, seed=seed)
             plc = st["plc_samples"] / len(x) * 100
         out[name] = (metrics.snr_db(x, y), bm(y - x), plc)

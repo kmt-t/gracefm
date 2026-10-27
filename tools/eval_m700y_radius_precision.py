@@ -55,7 +55,7 @@ def variant(bits):
     standard = PROFILES["M700Y"]
     return make_hybrid(PROFILES["M700"], f"M700Y-R{bits}", standard.pid,
                        mantissa_bits=bits, experimental_tag=3,
-                       channels=standard.hybrid_channels, bits_s=standard.bits_s)
+                       channels=standard.hybrid_channels, bits_m=standard.bits_m, bits_s=standard.bits_s)
 
 
 def main():

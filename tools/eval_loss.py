@@ -10,7 +10,7 @@
 構成:
   1系統・無音     : B200M のみ (全電力)。欠落は 0 (無音) で埋める
   1系統・PLC      : B200M のみ。欠落は PLC (32次 LPC の外挿、10ms 保持・20ms で減衰)
-  2系統・PLC      : B200M＋SUB50M (50:50)。帯域ごとに融合し、両方欠けた区間だけ PLC
+  2系統・PLC      : B200M＋SUB50M (独立チャンネル)。帯域ごとに融合し、両方欠けた区間だけ PLC
 数値: 波形SNR [dB] / 両系統とも欠けた時間 (PLC で埋めた時間) [%] / 無音になった時間 [%] / 最長の欠け [ms]
 """
 import argparse
@@ -65,7 +65,7 @@ def job(a):
     x, fs = wavio.read(os.path.join(ROOT, "samples", f"{mat}__32k__reference.flac"))
     x = x[: int(sec * fs)]
     pm, ps = PROFILES["B200M"], PROFILES["SUB50M"]
-    off = pm.block // 2
+    off = 0
     block_ms = 1000 * pm.block / pm.fs
     rng = np.random.default_rng(seed)
     fa0 = txrx.Transmitter(pm, 0, 0).run(x)

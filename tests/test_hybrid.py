@@ -198,8 +198,8 @@ def test_hybrid_eight_bit_option_and_two_stream_fusion():
     p = make_hybrid(base, "experimental-8", 0, mantissa_bits=8)
     x = _audio(p, 12)
     fa = Transmitter(p).run(x)
-    fs = Transmitter(PROFILES["SUB50M"], 1, p.block // 2).run(x)
-    y, stats = receive(p, fa, fs, len(x), p.block // 2, profile_b=PROFILES["SUB50M"])
+    fs = Transmitter(PROFILES["SUB50M"], 1, 0).run(x)
+    y, stats = receive(p, fa, fs, len(x), 0, profile_b=PROFILES["SUB50M"])
     assert stats["plc_samples"] == 0
     assert np.isfinite(y).all()
 
@@ -210,11 +210,11 @@ def test_m700y_radius_precision_does_not_use_extra_symbols_or_remove_fec():
     for bits in (8, 10, 12):
         p = make_hybrid(PROFILES["M700"], f"M700Y-R{bits}", 13,
                         mantissa_bits=bits, experimental_tag=3, bits_s=baseline.bits_s,
-                        channels=baseline.hybrid_channels)
+                        bits_m=baseline.bits_m[:5] + (bits, bits), channels=baseline.hybrid_channels)
         lay = HybridLayout(p)
         assert p.bits_m[5:] == (bits, bits)
-        assert p.bits_s[:5] == baseline.bits_s[:5] and p.bits_s[5] == bits and p.bits_s[6] == 0   # SのY帯域も同じ幅
-        assert lay.n_hybrid == baseline_layout.n_hybrid == 64
+        assert p.bits_s[:5] == baseline.bits_s[:5] and p.bits_s[5] == bits and p.bits_s[6] == bits   # SのY帯域(k=5,6)も同じ幅
+        assert lay.n_hybrid == baseline_layout.n_hybrid == 96
         assert lay.n_coded == baseline_layout.n_coded
         assert Transmitter(p).nsym == Transmitter(baseline).nsym
         x = _audio(p, 4)
@@ -231,20 +231,24 @@ def test_m700_y_profiles_preserve_channel_mode_and_experimental_identity():
         old, y = PROFILES[old_name], PROFILES[y_name]
         assert y.hybrid_bits == 7
         assert y.fs == 48000 and y.block == 64 and y.hybrid_start_k == 5
-        assert y.bits_s == old.bits_s and y.exp_offset_s == old.exp_offset_s
-        assert y.attn_group_s == old.attn_group_s
+        # M700 は S の H1 (k=6) を 3bit で送り、Y 版 (M700Y) は S の k=6 も Y 帯域 (7bit) で送る
+        assert y.bits_s[:6] == old.bits_s[:6] and y.exp_offset_s == old.exp_offset_s
+        assert y.attn_group_s[:5] == old.attn_group_s[:5]
         assert any(y.bits_s) == (old_name == "M700")
         assert y.pid != old.pid and y.experimental_tag == old.experimental_tag == 3
         assert BY_ID[y.pid] is y and BY_HEADER[(y.pid, 3)] is y
         lay, old_lay = HybridLayout(y), Layout(old)
         assert lay.header_bits == old_lay.header_bits == 24
-        assert lay.n_prot == old_lay.n_prot       # Y帯域は4区間ずつ (8bit) で、元の最高域M (k=6, 8bit) と同じ
+        if old_name == "M700M":
+            assert lay.n_prot == old_lay.n_prot       # Y帯域は4区間ずつ (8bit) で、元の最高域M (k=6, 8bit) と同じ
+        else:
+            assert lay.n_prot == old_lay.n_prot       # Sも同様 (Mのk=6とSのk=6が各8bit)
         assert lay.n_header == 2 * (lay.n_prot_crc + 6)
         assert lay.n_hybrid == 48 + sum(y.ncoef(k) for k in (5, 6) if y.bits_s[k])
         bd = encode_block(_audio(y, 1), y)
         old_s = decode_coeffs(encode_block(_audio(y, 1), old), old)["S"]
         y_s = decode_coeffs(bd, y)["S"]
-        assert all(np.array_equal(a, b) for a, b in zip(old_s, y_s))
+        assert all(np.array_equal(a, b) for a, b in zip(old_s[:5], y_s[:5]))
         packed = lay.pack(bd, 0, 0)
         soft = 1 - 2 * packed
         assert lay.unpack(soft, packed, y_soft=_y_soft(lay, bd))[0] is not None
@@ -297,26 +301,26 @@ def test_monitor_y_bit_positions_preserve_s_codes():
 
     old = PROFILES["M700"]
     y_profile = PROFILES["M700Y"]
-    assert y_profile.bits_s == old.bits_s and y_profile.exp_offset_s == old.exp_offset_s
-    assert y_profile.attn_group_s == old.attn_group_s
+    assert y_profile.bits_s[:6] == old.bits_s[:6] and y_profile.bits_s[6] == 7 and old.bits_s[6] == 3
+    assert y_profile.exp_offset_s == old.exp_offset_s and y_profile.attn_group_s[:5] == old.attn_group_s[:5]
     assert y_profile.base_s[:5] == (3, 3, 3, 3, 3)
     assert y_profile.base_m == (5, 5, 5, 5, 5, 1, 1)
     assert BY_HEADER[(y_profile.pid, y_profile.experimental_tag)] is y_profile
     old_lay, y_layout = Layout(old), HybridLayout(y_profile)
-    assert y_layout.n_prot == old_lay.n_prot       # Y帯域は4区間ずつ (8bit) で、元の最高域M (k=6, 8bit) と同じ
+    assert y_layout.n_prot == old_lay.n_prot       # Y帯域は4区間ずつ (8bit)
     strong_slots = 2 * Transmitter(y_profile).digital_nsym
     strong_s = [(k, pos) for i, (ch, k, _, pos) in enumerate(y_layout.coef_items)
                 if ch == "S" and y_layout.coef_stream_idx[i] < strong_slots]
     # S の基本層2bitはすべて強い位置に入り、拡張層は弱い位置に入る
     assert len(strong_s) == sum(y_profile.ncoef(k) * y_profile.base_bits("S", k) for k in range(5))   # k=5 のSはY
     assert all(pos >= y_profile.bits_s[k] - y_profile.base_bits("S", k) for k, pos in strong_s)
-    assert Transmitter(y_profile).nsym + len(modem.PREAMBLE) == 224
+    assert Transmitter(y_profile).nsym + len(modem.PREAMBLE) == 260
     x = _audio(y_profile, 8)
     for start in range(0, len(x), y_profile.block):
         block = x[start:start + y_profile.block]
         s_old = decode_coeffs(encode_block(block, old), old)["S"]
         s_y = decode_coeffs(encode_block(block, y_profile), y_profile)["S"]
-        assert all(np.array_equal(a, b) for a, b in zip(s_old, s_y))
+        assert all(np.array_equal(a, b) for a, b in zip(s_old[:5], s_y[:5]))
     y, valid = StreamDecoder(y_profile).run(Transmitter(y_profile).run(x), len(x))
     assert valid.all()
     expected = np.concatenate([decode_block(encode_block(x[i:i + y_profile.block], y_profile), y_profile)

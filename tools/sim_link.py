@@ -5,15 +5,12 @@
   python tools/sim_link.py 入力.wav 出力.wav --profile B200 --snr 8 --loss 0.02
   python tools/sim_link.py 入力.wav 出力.wav --profile M700M --snr-a 6 --snr-b 15 --single
   python tools/sim_link.py 入力.wav --profile B200 --sweep        # SNR を振って表を出す
-  python tools/sim_link.py 入力.wav --profile B200M --snr 8 --power total   # 合計電力を固定して2系統に等分
 
 SNR は Es/N0 (1シンボルあたり、各系統)。--loss は系統ごとに独立なフレーム欠落率 (干渉・フェージングの谷の代わり)。
 換算 (同じ平均シンボルエネルギー・シンボルレートのモデル):
   C/N0 [dB-Hz] = Es/N0 [dB] + 10 log10(Rs [symbol/s])
   C/N  [dB]    = C/N0 [dB-Hz] - 10 log10(Bn [Hz])      Bn = C/N を定義する雑音帯域 (--bn)
---power per-stream: 各系統の Es/N0 を --snr にそろえる (単系統と同じ条件の波をもう1本足す比較)
---power total     : 2系統の合計受信電力を、単系統で --snr になる電力に固定して等分する
-                    (同じシンボルレート・雑音密度・伝搬条件なら、各系統の Es/N0 は --snr - 3.01dB)
+2系統は別送信機・別周波数の独立したチャンネルで、電力を分け合わない。各系統の Es/N0 を --snr にそろえる。
 2系統の占有帯域の合計は 1系統の 2倍 (2つの周波数の外端間の幅とは別)。
 入力の原音は評価にだけ使い、受信アルゴリズムには渡さない。
 """
@@ -42,13 +39,11 @@ def channel(frames, snr_db, loss, rng):
     return out
 
 
-def run_once(x, p, snr_a, snr_b, loss, single, seed, power="per-stream"):
-    """power="total" なら 2系統の各 Es/N0 を 10log10(2) 下げる (合計電力固定)"""
+def run_once(x, p, snr_a, snr_b, loss, single, seed):
     rng = np.random.default_rng(seed)
-    off = p.block // 2
-    split = 0.0 if (single or power == "per-stream") else 10 * np.log10(2)
-    fa = channel(Transmitter(p, 0, 0).run(x), snr_a - split, loss, rng)
-    fb = None if single else channel(Transmitter(p, 1, off).run(x), snr_b - split, loss, rng)
+    off = 0
+    fa = channel(Transmitter(p, 0, 0).run(x), snr_a, loss, rng)
+    fb = None if single else channel(Transmitter(p, 1, off).run(x), snr_b, loss, rng)
     return receive(p, fa, fb, len(x), off)
 
 
@@ -66,7 +61,6 @@ def main():
     ap.add_argument("--seconds", type=float, default=0, help="先頭から何秒を使うか (0 = 全部)")
     ap.add_argument("--sweep", action="store_true", help="SNR を振って表を出す")
     ap.add_argument("--seed", type=int, default=1)
-    ap.add_argument("--power", default="per-stream", choices=["per-stream", "total"])
     ap.add_argument("--bn", type=float, default=180e3, help="C/N を表示するときの雑音帯域 [Hz]")
     args = ap.parse_args()
 
@@ -83,7 +77,7 @@ def main():
           f"1系統 {rs / 1000:.1f}kシンボル/秒 (ロールオフ{p.pulse_beta:g}で理論支持幅 "
           f"{rs * (1 + p.pulse_beta) / 1000:.0f}kHz。"
           f"同じプロファイル2系統の合計 {rs * (1 + p.pulse_beta) * 2 / 1000:.0f}kHz)")
-    print(f"  電力条件 {args.power} / C/N0 = Es/N0 + {10 * np.log10(rs):.2f}dB, "
+    print(f"  C/N0 = Es/N0 + {10 * np.log10(rs):.2f}dB, "
           f"C/N({args.bn / 1000:g}kHz) = Es/N0 + {10 * np.log10(rs / args.bn):+.2f}dB (各系統)")
     bm = metrics.BandMetric(x, p.fs)
 
@@ -93,14 +87,13 @@ def main():
     if args.sweep:
         snrs = [-2, 0, 2, 4, 6, 8, 10, 12, 15, 20]
         print(f"  {'構成':30s} " + " ".join(f"{s:>6}dB" for s in snrs) + "  (横軸: 1系統あたりの Es/N0。"
-              "合計電力固定では単系統の値)")
-        for label, single, loss, power in [("1系統", True, 0.0, "per-stream"),
-                                           ("2系統 (各系統同じEs/N0)", False, 0.0, "per-stream"),
-                                           ("2系統 (合計電力固定)", False, 0.0, "total"),
-                                           ("2系統 + 欠落5% (各系統同じ)", False, 0.05, "per-stream")]:
+              "各系統の値)")
+        for label, single, loss in [("1系統", True, 0.0),
+                                    ("2系統 (各系統同じEs/N0)", False, 0.0),
+                                    ("2系統 + 欠落5% (各系統同じ)", False, 0.05)]:
             row = []
             for s in snrs:
-                y, _ = run_once(x, p, s, s, loss, single, args.seed, power)
+                y, _ = run_once(x, p, s, s, loss, single, args.seed)
                 row.append(report(y)[0])
             print(f"  {label:30s} " + " ".join(f"{v:8.2f}" for v in row), flush=True)
         print("  (帯域指標。誤りなしの値は tools/codec_wav.py で確認できる)")
@@ -108,8 +101,7 @@ def main():
 
     sa = args.snr if args.snr_a is None else args.snr_a
     sb = args.snr if args.snr_b is None else args.snr_b
-    y, st = run_once(x, p, sa, sb, args.loss, args.single, args.seed,
-                     args.power)
+    y, st = run_once(x, p, sa, sb, args.loss, args.single, args.seed)
     for k in ("A", "B"):
         if k in st:
             s = st[k]

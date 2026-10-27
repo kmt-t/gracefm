@@ -55,7 +55,7 @@ def job(task):
         audio_kbps = int(method.split("-", 1)[1])
         y, encoded_bytes = mp3_roundtrip(x, 32000, audio_kbps)
     elif method == "GraceFM":
-        y, state, _ = channel.link(x, "B200M", cn0, sub="SUB50M", power_main=0.5,
+        y, state, _ = channel.link(x, "B200M", cn0, sub="SUB50M",
                                    kind_main=kind, kind_sub="awgn" if kind == "fade10" else kind, seed=1)
         plc = 100 * state["plc_samples"] / len(x)
         audio_kbps = 474.0

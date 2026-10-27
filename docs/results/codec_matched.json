@@ -19,9 +19,9 @@
     "B200MY": "Profile(pid=3, name='B200MY', fs=32000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 7, 7), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 5, 1, 1), base_s=(0, 0, 0, 0, 0, 0, 0), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 4, 8), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
     "B200Y": "Profile(pid=4, name='B200Y', fs=32000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 7, 7), bits_s=(11, 11, 11, 11, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.1, pulse_span=32, base_m=(5, 5, 5, 5, 5, 1, 1), base_s=(5, 5, 5, 5, 3, 1, 1), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 4, 8), attn_group_s=(0, 0, 0, 0, 0, 4, 8), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
     "M700M": "Profile(pid=7, name='M700M', fs=48000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 7, 7), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 5, 3, 3), base_s=(0, 0, 0, 0, 0, 0, 0), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 0, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
-    "M700": "Profile(pid=8, name='M700', fs=48000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 7, 7), bits_s=(7, 7, 7, 7, 7, 7, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 5, 3, 3), base_s=(3, 3, 3, 3, 3, 3, 0), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 0, 4), attn_group_s=(0, 0, 0, 0, 0, 4, 0), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
+    "M700": "Profile(pid=8, name='M700', fs=48000, block=64, levels=6, bits_m=(11, 11, 11, 11, 7, 7, 7), bits_s=(7, 7, 7, 7, 7, 7, 3), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 3, 3, 3), base_s=(3, 3, 3, 3, 3, 3, 1), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 0, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
     "M700MY": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 7, 7), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 5, 1, 1), base_s=(0, 0, 0, 0, 0, 0, 0), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 4, 8), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
-    "M700Y": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 7, 7), bits_s=(7, 7, 7, 7, 7, 7, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 5, 1, 1), base_s=(3, 3, 3, 3, 3, 1, 0), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 4, 8), attn_group_s=(0, 0, 0, 0, 0, 4, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)"
+    "M700Y": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 7, 7), bits_s=(7, 7, 7, 7, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 5, 1, 1), base_s=(3, 3, 3, 3, 3, 1, 1), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 4, 8), attn_group_s=(0, 0, 0, 0, 0, 4, 8), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)"
   },
   "sources": [
     {
@@ -470,10 +470,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 16,
       "method": "M700",
-      "audio_kbps": 600.0,
+      "audio_kbps": 654.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 47.86,
-      "visqol_mean": 4.021
+      "snr_db": 47.61,
+      "visqol_mean": 3.219
     },
     {
       "material": "piano",
@@ -481,10 +481,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 16,
       "method": "M700Y",
-      "audio_kbps": 600.0,
+      "audio_kbps": 774.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 47.91,
-      "visqol_mean": 4.035
+      "snr_db": 48.63,
+      "visqol_mean": 4.062
     },
     {
       "material": "piano",
@@ -492,10 +492,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 24,
       "method": "M700",
-      "audio_kbps": 600.0,
+      "audio_kbps": 654.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 35.17,
-      "visqol_mean": 3.072
+      "snr_db": 46.56,
+      "visqol_mean": 2.407
     },
     {
       "material": "piano",
@@ -503,10 +503,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 24,
       "method": "M700Y",
-      "audio_kbps": 600.0,
+      "audio_kbps": 774.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 35.17,
-      "visqol_mean": 3.087
+      "snr_db": 48.68,
+      "visqol_mean": 3.806
     },
     {
       "material": "percussion",
@@ -602,10 +602,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 16,
       "method": "M700",
-      "audio_kbps": 600.0,
+      "audio_kbps": 654.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 45.45,
-      "visqol_mean": 4.528
+      "snr_db": 54.08,
+      "visqol_mean": 4.641
     },
     {
       "material": "percussion",
@@ -613,10 +613,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 16,
       "method": "M700Y",
-      "audio_kbps": 600.0,
+      "audio_kbps": 774.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 45.47,
-      "visqol_mean": 4.527
+      "snr_db": 56.34,
+      "visqol_mean": 4.642
     },
     {
       "material": "percussion",
@@ -624,10 +624,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 24,
       "method": "M700",
-      "audio_kbps": 600.0,
+      "audio_kbps": 654.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 40.67,
-      "visqol_mean": 4.204
+      "snr_db": 53.15,
+      "visqol_mean": 4.682
     },
     {
       "material": "percussion",
@@ -635,10 +635,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 24,
       "method": "M700Y",
-      "audio_kbps": 600.0,
+      "audio_kbps": 774.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 40.68,
-      "visqol_mean": 4.204
+      "snr_db": 57.82,
+      "visqol_mean": 4.73
     },
     {
       "material": "guitar",

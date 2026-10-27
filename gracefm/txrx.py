@@ -1,11 +1,11 @@
 """
 送信機・受信機 (2系統)。
 
-送信: 同じ音声を 2系統で送る。系統 B はブロックの格子を半ブロックずらす (先頭に block/2 サンプルの 0)。
+送信: 同じ音声を 2系統で送る。2系統のブロックの格子は同じ。
       2系統は大きく離れた別の周波数で送り、欠落やフェージングを独立にする。
 受信: 系統ごとに 復調 → 軟判定ビタビ → CRC 判定 → 復号。
       基本CRC不一致はフレーム欠落。H1/H2 CRCだけの不一致は高域を消去して低中域を採用する。
-      2系統の合成: 半ブロック単位で、両方届いた区間は帯域ごとに融合 (gracefm/fusion.py。各系統の係数の
+      2系統の合成: ブロック単位で、両方届いた区間は帯域ごとに融合 (gracefm/fusion.py。各系統の係数の
       誤差分散による逆分散重み) / 片方だけなら片方 / どちらも無ければ PLC。
 """
 import numpy as np
@@ -15,7 +15,6 @@ from .codec import (attenuator_expanded, decode_coeffs, encode_block, exp_range,
                     haar_inverse, ms_to_lr, offset_of, qmax_of, qmin_of)
 from .framing import HybridLayout, Layout
 from .crypto import unwrap_counter
-from .kalman import StreamBandKalman
 from .profiles import Profile
 
 
@@ -56,7 +55,7 @@ class Transmitter:
         return np.concatenate([digital, high])
 
     def run(self, x):
-        """x: (n, 2) → フレームのリスト (系統のずらしを含む)"""
+        """x: (n, 2) → フレームのリスト"""
         b = self.p.block
         xp = np.pad(x, ((self.offset, 0), (0, 0)))
         nfr = int(np.ceil(len(xp) / b))
@@ -69,7 +68,7 @@ class Transmitter:
 
 class StreamDecoder:
     def __init__(self, profile: Profile, soft_decode=True,
-                 kalman_bands=None, kalman_order=2, cipher=None, hybrid_phase_only=False):
+                 cipher=None, hybrid_phase_only=False):
         """
         soft_decode=True: 非保護ビットを硬判定せず、事後確率で重み付けした仮数の期待値で復号する
                           (modem.bit_probs。保護部は CRC が通った確定値)。False なら硬判定 (比較用)。
@@ -79,12 +78,9 @@ class StreamDecoder:
         self.p = profile
         self.hybrid_phase_only = hybrid_phase_only
         self.soft_decode = soft_decode
-        # 系統ごとの帯域カルマン (軟判定のときだけ)。kalman_bands = 帯域番号のリスト / "all" / None
-        kb = None if kalman_bands is None else (None if kalman_bands == "all" else list(kalman_bands))
-        self.kf = (StreamBandKalman(profile.nbands, kb, kalman_order)
-                   if (kalman_bands is not None and soft_decode) else None)
         self.cipher = cipher
         self.last_frame_no = -1
+        self.last_pre_err = None                        # 直前フレームの、既知プリアンブルとの差から求めた I/Q 軸あたりの誤差分散 (復調には使わない。記録用)
         self.layout = HybridLayout(profile) if profile.hybrid else Layout(profile, encrypted=cipher is not None)
         self.digital_nsym = modem.n_symbols(self.layout.n_tx, self.layout.n_strong, profile.modulation)
         self.stats = {"frames": 0, "lost": 0, "crc_fail": 0, "high_crc_fail": 0}
@@ -169,17 +165,27 @@ class StreamDecoder:
         w = 2.0 ** lay.coef_pos
         du = np.bincount(lay.coef_flat, weights=(p1_coef - hard) * w, minlength=lay.n_coef)
         var = np.bincount(lay.coef_flat, weights=p1_coef * (1 - p1_coef) * w * w, minlength=lay.n_coef)
+        # 係数ごとに最も不確かなビット (誤差分散への寄与が最大) を選び、それを反転した候補との差 alt と反転確率 pa を求める
+        contrib = p1_coef * (1 - p1_coef) * w * w
+        best = np.zeros(lay.n_coef)
+        np.maximum.at(best, lay.coef_flat, contrib)
+        top = contrib >= best[lay.coef_flat] - 1e-300
+        alt = np.zeros(lay.n_coef)
+        pa = np.zeros(lay.n_coef)
+        alt[lay.coef_flat[top]] = ((1 - 2 * hard) * w)[top]
+        pa[lay.coef_flat[top]] = np.abs(p1_coef - hard)[top]
         coefs = {}
         R = np.zeros(2)
         rb = np.full((2, 2, p.nbands), np.inf)          # (前半/後半, M/S, 帯域) の係数あたりの誤差分散
+        self.last_rv = {}                               # (ch, 帯域) → 係数ごとの誤差分散 (評価・学習データ用)
+        self.last_su = {}                               # (ch, 帯域) → 係数ごとの誤差の標準偏差 (仮数の最下位bit単位)
+        self.last_alt = {}                              # (ch, 帯域) → (最も不確かなビットを反転した候補との差, 反転確率)
         for ci, (ch, bits) in enumerate((("M", p.bits_m), ("S", p.bits_s))):
             coefs[ch] = []
             for k, b in enumerate(bits):
                 n = p.ncoef(k)
                 if k >= 5 and not high_ok:
                     coefs[ch].append(np.zeros(n))
-                    if self.kf is not None and b:
-                        self.kf.predict_only(ch, k, n)
                     continue
                 if b == 0:
                     coefs[ch].append(np.zeros(n))
@@ -194,9 +200,10 @@ class StreamDecoder:
                 z = np.clip(m + du[o:o + n], qmin, qmax) * step
                 extra = self.hybrid_variance.get((ch, k), 0)
                 rv = (var[o:o + n] + extra + 1.0 / 12) * step ** 2
-                if self.kf is not None:
-                    z, rv = self.kf.update(ch, k, z, rv, scale=qmax * step)
                 coefs[ch].append(z)
+                self.last_rv[(ch, k)] = rv
+                self.last_su[(ch, k)] = np.sqrt(var[o:o + n] + extra + 1.0 / 12)
+                self.last_alt[(ch, k)] = (alt[o:o + n] * step, pa[o:o + n])
                 R[ci] += np.sum(rv)
                 if n >= 2:
                     rb[0, ci, k], rb[1, ci, k] = np.mean(rv[: n // 2]), np.mean(rv[n // 2:])
@@ -220,6 +227,8 @@ class StreamDecoder:
         if sym is None:
             self.stats["lost"] += 1
         elif self.soft_decode:
+            npre = len(modem.PREAMBLE)
+            self.last_pre_err = float(np.mean(np.abs(digital_sym[:npre] - modem.PREAMBLE) ** 2) / 2)   # 記録用 (NN の入力に使う)
             p1, llr = modem.bit_probs(digital_sym, lay.n_tx, p.modulation, p.alpha)
             s = modem.prbs(lay.n_tx).astype(bool)        # スクランブルを戻す
             p1, llr = np.where(s, 1 - p1, p1), np.where(s, -llr, llr)
@@ -249,11 +258,6 @@ class StreamDecoder:
         if bd is None:
             self.last_r = (np.nan, np.nan)
             self.last_rb = None
-            if self.kf is not None:
-                for ch, bits in (("M", p.bits_m), ("S", p.bits_s)):
-                    for k, b in enumerate(bits):
-                        if b > 0:
-                            self.kf.predict_only(ch, k, p.ncoef(k))
             return np.zeros((p.block, 2)), False
         high_ok = hdr["high_ok"]
         if not high_ok:
@@ -309,28 +313,25 @@ class StreamDecoder:
 
 def receive(profile: Profile, framesA, framesB, n, offset_b, plc_order=32,
             return_streams=False, soft_decode=True, profile_b=None,
-            kalman_bands=None, kalman_order=2, cipher=None, hybrid_phase_only=False):
+            cipher=None, hybrid_phase_only=False):
     """
     2系統 (framesB=None なら 1系統) を受信して (n, 2) の音声を返す。
     return_streams=True なら stats に各系統の時刻合わせ済み出力と重みの推移も入れる (評価用)。
     profile_b: 副系のプロファイル (None なら主系と同じ)。サンプリング周波数とブロック長は主系と同じであること。
-    kalman_bands, kalman_order: 系統ごとの帯域カルマン (StreamDecoder を参照)。
     cipher: 暗号化しているとき、送信側と同じ鍵・nonce の gracefm.crypto.StreamCipher。
     """
     pb = profile if profile_b is None else profile_b
     assert pb.fs == profile.fs and pb.block == profile.block
-    dA = StreamDecoder(profile, soft_decode=soft_decode, kalman_bands=kalman_bands,
-                       kalman_order=kalman_order, cipher=cipher,
+    dA = StreamDecoder(profile, soft_decode=soft_decode, cipher=cipher,
                        hybrid_phase_only=hybrid_phase_only)
     yA, vA = dA.run(framesA, n, 0)
     stats = {"A": dA.stats}
     if framesB is not None:
-        dB = StreamDecoder(pb, soft_decode=soft_decode, kalman_bands=kalman_bands,
-                           kalman_order=kalman_order, cipher=cipher,
+        dB = StreamDecoder(pb, soft_decode=soft_decode, cipher=cipher,
                            hybrid_phase_only=hybrid_phase_only)
         yB, vB = dB.run(framesB, n, offset_b)
         stats["B"] = dB.stats
-        y, v, tr = fusion.fuse_band(yA, vA, yB, vB, profile.block // 2, dA.rb_trace, dB.rb_trace)
+        y, v, tr = fusion.fuse_band(yA, vA, yB, vB, profile.block, dA.rb_trace, dB.rb_trace)
         if return_streams:
             stats.update(yA=yA, vA=vA, yB=yB, vB=vB, weight_trace=tr)
     else:

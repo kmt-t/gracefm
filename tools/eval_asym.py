@@ -10,11 +10,9 @@ R = __import__("os").path.join(__import__("os").path.dirname(__file__), "..", "s
 def rs(p):
     t = txrx.Transmitter(p); return (len(modem.PREAMBLE) + t.nsym) * p.frames_per_sec
 def configs(main, subs):
-    c = {"単系統": (main, None, 1.0), "対称 等電力": (main, main, 0.5)}
+    c = {"単系統": (main, None, 1.0), "対称 独立2系統": (main, main, 1.0)}
     for s in subs:
-        c[f"+{s} 等電力"] = (main, s, 0.5)
-        a = rs(PROFILES[main]) / (rs(PROFILES[main]) + rs(PROFILES[s]))
-        c[f"+{s} 等密度"] = (main, s, a)
+        c[f"+{s} 独立2系統"] = (main, s, 1.0)
     return c
 def gains(nfr, kind, rng):
     if kind == "awgn": return np.ones(nfr)
@@ -32,7 +30,7 @@ def job(a):
     out = {}
     for cname, (pm, ps, frac) in configs(main, subs).items():
         rng = np.random.default_rng(seed)
-        PM = PROFILES[pm]; off = PM.block // 2
+        PM = PROFILES[pm]; off = 0
         fa = txrx.Transmitter(PM, 0, 0).run(x)
         ga = gains(len(fa), kind, np.random.default_rng(seed + 100))
         fa = chan(fa, cn0 + 10 * np.log10(frac) - 10 * np.log10(rs(PM)), ga, rng)
@@ -40,7 +38,7 @@ def job(a):
         if ps:
             PS = PROFILES[ps]; fb = txrx.Transmitter(PS, 1, off).run(x)
             gb = gains(len(fb), "awgn" if kind == "mainfade" else kind, np.random.default_rng(seed + 200))
-            fb = chan(fb, cn0 + 10 * np.log10(1 - frac) - 10 * np.log10(rs(PS)), gb, rng)
+            fb = chan(fb, cn0 - 10 * np.log10(rs(PS)), gb, rng)
         y, st = txrx.receive(PM, fa, fb, len(x), off, profile_b=PROFILES[ps] if ps else None)
         out[cname] = (metrics.snr_db(x, y), bm(y - x), st["plc_samples"] / len(x) * 100)
     return a, out

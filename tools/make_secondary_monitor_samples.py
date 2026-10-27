@@ -19,11 +19,11 @@ def main():
     audio=input_audio('demo',10)
     reference,fs=wavio.read(ROOT/'samples/monitor/demo__48k__reference.flac')
     assert fs==48000 and audio.shape==reference.shape
-    report={'power_main':0.75,'power_secondary':0.25,'seed':1,
+    report={'seed':1,
             'main_profile_signature':repr(PROFILES['M700']),
             'secondary_profile_signature':repr(PROFILES['SUB100-48K']),'samples':[]}
     for cn0 in (80,75,70,65):
-        output,stats,link=channel.link(audio,'M700',cn0,sub='SUB100-48K',power_main=0.75,seed=1)
+        output,stats,link=channel.link(audio,'M700',cn0,sub='SUB100-48K',seed=1)
         assert np.all(np.isfinite(output))
         path=ROOT/'samples/monitor'/sample_name('demo',48000,'M700',f'awgn{cn0}',sub='SUB100-48K')
         wavio.write_flac24(path,output,fs)

@@ -87,7 +87,6 @@ def codec(x, p):
     return out[:n]
 
 
-POWER_MAIN = 0.5                     # 主系に回す電力の割合 (送信電力の合計は固定)
 CN0_LIST = (80, 66, 60, 57, 54)      # C/N0 [dB-Hz]。66 は 5m・室内の保守的な見積もり (SPEC 付録D)
 BN = 180e3                           # C/N を表示する雑音帯域 [Hz] (FM放送 1波ぶん)
 ROWS = []
@@ -121,7 +120,7 @@ def link_desc(main, sub, cn0, es, kind):
     em = es["esn0_main"] - (10.0 if kind == "fade10" else 0.0)
     avg = "平均の " if kind == "rayleigh" else ""
     return (f"{ch}。C/N0 {cn0}dB-Hz（C/N {cn(cn0):.1f}dB）。{avg}主系 {main} Es/N0 {em:.1f}dB、"
-            f"副系 {sub} Es/N0 {es['esn0_sub']:.1f}dB（電力 {POWER_MAIN * 100:.0f}:{(1 - POWER_MAIN) * 100:.0f}）")
+            f"副系 {sub} Es/N0 {es['esn0_sub']:.1f}dB（主系と独立のチャンネル、C/N0同じ）")
 
 
 def main():
@@ -214,14 +213,14 @@ def generate_source(task):
              f"コーデックだけ。B200Y（階層16QAM＋Y、約{p.audio_kbps():.0f}kbps）。標準アッテネータを含む")
     fm = AnalogFM(x[:, 0], 32000) if mono and not adopted_only else None
     for cn0 in CN0_LIST:
-        y, st, es = channel.link(x, main_p, cn0, sub=sub, power_main=POWER_MAIN, seed=1)
+        y, st, es = channel.link(x, main_p, cn0, sub=sub, seed=1)
         save(sample_name(name, 32000, main_p, f"awgn{cn0}", sub=sub), y, mono, x, link_desc(main_p, sub, cn0, es, "awgn"))
         if fm is not None:
             y1 = fm.receive(cn0, np.random.default_rng(1))
             save(sample_name(name, 32000, "FM", f"awgn{cn0}"), np.stack([y1, y1], 1), mono, x,
                  f"アナログFMモノラル。白色雑音のみ。C/N0 {cn0}dB-Hz（C/N {cn(cn0):.1f}dB）。ゴーストなし")
     for kind, cn0 in (("rayleigh", 60), ("fade10", 66)):
-        y, st, es = channel.link(x, main_p, cn0, sub=sub, power_main=POWER_MAIN, kind_main=kind,
+        y, st, es = channel.link(x, main_p, cn0, sub=sub, kind_main=kind,
                                  kind_sub="awgn" if kind == "fade10" else kind, seed=1)
         plc = st["plc_samples"] / len(x) * 100
         save(sample_name(name, 32000, main_p, f"{'rayleigh' if kind == 'rayleigh' else 'main_minus10db'}{cn0}", sub=sub), y, mono, x,
@@ -340,7 +339,7 @@ README_HEAD = """# サンプル音声（GraceFM）
 
 | ファイル | 内容 |
 |---|---|
-| `*__B200M+SUB50M__* / *__B200+SUB100__*` | この方式の放送の採用構成（主系 B200M / B200 ＋ 副系 SUB50M / SUB100、送信電力 50:50） |
+| `*__B200M+SUB50M__* / *__B200+SUB100__*` | この方式の放送の採用構成（主系 B200M / B200 ＋ 副系 SUB50M / SUB100、別送信機の独立チャンネル） |
 | `*__FM__*` | 同じ受信電力のアナログFM（モノラル、ゴーストなし） |
 | `*__B200M__codec.flac`・`*__B200__codec.flac` | コーデックだけ、全ビット（拡張層まで届いたときの上限） |
 | `*__B200Y__codec.flac` | B200Y（階層16QAM＋Y）のステレオ音声。区間アッテネータを含む |

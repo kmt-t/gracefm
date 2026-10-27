@@ -6,23 +6,22 @@
     "gracefm/__init__.py": "8abf7535ba210c9045bd2224ca4de812ba291c5c84d743fb34cd480f31d46ea8",
     "gracefm/analog_am.py": "81a26adfb79a79bbf2ee8fc306a9a905a792e941d575aac85005a3e2f9adbfec",
     "gracefm/analog_fm.py": "57cbbfd1a22a81332b4e631598a1342c795b5dbc8a84f3be7746f54f765c693a",
-    "gracefm/channel.py": "6bc8cc03db3e5ff4697ba8adcd3526e3b4cf0c161cf12969235af33baa2fd19b",
+    "gracefm/channel.py": "539e59b29e152629d1fed64053fa46ee9249fd4848a6c54a6faea13682450ed7",
     "gracefm/codec.py": "7976004535b1abdc4c0eb9c9db334593b13765654b6903e24a3cf8a8f64cbbbf",
     "gracefm/crypto.py": "9fde6b9a6831796884dfbfae0797507b297a9c1cb41c1ebd65c6ec0411698841",
     "gracefm/equalizer.py": "6b0832e01d252a64137adf8ff4ea1f72d314be8966cbecf480706bfc134fedb0",
     "gracefm/fec.py": "6163136beafb127749c8385e1941f6b8a9e734ba6528d845c2fc67c07bbb8e54",
     "gracefm/framing.py": "62c73fce4a4b865a57f31828ea2acfc12a62759f8fa85db0378aaa57e6d858b6",
-    "gracefm/fusion.py": "6e5ad2d7651b5ae824b83ec1a315fc0ddb213ed355faf759f5d1bebb9506c3d2",
-    "gracefm/kalman.py": "e70e69e841dbd8355be9bb27a847dae644988ca45bc346bb35570e37b4402a82",
+    "gracefm/fusion.py": "2159d0f51b033290f2d9197097919a86861e37eeec8685773174b4dad2f7997a",
     "gracefm/layers.py": "511b5889beb487b1970b090ce551ab3baf6a33f8048bf199627cfe241022de4f",
     "gracefm/metrics.py": "de0251384d4a828e283a403a9491920edc868d4157eefbac2ec7b36c6d031727",
     "gracefm/modem.py": "e313385c5c5549294b344460971ce51b67b8e1297ef9bafb29f4f714824d5585",
     "gracefm/plc.py": "c6b568a4110c23bc0bbeabf56096ea9f98487ba216d46104ed5656f5c2411cbf",
     "gracefm/postfilter.py": "facfcac030606c340dfe5514932364a54c04def96eeb240fc725922c702b6f3e",
-    "gracefm/profiles.py": "6fb86fdd2641d21c90f4623512fc0aa88aa42222c673215d23b090316481ee74",
+    "gracefm/profiles.py": "e6463e39e0651320f5bc9179320b26479280351b723f4a27813a31731129549f",
     "gracefm/pulse.py": "b309a72a20f4c92342f19ff35e64695d2be72186bfc72fa57356ed04fa579e6e",
-    "gracefm/timing.py": "65e909b3eaafe368335338cedfb56da43f463ab0fb25cf539525b3e846460a79",
-    "gracefm/txrx.py": "b09d279c7adf3c4d4ef404b0aa30623529db4313ab4d7126016d118b45a0fc8e",
+    "gracefm/timing.py": "578531f61fd3af7df68beb276f8b987318b33203efa767e81a505ce54b815408",
+    "gracefm/txrx.py": "be09538e66fec7e23c8c9e94222d2e568d4ed4b7a0eba9661ea21550cb4c5670",
     "gracefm/wavio.py": "3ca226f908afc181e947f37ef28fd09fdd1b8a7aa86042f9847ab55a849846ad",
     "tools/alloc_search.py": "13cd50ecadb7580f7db0db9839dd10bca55905020a2bd41a34964275e23bea9e",
     "tools/base_layer_sample.py": "ab23566db28f4bdaa96e29b99eb5850fbdf9ff3a57a9add8609d12da9c4e073d",
@@ -32,42 +31,42 @@
     "tools/compare_monitor_y_samples.py": "80b7276b6ae41edbee330fc79852d8830fdec765e12ce54d5642a1715ac1a5e0",
     "tools/design_layers.py": "0a7b62c4981b20eca64013a97dc714b47f876fac8c508cdb627e3701e7a7fce2",
     "tools/eval_am.py": "97e34b15d0b8935258f2b7d2dc62aaa1dbe296eabc15a4328f29269b8b22f39d",
-    "tools/eval_asym.py": "2471ddfda9863bf31e6389e88506d5917587d1bdce52b9f38ab0f5cc0e54f488",
-    "tools/eval_attn_layout.py": "37d99466113106f9a50474dd420fc04f0f223480e04ce1ec9e7fa1640bd3c158",
+    "tools/eval_asym.py": "3569b43021156c6450469fb51fc0107390bd66a22c72aa2ad1579cb27f3e1308",
+    "tools/eval_attn_layout.py": "0d0597adb9f74635c8c216099a529c75e306e3e6cb682cb3eccc5924bee40341",
     "tools/eval_codec_matched.py": "62d09127eb7cbfac677f2f59ce393bc7a80b9690102e4d3a597ea788ab3469d6",
     "tools/eval_codec_perceptual.py": "d7d7a13448ca5cf4ae12cc05f9d30135449656d05a49c553fedb49e3a1fa0768",
-    "tools/eval_distortion.py": "47cce5e27d7ec4ed2e55ef48bbbd7cb83ad1b4bda807dbd0b3672feb7d1a4ce3",
-    "tools/eval_exp_layout.py": "9d1a5f0d7bfe57963c7ca076c581adb917f6e8e62e7490fa17b778b1e6dea2fc",
+    "tools/eval_distortion.py": "cb449ded98a578504b3fabc04014d1f8db291473d69834bf206c58e8ba3dd500",
+    "tools/eval_exp_layout.py": "ab53dacb2d79b40de3c40925123ab6c99aff25638273c62f7013687bff0b1662",
     "tools/eval_expbits.py": "b1b9b483d9237a7a4724de903ec1ccecd6409cf57ee9ec24b35fc10c8e3dede7",
-    "tools/eval_final.py": "474be1f6dc05c71492af98a1a53d7dfff73f9d2fa19bd027c88799abca57a087",
-    "tools/eval_ghost.py": "2450dea002bdef5a9413e4cc53648b940ae02c5893b9dfa7ab8d6d9ee4b8845f",
+    "tools/eval_final.py": "3d7d652355485b3da0b1fd02fdb455f4a556e4df63100f79f90256b4e1ac5063",
+    "tools/eval_ghost.py": "1b4a168c064f7c984726781e7ebdaf291371c29398efacb9f11cf345c7711139",
     "tools/eval_hybrid.py": "2d4be8a597032fbfd9258de3eae022662e6c2aa72634335dd21e940a3cafc9a0",
-    "tools/eval_kalman.py": "2dc5c03cedc04dec3902d5777b239970df5051c9c89da73565df80d2fe638f8a",
-    "tools/eval_loss.py": "a83364ae5f5a2b8f898f7b8903d8d4c770ab294043172a77c74a558faf75a2f7",
-    "tools/eval_lossless_benchmark.py": "39c46a84b602df5ded299fe5ec2066857aeb9a60996010e1cc779d661d642759",
-    "tools/eval_m700.py": "bea83b1c3b846e1e459bd3af7674611373e3ebfd03b98edcb4967b1309a9fee9",
+    "tools/eval_loss.py": "80b1ac95b1a278f15a589ca24d2430a3f6088ce61a07eda7afbb20190b40a1f0",
+    "tools/eval_lossless_benchmark.py": "1a932f51cc74cb77c04a55969902706a2376b96c99380255954ec845c999ce0a",
+    "tools/eval_m700.py": "d41e23fce4adc4e21d4d2339a8504cfc4001c68a969c01d85dcc6d393d2892e2",
     "tools/eval_m700y_radius_precision.py": "67324dacdb22ccc1f00219a8187683c1c91c6b5ec5c9eefd04d3ca60fe510c01",
     "tools/eval_mp3_licensed.py": "d23fdb426d59feb230c0baddb38a8905a36aa714a7f5c85d92f4ba89546191f1",
-    "tools/eval_perceptual.py": "494c884cc05e1a9725aaeebcfa26e91ef773d673b90cd9d9ff1db72f2ae8e573",
+    "tools/eval_perceptual.py": "c378b3f8586d61e39ca544c63f1dcf697d091f3eac69f736425a776f2874a53d",
     "tools/eval_softdec.py": "874ce9af9ff4c798e94719d8ea6edefdeb13febd78c1156e3e2bf220f9b32b58",
     "tools/eval_stereo_attn.py": "c9e025e3cb990c73d653562f8d530eb7e9d563e4136e62de19e02239b8af5785",
     "tools/fetch_exp_audio.py": "7fbae498e6b7b67f5d8c8194e893f5cd74d2d4dc4191b78495f470623b3f5864",
     "tools/fetch_lossless_benchmark_audio.py": "2d132a31709ae9d45f951a47dc2dbe8fe4f85404bee1f6f7d2e174759acd7c48",
+    "tools/fetch_training_audio.py": "b32fb4341df3c3e1a6e33269ecfe53724627ca6d18d4be331383b352a9a3fa15",
     "tools/fig_hybrid.py": "ed439b15035c463f07ea541d4c01a3a3b6e255bd9403ceb8ef2a76af4a27f537",
     "tools/fig_lossless_benchmark.py": "f793068b5802e81f43d19c957835ecfee1d6d0abdbf910a104e6fc7298e053a4",
     "tools/fig_perceptual.py": "8a3da8c7ec6bf22967252b3d524c359ba8322e8d549bbfb34e91f49da16c231a",
     "tools/make_hires_y_probe.py": "fb26bd58b528a30c55e3950ac94f5b84c80d0dd119eb787b9b484b974cfce422",
-    "tools/make_hybrid_y_samples.py": "299cc5f31a986569ea1136247d753978ad255ef7c05e090631308ca84ff765e6",
+    "tools/make_hybrid_y_samples.py": "c90a8ff3e46be7217818e26add43f23a72b925653da5235027539a0690fb3c36",
     "tools/make_monitor_y_samples.py": "6d00c4ca6d135a7cdda6937983436161f156bb6224765fccf74caee04888db82",
-    "tools/make_samples.py": "9c2edd35821380d2924f547ea6200996e923e203a02a6c1a080c5a7dc7b0333c",
-    "tools/make_secondary_monitor_samples.py": "eee8efac2ba9c66a3bf09b364d54df57b778852ad41359cc21e601ebf67f203c",
+    "tools/make_samples.py": "5f0938370681b1fac924ef283d66118a87875b587035b029d7a010e8dc640707",
+    "tools/make_secondary_monitor_samples.py": "4361253247691dfb05b46a0cd2dca3db774fb854186f5bdcb57e15fe097660e0",
     "tools/profile_matrix.py": "4925e28e60cd2ebcc22caceba859876a037bc4940afdc443bb078f58aa3811f4",
     "tools/regenerate_samples.py": "f1883cef374f60026ee5fcccfde404a51244df9f3765ba36a4b10e68045fddd2",
     "tools/regenerate_y_samples.py": "ba052a75c65d8b234e90443f38e005edea76aebc6d2c8362ea1b28bdf6b4223f",
     "tools/report_y_stereo_components.py": "4771c8b8c7620cad5ef62788a562e16bbd829448274dc5d0c0e76ef074dc22e2",
-    "tools/sample_catalog.py": "f7a2fac8555e11a518fe37301b632c549794d705cba88ec7ed29d588b6a3e987",
+    "tools/sample_catalog.py": "1e217445553eb16b291fa61a51813ba2f30032b3659c83fe1ee4de29830b2444",
     "tools/sample_names.py": "17a092c6b41854eab30d5a8f1ba1ddd8c241a5646ed9921ecb8386ce4ae28a89",
-    "tools/sim_link.py": "42966f61533ef5755c7e83e0550105df7bc2084bc8c82106d4e051c45f2a9e36",
+    "tools/sim_link.py": "8cc7f321c3c24bedd830a03a1f97f8e488abe093b8009ae14245b047e11080f9",
     "tools/spectrum.py": "291b86dfedca0a9d06e6b0fd7d77d9cd15b441b293b11b2741ef93996f1f32ff",
     "tools/validate_attn_headroom.py": "1a8caf8ced918de64edbbc62c8837e20cab2cdedebc040c18a155541c62831e3",
     "tools/validate_lossless_layout.py": "04eed4b27da5243e8a5827c91034fa12c8c7ceccd1da188d83d2b40dd1cbc5e4"
@@ -76,7 +75,7 @@
   "samples": [
     {
       "file": "samples/demo__32k__B200+SUB100__awgn-cn0-54dBHz.flac",
-      "sha256": "642c1c0a607483d14dc800996a9a0103b21c306959d976fd7123ffd339d1d208",
+      "sha256": "424c36bb7756b1e7df662591490780a00b650b2830f2a0e08bfd1d036f4a9c7f",
       "source": "demo",
       "reference_file": "samples/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -232,11 +231,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 8.00152654818822
+      "snr_db": 15.588766388702158
     },
     {
       "file": "samples/demo__32k__B200+SUB100__awgn-cn0-57dBHz.flac",
-      "sha256": "2ad8f0331cd54a4e852639e287c2a206ec6bb8aa92b1cb331feb91cdf50f881d",
+      "sha256": "d17ac8bdc6d949d6ae793978ab5ad7e5f7cb2b760a000a880524be0b22e9beb9",
       "source": "demo",
       "reference_file": "samples/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -392,11 +391,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 15.342802009107498
+      "snr_db": 21.206158133980885
     },
     {
       "file": "samples/demo__32k__B200+SUB100__awgn-cn0-60dBHz.flac",
-      "sha256": "eb69bb383cac57595e3766d136657fdcb2d97440dc501df818b7592c7965cdee",
+      "sha256": "e44a0c4b63515b0246375951593945221a77baa455c2d3493c392b90113bfcf7",
       "source": "demo",
       "reference_file": "samples/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -552,11 +551,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 21.00541133167228
+      "snr_db": 32.51705341669384
     },
     {
       "file": "samples/demo__32k__B200+SUB100__awgn-cn0-66dBHz.flac",
-      "sha256": "33f790a7ce4a4748a8553a2603355b3ec546adc265bfb536c708fc2477c6b118",
+      "sha256": "6337c8a772e06c17f16ac3467de8e4367e505900bee5fa768f9c24dc832d87e1",
       "source": "demo",
       "reference_file": "samples/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -712,11 +711,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 40.108289282600836
+      "snr_db": 41.59261189361818
     },
     {
       "file": "samples/demo__32k__B200+SUB100__awgn-cn0-80dBHz.flac",
-      "sha256": "68f94c55bac7523e3418252b72a90d7a35c73593058c70a5c0b8352ceb4bdd97",
+      "sha256": "adefcaf97554d36650ec6557a01fdca25c3683c570e52e3f1809fc1b66992cd5",
       "source": "demo",
       "reference_file": "samples/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -872,11 +871,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 57.86394936521641
+      "snr_db": 62.273159466888174
     },
     {
       "file": "samples/demo__32k__B200+SUB100__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "b920d035fb0b9c5d086eff0c2c78cdd0630798728b1f05d5c18b8e69adf0235e",
+      "sha256": "04c5dacb5a9cd2c0e6e2a4960c5236166147c8e3b576b11c6995f7c3b626132a",
       "source": "demo",
       "reference_file": "samples/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -1032,11 +1031,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 25.762724789044494
+      "snr_db": 25.784104552716688
     },
     {
       "file": "samples/demo__32k__B200+SUB100__rayleigh-cn0-60dBHz.flac",
-      "sha256": "ce56308c06faf36daa039a1fb041a052d0d617ca0cdfdbe2d0645aeed4745006",
+      "sha256": "899c4f40f7c704d1458bc723de0e17c38866e41816f7f28f868c5b285aefe505",
       "source": "demo",
       "reference_file": "samples/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -1192,7 +1191,7 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 9.217930069300177
+      "snr_db": 13.800256247661105
     },
     {
       "file": "samples/demo__32k__B200Y__codec.flac",
@@ -1388,7 +1387,7 @@
     },
     {
       "file": "samples/fishin__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "0380ac8c4af4f47a3e4e5a78eb5c82dae74102d9f659ad77d198982037d2320b",
+      "sha256": "1445a917fc0e3421a6fe07e41392ded163c892e46719d4db9a389bbcccb848c1",
       "source": "fishin",
       "reference_file": "samples/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -1544,11 +1543,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 9.821035645297892
+      "snr_db": 12.412442350098447
     },
     {
       "file": "samples/fishin__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "da2fa89c975354c09bc4b04aaa45f4e977802705977b9f7fa93e6121d6c18ba4",
+      "sha256": "dd339b2219e7861dd0f2b6a5dc65761ab69b2add54c872455760ecad15150328",
       "source": "fishin",
       "reference_file": "samples/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -1704,11 +1703,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 12.447693802278996
+      "snr_db": 19.078512237685466
     },
     {
       "file": "samples/fishin__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "4f3d8608915289a4988e13fa3b9dce0983c014580c4bc98316929582bf35fd72",
+      "sha256": "2d4dae3fae40f5521771b133d999c48d80abf4c0d35d325db041d252117f8764",
       "source": "fishin",
       "reference_file": "samples/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -1864,11 +1863,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 19.1841030633722
+      "snr_db": 28.987812164071688
     },
     {
       "file": "samples/fishin__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "be3ae6760b78a4fe724845465505567d71d1ec26f6e1ef57d1163bfb1a43622c",
+      "sha256": "a635add070c631b3af997da641e6aba28b3204e452a554478e16a4a7b49bd8e8",
       "source": "fishin",
       "reference_file": "samples/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -2024,11 +2023,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 32.36397686519134
+      "snr_db": 33.892596377361784
     },
     {
       "file": "samples/fishin__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "f36d4303d2c5e7f3e67b6a333c1d08e3d1dda42e7e52f9144238bb5da29aaa0f",
+      "sha256": "a56562a4657ddfe29f7e4b2821050a010703b5ac636c894a8a62ea7bbfb98c49",
       "source": "fishin",
       "reference_file": "samples/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -2184,11 +2183,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 55.34255741634762
+      "snr_db": 57.33772135918072
     },
     {
       "file": "samples/fishin__32k__B200M+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "997c9d7bdded9278c72c104da3a83cf96bb46b6b50584e01f5a2bbe616c9e36d",
+      "sha256": "f2650f3311ff3e876f53f0f7fb9e608cfe7058292bb1a44fc379a978d8468c2f",
       "source": "fishin",
       "reference_file": "samples/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -2344,11 +2343,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 14.000932224009372
+      "snr_db": 16.479884354035804
     },
     {
       "file": "samples/fishin__32k__B200M+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "f8dedb4d8715d392eecd0cc82ad309c8567428c4799cb3d8217441002936beb2",
+      "sha256": "b5753386deb83e4198adb1d66826134af13ca906a17c717ea8e375f6fe6390e1",
       "source": "fishin",
       "reference_file": "samples/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -2504,7 +2503,7 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 10.465546451184064
+      "snr_db": 14.493524024161776
     },
     {
       "file": "samples/fishin__32k__B200M__codec.flac",
@@ -2709,7 +2708,7 @@
     },
     {
       "file": "samples/hybrid_y/demo__32k__B200Y+SUB100__awgn-cn0-54dBHz.flac",
-      "sha256": "3574029ba0956b4fa025b897ed9522c3007ce6578de6970cdb731db021b358ac",
+      "sha256": "0df1381d19fdf36af6e694f9941c0c61e2bd4dbee2c6ee11b8bbfb7c41f7a336",
       "source": "demo",
       "reference_file": "samples/hybrid_y/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -2865,21 +2864,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 8.305270805947583,
-        "low_0_4khz": 8.374101005472697,
-        "high_4_16khz": -0.12790767881194706,
-        "visqol_moslqo": 2.4919102444980243,
-        "crc_fail": 5000,
-        "crc_fail_percent": 100.0,
-        "plc_percent": 29.52,
-        "samples_clipped_at_flac": 0,
-        "secondary_crc_fail_percent": 29.514097180563887
+        "snr_db": 14.911565122381308,
+        "low_0_4khz": 15.268778297093299,
+        "high_4_16khz": -0.0001120446312285139,
+        "visqol_moslqo": 2.0615935586964325,
+        "crc_fail": 4998,
+        "crc_fail_percent": 99.96,
+        "plc_percent": 0.02,
+        "samples_clipped_at_flac": 108,
+        "secondary_crc_fail_percent": 0.02
       },
-      "snr_db": 8.305270805947583
+      "snr_db": 14.911565122381308
     },
     {
       "file": "samples/hybrid_y/demo__32k__B200Y+SUB100__awgn-cn0-57dBHz.flac",
-      "sha256": "f3d0b11831cc539f575c76f76b44389668eb63fa452f834b6e13b9aecf599aef",
+      "sha256": "5aa9faf95cfe5d924b9ae812a46a2c766f510488fb25163142640842876613cb",
       "source": "demo",
       "reference_file": "samples/hybrid_y/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -3035,21 +3034,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 14.953633750884517,
-        "low_0_4khz": 15.314572049087761,
-        "high_4_16khz": 0.0001265597873042673,
-        "visqol_moslqo": 2.0066971583854194,
-        "crc_fail": 4998,
-        "crc_fail_percent": 99.96,
-        "plc_percent": 0.02,
-        "samples_clipped_at_flac": 40,
-        "secondary_crc_fail_percent": 0.01999600079984003
+        "snr_db": 21.069728031654577,
+        "low_0_4khz": 22.280944775343418,
+        "high_4_16khz": 1.3650005773191038,
+        "visqol_moslqo": 2.103903123514921,
+        "crc_fail": 2950,
+        "crc_fail_percent": 59.0,
+        "plc_percent": 0.0,
+        "samples_clipped_at_flac": 8,
+        "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 14.953633750884517
+      "snr_db": 21.069728031654577
     },
     {
       "file": "samples/hybrid_y/demo__32k__B200Y+SUB100__awgn-cn0-60dBHz.flac",
-      "sha256": "0d5e5985bfa4e7c1f4c2e932b467be74da59d7a0ea1394c94c52504634495442",
+      "sha256": "53a53f39de5e95879eeda966f337eec25a7641388daf8c81478b8115b47a27d0",
       "source": "demo",
       "reference_file": "samples/hybrid_y/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -3205,21 +3204,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 21.524697990893664,
-        "low_0_4khz": 22.932926402537312,
-        "high_4_16khz": 1.2646566085206654,
-        "visqol_moslqo": 2.167531260831847,
-        "crc_fail": 2966,
-        "crc_fail_percent": 59.32,
+        "snr_db": 31.83211918008892,
+        "low_0_4khz": 40.01277924265902,
+        "high_4_16khz": 6.739698477129322,
+        "visqol_moslqo": 2.5137220595265717,
+        "crc_fail": 34,
+        "crc_fail_percent": 0.68,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 21.524697990893664
+      "snr_db": 31.83211918008892
     },
     {
       "file": "samples/hybrid_y/demo__32k__B200Y+SUB100__awgn-cn0-66dBHz.flac",
-      "sha256": "6f2fdc02d6ae6915879977183c5e53d7e315d7d497b1a9e39db2a1a131d545dc",
+      "sha256": "8c2d511a2a16069f0faec243e1852d997db94f2aabe08d92631d121fcbac4066",
       "source": "demo",
       "reference_file": "samples/hybrid_y/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -3375,21 +3374,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 34.72293489116567,
-        "low_0_4khz": 52.70691862591563,
-        "high_4_16khz": 8.98581146618153,
-        "visqol_moslqo": 2.642702800030608,
+        "snr_db": 37.24684490725885,
+        "low_0_4khz": 53.5328248451452,
+        "high_4_16khz": 11.543348392289525,
+        "visqol_moslqo": 2.831895704737126,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 34.72293489116567
+      "snr_db": 37.24684490725885
     },
     {
       "file": "samples/hybrid_y/demo__32k__B200Y+SUB100__awgn-cn0-80dBHz.flac",
-      "sha256": "3729b108354eb063a7096c9c0affd7935831b3bf0700d78fd753ef0743d30a1d",
+      "sha256": "cd9d9a1be58f2408c059eef7415eeedfcec7cc34c6f0e34dc73cc0291cb3e0eb",
       "source": "demo",
       "reference_file": "samples/hybrid_y/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -3545,21 +3544,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 47.70995513222519,
-        "low_0_4khz": 66.14372658327127,
-        "high_4_16khz": 21.96594877848879,
-        "visqol_moslqo": 4.162108724463471,
+        "snr_db": 50.588800781382055,
+        "low_0_4khz": 68.45687038779954,
+        "high_4_16khz": 24.85357163940117,
+        "visqol_moslqo": 4.4803745523417335,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 47.70995513222519
+      "snr_db": 50.588800781382055
     },
     {
       "file": "samples/hybrid_y/demo__32k__B200Y+SUB100__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "f1d1f2193869a9a1bcafae68da23150c525d433f1048677b059582ca92b9da2e",
+      "sha256": "f182fbb12761449004ec5fa501376bbf8935aa9a5ca1d38b85fa70192033c0d9",
       "source": "demo",
       "reference_file": "samples/hybrid_y/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -3715,21 +3714,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.76221511461697,
-        "low_0_4khz": 45.680427860965395,
-        "high_4_16khz": 0.0,
-        "visqol_moslqo": 1.8328366351716725,
-        "crc_fail": 4998,
-        "crc_fail_percent": 99.96,
+        "snr_db": 26.06428521130717,
+        "low_0_4khz": 45.83359716083652,
+        "high_4_16khz": 0.3036257550405042,
+        "visqol_moslqo": 1.9405785545836198,
+        "crc_fail": 4437,
+        "crc_fail_percent": 88.74,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 25.76221511461697
+      "snr_db": 26.06428521130717
     },
     {
       "file": "samples/hybrid_y/demo__32k__B200Y+SUB100__phase-only-awgn-cn0-66dBHz.flac",
-      "sha256": "2073c31229d0dbd52840b416e7d19a7fd8b29dee441d05ca4908c74000ed7b8e",
+      "sha256": "885e7b37188fb45cb4f83986fc794ba443f5f9428a936d4d577acf8f3650c99b",
       "source": "demo",
       "reference_file": "samples/hybrid_y/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -3885,21 +3884,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 28.06195796621634,
-        "low_0_4khz": 52.706919796702266,
-        "high_4_16khz": 2.270268027148265,
-        "visqol_moslqo": 2.3201684959815987,
+        "snr_db": 28.064533085462333,
+        "low_0_4khz": 53.53282442781293,
+        "high_4_16khz": 2.270268133947715,
+        "visqol_moslqo": 2.3156400470133267,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 28.06195796621634
+      "snr_db": 28.064533085462333
     },
     {
       "file": "samples/hybrid_y/demo__32k__B200Y+SUB100__rayleigh-cn0-60dBHz.flac",
-      "sha256": "1b457b63ca686521ab02f2d565a47011597d5001ca99332f575c491f7bdb9e55",
+      "sha256": "57b0ce35794295c8b9824adecfbd6932e7637bac42bd702d30e422fe686dd9ff",
       "source": "demo",
       "reference_file": "samples/hybrid_y/demo__32k__reference.flac",
       "reference_sha256": "83926efef5cb74c605911ca22b0160ab51070f8827c787237155a8bfb2915055",
@@ -4055,17 +4054,17 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 9.558269925375527,
-        "low_0_4khz": 9.615634307429506,
-        "high_4_16khz": 1.7889303469336524,
-        "visqol_moslqo": 2.148381370022709,
-        "crc_fail": 3286,
-        "crc_fail_percent": 65.72,
-        "plc_percent": 12.99,
+        "snr_db": 13.626528845548663,
+        "low_0_4khz": 13.730632371951021,
+        "high_4_16khz": 3.6286911382136133,
+        "visqol_moslqo": 2.3323738529748343,
+        "crc_fail": 2139,
+        "crc_fail_percent": 42.78,
+        "plc_percent": 4.58,
         "samples_clipped_at_flac": 0,
-        "secondary_crc_fail_percent": 21.175764847030592
+        "secondary_crc_fail_percent": 11.04
       },
-      "snr_db": 9.558269925375527
+      "snr_db": 13.626528845548663
     },
     {
       "file": "samples/hybrid_y/demo__32k__B200Y__codec.flac",
@@ -4276,7 +4275,7 @@
     },
     {
       "file": "samples/hybrid_y/fishin__32k__B200MY+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "8df58b2a110ee6d1c910ff19d48ce61e08cbc10b862545d69a8edfd2e974c9ab",
+      "sha256": "f7826dfe68a07dd399fa791778521080c13d829cd86558b649a1c8d8ca1bf063",
       "source": "fishin",
       "reference_file": "samples/hybrid_y/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -4432,21 +4431,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 10.124139203535682,
-        "low_0_4khz": 12.119065314781349,
-        "high_4_16khz": 0.0038742780123177047,
-        "visqol_moslqo": 1.6957158926023437,
-        "crc_fail": 4991,
-        "crc_fail_percent": 99.82,
-        "plc_percent": 0.56,
+        "snr_db": 13.261580315517971,
+        "low_0_4khz": 17.949673830886308,
+        "high_4_16khz": 0.79738414582632,
+        "visqol_moslqo": 2.230768336242309,
+        "crc_fail": 3483,
+        "crc_fail_percent": 69.66,
+        "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
-        "secondary_crc_fail_percent": 0.5598880223955209
+        "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 10.124139203535682
+      "snr_db": 13.261580315517971
     },
     {
       "file": "samples/hybrid_y/fishin__32k__B200MY+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "14cc68d1ccf7c6ab70fab7ec5a05fb613b8e67ee188551af8d4944ead5aff139",
+      "sha256": "e1b80e7f4b114195c2f93e30edca8bac385fbd13b4bc65eace5f10bf9f438f63",
       "source": "fishin",
       "reference_file": "samples/hybrid_y/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -4602,21 +4601,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 13.289718813261304,
-        "low_0_4khz": 18.055895241624693,
-        "high_4_16khz": 0.7881172370585471,
-        "visqol_moslqo": 2.236427916717186,
-        "crc_fail": 3502,
-        "crc_fail_percent": 70.04,
+        "snr_db": 19.18416740032663,
+        "low_0_4khz": 28.880300741162355,
+        "high_4_16khz": 5.4741985522725765,
+        "visqol_moslqo": 2.8699879299183753,
+        "crc_fail": 126,
+        "crc_fail_percent": 2.52,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 13.289718813261304
+      "snr_db": 19.18416740032663
     },
     {
       "file": "samples/hybrid_y/fishin__32k__B200MY+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "9f4be8ac393ba185dff797598f97c07926a746118895cd09868bea44baa87cdd",
+      "sha256": "3f07c3abee62a2f0cfb34866ca1e19fa917e663d8f8d6035788dcfc2e24a4172",
       "source": "fishin",
       "reference_file": "samples/hybrid_y/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -4772,21 +4771,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 19.20268475071757,
-        "low_0_4khz": 29.176389576518915,
-        "high_4_16khz": 5.461898541933477,
-        "visqol_moslqo": 2.8680153131479256,
-        "crc_fail": 130,
-        "crc_fail_percent": 2.6,
+        "snr_db": 21.910709154220957,
+        "low_0_4khz": 34.95852091314395,
+        "high_4_16khz": 7.94008166961644,
+        "visqol_moslqo": 2.993379146487673,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 19.20268475071757
+      "snr_db": 21.910709154220957
     },
     {
       "file": "samples/hybrid_y/fishin__32k__B200MY+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "6a24a0454c9f898c2264bcb4b5022f6afdc3484558213cfef1fc92699e480e09",
+      "sha256": "288143baae3bb9878ce3c063991d118d81ffe73d1c22a582ce3cbfe9faf18266",
       "source": "fishin",
       "reference_file": "samples/hybrid_y/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -4942,21 +4941,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 24.420793992908955,
-        "low_0_4khz": 37.59683694800341,
-        "high_4_16khz": 10.443845081338846,
-        "visqol_moslqo": 3.114180987489613,
+        "snr_db": 27.099983328821597,
+        "low_0_4khz": 38.99947363823386,
+        "high_4_16khz": 13.195667307547726,
+        "visqol_moslqo": 3.261086436039189,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 24.420793992908955
+      "snr_db": 27.099983328821597
     },
     {
       "file": "samples/hybrid_y/fishin__32k__B200MY+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "633b474b2fd800bb5db49299c1536e1673e32c1d47d5fee9245b8c2e2594ca2b",
+      "sha256": "1cdbbbbc4da2ad60b2ef1ba52b27fcc603a8b2ef07efafed49a42669dcbaba5a",
       "source": "fishin",
       "reference_file": "samples/hybrid_y/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -5112,21 +5111,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 37.904886704341685,
-        "low_0_4khz": 65.27281730337263,
-        "high_4_16khz": 23.72976212020333,
-        "visqol_moslqo": 4.075948005636007,
+        "snr_db": 40.734747306728934,
+        "low_0_4khz": 66.3963863683214,
+        "high_4_16khz": 26.56331601649469,
+        "visqol_moslqo": 4.232476915839518,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 37.904886704341685
+      "snr_db": 40.734747306728934
     },
     {
       "file": "samples/hybrid_y/fishin__32k__B200MY+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "649359833667799c4ac63b31f46fabd3aee4aed4c0fef40234de491e3713e5cd",
+      "sha256": "de36c3a6bd63ea9e886eabe532edd28b2654b6717b0296937cc2d32056557b28",
       "source": "fishin",
       "reference_file": "samples/hybrid_y/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -5282,21 +5281,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 14.16207674134921,
-        "low_0_4khz": 27.15702114496297,
-        "high_4_16khz": 0.19411304771469737,
-        "visqol_moslqo": 1.9228297737287638,
-        "crc_fail": 4549,
-        "crc_fail_percent": 90.98,
+        "snr_db": 17.862507524875475,
+        "low_0_4khz": 29.015420996925705,
+        "high_4_16khz": 4.0124722488949605,
+        "visqol_moslqo": 2.794588220656134,
+        "crc_fail": 606,
+        "crc_fail_percent": 12.12,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 14.16207674134921
+      "snr_db": 17.862507524875475
     },
     {
       "file": "samples/hybrid_y/fishin__32k__B200MY+SUB50M__phase-only-awgn-cn0-66dBHz.flac",
-      "sha256": "e928496cbac8985667aaa7fb517f426098040960a2b86706e2f3d0deb3ca3778",
+      "sha256": "720284fe052bf735cd461d09863fb9033aac1067c980ac6ac8fa983113ecad22",
       "source": "fishin",
       "reference_file": "samples/hybrid_y/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -5452,21 +5451,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 15.791712584947637,
-        "low_0_4khz": 37.59683693821835,
-        "high_4_16khz": 1.6365773282865455,
-        "visqol_moslqo": 2.6982326983188964,
+        "snr_db": 15.799327580620266,
+        "low_0_4khz": 38.999473820800546,
+        "high_4_16khz": 1.636577394126937,
+        "visqol_moslqo": 2.698495940716316,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 15.791712584947637
+      "snr_db": 15.799327580620266
     },
     {
       "file": "samples/hybrid_y/fishin__32k__B200MY+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "a55f5a81e8b3f1c1438f3ada25b7ed3140274e63665dba44ae48f5cbf51ed24b",
+      "sha256": "ddf94740fab928fa1270b031cb5c6fce6f299b80c052b04098f3e156cd3a4e19",
       "source": "fishin",
       "reference_file": "samples/hybrid_y/fishin__32k__reference.flac",
       "reference_sha256": "f92341dea69126ab397741a6753c3d0b745f55709a5f8755f2bf96efa99db9c9",
@@ -5622,17 +5621,17 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 10.950449071496173,
-        "low_0_4khz": 12.131303298653295,
-        "high_4_16khz": 2.500049296661884,
-        "visqol_moslqo": 2.4027319328438983,
-        "crc_fail": 2275,
-        "crc_fail_percent": 45.5,
-        "plc_percent": 5.72,
+        "snr_db": 14.814368133698228,
+        "low_0_4khz": 17.228522988470058,
+        "high_4_16khz": 4.115644397820288,
+        "visqol_moslqo": 2.6693847407340647,
+        "crc_fail": 1337,
+        "crc_fail_percent": 26.74,
+        "plc_percent": 2.12,
         "samples_clipped_at_flac": 0,
-        "secondary_crc_fail_percent": 12.87742451509698
+        "secondary_crc_fail_percent": 6.7
       },
-      "snr_db": 10.950449071496173
+      "snr_db": 14.814368133698228
     },
     {
       "file": "samples/hybrid_y/fishin__32k__B200MY__codec.flac",
@@ -5843,7 +5842,7 @@
     },
     {
       "file": "samples/hybrid_y/vibeace__32k__B200MY+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "2e11f64ec87dd9f560191955862685c2bf14a07bf8b4e63dc28b54cfe5ce3509",
+      "sha256": "d4bc3d873ce7e3c727696aa2b88a3abdc091edae8e334e28017a1247972392d0",
       "source": "vibeace",
       "reference_file": "samples/hybrid_y/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -5999,21 +5998,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 13.280413201201299,
-        "low_0_4khz": 13.578719827437995,
-        "high_4_16khz": 0.0025925497950912133,
-        "visqol_moslqo": 1.4895754839448792,
-        "crc_fail": 4991,
-        "crc_fail_percent": 99.82,
-        "plc_percent": 0.66,
+        "snr_db": 18.281818858251647,
+        "low_0_4khz": 19.080987586673892,
+        "high_4_16khz": 1.0947288037240157,
+        "visqol_moslqo": 1.5948423152138962,
+        "crc_fail": 3464,
+        "crc_fail_percent": 69.28,
+        "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
-        "secondary_crc_fail_percent": 0.6598680263947211
+        "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 13.280413201201299
+      "snr_db": 18.281818858251647
     },
     {
       "file": "samples/hybrid_y/vibeace__32k__B200MY+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "9a867363bdbbcc7d7005c07d7503aa34495cd4f3c5012d5d434425273c307565",
+      "sha256": "831932799a05bf2e73b525800b47cf97ecf88a965200419ac5361bd0b50a1af1",
       "source": "vibeace",
       "reference_file": "samples/hybrid_y/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -6169,21 +6168,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 18.463020297949004,
-        "low_0_4khz": 19.30282486999611,
-        "high_4_16khz": 1.0838709814088825,
-        "visqol_moslqo": 1.5866388710877688,
-        "crc_fail": 3479,
-        "crc_fail_percent": 69.58,
+        "snr_db": 29.667597189340743,
+        "low_0_4khz": 33.17058191060524,
+        "high_4_16khz": 7.361636082109646,
+        "visqol_moslqo": 2.0229072725248387,
+        "crc_fail": 111,
+        "crc_fail_percent": 2.22,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 18.463020297949004
+      "snr_db": 29.667597189340743
     },
     {
       "file": "samples/hybrid_y/vibeace__32k__B200MY+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "bf9e9f2e4fdd5193ff84109fd5dd11db13ab8db6819729a6c4943112f75048f3",
+      "sha256": "5ebace472a7bade9de3febd78e1b6a2ce46dae90464550576db0e0fe81fccf84",
       "source": "vibeace",
       "reference_file": "samples/hybrid_y/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -6339,21 +6338,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 29.909746224325797,
-        "low_0_4khz": 33.7451283971342,
-        "high_4_16khz": 7.354583987548179,
-        "visqol_moslqo": 2.0199617387935103,
-        "crc_fail": 112,
-        "crc_fail_percent": 2.24,
+        "snr_db": 33.548149803852205,
+        "low_0_4khz": 40.40523500898857,
+        "high_4_16khz": 9.684962383608418,
+        "visqol_moslqo": 2.143376668635258,
+        "crc_fail": 0,
+        "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 29.909746224325797
+      "snr_db": 33.548149803852205
     },
     {
       "file": "samples/hybrid_y/vibeace__32k__B200MY+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "1b927c98b57148f366d50f0f4cb47b83728e8a6143c2664064f5f9ccfdfd5daa",
+      "sha256": "dda2a5ec8c618598fcfb830d93a539d245b3b283f2e343bdad5184945255137d",
       "source": "vibeace",
       "reference_file": "samples/hybrid_y/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -6509,21 +6508,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 35.94721110836583,
-        "low_0_4khz": 43.0268936076572,
-        "high_4_16khz": 12.028248765829597,
-        "visqol_moslqo": 2.2344619508965233,
+        "snr_db": 38.26574741079869,
+        "low_0_4khz": 44.238634568704654,
+        "high_4_16khz": 14.663960785424361,
+        "visqol_moslqo": 2.3397483756687256,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 35.94721110836583
+      "snr_db": 38.26574741079869
     },
     {
       "file": "samples/hybrid_y/vibeace__32k__B200MY+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "009b8958f02849af1f97e17246d7a4f1bf3acc58ba6d25b02ee11856ab9346cc",
+      "sha256": "724b28cc5b1834e2e70ab3dd22b38277df5d77d53e91f1267a5a151c1748aa47",
       "source": "vibeace",
       "reference_file": "samples/hybrid_y/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -6679,21 +6678,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 49.871437225282975,
-        "low_0_4khz": 66.44592693854395,
-        "high_4_16khz": 25.105355582613896,
-        "visqol_moslqo": 3.6134777999325203,
+        "snr_db": 52.676420612404655,
+        "low_0_4khz": 67.83987211825495,
+        "high_4_16khz": 27.947891462398164,
+        "visqol_moslqo": 4.021806234285815,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 49.871437225282975
+      "snr_db": 52.676420612404655
     },
     {
       "file": "samples/hybrid_y/vibeace__32k__B200MY+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "ebdfa86c97a247b5a298058ecff0e23138e2db7e7625bb4c143e9b05aaf04e52",
+      "sha256": "fc408bbbd64676ef7e0919b33053fb42e8d6fa2fe6617f6e968a13ed9e59a39e",
       "source": "vibeace",
       "reference_file": "samples/hybrid_y/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -6849,21 +6848,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 24.68749223073527,
-        "low_0_4khz": 34.562781078674945,
-        "high_4_16khz": 0.29511867796600605,
-        "visqol_moslqo": 1.5730260834323362,
-        "crc_fail": 4559,
-        "crc_fail_percent": 91.18,
+        "snr_db": 29.338875884206676,
+        "low_0_4khz": 35.97242705793854,
+        "high_4_16khz": 5.535439517742448,
+        "visqol_moslqo": 1.905074593649199,
+        "crc_fail": 601,
+        "crc_fail_percent": 12.02,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 24.68749223073527
+      "snr_db": 29.338875884206676
     },
     {
       "file": "samples/hybrid_y/vibeace__32k__B200MY+SUB50M__phase-only-awgn-cn0-66dBHz.flac",
-      "sha256": "f2af2175246567bb59cd39de91d858fdd9de8496fe622e5cf722db20eb6b5337",
+      "sha256": "9c19f50efce40638bf1b60ab3a1727e7074bdc6fa87ac500805a8809a75bd73e",
       "source": "vibeace",
       "reference_file": "samples/hybrid_y/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -7019,21 +7018,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 29.0130084042192,
-        "low_0_4khz": 43.0268935346602,
-        "high_4_16khz": 4.325876367209826,
-        "visqol_moslqo": 1.9125562863199685,
+        "snr_db": 29.055034703095274,
+        "low_0_4khz": 44.238634061390584,
+        "high_4_16khz": 4.325876318417738,
+        "visqol_moslqo": 1.9139129618638324,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 29.0130084042192
+      "snr_db": 29.055034703095274
     },
     {
       "file": "samples/hybrid_y/vibeace__32k__B200MY+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "2dd88d49cac5cf2baffb8d29e3557ff959be4fdaa1395e77bee7e2883b121494",
+      "sha256": "01d65de3d721fed5fde8e0220ebb429579bd6324a181a726a8d1b9200fadb2d3",
       "source": "vibeace",
       "reference_file": "samples/hybrid_y/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -7189,17 +7188,17 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 14.032155063529714,
-        "low_0_4khz": 14.1837775446754,
-        "high_4_16khz": 3.433837566331955,
-        "visqol_moslqo": 1.7289190870767133,
-        "crc_fail": 2285,
-        "crc_fail_percent": 45.7,
-        "plc_percent": 5.86,
+        "snr_db": 19.769709453860433,
+        "low_0_4khz": 20.19564319107536,
+        "high_4_16khz": 5.067522047616619,
+        "visqol_moslqo": 1.871210377349462,
+        "crc_fail": 1334,
+        "crc_fail_percent": 26.68,
+        "plc_percent": 1.9,
         "samples_clipped_at_flac": 0,
-        "secondary_crc_fail_percent": 13.097380523895222
+        "secondary_crc_fail_percent": 6.82
       },
-      "snr_db": 14.032155063529714
+      "snr_db": 19.769709453860433
     },
     {
       "file": "samples/hybrid_y/vibeace__32k__B200MY__codec.flac",
@@ -7410,7 +7409,7 @@
     },
     {
       "file": "samples/monitor/demo__48k__M700+SUB100-48K__awgn-cn0-65dBHz.flac",
-      "sha256": "6348066fc87dcbfbd18afbdd38dd1c4cc69738281e4819a7eeea33d5dfe64cb1",
+      "sha256": "9cff3d2ddf641cd04915b78cda5a276f640333923eb7b530d4cf94be7abff5b7",
       "source": "demo",
       "reference_file": "samples/monitor/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -7431,7 +7430,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -7442,7 +7441,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -7456,7 +7455,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -7467,7 +7466,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -7488,8 +7487,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -7566,20 +7565,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.08862915788694,
-        "low_0_6khz": 37.83332622035177,
-        "high_6_24khz": 3.7688722203736713,
-        "visqol_moslqo": 2.7297086044563863,
+        "snr_db": 28.82537267606788,
+        "low_0_6khz": 47.9072699217242,
+        "high_6_24khz": 7.323723760957849,
+        "visqol_moslqo": 2.976286904584009,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 25.08862915788694
+      "snr_db": 28.82537267606788
     },
     {
       "file": "samples/monitor/demo__48k__M700+SUB100-48K__awgn-cn0-70dBHz.flac",
-      "sha256": "6dc825ecd783a15c541db40cdaa85402d8dea692e63e13c901c673d2a822af0a",
+      "sha256": "10623bfb515672833b16f2e72ad3e1c6f1a368c0d5b3d143817ecfc2c5469624",
       "source": "demo",
       "reference_file": "samples/monitor/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -7600,7 +7599,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -7611,7 +7610,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -7625,7 +7624,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -7636,7 +7635,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -7657,8 +7656,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -7735,20 +7734,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.399319767726013,
-        "low_0_6khz": 49.95893884961039,
-        "high_6_24khz": 3.8591826200224,
-        "visqol_moslqo": 3.474393223680787,
+        "snr_db": 31.17308957086931,
+        "low_0_6khz": 49.39952335978235,
+        "high_6_24khz": 9.683200160603782,
+        "visqol_moslqo": 3.2906736433292454,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 25.399319767726013
+      "snr_db": 31.17308957086931
     },
     {
       "file": "samples/monitor/demo__48k__M700+SUB100-48K__awgn-cn0-75dBHz.flac",
-      "sha256": "759064a7676f2d4e43113b9fa7878553a89680c93a30e27e54afcf0380a18520",
+      "sha256": "359a579f90a2c2a6d9dc2a224489f7ad023e238a46fbf6e929440221ffce3cea",
       "source": "demo",
       "reference_file": "samples/monitor/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -7769,7 +7768,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -7780,7 +7779,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -7794,7 +7793,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -7805,7 +7804,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -7826,8 +7825,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -7904,20 +7903,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.48854016404767,
-        "low_0_6khz": 53.59787696430231,
-        "high_6_24khz": 3.9399538954931757,
-        "visqol_moslqo": 4.232551158339103,
+        "snr_db": 36.34189594256937,
+        "low_0_6khz": 53.706717901533175,
+        "high_6_24khz": 14.866483408598956,
+        "visqol_moslqo": 4.209256731062679,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 25.48854016404767
+      "snr_db": 36.34189594256937
     },
     {
       "file": "samples/monitor/demo__48k__M700+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "754b25a2b876d346d08d4907250edd3e9d550d34c562259ada3a24fc9c842fdf",
+      "sha256": "956bd8192f9c6a16e3c1e8a8f633c72b61866195e412fe9f66d112bcdc2b813b",
       "source": "demo",
       "reference_file": "samples/monitor/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -7938,7 +7937,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -7949,7 +7948,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -7963,7 +7962,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -7974,7 +7973,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -7995,8 +7994,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -8073,20 +8072,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.522791545808573,
-        "low_0_6khz": 63.54219838631633,
-        "high_6_24khz": 3.9682155993592105,
-        "visqol_moslqo": 4.712119575091306,
+        "snr_db": 40.30418082687045,
+        "low_0_6khz": 62.98279376687506,
+        "high_6_24khz": 18.772261265573064,
+        "visqol_moslqo": 4.726370815997451,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "secondary_crc_fail_percent": 0.0
       },
-      "snr_db": 25.522791545808573
+      "snr_db": 40.30418082687045
     },
     {
       "file": "samples/monitor/demo__48k__M700-base__codec.flac",
-      "sha256": "18a1e5b4d9f2add17c39d5843196018be61c200200c5ec687e73db8e69c84dba",
+      "sha256": "72b656592839fdb3e9700d065dc7d3e4c5a2bf944126f0ed1a3fb1b4d1f1ed01",
       "source": "demo",
       "reference_file": "samples/monitor/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -8107,7 +8106,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -8118,7 +8117,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -8132,7 +8131,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -8143,7 +8142,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -8164,8 +8163,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -8178,7 +8177,7 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 24.415474654749723
+      "snr_db": 26.0952344133748
     },
     {
       "file": "samples/monitor/demo__48k__M700M__awgn-cn0-65dBHz.flac",
@@ -8470,7 +8469,7 @@
     },
     {
       "file": "samples/monitor/demo__48k__M700__awgn-cn0-65dBHz.flac",
-      "sha256": "8f3b71e01b6906121ffd2313472de48a4fe0b7f39b0e336f8375ec274b8207ec",
+      "sha256": "624c73626d51760379ffefd1bdc2d0660cbdb19ed07ea8179cced9603504ded6",
       "source": "demo",
       "reference_file": "samples/monitor/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -8491,7 +8490,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -8502,7 +8501,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -8516,7 +8515,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -8527,7 +8526,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -8548,8 +8547,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -8562,11 +8561,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 24.54394084075556
+      "snr_db": 25.245631532905755
     },
     {
       "file": "samples/monitor/demo__48k__M700__awgn-cn0-70dBHz.flac",
-      "sha256": "466725f01547568433a00342624bf95a2fb4ad2f61089856e98fb5314ced2e45",
+      "sha256": "33bfe712ca7e13221c5278ebd75695e67a5fa65dbae532ec51c7cb49296717da",
       "source": "demo",
       "reference_file": "samples/monitor/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -8587,7 +8586,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -8598,7 +8597,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -8612,7 +8611,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -8623,7 +8622,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -8644,8 +8643,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -8658,11 +8657,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 25.042637293190147
+      "snr_db": 29.766518867990666
     },
     {
       "file": "samples/monitor/demo__48k__M700__awgn-cn0-75dBHz.flac",
-      "sha256": "df78e926eed4bf180c19f6ffd613868f19066514810d8371eae9e85e753eb926",
+      "sha256": "9dc77619ad4fbce2970dc434b862617365f11c18a40b4ea4e4bde110f3f294b8",
       "source": "demo",
       "reference_file": "samples/monitor/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -8683,7 +8682,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -8694,7 +8693,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -8708,7 +8707,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -8719,7 +8718,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -8740,8 +8739,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -8754,11 +8753,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 25.434063567175386
+      "snr_db": 35.37557681842784
     },
     {
       "file": "samples/monitor/demo__48k__M700__awgn-cn0-80dBHz.flac",
-      "sha256": "637804c0899783409d27d60aa89dc500673c47b1cb5b25cfd2b35309259e8ac2",
+      "sha256": "781fb0b767987638dacd3882fd22e6ad8c1acc1edc30dfb49ff05423e11227c8",
       "source": "demo",
       "reference_file": "samples/monitor/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -8779,7 +8778,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -8790,7 +8789,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -8804,7 +8803,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -8815,7 +8814,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -8836,8 +8835,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -8850,11 +8849,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 25.523474382548162
+      "snr_db": 40.246464491647885
     },
     {
       "file": "samples/monitor/demo__48k__M700__codec.flac",
-      "sha256": "2fa5b6d05490aeed809841e5fe38ea162c646f357c856424e58479cc4fc1b20c",
+      "sha256": "cc01ac5824f2dc0b7ff70883dfc3a25187090db043dd8c9574c4c9c18a795627",
       "source": "demo",
       "reference_file": "samples/monitor/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -8875,7 +8874,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -8886,7 +8885,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -8900,7 +8899,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -8911,7 +8910,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -8932,8 +8931,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -8946,11 +8945,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 25.524076774688385
+      "snr_db": 40.40210548966926
     },
     {
       "file": "samples/monitor/fishin__48k__M700-base__codec.flac",
-      "sha256": "146670b86b8020a979a8393dd50b78b2b1aa80ba155b5a0ba6d67b1261af578c",
+      "sha256": "685be8f9def50d1270dd1b0d5952267d769602392b957b7fc98a6dc8d80a4ad9",
       "source": "fishin",
       "reference_file": "samples/monitor/fishin__48k__reference.flac",
       "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
@@ -8971,7 +8970,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -8982,7 +8981,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -8996,7 +8995,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -9007,7 +9006,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -9028,8 +9027,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -9042,7 +9041,7 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 26.735901224543277
+      "snr_db": 24.61143061083543
     },
     {
       "file": "samples/monitor/fishin__48k__M700M__awgn-cn0-65dBHz.flac",
@@ -9334,7 +9333,7 @@
     },
     {
       "file": "samples/monitor/fishin__48k__M700__awgn-cn0-65dBHz.flac",
-      "sha256": "de94e2c73f5eab5c68586ac241def3f587acb2e30d6a70b3ad830990577958cc",
+      "sha256": "9d556c537fb483cf949bcffb2dc0e40925fb489341a8cfef32641ee1089b022c",
       "source": "fishin",
       "reference_file": "samples/monitor/fishin__48k__reference.flac",
       "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
@@ -9355,7 +9354,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -9366,7 +9365,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -9380,7 +9379,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -9391,7 +9390,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -9412,8 +9411,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -9426,11 +9425,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 27.496633140671094
+      "snr_db": 25.352116089700374
     },
     {
       "file": "samples/monitor/fishin__48k__M700__awgn-cn0-70dBHz.flac",
-      "sha256": "d218d9b49a979ca6557be268ac798f95d716477defb104fbce4749a27102e840",
+      "sha256": "70c996365c002e9d8d71ad46a33198828a62b0966de678bf454612e156b3e925",
       "source": "fishin",
       "reference_file": "samples/monitor/fishin__48k__reference.flac",
       "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
@@ -9451,7 +9450,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -9462,7 +9461,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -9476,7 +9475,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -9487,7 +9486,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -9508,8 +9507,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -9522,11 +9521,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 30.97374540192172
+      "snr_db": 28.503379029511645
     },
     {
       "file": "samples/monitor/fishin__48k__M700__awgn-cn0-75dBHz.flac",
-      "sha256": "caa39b7a5540fa4372277941d193e0e7cd08d7001d8db459c78e1daa7a362d66",
+      "sha256": "891e8e6a6cdd854fddf00573ca0ea5dd9db29bd92fc8afdcc909deb87e7e1cc6",
       "source": "fishin",
       "reference_file": "samples/monitor/fishin__48k__reference.flac",
       "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
@@ -9547,7 +9546,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -9558,7 +9557,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -9572,7 +9571,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -9583,7 +9582,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -9604,8 +9603,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -9618,11 +9617,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 38.275036226077994
+      "snr_db": 35.397253976051076
     },
     {
       "file": "samples/monitor/fishin__48k__M700__awgn-cn0-80dBHz.flac",
-      "sha256": "fa700506e59f002e0ded101c4f66592f8404b5a4606acd5fcbfa09f4594ec8ff",
+      "sha256": "5c86d2a4dbe4cc6d3645084ac9a04b51539bdd40fdfa8d8e9dd0743237290112",
       "source": "fishin",
       "reference_file": "samples/monitor/fishin__48k__reference.flac",
       "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
@@ -9643,7 +9642,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -9654,7 +9653,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -9668,7 +9667,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -9679,7 +9678,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -9700,8 +9699,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -9714,11 +9713,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 51.980019985843825
+      "snr_db": 48.10890243125694
     },
     {
       "file": "samples/monitor/fishin__48k__M700__codec.flac",
-      "sha256": "717731d3aa54c82f3766f4c8d7caf3c7129572e973fd4f0de659a9e8972d1db4",
+      "sha256": "44dcf7936b7e55773d157da03565f61427de46bafc03e7108444aef626234486",
       "source": "fishin",
       "reference_file": "samples/monitor/fishin__48k__reference.flac",
       "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
@@ -9739,7 +9738,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -9750,7 +9749,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -9764,7 +9763,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -9775,7 +9774,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -9796,8 +9795,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -9810,11 +9809,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 53.00767387602355
+      "snr_db": 49.786987344849514
     },
     {
       "file": "samples/monitor/vibeace__48k__M700-base__codec.flac",
-      "sha256": "8389339b6734318ac1d5fc1472bab8ec7a1c70b1621e528751ed181b8726c2f4",
+      "sha256": "f7a51faf6db25d4247464fe7a28f1ee660d026f8b9990d91029934cdbe3f6299",
       "source": "vibeace",
       "reference_file": "samples/monitor/vibeace__48k__reference.flac",
       "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
@@ -9835,7 +9834,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -9846,7 +9845,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -9860,7 +9859,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -9871,7 +9870,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -9892,8 +9891,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -9906,7 +9905,7 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 30.792947091038755
+      "snr_db": 30.22802525280856
     },
     {
       "file": "samples/monitor/vibeace__48k__M700M__awgn-cn0-65dBHz.flac",
@@ -10198,7 +10197,7 @@
     },
     {
       "file": "samples/monitor/vibeace__48k__M700__awgn-cn0-65dBHz.flac",
-      "sha256": "d3af0af2cbe0b831d4203a90dff53f7f98ae58bcd9b230859b248711f206ada1",
+      "sha256": "92158b5d526b6515a9377bfac7efaffd804b2cfd16942e960587a5d931a8a65f",
       "source": "vibeace",
       "reference_file": "samples/monitor/vibeace__48k__reference.flac",
       "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
@@ -10219,7 +10218,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -10230,7 +10229,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -10244,7 +10243,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -10255,7 +10254,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -10276,8 +10275,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -10290,11 +10289,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 30.34577367131567
+      "snr_db": 28.70662868910729
     },
     {
       "file": "samples/monitor/vibeace__48k__M700__awgn-cn0-70dBHz.flac",
-      "sha256": "56c04811e5ca60d7b36827c33007e345a02c6f3cabbe03d7bfd63fe37600ab0d",
+      "sha256": "1d023f2905d136c5590bc7fbcea18571317097ce173f8a524c2f6c0cd63ad75a",
       "source": "vibeace",
       "reference_file": "samples/monitor/vibeace__48k__reference.flac",
       "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
@@ -10315,7 +10314,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -10326,7 +10325,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -10340,7 +10339,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -10351,7 +10350,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -10372,8 +10371,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -10386,11 +10385,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 34.69594002139186
+      "snr_db": 34.35655090039199
     },
     {
       "file": "samples/monitor/vibeace__48k__M700__awgn-cn0-75dBHz.flac",
-      "sha256": "5a7af54cc7da25babc07323410e541b83f26438bf55c611ae2425d7bcbce22ab",
+      "sha256": "7a3995b25fa011770baa530e93701596b553fa4e28e00b057abe7d797ad77fca",
       "source": "vibeace",
       "reference_file": "samples/monitor/vibeace__48k__reference.flac",
       "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
@@ -10411,7 +10410,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -10422,7 +10421,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -10436,7 +10435,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -10447,7 +10446,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -10468,8 +10467,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -10482,11 +10481,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 41.50198182813899
+      "snr_db": 40.96862506122281
     },
     {
       "file": "samples/monitor/vibeace__48k__M700__awgn-cn0-80dBHz.flac",
-      "sha256": "44a2acb12827d5aeb0f8c3e82bb733f64ebec20071bdaa33db987ac571e288a1",
+      "sha256": "4279bf0ac1b7266ecad06b9b60c141591937b39bbfc43b968e46f81913e97b55",
       "source": "vibeace",
       "reference_file": "samples/monitor/vibeace__48k__reference.flac",
       "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
@@ -10507,7 +10506,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -10518,7 +10517,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -10532,7 +10531,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -10543,7 +10542,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -10564,8 +10563,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -10578,11 +10577,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 60.071559904396814
+      "snr_db": 55.84779629834987
     },
     {
       "file": "samples/monitor/vibeace__48k__M700__codec.flac",
-      "sha256": "c121f3070b0e3c08f4f147dba39a5b1c7339c392c2a4406d748718f1473983bd",
+      "sha256": "25863a13a173f665140125566854e91750e143c8d3adeb55c272defb6fd2f441",
       "source": "vibeace",
       "reference_file": "samples/monitor/vibeace__48k__reference.flac",
       "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
@@ -10603,7 +10602,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -10614,7 +10613,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -10628,7 +10627,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -10639,7 +10638,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -10660,8 +10659,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -10674,7 +10673,7 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 63.49521856036439
+      "snr_db": 60.33994974927183
     },
     {
       "file": "samples/monitor_y/demo__48k__M700MY__awgn-cn0-65dBHz.flac",
@@ -11116,7 +11115,7 @@
             11,
             11,
             11,
-            11,
+            7,
             10,
             10
           ],
@@ -11127,7 +11126,7 @@
             7,
             7,
             10,
-            0
+            10
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -11141,7 +11140,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -11152,7 +11151,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -11174,7 +11173,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0023483365949119373,
@@ -11223,7 +11222,7 @@
             11,
             11,
             11,
-            11,
+            7,
             10,
             10
           ],
@@ -11234,7 +11233,7 @@
             7,
             7,
             10,
-            0
+            10
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -11248,7 +11247,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -11259,7 +11258,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -11281,7 +11280,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0023483365949119373,
@@ -11330,7 +11329,7 @@
             11,
             11,
             11,
-            11,
+            7,
             10,
             10
           ],
@@ -11341,7 +11340,7 @@
             7,
             7,
             10,
-            0
+            10
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -11355,7 +11354,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -11366,7 +11365,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -11388,7 +11387,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0023483365949119373,
@@ -11437,7 +11436,7 @@
             11,
             11,
             11,
-            11,
+            7,
             10,
             10
           ],
@@ -11448,7 +11447,7 @@
             7,
             7,
             10,
-            0
+            10
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -11462,7 +11461,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -11473,7 +11472,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -11495,7 +11494,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0023483365949119373,
@@ -11544,7 +11543,7 @@
             11,
             11,
             11,
-            11,
+            7,
             10,
             10
           ],
@@ -11555,7 +11554,7 @@
             7,
             7,
             10,
-            0
+            10
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -11569,7 +11568,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -11580,7 +11579,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -11602,7 +11601,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0023483365949119373,
@@ -11648,7 +11647,7 @@
             11,
             11,
             11,
-            11,
+            7,
             12,
             12
           ],
@@ -11659,7 +11658,7 @@
             7,
             7,
             12,
-            0
+            12
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -11673,7 +11672,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -11684,7 +11683,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -11706,7 +11705,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0005862237420615535,
@@ -11755,7 +11754,7 @@
             11,
             11,
             11,
-            11,
+            7,
             12,
             12
           ],
@@ -11766,7 +11765,7 @@
             7,
             7,
             12,
-            0
+            12
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -11780,7 +11779,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -11791,7 +11790,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -11813,7 +11812,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0005862237420615535,
@@ -11862,7 +11861,7 @@
             11,
             11,
             11,
-            11,
+            7,
             12,
             12
           ],
@@ -11873,7 +11872,7 @@
             7,
             7,
             12,
-            0
+            12
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -11887,7 +11886,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -11898,7 +11897,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -11920,7 +11919,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0005862237420615535,
@@ -11969,7 +11968,7 @@
             11,
             11,
             11,
-            11,
+            7,
             12,
             12
           ],
@@ -11980,7 +11979,7 @@
             7,
             7,
             12,
-            0
+            12
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -11994,7 +11993,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -12005,7 +12004,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -12027,7 +12026,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0005862237420615535,
@@ -12076,7 +12075,7 @@
             11,
             11,
             11,
-            11,
+            7,
             12,
             12
           ],
@@ -12087,7 +12086,7 @@
             7,
             7,
             12,
-            0
+            12
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -12101,7 +12100,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -12112,7 +12111,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -12134,7 +12133,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0005862237420615535,
@@ -12159,7 +12158,7 @@
     },
     {
       "file": "samples/monitor_y/demo__48k__M700Y__awgn-cn0-65dBHz.flac",
-      "sha256": "50df90fb6607a70d50b4c6cb738cd257becde3458b51ce453161b81295d940ad",
+      "sha256": "aaa1acd900368281248e3a3d0db3ff2a565aac6550a1375457f366cc5b271e5e",
       "source": "demo",
       "reference_file": "samples/monitor_y/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -12191,7 +12190,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -12216,7 +12215,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -12238,7 +12237,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -12251,20 +12250,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 24.266926967270194,
-        "low_0_6khz": 33.34520118920525,
-        "high_6_24khz": 3.2805832959980212,
-        "visqol_moslqo": 2.7026675864420406,
+        "snr_db": 26.70285198587318,
+        "low_0_6khz": 29.338745329613065,
+        "high_6_24khz": 8.53143834844976,
+        "visqol_moslqo": 2.651078020045186,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 24.266926967270194
+      "snr_db": 26.70285198587318
     },
     {
       "file": "samples/monitor_y/demo__48k__M700Y__awgn-cn0-70dBHz.flac",
-      "sha256": "81704cc6598fef4e174fb0eb44d0a6a84fc917c5e03df3f613bc8e23835dcf86",
+      "sha256": "5472940f86ec92cc139ab3fa437b1a9ed5a649a004e19d9a7572f8da2c2c59fe",
       "source": "demo",
       "reference_file": "samples/monitor_y/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -12296,7 +12295,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -12321,7 +12320,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -12343,7 +12342,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -12356,20 +12355,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 24.98393021643618,
-        "low_0_6khz": 36.91930581250694,
-        "high_6_24khz": 3.714031846452817,
-        "visqol_moslqo": 2.928821617756652,
+        "snr_db": 32.253644133638524,
+        "low_0_6khz": 36.09052484847761,
+        "high_6_24khz": 12.99321821709351,
+        "visqol_moslqo": 2.841611230195138,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 24.98393021643618
+      "snr_db": 32.253644133638524
     },
     {
       "file": "samples/monitor_y/demo__48k__M700Y__awgn-cn0-75dBHz.flac",
-      "sha256": "1212bafa7e6281b1de6841e02a89f527ead833f7ed177a47db624d3628b15e5d",
+      "sha256": "fa3d66afc01c8d9165be2e38f94d449f73e727b1f0034dff1cbe810178ac75d6",
       "source": "demo",
       "reference_file": "samples/monitor_y/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -12401,7 +12400,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -12426,7 +12425,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -12448,7 +12447,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -12461,20 +12460,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.405105942953796,
-        "low_0_6khz": 46.49345481602036,
-        "high_6_24khz": 3.883546147932319,
-        "visqol_moslqo": 3.8976995644766985,
+        "snr_db": 38.09901689195752,
+        "low_0_6khz": 44.13234343672408,
+        "high_6_24khz": 17.77884599416122,
+        "visqol_moslqo": 3.781833564112185,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 25.405105942953796
+      "snr_db": 38.09901689195752
     },
     {
       "file": "samples/monitor_y/demo__48k__M700Y__awgn-cn0-80dBHz.flac",
-      "sha256": "df0e8f5fc416934c58ba09fd96ddc1675006170fa57f1f7b99d3cf7456e2c6b2",
+      "sha256": "4c747f73d37fec0b6d8ec330279574ad6a1c5311dc534ed9d2405f6cb8e38550",
       "source": "demo",
       "reference_file": "samples/monitor_y/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -12506,7 +12505,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -12531,7 +12530,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -12553,7 +12552,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -12566,20 +12565,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.49631483412009,
-        "low_0_6khz": 66.72254537480586,
-        "high_6_24khz": 3.9413835682019682,
-        "visqol_moslqo": 4.580858787053213,
+        "snr_db": 44.11790155266003,
+        "low_0_6khz": 62.43947332492738,
+        "high_6_24khz": 22.626585282444015,
+        "visqol_moslqo": 4.556957734262643,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 25.49631483412009
+      "snr_db": 44.11790155266003
     },
     {
       "file": "samples/monitor_y/demo__48k__M700Y__codec.flac",
-      "sha256": "38a301f236c26e95c9a1b73fdf1a60cdec6db1300a50dd242554b8b380bca772",
+      "sha256": "dd63782abf6b0e0b9d4b987ae56120cf6730d4ac3d1f1b888572834ad0ecf073",
       "source": "demo",
       "reference_file": "samples/monitor_y/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -12611,7 +12610,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -12636,7 +12635,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -12658,7 +12657,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -12671,17 +12670,17 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.524028729240857,
-        "low_0_6khz": 66.81092853175979,
-        "high_6_24khz": 3.969092952023239,
-        "visqol_moslqo": 4.715771454687276,
+        "snr_db": 59.18874550017808,
+        "low_0_6khz": 66.81092050557609,
+        "high_6_24khz": 38.451541640409225,
+        "visqol_moslqo": 4.731673021217787,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 25.524028729240857
+      "snr_db": 59.18874550017808
     },
     {
       "file": "samples/monitor_y/demo__48k__M700Y__ideal.flac",
-      "sha256": "9f00a7fb554a18937761444fab1662e130451dab11852100c73a3d2664233684",
+      "sha256": "1cc302e681b804918d53e45c1d574ef0e5ee3065f27bcac1b97367326732fe7c",
       "source": "demo",
       "reference_file": "samples/monitor_y/demo__48k__reference.flac",
       "reference_sha256": "c796263bb2a0d8450943606f9406c58a2216bf8f57d6c02c7108558310b131f2",
@@ -12713,7 +12712,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -12738,7 +12737,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -12760,7 +12759,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -12773,16 +12772,16 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.524028732144366,
-        "low_0_6khz": 66.81092871878305,
-        "high_6_24khz": 3.969092954913152,
-        "visqol_moslqo": 4.7157714546918665,
+        "snr_db": 59.188745513240704,
+        "low_0_6khz": 66.81092036250317,
+        "high_6_24khz": 38.45154168583444,
+        "visqol_moslqo": 4.731673021215229,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 25.524028732144366
+      "snr_db": 59.188745513240704
     },
     {
       "file": "samples/monitor_y/fishin__48k__M700MY__awgn-cn0-65dBHz.flac",
@@ -13203,7 +13202,7 @@
     },
     {
       "file": "samples/monitor_y/fishin__48k__M700Y__awgn-cn0-65dBHz.flac",
-      "sha256": "be86dba446a8e90cbead23db087bde3c6266a30fead0d88ade2d1af61c6c2196",
+      "sha256": "53ed68ac9bebe4e359474124f54243e7375b9f1ef1d79639a9fdae5b0e720482",
       "source": "fishin",
       "reference_file": "samples/monitor_y/fishin__48k__reference.flac",
       "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
@@ -13235,7 +13234,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -13260,7 +13259,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -13282,7 +13281,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -13295,20 +13294,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.000077494833796,
-        "low_0_6khz": 31.763045974602463,
-        "high_6_24khz": 9.595682680471745,
-        "visqol_moslqo": 3.2083873417013433,
+        "snr_db": 24.449346712678064,
+        "low_0_6khz": 31.129916787121026,
+        "high_6_24khz": 9.0665741517446,
+        "visqol_moslqo": 3.2096343292694134,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 25.000077494833796
+      "snr_db": 24.449346712678064
     },
     {
       "file": "samples/monitor_y/fishin__48k__M700Y__awgn-cn0-70dBHz.flac",
-      "sha256": "c2bef0413f05aae7bb52a62f5d547db2d18d16011151cf7992950c966b81ea3c",
+      "sha256": "c78efabe2d3c6739aa5f75a48f3923526680915bb418918bf4bc5531d28869f6",
       "source": "fishin",
       "reference_file": "samples/monitor_y/fishin__48k__reference.flac",
       "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
@@ -13340,7 +13339,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -13365,7 +13364,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -13387,7 +13386,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -13400,20 +13399,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 29.332805754126767,
-        "low_0_6khz": 35.46267747259571,
-        "high_6_24khz": 14.108826504834992,
-        "visqol_moslqo": 3.3725111570616053,
+        "snr_db": 28.733370673601573,
+        "low_0_6khz": 34.84249787364448,
+        "high_6_24khz": 13.515898600937831,
+        "visqol_moslqo": 3.372164585086071,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 29.332805754126767
+      "snr_db": 28.733370673601573
     },
     {
       "file": "samples/monitor_y/fishin__48k__M700Y__awgn-cn0-75dBHz.flac",
-      "sha256": "df75f126182c88c5f45fcfd2f37d21223310eeaadf5d8dea9f192f88cd0f38aa",
+      "sha256": "6c5f8af5435bb80749885a2e4ecbdea8d8df81f6b29a671f682188599aea5f03",
       "source": "fishin",
       "reference_file": "samples/monitor_y/fishin__48k__reference.flac",
       "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
@@ -13445,7 +13444,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -13470,7 +13469,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -13492,7 +13491,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -13505,20 +13504,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 34.80865421119605,
-        "low_0_6khz": 44.5056506936767,
-        "high_6_24khz": 18.883691406996977,
-        "visqol_moslqo": 3.5690246769271,
+        "snr_db": 34.07574241249705,
+        "low_0_6khz": 42.741757350195364,
+        "high_6_24khz": 18.28914731249603,
+        "visqol_moslqo": 3.5601326903652524,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 34.80865421119605
+      "snr_db": 34.07574241249705
     },
     {
       "file": "samples/monitor_y/fishin__48k__M700Y__awgn-cn0-80dBHz.flac",
-      "sha256": "a78278b0a76154e08530d16057a8770a5144180cee631df5ee13ba23babd2de9",
+      "sha256": "da039002f733d10037abbece29004cafca1c902d14c8e001b1cf805ed5e85442",
       "source": "fishin",
       "reference_file": "samples/monitor_y/fishin__48k__reference.flac",
       "reference_sha256": "daefa69f614d7387f188ff36a31e6a49eacba8248a5fb1f4e42853a874014f0c",
@@ -13550,7 +13549,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -13575,7 +13574,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -13597,7 +13596,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -13610,16 +13609,16 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 40.078357396155546,
-        "low_0_6khz": 65.46741016498454,
-        "high_6_24khz": 23.685013985751766,
-        "visqol_moslqo": 3.802170892378115,
+        "snr_db": 39.49229080027592,
+        "low_0_6khz": 63.260443095143145,
+        "high_6_24khz": 23.104517571661162,
+        "visqol_moslqo": 3.7893640938398154,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 40.078357396155546
+      "snr_db": 39.49229080027592
     },
     {
       "file": "samples/monitor_y/fishin__48k__M700Y__codec.flac",
@@ -13655,7 +13654,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -13680,7 +13679,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -13702,7 +13701,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -13757,7 +13756,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -13782,7 +13781,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -13804,7 +13803,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -14587,7 +14586,7 @@
             11,
             11,
             11,
-            11,
+            7,
             10,
             10
           ],
@@ -14598,7 +14597,7 @@
             7,
             7,
             10,
-            0
+            10
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -14612,7 +14611,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -14623,7 +14622,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -14645,7 +14644,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0023483365949119373,
@@ -14695,7 +14694,7 @@
             11,
             11,
             11,
-            11,
+            7,
             10,
             10
           ],
@@ -14706,7 +14705,7 @@
             7,
             7,
             10,
-            0
+            10
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -14720,7 +14719,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -14731,7 +14730,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -14753,7 +14752,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0023483365949119373,
@@ -14803,7 +14802,7 @@
             11,
             11,
             11,
-            11,
+            7,
             10,
             10
           ],
@@ -14814,7 +14813,7 @@
             7,
             7,
             10,
-            0
+            10
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -14828,7 +14827,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -14839,7 +14838,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -14861,7 +14860,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0023483365949119373,
@@ -14911,7 +14910,7 @@
             11,
             11,
             11,
-            11,
+            7,
             10,
             10
           ],
@@ -14922,7 +14921,7 @@
             7,
             7,
             10,
-            0
+            10
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -14936,7 +14935,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -14947,7 +14946,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -14969,7 +14968,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0023483365949119373,
@@ -15019,7 +15018,7 @@
             11,
             11,
             11,
-            11,
+            7,
             10,
             10
           ],
@@ -15030,7 +15029,7 @@
             7,
             7,
             10,
-            0
+            10
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -15044,7 +15043,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -15055,7 +15054,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -15077,7 +15076,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0023483365949119373,
@@ -15124,7 +15123,7 @@
             11,
             11,
             11,
-            11,
+            7,
             12,
             12
           ],
@@ -15135,7 +15134,7 @@
             7,
             7,
             12,
-            0
+            12
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -15149,7 +15148,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -15160,7 +15159,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -15182,7 +15181,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0005862237420615535,
@@ -15232,7 +15231,7 @@
             11,
             11,
             11,
-            11,
+            7,
             12,
             12
           ],
@@ -15243,7 +15242,7 @@
             7,
             7,
             12,
-            0
+            12
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -15257,7 +15256,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -15268,7 +15267,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -15290,7 +15289,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0005862237420615535,
@@ -15340,7 +15339,7 @@
             11,
             11,
             11,
-            11,
+            7,
             12,
             12
           ],
@@ -15351,7 +15350,7 @@
             7,
             7,
             12,
-            0
+            12
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -15365,7 +15364,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -15376,7 +15375,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -15398,7 +15397,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0005862237420615535,
@@ -15448,7 +15447,7 @@
             11,
             11,
             11,
-            11,
+            7,
             12,
             12
           ],
@@ -15459,7 +15458,7 @@
             7,
             7,
             12,
-            0
+            12
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -15473,7 +15472,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -15484,7 +15483,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -15506,7 +15505,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0005862237420615535,
@@ -15556,7 +15555,7 @@
             11,
             11,
             11,
-            11,
+            7,
             12,
             12
           ],
@@ -15567,7 +15566,7 @@
             7,
             7,
             12,
-            0
+            12
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -15581,7 +15580,7 @@
             5,
             5,
             5,
-            5,
+            3,
             1,
             1
           ],
@@ -15592,7 +15591,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -15614,7 +15613,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.0005862237420615535,
@@ -15640,7 +15639,7 @@
     },
     {
       "file": "samples/monitor_y/hires_probe__48k__M700Y__awgn-cn0-65dBHz.flac",
-      "sha256": "d8340d4c1a9c7f8b6007588dae6bf4d3de6133fb598a67c650d77d2301e797cd",
+      "sha256": "5aa2ecaa0cc9c9db08126e22b56a7e95d915d23c60cd0525a955e2754d1ffc3f",
       "source": "hires_probe",
       "reference_file": "samples/monitor_y/hires_probe__48k__reference.flac",
       "reference_sha256": "491837d88ec38b7acfdd5cef53a15b18c510a8433a2a31c5bd3ae33bba63c720",
@@ -15672,7 +15671,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -15697,7 +15696,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -15719,7 +15718,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -15732,21 +15731,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 21.88379324177648,
-        "low_0_6khz": 33.0887162949788,
-        "high_6_24khz": 7.175994198484338,
-        "visqol_moslqo": 4.211700253015113,
+        "snr_db": 23.382896634938692,
+        "low_0_6khz": 32.313969427879535,
+        "high_6_24khz": 8.918486705019632,
+        "visqol_moslqo": 4.202854630134301,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
-        "highest_12_24khz": 6.68139178122502,
+        "highest_12_24khz": 8.724463771416733,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 21.88379324177648
+      "snr_db": 23.382896634938692
     },
     {
       "file": "samples/monitor_y/hires_probe__48k__M700Y__awgn-cn0-70dBHz.flac",
-      "sha256": "79619de053ba34760318783a661bf72fb17ac23c5236b64a4a8b2abc7ae64d6a",
+      "sha256": "6ba2b88eb76eb8c423d26ca3a57d10adb9f42fd1fa8f71aa1f520c4c1fe1e984",
       "source": "hires_probe",
       "reference_file": "samples/monitor_y/hires_probe__48k__reference.flac",
       "reference_sha256": "491837d88ec38b7acfdd5cef53a15b18c510a8433a2a31c5bd3ae33bba63c720",
@@ -15778,7 +15777,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -15803,7 +15802,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -15825,7 +15824,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -15838,21 +15837,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 23.84807223713913,
-        "low_0_6khz": 36.7319549787728,
-        "high_6_24khz": 9.031349899824749,
-        "visqol_moslqo": 4.313852408593507,
+        "snr_db": 27.608628384633906,
+        "low_0_6khz": 35.26271971218878,
+        "high_6_24khz": 13.359407876823164,
+        "visqol_moslqo": 4.304727124681738,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
-        "highest_12_24khz": 8.347906460454837,
+        "highest_12_24khz": 13.178756170078582,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 23.84807223713913
+      "snr_db": 27.608628384633906
     },
     {
       "file": "samples/monitor_y/hires_probe__48k__M700Y__awgn-cn0-75dBHz.flac",
-      "sha256": "df81afd0ef366e141959bcb46f062ca969bd2b3a8c99e59ee564d7c9801f0127",
+      "sha256": "d1b250c215094b38d54576256233669d6254314f9251a3dc5255bae9c49eca62",
       "source": "hires_probe",
       "reference_file": "samples/monitor_y/hires_probe__48k__reference.flac",
       "reference_sha256": "491837d88ec38b7acfdd5cef53a15b18c510a8433a2a31c5bd3ae33bba63c720",
@@ -15884,7 +15883,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -15909,7 +15908,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -15931,7 +15930,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -15944,21 +15943,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 24.98844343184696,
-        "low_0_6khz": 46.34405710451725,
-        "high_6_24khz": 9.980479723162983,
-        "visqol_moslqo": 4.419159274340089,
+        "snr_db": 32.77573483559225,
+        "low_0_6khz": 43.26476132820473,
+        "high_6_24khz": 18.130025899130516,
+        "visqol_moslqo": 4.414323932040471,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
-        "highest_12_24khz": 9.166342544332439,
+        "highest_12_24khz": 17.95536525908228,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 24.98844343184696
+      "snr_db": 32.77573483559225
     },
     {
       "file": "samples/monitor_y/hires_probe__48k__M700Y__awgn-cn0-80dBHz.flac",
-      "sha256": "1964876c8c8a7dfe966bc0a129a39b4227c18babce7462ee63cc0acdae6fea82",
+      "sha256": "dc6cdc2bc00403cf7821525470152c56705ea75b62d1a9ba1a2e0c478fe21075",
       "source": "hires_probe",
       "reference_file": "samples/monitor_y/hires_probe__48k__reference.flac",
       "reference_sha256": "491837d88ec38b7acfdd5cef53a15b18c510a8433a2a31c5bd3ae33bba63c720",
@@ -15990,7 +15989,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -16015,7 +16014,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -16037,7 +16036,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -16050,21 +16049,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.388868294072978,
-        "low_0_6khz": 66.16421065348658,
-        "high_6_24khz": 10.350357969293352,
-        "visqol_moslqo": 4.50338081168789,
+        "snr_db": 37.94104142421341,
+        "low_0_6khz": 57.48408238863328,
+        "high_6_24khz": 22.949168426587747,
+        "visqol_moslqo": 4.512321624709655,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
-        "highest_12_24khz": 9.477878004000678,
+        "highest_12_24khz": 22.77500821122929,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 25.388868294072978
+      "snr_db": 37.94104142421341
     },
     {
       "file": "samples/monitor_y/hires_probe__48k__M700Y__codec.flac",
-      "sha256": "c602b48a30822d92b838748d9a9c218f2365584ccfc790dfd22ce9dd09b76bf1",
+      "sha256": "49cb6f2ceda11e6065d4bb097a70a3b8499575042fa97e2492475e085d6175e1",
       "source": "hires_probe",
       "reference_file": "samples/monitor_y/hires_probe__48k__reference.flac",
       "reference_sha256": "491837d88ec38b7acfdd5cef53a15b18c510a8433a2a31c5bd3ae33bba63c720",
@@ -16096,7 +16095,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -16121,7 +16120,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -16143,7 +16142,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -16156,18 +16155,18 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.577459436880503,
-        "low_0_6khz": 66.66122079463445,
-        "high_6_24khz": 10.538924986281767,
-        "visqol_moslqo": 4.614646163924801,
-        "highest_12_24khz": 9.634990743768245,
+        "snr_db": 53.31281116830048,
+        "low_0_6khz": 66.66122402864917,
+        "high_6_24khz": 38.473029986881635,
+        "visqol_moslqo": 4.718754247750789,
+        "highest_12_24khz": 38.26273230435325,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 25.577459436880503
+      "snr_db": 53.31281116830048
     },
     {
       "file": "samples/monitor_y/hires_probe__48k__M700Y__ideal.flac",
-      "sha256": "5a624eadf23bd5dabd744d831a96c16c3aa4daa48d69d0e9494529260fd27ccb",
+      "sha256": "22428db412283d1def4d772dd13c8b9becd82cfa2b736e4e48691abe188359c0",
       "source": "hires_probe",
       "reference_file": "samples/monitor_y/hires_probe__48k__reference.flac",
       "reference_sha256": "491837d88ec38b7acfdd5cef53a15b18c510a8433a2a31c5bd3ae33bba63c720",
@@ -16199,7 +16198,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -16224,7 +16223,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -16246,7 +16245,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -16259,21 +16258,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.57745943809791,
-        "low_0_6khz": 66.66122069437245,
-        "high_6_24khz": 10.538924987506837,
-        "visqol_moslqo": 4.614646164232951,
+        "snr_db": 53.31281113706642,
+        "low_0_6khz": 66.66122377147246,
+        "high_6_24khz": 38.47302996624587,
+        "visqol_moslqo": 4.718754244962624,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
-        "highest_12_24khz": 9.634990745016207,
+        "highest_12_24khz": 38.262732301493635,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 25.57745943809791
+      "snr_db": 53.31281113706642
     },
     {
       "file": "samples/monitor_y/hires_probe__48k__M700__awgn-cn0-65dBHz.flac",
-      "sha256": "eb9910fb63aec7fb6819ee6c9341bfd5678d44c43acb332d569a74fb445dee8c",
+      "sha256": "b775f542448fdde2273290304fbcc98d3661e21b4c746941bd957e1d4a657e9c",
       "source": "hires_probe",
       "reference_file": "samples/monitor_y/hires_probe__48k__reference.flac",
       "reference_sha256": "491837d88ec38b7acfdd5cef53a15b18c510a8433a2a31c5bd3ae33bba63c720",
@@ -16294,7 +16293,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -16305,7 +16304,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -16319,7 +16318,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -16330,7 +16329,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -16351,8 +16350,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -16365,21 +16364,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 23.84977038749467,
-        "low_0_6khz": 32.110516273651236,
-        "high_6_24khz": 9.489093998977427,
-        "visqol_moslqo": 4.290849104899095,
+        "snr_db": 24.76798317755325,
+        "low_0_6khz": 28.33421523726407,
+        "high_6_24khz": 12.141027093378456,
+        "visqol_moslqo": 4.276109579698895,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
-        "highest_12_24khz": 8.85252794633738,
+        "highest_12_24khz": 11.784725932333107,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 23.84977038749467
+      "snr_db": 24.76798317755325
     },
     {
       "file": "samples/monitor_y/hires_probe__48k__M700__awgn-cn0-70dBHz.flac",
-      "sha256": "3788dcdc1836a53d805fe64cd0922cb763973b1ce9ab04240586577aa76650a7",
+      "sha256": "95b839abf39cb6facf22326cd13b4e768ef8a09b39a1ed83a0213243edeffdd6",
       "source": "hires_probe",
       "reference_file": "samples/monitor_y/hires_probe__48k__reference.flac",
       "reference_sha256": "491837d88ec38b7acfdd5cef53a15b18c510a8433a2a31c5bd3ae33bba63c720",
@@ -16400,7 +16399,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -16411,7 +16410,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -16425,7 +16424,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -16436,7 +16435,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -16457,8 +16456,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -16471,21 +16470,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 24.651563927369796,
-        "low_0_6khz": 35.50197239908339,
-        "high_6_24khz": 9.973123285199216,
-        "visqol_moslqo": 4.358907213802125,
+        "snr_db": 28.563076031456326,
+        "low_0_6khz": 34.73134203904814,
+        "high_6_24khz": 14.682318501669263,
+        "visqol_moslqo": 4.351226315811622,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
-        "highest_12_24khz": 9.2195031035278,
+        "highest_12_24khz": 14.288494317370343,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 24.651563927369796
+      "snr_db": 28.563076031456326
     },
     {
       "file": "samples/monitor_y/hires_probe__48k__M700__awgn-cn0-75dBHz.flac",
-      "sha256": "9b6719494ca11d4fcd820af3c1e4500bb8f7ce0e4e5a6649ee5b7b55659303d1",
+      "sha256": "580ddca25905756a7d1c6e92fb98e9faf4fbe737b39455b269d41c560f7f691b",
       "source": "hires_probe",
       "reference_file": "samples/monitor_y/hires_probe__48k__reference.flac",
       "reference_sha256": "491837d88ec38b7acfdd5cef53a15b18c510a8433a2a31c5bd3ae33bba63c720",
@@ -16506,7 +16505,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -16517,7 +16516,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -16531,7 +16530,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -16542,7 +16541,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -16563,8 +16562,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -16577,21 +16576,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.392051186844608,
-        "low_0_6khz": 42.634057389800134,
-        "high_6_24khz": 10.433311456328989,
-        "visqol_moslqo": 4.487533603571735,
+        "snr_db": 34.48491743436749,
+        "low_0_6khz": 41.703520049340824,
+        "high_6_24khz": 20.328010745880995,
+        "visqol_moslqo": 4.481831072197867,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
-        "highest_12_24khz": 9.55947336643417,
+        "highest_12_24khz": 19.809165166276593,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 25.392051186844608
+      "snr_db": 34.48491743436749
     },
     {
       "file": "samples/monitor_y/hires_probe__48k__M700__awgn-cn0-80dBHz.flac",
-      "sha256": "129a162bec1411ac2a0665e2d5092826e19b72d96106b080b2ab26bd8bab533d",
+      "sha256": "6095fd6d9fa6144b592274318ee3b5b26c3d0c7268c6d05a34e34f7d7d9f54ff",
       "source": "hires_probe",
       "reference_file": "samples/monitor_y/hires_probe__48k__reference.flac",
       "reference_sha256": "491837d88ec38b7acfdd5cef53a15b18c510a8433a2a31c5bd3ae33bba63c720",
@@ -16612,7 +16611,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -16623,7 +16622,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -16637,7 +16636,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -16648,7 +16647,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -16669,8 +16668,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -16683,21 +16682,21 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.575452198925767,
-        "low_0_6khz": 58.64631853011568,
-        "high_6_24khz": 10.538664739699223,
-        "visqol_moslqo": 4.609950314516094,
+        "snr_db": 40.138359230233,
+        "low_0_6khz": 57.956589500844885,
+        "high_6_24khz": 25.16958306876102,
+        "visqol_moslqo": 4.694208977860085,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
-        "highest_12_24khz": 9.635658310104926,
+        "highest_12_24khz": 24.33329635821377,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 25.575452198925767
+      "snr_db": 40.138359230233
     },
     {
       "file": "samples/monitor_y/hires_probe__48k__M700__codec.flac",
-      "sha256": "7a410e9612ffb5c8d5813fe1ba921ebfa6e52879db5b128f1687f9a37972a8d2",
+      "sha256": "fa56594d724f59583646d1ca2beefc09158cacdb4c55dc57f093e1a8f1334fd8",
       "source": "hires_probe",
       "reference_file": "samples/monitor_y/hires_probe__48k__reference.flac",
       "reference_sha256": "491837d88ec38b7acfdd5cef53a15b18c510a8433a2a31c5bd3ae33bba63c720",
@@ -16718,7 +16717,7 @@
             11,
             11,
             11,
-            11,
+            7,
             7,
             7
           ],
@@ -16729,7 +16728,7 @@
             7,
             7,
             7,
-            0
+            3
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -16743,7 +16742,7 @@
             5,
             5,
             5,
-            5,
+            3,
             3,
             3
           ],
@@ -16754,7 +16753,7 @@
             3,
             3,
             3,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -16775,8 +16774,8 @@
             0,
             0,
             0,
-            4,
-            0
+            0,
+            4
           ],
           "hybrid_start_k": null,
           "hybrid_amplitude": 0.019047619047619046,
@@ -16789,14 +16788,14 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 25.57790329971614,
-        "low_0_6khz": 66.6612212393271,
-        "high_6_24khz": 10.539368882587986,
-        "visqol_moslqo": 4.612795102663683,
-        "highest_12_24khz": 9.636134871831914,
+        "snr_db": 40.31331608717031,
+        "low_0_6khz": 63.786084643018285,
+        "high_6_24khz": 25.293404558896846,
+        "visqol_moslqo": 4.70562535607975,
+        "highest_12_24khz": 24.442943930888717,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 25.57790329971614
+      "snr_db": 40.31331608717031
     },
     {
       "file": "samples/monitor_y/vibeace__48k__M700MY__awgn-cn0-65dBHz.flac",
@@ -17217,7 +17216,7 @@
     },
     {
       "file": "samples/monitor_y/vibeace__48k__M700Y__awgn-cn0-65dBHz.flac",
-      "sha256": "c192b3af5433cba7f6b73b3a2274842dae2d566b896c49ef0b7c8981a2fb030e",
+      "sha256": "820bea1221d344d1f10d13cf804e285c9aca52bd10fa4c7efb7819214d2aed12",
       "source": "vibeace",
       "reference_file": "samples/monitor_y/vibeace__48k__reference.flac",
       "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
@@ -17249,7 +17248,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -17274,7 +17273,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -17296,7 +17295,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -17309,20 +17308,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 30.646732948626585,
-        "low_0_6khz": 31.345728298566534,
-        "high_6_24khz": 11.142659902074678,
-        "visqol_moslqo": 2.0111897292785006,
+        "snr_db": 31.240430132839695,
+        "low_0_6khz": 32.188610874738444,
+        "high_6_24khz": 10.544644854066982,
+        "visqol_moslqo": 2.005659282958033,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 30.646732948626585
+      "snr_db": 31.240430132839695
     },
     {
       "file": "samples/monitor_y/vibeace__48k__M700Y__awgn-cn0-70dBHz.flac",
-      "sha256": "eef32069415f2bba17ba1a3b12ec68b1edfab33a0f73169111c972bf4f8824bc",
+      "sha256": "97b06daafc88c1b39b78f1a7fbdd9db820338ad6eda031b9b00290be3ed34275",
       "source": "vibeace",
       "reference_file": "samples/monitor_y/vibeace__48k__reference.flac",
       "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
@@ -17354,7 +17353,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -17379,7 +17378,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -17401,7 +17400,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -17414,20 +17413,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 35.588212605085204,
-        "low_0_6khz": 36.40548223666539,
-        "high_6_24khz": 15.469142324321004,
-        "visqol_moslqo": 2.195752227063344,
+        "snr_db": 34.991677633070125,
+        "low_0_6khz": 35.82620815167739,
+        "high_6_24khz": 14.79099014017406,
+        "visqol_moslqo": 2.162198904924105,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 35.588212605085204
+      "snr_db": 34.991677633070125
     },
     {
       "file": "samples/monitor_y/vibeace__48k__M700Y__awgn-cn0-75dBHz.flac",
-      "sha256": "6c660b526114960baa989164de340ef976310172ec6b148aed9f0790abacf278",
+      "sha256": "8529012b54abf3798e615bb1db1105d9f7123d424d6fd080adaebc2f2f7df2bd",
       "source": "vibeace",
       "reference_file": "samples/monitor_y/vibeace__48k__reference.flac",
       "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
@@ -17459,7 +17458,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -17484,7 +17483,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -17506,7 +17505,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -17519,20 +17518,20 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 43.70633464991325,
-        "low_0_6khz": 45.76395025983024,
-        "high_6_24khz": 20.186419473434043,
-        "visqol_moslqo": 2.8327100989192786,
+        "snr_db": 42.38953477260405,
+        "low_0_6khz": 44.113450308990956,
+        "high_6_24khz": 19.48039060596446,
+        "visqol_moslqo": 2.684718613645871,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 43.70633464991325
+      "snr_db": 42.38953477260405
     },
     {
       "file": "samples/monitor_y/vibeace__48k__M700Y__awgn-cn0-80dBHz.flac",
-      "sha256": "a28a491a6de8a76bce669fd3a29fb5f6e21d49d5a7300c65fb3512fedbfbb05a",
+      "sha256": "26a47b34cd00873863f6e7b8171b36b91566a72700dde8b3b86406f086409fe1",
       "source": "vibeace",
       "reference_file": "samples/monitor_y/vibeace__48k__reference.flac",
       "reference_sha256": "7256c2608b0c3dcdd23974ee8015fd322c0b16e0e31b1633d851919ccd0ce8e4",
@@ -17564,7 +17563,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -17589,7 +17588,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -17611,7 +17610,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -17624,16 +17623,16 @@
         }
       ],
       "detailed_measurements": {
-        "snr_db": 52.57763968479529,
-        "low_0_6khz": 67.23437124797692,
-        "high_6_24khz": 24.98827545704451,
-        "visqol_moslqo": 3.811795745395729,
+        "snr_db": 51.420937667502635,
+        "low_0_6khz": 60.333095567876676,
+        "high_6_24khz": 24.27667167300836,
+        "visqol_moslqo": 3.743770599177778,
         "crc_fail": 0,
         "crc_fail_percent": 0.0,
         "plc_percent": 0.0,
         "samples_clipped_at_flac": 0
       },
-      "snr_db": 52.57763968479529
+      "snr_db": 51.420937667502635
     },
     {
       "file": "samples/monitor_y/vibeace__48k__M700Y__codec.flac",
@@ -17669,7 +17668,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -17694,7 +17693,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -17716,7 +17715,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -17771,7 +17770,7 @@
             7,
             7,
             7,
-            0
+            7
           ],
           "exp_bits": 4,
           "protect_k": 1,
@@ -17796,7 +17795,7 @@
             3,
             3,
             1,
-            0
+            1
           ],
           "exp_bits_m": null,
           "exp_bits_s": null,
@@ -17818,7 +17817,7 @@
             0,
             0,
             4,
-            0
+            8
           ],
           "hybrid_start_k": 5,
           "hybrid_amplitude": 0.019047619047619046,
@@ -17844,7 +17843,7 @@
     },
     {
       "file": "samples/vibeace__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "750bdfed0a50c7736d54c155484b9c039e68fcf3445660e0089106567725e63b",
+      "sha256": "241be33cbf2ed174db22cff897e81c746cf465f4efc9e4eb8b5b72acbd079ef5",
       "source": "vibeace",
       "reference_file": "samples/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -18000,11 +17999,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 12.976365345075143
+      "snr_db": 17.888076609430207
     },
     {
       "file": "samples/vibeace__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "37bc64fd5e3c91ebafc5d1d7e2a1cfe438f65e30a187070b7b8e855e29fd1177",
+      "sha256": "7d678c89830a7b053b53a71c96eff12795c6293c07e05c2ba066042b51198858",
       "source": "vibeace",
       "reference_file": "samples/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -18160,11 +18159,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 17.825789547041033
+      "snr_db": 27.973349705261544
     },
     {
       "file": "samples/vibeace__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "f10f60251b1aeb4118702ac6c624ad89c4a71705a6f51b7c6623bc3282d2c55b",
+      "sha256": "80f429720126bf50559eba08983e8dfb8de3096392af2c97f4dca91db2a80044",
       "source": "vibeace",
       "reference_file": "samples/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -18320,11 +18319,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 27.650050405067855
+      "snr_db": 37.77632241525066
     },
     {
       "file": "samples/vibeace__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "38fb80787df5e35e636fbc6851c682861c1410fc79cf6378a73fcefcbf1afbfb",
+      "sha256": "2f4ce211356058653592ba699a1640971c0cba6d3389200b0f6f24030be7eb05",
       "source": "vibeace",
       "reference_file": "samples/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -18480,11 +18479,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 41.37488685774838
+      "snr_db": 42.65304794286976
     },
     {
       "file": "samples/vibeace__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "e11e9f4877f178d78c027344236c849c14f634c16cf2cda2e3971072fa3adec3",
+      "sha256": "df1560e8ebee739c36109d9fcef1e35b2781de6feb6c3a5eeefafc2d9125da4a",
       "source": "vibeace",
       "reference_file": "samples/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -18640,11 +18639,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 63.045462418705384
+      "snr_db": 66.07354789476301
     },
     {
       "file": "samples/vibeace__32k__B200M+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "b1c27369e1984f04b3cea653137154d06b674cb1157b10216ac4282d1d341ea7",
+      "sha256": "502d775e5fd36a6da799517abe87f7e56308a20db5762e8ff119e1cbb94d555f",
       "source": "vibeace",
       "reference_file": "samples/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -18800,11 +18799,11 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 23.277918337231583
+      "snr_db": 26.543645287279055
     },
     {
       "file": "samples/vibeace__32k__B200M+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "ffefadb8c9a61edc9ca4bf49d99db272b6edaba2bff0848d4a648a9d1f76d37f",
+      "sha256": "de10ca1f6ff34305297294aaf11753e9fe22aa465f39b4feca5efa1478e94e83",
       "source": "vibeace",
       "reference_file": "samples/vibeace__32k__reference.flac",
       "reference_sha256": "c0d5a618bb99a1f2043b02bbc4ead8180c9265205875ab438c69630f3295980c",
@@ -18960,7 +18959,7 @@
         }
       ],
       "detailed_measurements": null,
-      "snr_db": 13.672901787755228
+      "snr_db": 18.231271127497884
     },
     {
       "file": "samples/vibeace__32k__B200M__codec.flac",

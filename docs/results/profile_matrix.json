@@ -659,7 +659,7 @@
           11,
           11,
           11,
-          11,
+          7,
           7,
           7
         ],
@@ -670,7 +670,7 @@
           7,
           7,
           7,
-          0
+          3
         ],
         "exp_bits": 4,
         "protect_k": 1,
@@ -684,7 +684,7 @@
           5,
           5,
           5,
-          5,
+          3,
           3,
           3
         ],
@@ -695,7 +695,7 @@
           3,
           3,
           3,
-          0
+          1
         ],
         "exp_bits_m": null,
         "exp_bits_s": null,
@@ -716,8 +716,8 @@
           0,
           0,
           0,
-          4,
-          0
+          0,
+          4
         ],
         "hybrid_start_k": null,
         "hybrid_amplitude": 0.019047619047619046,
@@ -730,19 +730,19 @@
       },
       "header_bits": 24,
       "crc_count": 2,
-      "header_crc_bits": 110,
-      "header_fec_bits": 232,
-      "parity_bits": 108,
+      "header_crc_bits": 118,
+      "header_fec_bits": 248,
+      "parity_bits": 140,
       "protect_bits_low": 1,
       "protect_bits_high": 1,
-      "fec_bits": 340,
-      "coefficient_part_bits": 736,
-      "strong_positions": 660,
-      "weak_positions": 416,
-      "symbols_per_frame": 285,
-      "symbol_rate": 213750.0,
-      "audio_kbps": 600.0,
-      "theoretical_bandwidth_hz": 267187.5
+      "fec_bits": 388,
+      "coefficient_part_bits": 800,
+      "strong_positions": 724,
+      "weak_positions": 464,
+      "symbols_per_frame": 313,
+      "symbol_rate": 234750.0,
+      "audio_kbps": 654.0,
+      "theoretical_bandwidth_hz": 293437.5
     },
     {
       "profile": {
@@ -864,7 +864,7 @@
           7,
           7,
           7,
-          0
+          7
         ],
         "exp_bits": 4,
         "protect_k": 1,
@@ -889,7 +889,7 @@
           3,
           3,
           1,
-          0
+          1
         ],
         "exp_bits_m": null,
         "exp_bits_s": null,
@@ -911,7 +911,7 @@
           0,
           0,
           4,
-          0
+          8
         ],
         "hybrid_start_k": 5,
         "hybrid_amplitude": 0.019047619047619046,
@@ -924,19 +924,19 @@
       },
       "header_bits": 24,
       "crc_count": 2,
-      "header_crc_bits": 110,
-      "header_fec_bits": 232,
+      "header_crc_bits": 118,
+      "header_fec_bits": 248,
       "parity_bits": 56,
       "protect_bits_low": 1,
       "protect_bits_high": 1,
-      "fec_bits": 288,
+      "fec_bits": 304,
       "coefficient_part_bits": 288,
-      "strong_positions": 416,
+      "strong_positions": 432,
       "weak_positions": 160,
-      "symbols_per_frame": 224,
-      "symbol_rate": 168000.0,
-      "audio_kbps": 600.0,
-      "theoretical_bandwidth_hz": 210000.0
+      "symbols_per_frame": 260,
+      "symbol_rate": 195000.0,
+      "audio_kbps": 774.0,
+      "theoretical_bandwidth_hz": 243750.0
     },
     {
       "profile": {

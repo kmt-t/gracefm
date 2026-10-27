@@ -53,7 +53,7 @@ def main():
         for name in ("B200M",):
             rows[f"{name} コーデックだけ"] = codec(x, PROFILES[name])[:, 0]
         for cn0 in (80, 66, 60):
-            y, st, es = channel.link(x, "B200M", cn0, sub="SUB50M", power_main=0.5, seed=1)
+            y, st, es = channel.link(x, "B200M", cn0, sub="SUB50M", seed=1)
             rows[f"放送 B200M+SUB50M C/N0 {cn0}dB-Hz"] = y[:, 0]
         res = {}
         for k, y in rows.items():

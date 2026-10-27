@@ -63,7 +63,7 @@ def material_job(entry, seconds, strengths, scenarios, spacing_hz, training_fram
     x = prepare(entry, seconds + warmup_seconds)
     start = training_frames * pm.block
     end = start + round(seconds * pm.fs)
-    off = pm.block // 2
+    off = 0
     fm = AnalogFM(x[:, 0], pm.fs)
     frames_main = Transmitter(pm, 0, 0).run(x)
     frames_sub = Transmitter(ps, 1, off).run(x)

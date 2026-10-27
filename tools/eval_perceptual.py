@@ -28,8 +28,7 @@ METHODS = {
     "AM": None,
     "FM": None,
     "B200M": dict(main="B200M"),
-    "GraceFM": dict(main="B200M", sub="SUB50M", power_main=0.5),
-    "GraceFM75": dict(main="B200M", sub="SUB50M", power_main=0.75),
+    "GraceFM": dict(main="B200M", sub="SUB50M"),
 }
 DEFAULT_METHODS = "AM,FM,GraceFM"
 
@@ -73,7 +72,6 @@ def job(args):
     else:
         cfg = METHODS[method]
         y, state, _ = channel.link(x, cfg["main"], cn0, sub=cfg.get("sub"),
-                                   power_main=cfg.get("power_main", 0.5),
                                    kind_main=kind, kind_sub="awgn" if kind == "fade10" else kind,
                                    seed=seed)
         plc = 100 * state["plc_samples"] / len(x)
