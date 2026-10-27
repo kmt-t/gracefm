@@ -27,10 +27,6 @@ def symbol_rate(p):
     return (len(modem.PREAMBLE) + Transmitter(p).nsym) * p.frames_per_sec
 
 
-def cn_db(cn0, bn=180e3):
-    return cn0 - 10 * np.log10(bn)
-
-
 def fading_gains(nfr, kind, rng, tau_frames=50):
     """
     フレームごとの電力利得 (平均 1)。

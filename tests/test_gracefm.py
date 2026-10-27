@@ -290,7 +290,7 @@ def test_b200_link_preserves_high_side_signal():
     from gracefm.codec import haar_forward
 
     p = PROFILES["B200"]
-    path = os.path.join(os.path.dirname(__file__), "..", "samples", "demo__32k__reference.flac")
+    path = os.path.join(os.path.dirname(__file__), "..", "samples", "demo-stereo__32k__reference.flac")
     x, fs = wavio.read(path)
     assert fs == p.fs
     x = x[:fs]

@@ -50,16 +50,6 @@ def write_pcm24(path, x, fs):
         f.write(b"data" + struct.pack("<I", len(b)) + b)
 
 
-def write_flac16(path, x, fs, seed=0):
-    """16bit の FLAC で書き出す (TPDF ディザ ±1LSB)"""
-    import soundfile as sf
-    x = np.atleast_2d(np.asarray(x, float).T).T
-    rng = np.random.default_rng(seed)
-    d = (rng.random(x.shape) - rng.random(x.shape)) / 32768.0
-    q = np.clip(np.round((x + d) * 32767.0), -32768, 32767).astype(np.int16)
-    sf.write(path, q, fs, subtype="PCM_16", format="FLAC")
-
-
 def write_flac24(path, x, fs):
     """24bit の FLAC で書き出す。"""
     import soundfile as sf
