@@ -63,12 +63,12 @@ def awgn(sym, snr_db, rng):
 def adc(sym):
     """実数のシンボル (n, 2) を ADC の符号 (12 bit) にして、受信側の 24 bit 固定小数点 (±1 = 2^FRAC) の整数に直す"""
     code = np.clip(np.rint(sym * ADC_ONE), -(1 << (ADC_BITS - 1)), (1 << (ADC_BITS - 1)) - 1).astype(np.int64)
-    return code << (modem.FRAC - ADC_BITS + 2)
+    return code << (modem.SYM_FRAC - ADC_BITS + 2)
 
 
 def through(frames, esn0, gains, rng):
     """整数のシンボル (n, 2) のリスト → 雑音を加え、ADC で量子化した整数のシンボルのリスト"""
-    return [adc(awgn(f / float(1 << modem.FRAC), esn0 + 10 * np.log10(max(g, 1e-6)), rng)) for f, g in zip(frames, gains)]
+    return [adc(awgn(f / float(1 << modem.SYM_FRAC), esn0 + 10 * np.log10(max(g, 1e-6)), rng)) for f, g in zip(frames, gains)]
 
 
 def link(x, main, cn0, sub="auto", cn0_sub=None, kind_main="awgn", kind_sub="awgn", seed=1, cipher=None,

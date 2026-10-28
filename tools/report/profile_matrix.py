@@ -43,7 +43,7 @@ def render():
                             audio_kbps=float(p.audio_kbps()), theoretical_bandwidth_hz=rs*(100+p.pulse_beta_pct)/100))
     lines += ['', '## 成分ごとの全設定', '',
               'ベクトルは `k=0…4`（k0〜k4 は 32 kHz で 0〜1、1〜2、2〜4、4〜8、8〜16 kHz）。M/Sの各行に同じ項目を表示する。アッテネータ区間長0はその帯域では不使用。各成分の最高送信帯域に配置し、4係数を基本とする（係数数が4未満ならその係数数）。Y帯域は各帯域4区間。', '',
-              '階層16QAMでは、係数をシンボル単位で分け、位相部（強い2位置）に置く仮数bitが基本層、振幅部（弱い2位置）に置く仮数bitが拡張層。位相部には基本層の仮数のほかにパリティKbitが入るので、位相部（基本層 + K）と振幅部（拡張層）がどちらも2の倍数で、全幅 = 基本層 + 拡張層。K=1でNシンボルの係数は基本層 2N−1、拡張層 2N、全幅 4N−1。基本層幅は、係数ごとに位相部（基本層 + パリティ）と振幅部（拡張層）が同じ大きさになるように `gracefm/layers.py` が決める。Y高域Mは専用シンボルで、デジタル層分割の対象外。QPSKは全幅が2の倍数で、層分割なし。', '',
+              '階層16QAMでは、係数をシンボル単位で分け、位相部（強い2位置）に置く仮数bitが基本層、振幅部（弱い2位置）に置く仮数bitが拡張層。位相部には基本層の仮数のほかにパリティKbitが入るので、位相部（基本層 + K）と振幅部（拡張層）がどちらも2の倍数で、全幅 = 基本層 + 拡張層。K=1でNシンボルの係数は基本層 2N−1、拡張層 2N、全幅 4N−1。基本層幅は、係数ごとに位相部（基本層 + パリティ）と振幅部（拡張層）が同じ大きさになるように `tools/common/layers.py` が決める。Y高域Mは専用シンボルで、デジタル層分割の対象外。QPSKは全幅が2の倍数で、層分割なし。', '',
               '| ID | 名前 | 成分 | 全幅 | 基本層 | 拡張層 | アッテネータ区間長 | 指数幅 | 指数最小値 |',
               '|---|---|---|---|---|---|---|---|---|']
     for p in PROFILES.values():
@@ -57,7 +57,7 @@ def render():
                 else:
                     base.append(p.base_bits(ch,k));ext.append(b-p.base_bits(ch,k))
             exps=[p.exp_bits if b else '—' for k,b in enumerate(bits)]
-            offsets=[exp_range(k,b,p,ch)[0] if b else '—' for k,b in enumerate(bits)]
+            offsets=[exp_range(k,b,p)[0] if b else '—' for k,b in enumerate(bits)]
             lines.append(f'| {p.pid} | {p.name} | {ch} | {vector(bits)} | {vector(base)} | {vector(ext)} | {vector(p.attenuator_group(ch,k) for k in range(p.nbands))} | {vector(exps)} | {vector(offsets)} |')
     lines += ['', 'Y帯域は標準7bit（位相＝最上位bit＋パリティ、半径6bit）、半径間隔は `0.08 * 7.5 / 31.5`。Y帯域の仮数は仮数bitに入らず専用シンボルで送り、位相に最上位bitとそのパリティを載せてFEC保護する（終端bitだけヘッダ側）。Yの暗号化は未対応。', '',
               'フレーム予算は現行設定から計算した値。', '']

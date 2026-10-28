@@ -22,7 +22,6 @@ def pack(lay: Layout, bd: BlockData, stream_id: int, counter: int, keystream=Non
         hdr = (int_bits(p.pid, 4) + int_bits(stream_id, 1) + [0] + tag
                + int_bits(counter & ((1 << counter_bits) - 1), counter_bits))
     prot = list(hdr)
-    bits_of = {"M": p.bits_m, "S": p.bits_s}
     for ch, k in lay.exp_items:
         prot += int_bits(bd.eidx[ch][k], p.exp_bits)
     for ch, k, j in lay.attn_items:

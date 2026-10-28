@@ -9,7 +9,8 @@ from gracefm import modem  # noqa: E402
 from gracefm.codec import decode_block, decode_coeffs, encode_block, haar_forward  # noqa: E402
 from gracefm.framing import pack, unpack  # noqa: E402
 from gracefm.layout import Layout  # noqa: E402
-from gracefm.profiles import PROFILES, make_y_profile  # noqa: E402
+from gracefm.profiles import PROFILES  # noqa: E402
+from helpers import make_y_profile, header_info, with_header  # noqa: E402
 from gracefm.txrx import StreamDecoder, Transmitter, receive  # noqa: E402
 
 
@@ -132,10 +133,10 @@ def test_broadcast_y_bands_have_protected_attenuator_bytes():
         assert np.array_equal(restored.attn["M"][3], bd.attn["M"][3])
         assert np.array_equal(restored.attn["M"][4], bd.attn["M"][4])
 
-        protected = layout.header_info(packed)
+        protected = header_info(layout, packed)
         first_attn = layout.header_bits + sum(p.exp_bits for ch, k in layout.exp_items)
         protected[layout.high_prot_indices[0]] ^= 1
-        corrupted = layout.with_header(packed, protected)
+        corrupted = with_header(layout, packed, protected)
         recovered, header = unpack(layout, 8 * (1 - 2 * corrupted), corrupted, y_soft=_y_soft(layout, bd))
         assert recovered is not None and header['high_ok'] is False
 

@@ -1,6 +1,6 @@
 """
 変調と復調 (QPSK、階層16QAM、Y方式)。すべて整数演算。シンボルは (I, Q) の整数の組で、配列の形は (n, 2)。
-信号点は小数 FRAC bit の固定小数点 (±1 = 2^FRAC)、平均シンボルエネルギーは 1。
+信号点は小数 SYM_FRAC bit の固定小数点 (±1 = 2^SYM_FRAC)、平均シンボルエネルギーは 1。
 
 変調: ビット列 → (n, 2)。ビット列の並びは「全シンボルの強い位置 (符号) → 全シンボルの弱い位置 (位置の Gray 符号)」の順。
   フレーム先頭に既知のプリアンブル (QPSK 16シンボル) を付ける。プリアンブル以外のビット (端数の詰め物を含む) は、
@@ -19,9 +19,9 @@ import numpy as np
 
 from .dsp import CONST_BITS
 
-FRAC = 21
+SYM_FRAC = 21
 DIST_BITS = CONST_BITS - 1                      # 二乗する距離の幅 (符号を除く)
-DIST_SHIFT = FRAC + 1 - DIST_BITS               # 距離 (Q FRAC、最大 約±2) を DIST_BITS bit に収める右シフト
+DIST_SHIFT = SYM_FRAC + 1 - DIST_BITS               # 距離 (Q SYM_FRAC、最大 約±2) を DIST_BITS bit に収める右シフト
 LLR_BITS = 8
 LLR_MAX = (1 << (LLR_BITS - 1)) - 1
 LLR_FRAC = 2                                    # LLR の小数bit数 (整数 LLR = LLR × 2^LLR_FRAC)
@@ -54,7 +54,7 @@ def n_symbols(n_tx, n_coded, mod):
     return max(-(-n_tx // bps), -(-n_coded // 2))
 
 
-INV_SQRT2 = isqrt(1 << (2 * FRAC - 1))          # 1/√2 を Q FRAC で
+INV_SQRT2 = isqrt(1 << (2 * SYM_FRAC - 1))          # 1/√2 を Q SYM_FRAC で
 
 PREAMBLE_BITS = np.array([1, 1, 1, -1, -1, 1, 1, -1, 1, -1, -1, -1, 1, 1, -1, 1], np.int64)
 PREAMBLE = np.stack([PREAMBLE_BITS * INV_SQRT2, np.roll(PREAMBLE_BITS, 5) * INV_SQRT2], axis=1)    # (16, 2)
@@ -62,13 +62,13 @@ N_PREAMBLE = len(PREAMBLE)
 
 
 def axis_points(mod, alpha):
-    """1軸の信号点の値 (整数、Q FRAC)、ラベル (符号ビット, 位置ビット...)、位置ビット数、大きさの表、Gray→位置の表。alpha は整数"""
+    """1軸の信号点の値 (整数、Q SYM_FRAC)、ラベル (符号ビット, 位置ビット...)、位置ビット数、大きさの表、Gray→位置の表。alpha は整数"""
     L = HALF_AXIS_POINTS[mod]
     a = alpha if L > 1 else 1
     nlp = L.bit_length() - 1
     pos = [a + 2 * i for i in range(L)]
-    r = isqrt(((2 * sum(p * p for p in pos)) << (2 * FRAC)) // L)       # √(2 × 平均エネルギー) × 2^FRAC
-    mags = [(p << (2 * FRAC)) // r for p in pos]
+    r = isqrt(((2 * sum(p * p for p in pos)) << (2 * SYM_FRAC)) // L)       # √(2 × 平均エネルギー) × 2^SYM_FRAC
+    mags = [(p << (2 * SYM_FRAC)) // r for p in pos]
     vals, labels = [], []
     for hp in (0, 1):
         for idx in range(L):
@@ -97,7 +97,7 @@ def modulate(bits, nsym, mod="qpsk", alpha=1):
 
 
 def _sq(d):
-    """距離 d (Q FRAC) の二乗。乗算器の幅に収めるため、d を右シフトして DIST_BITS bit にしてから二乗する"""
+    """距離 d (Q SYM_FRAC) の二乗。乗算器の幅に収めるため、d を右シフトして DIST_BITS bit にしてから二乗する"""
     r = np.clip(d >> DIST_SHIFT, -(1 << DIST_BITS), (1 << DIST_BITS) - 1)
     return r * r
 
@@ -134,13 +134,13 @@ _QUADRANT_SIGN = np.array([[1, 1], [-1, 1], [-1, -1], [1, -1]], np.int64)       
 
 
 def y_radii(step, lower_bits=6):
-    """半径の段 L = 0 … 2^lower_bits - 1 の半径 (Q FRAC)。step = (分子, 分母)"""
+    """半径の段 L = 0 … 2^lower_bits - 1 の半径 (Q SYM_FRAC)。step = (分子, 分母)"""
     num, den = step
     levels = 1 << lower_bits
-    scale = isqrt((((12 * den * den + num * num * (levels * levels - 1)) << (2 * FRAC)) // (12 * den * den)))
+    scale = isqrt((((12 * den * den + num * num * (levels * levels - 1)) << (2 * SYM_FRAC)) // (12 * den * den)))
     ls = np.arange(levels, dtype=np.int64)
     top = 2 * den + num * (2 * ls - (levels - 1))
-    return (top << (2 * FRAC)) // (2 * den * scale), scale
+    return (top << (2 * SYM_FRAC)) // (2 * den * scale), scale
 
 
 def y_modulate(u, parity, step=(2, 105), scramble=None, lower_bits=6):
@@ -160,11 +160,11 @@ def y_modulate(u, parity, step=(2, 105), scramble=None, lower_bits=6):
         L = np.where(mask[:, 2] != 0, levels - 1 - L, L)
     radius = y_radii(step, lower_bits)[0][L]
     sign = _QUADRANT_SIGN[_QUADRANT[2 * msb + parity]]
-    return np.stack([sign[:, 0] * radius, sign[:, 1] * radius], axis=1) * INV_SQRT2 >> FRAC
+    return np.stack([sign[:, 0] * radius, sign[:, 1] * radius], axis=1) * INV_SQRT2 >> SYM_FRAC
 
 
 def _magnitude(y):
-    """|z| (Q FRAC)。距離を DIST_SHIFT bit 縮めて二乗和の整数平方根を取る (ハードウェアでは CORDIC など)"""
+    """|z| (Q SYM_FRAC)。距離を DIST_SHIFT bit 縮めて二乗和の整数平方根を取る (ハードウェアでは CORDIC など)"""
     r = y >> DIST_SHIFT
     return isqrt_array((r * r).sum(axis=-1)) << DIST_SHIFT
 
@@ -184,10 +184,10 @@ def y_slice(values, step=(2, 105), lower_bits=6):
 
 
 def y_points(quadrant, level, step=(2, 105), lower_bits=6):
-    """象限番号と半径の段 → 信号点 (n, 2) (Q FRAC)"""
+    """象限番号と半径の段 → 信号点 (n, 2) (Q SYM_FRAC)"""
     radius = y_radii(step, lower_bits)[0][np.asarray(level, np.int64)]
     sign = _QUADRANT_SIGN[np.asarray(quadrant, np.int64)]
-    return (sign * radius[:, None] * INV_SQRT2) >> FRAC
+    return (sign * radius[:, None] * INV_SQRT2) >> SYM_FRAC
 
 
 def y_phase_llr(sym, step=(2, 105), scramble=None, var=1, lower_bits=6):
@@ -202,7 +202,7 @@ def y_phase_llr(sym, step=(2, 105), scramble=None, var=1, lower_bits=6):
         raise ValueError("スクランブル長が係数数と一致しません")
     radii = y_radii(step, lower_bits)[0]
     r = np.clip(_magnitude(y), radii[0], radii[-1])
-    unit = (r * INV_SQRT2) >> FRAC                                  # 1軸の大きさ (Q FRAC)
+    unit = (r * INV_SQRT2) >> SYM_FRAC                                  # 1軸の大きさ (Q SYM_FRAC)
     llr_par = np.clip(((((y[:, 0] >> DIST_SHIFT) * (unit >> DIST_SHIFT)) << (LLR_FRAC + 1)) // max(var, 1)), -LLR_MAX, LLR_MAX)
     llr_msb = np.clip(((((y[:, 1] >> DIST_SHIFT) * (unit >> DIST_SHIFT)) << (LLR_FRAC + 1)) // max(var, 1)), -LLR_MAX, LLR_MAX)
     # 送信側で msb・parity をスクランブルのマスクで反転しているので、LLR の符号も戻す
@@ -227,20 +227,20 @@ def y_demodulate(sym, msb, parity, step=(2, 105), scramble=None, var=1, lower_bi
         raise ValueError("Y帯域のシンボル数が一致しません")
     mask = np.zeros((len(y), 3), np.int64) if scramble is None else np.asarray(scramble, np.int64).reshape(-1, 3)
     levels = 1 << lower_bits
-    radii, scale = y_radii(step, lower_bits)
+    scale = y_radii(step, lower_bits)[1]
     quadrant = _QUADRANT[2 * (msb ^ mask[:, 0]) + (parity ^ mask[:, 1])]
     sign = _QUADRANT_SIGN[quadrant]
-    proj = ((sign[:, 0] * y[:, 0] + sign[:, 1] * y[:, 1]) * INV_SQRT2) >> FRAC          # 象限の軸への射影 (Q FRAC)
+    proj = ((sign[:, 0] * y[:, 0] + sign[:, 1] * y[:, 1]) * INV_SQRT2) >> SYM_FRAC          # 象限の軸への射影 (Q SYM_FRAC)
     num, den = step
     # 観測された段 = (proj × scale − 1) / a + 中心。a = num/den、中心 = (levels − 1)/2。小数 MANT_FRAC bit
-    scaled = (proj * scale) >> FRAC                                                     # proj × scale (Q FRAC)
-    obs = ((((scaled - (1 << FRAC)) * den) << MANT_FRAC) + ((num << FRAC) >> 1)) // (num << FRAC) + (((levels - 1) << MANT_FRAC) >> 1)
+    scaled = (proj * scale) >> SYM_FRAC                                                     # proj × scale (Q SYM_FRAC)
+    obs = ((((scaled - (1 << SYM_FRAC)) * den) << MANT_FRAC) + ((num << SYM_FRAC) >> 1)) // (num << SYM_FRAC) + (((levels - 1) << MANT_FRAC) >> 1)
     obs = np.where(mask[:, 2] != 0, ((levels - 1) << MANT_FRAC) - obs, obs)
     center = ((levels - 1) << MANT_FRAC) >> 1
-    # 雑音の段あたりの分散 = σ² × scale² / a² (σ² は demodulate と同じ単位 → Q FRAC の二乗へ戻す)
-    sigma2 = (max(var, 1) << (2 * DIST_SHIFT))                                          # (Q FRAC)² 単位
-    noise = ((sigma2 >> FRAC) * ((scale * scale) >> FRAC) >> FRAC) * den * den // (num * num)
-    noise_l = (noise << (2 * MANT_FRAC)) >> FRAC                                       # 段² を小数 MANT_FRAC 桁の二乗で
+    # 雑音の段あたりの分散 = σ² × scale² / a² (σ² は demodulate と同じ単位 → Q SYM_FRAC の二乗へ戻す)
+    sigma2 = (max(var, 1) << (2 * DIST_SHIFT))                                          # (Q SYM_FRAC)² 単位
+    noise = ((sigma2 >> SYM_FRAC) * ((scale * scale) >> SYM_FRAC) >> SYM_FRAC) * den * den // (num * num)
+    noise_l = (noise << (2 * MANT_FRAC)) >> SYM_FRAC                                       # 段² を小数 MANT_FRAC 桁の二乗で
     prior = ((levels * levels - 1) << (2 * MANT_FRAC)) // 12
     gain = 0 if phase_only else (prior << 15) // (prior + noise_l + 1)                 # Q15
     est = np.clip(center + ((gain * (obs - center) + (1 << 14)) >> 15), 0, (levels - 1) << MANT_FRAC)

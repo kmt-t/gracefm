@@ -36,7 +36,7 @@ def channel(frames, snr_db, loss, rng):
         if rng.random() < loss:
             out.append(None)
         else:
-            out.append(chan.adc(chan.awgn(f / float(1 << modem.FRAC), snr_db, rng)))
+            out.append(chan.adc(chan.awgn(f / float(1 << modem.SYM_FRAC), snr_db, rng)))
     return out
 
 

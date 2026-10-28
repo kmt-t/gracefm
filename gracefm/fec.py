@@ -7,7 +7,7 @@
      c1[t] = u[t] ^ u[t-1] ^ u[t-2] ^ u[t-3] ^ u[t-6]
   符号化ビットの順序: c0[0], c1[0], c0[1], c1[1], ...
 復号: 軟判定ビタビ (軟値が正なら 0 らしい)。軟値は符号つき LLR_BITS bit の整数で、乗算を使わない (docs/FIXED.md)。
-CRC: ヘッダの基本CRCは12bit (多項式 0x80F)、高域CRCは10bit (多項式 0x233)、初期値は全ビット1、MSB から。crc16 は 16bit CCITT (0x1021)。
+CRC: ヘッダの基本CRCは12bit (多項式 0x80F)、高域CRCは10bit (多項式 0x233)、初期値は全ビット1、MSB から。
 """
 import numpy as np
 
@@ -59,10 +59,6 @@ def crc(bits, width, poly):
         if top ^ int(b):
             reg ^= poly
     return np.array([(reg >> (width - 1 - i)) & 1 for i in range(width)], np.int64)
-
-
-def crc16(bits):
-    return crc(bits, 16, 0x1021)
 
 
 # ヘッダの検査 (フレームが短いので 10〜12 bit で足りる)

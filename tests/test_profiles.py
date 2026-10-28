@@ -10,7 +10,8 @@ from gracefm import modem
 from gracefm.codec import encode_block, decode_block
 from gracefm.framing import pack, unpack
 from gracefm.layout import Layout
-from gracefm.profiles import PROFILES, BY_ID, BY_HEADER, make_y_profile
+from gracefm.profiles import PROFILES, BY_ID, BY_HEADER
+from helpers import header_info, make_y_profile, with_header
 from gracefm.txrx import INF_LOG, Transmitter, StreamDecoder
 
 
@@ -60,7 +61,7 @@ def test_all_profiles_roundtrip_and_attenuator_crc():
         lay = tx.layout
         bd = encode_block(x, p)
         packed = pack(lay, bd, 0, 0)
-        body = lay.header_info(packed)
+        body = header_info(lay, packed)
         first = lay.header_bits + sum(p.exp_bits for ch, k in lay.exp_items)
         assert lay.attn_items
         kwargs = {}
@@ -70,7 +71,7 @@ def test_all_profiles_roundtrip_and_attenuator_crc():
         for index in {first, first + len(lay.attn_items) - 1}:
             damaged = body.copy()
             damaged[index] ^= 1
-            frame = lay.with_header(packed, damaged)
+            frame = with_header(lay, packed, damaged)
             recovered, header = unpack(lay, 8 * (1 - 2 * frame), frame, **kwargs)
             if index in lay.high_prot_indices:
                 assert recovered is not None and header['high_ok'] is False
@@ -103,7 +104,7 @@ def test_b200y_stereo_side_uses_qam_strong_positions():
 def test_layers_are_even_and_balanced():
     """位相部 (基本層の仮数＋パリティ) と振幅部 (拡張層) はどちらも2の倍数で、強い位置と弱い位置の数が釣り合う。
     QPSKは仮数幅とパリティの和が2の倍数。"""
-    from gracefm.layers import balanced
+    from tools.common.layers import balanced
     for p in PROFILES.values():
         for ch, widths, base in (('M', p.bits_m, p.base_m), ('S', p.bits_s, p.base_s)):
             for k, width in enumerate(widths):
@@ -180,10 +181,10 @@ def test_high_crc_erases_only_h1_h2_in_receiver():
     tx = Transmitter(p)
     lay = tx.layout
     packed = pack(lay, encode_block(x, p), 0, 0)
-    protected = lay.header_info(packed)
+    protected = header_info(lay, packed)
 
     def symbols(changed):
-        bits = lay.with_header(packed, changed)
+        bits = with_header(lay, packed, changed)
         buf = np.zeros(tx.digital_nsym * modem.bits_per_symbol(p.modulation), np.int64)
         buf[:len(bits)] = bits
         return modem.modulate(buf ^ modem.prbs(len(buf)), tx.digital_nsym, p.modulation, p.alpha)
@@ -218,9 +219,9 @@ def test_y_high_crc_keeps_lower_y_band():
     original = tx.frame(x)
     lay = tx.layout
     packed = pack(lay, encode_block(x, p), 0, 0)
-    protected = lay.header_info(packed)
+    protected = header_info(lay, packed)
     protected[lay.high_prot_indices[0]] ^= 1
-    bits = lay.with_header(packed, protected)
+    bits = with_header(lay, packed, protected)
     buf = np.zeros(tx.digital_nsym * modem.bits_per_symbol(p.modulation), np.int64)
     buf[:len(bits)] = bits
     digital = modem.modulate(buf ^ modem.prbs(len(buf)), tx.digital_nsym, p.modulation, p.alpha)
@@ -246,7 +247,7 @@ def test_broadcast_main_occupied_bandwidth():
     for name, reference in expected.items():
         p = PROFILES[name]
         tx = Transmitter(p)
-        iq = np.concatenate(tx.run(audio)) / float(1 << modem.FRAC)
+        iq = np.concatenate(tx.run(audio)) / float(1 << modem.SYM_FRAC)
         samples = shape(iq[:, 0] + 1j * iq[:, 1], beta=p.pulse_beta_pct / 100,
                         span=p.pulse_span, sps=8)
         freq, power = welch(samples, fs=8 * tx.symbol_rate(), nperseg=4096,
@@ -266,8 +267,8 @@ if __name__ == '__main__':
 
 
 def test_base_layer_widths_match_layer_solver():
-    """登録プロファイルの基本層の幅は、強い位置と弱い位置の数が釣り合う解 (gracefm.layers) と一致する。"""
-    from gracefm.layers import solve
+    """登録プロファイルの基本層の幅は、強い位置と弱い位置の数が釣り合う解 (tools/common/layers.py) と一致する。"""
+    from tools.common.layers import solve
     for p in PROFILES.values():
         if not p.layered:
             continue

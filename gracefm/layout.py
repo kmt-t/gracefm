@@ -193,19 +193,6 @@ class Layout:
             out[self._seg_index] = np.add.reduceat(np.asarray(values, np.int64)[self._seg_order], self._seg_starts)
         return out
 
-    def header_info(self, stream):
-        """送信ビット列からヘッダの情報bit (CRC込み) を取り出す (振幅部にある)"""
-        return np.asarray(stream)[self.hdata_idx].copy()
-
-    def with_header(self, stream, header_x):
-        """ヘッダの情報bitを差し替え、パリティと終端を作り直した送信ビット列を返す (試験・解析用)"""
-        out = np.array(stream, np.int64)
-        parity, tail = fec.rsc_parity(np.asarray(header_x, np.int64))
-        out[self.hpar_idx] = parity
-        out[self.hdata_idx] = header_x
-        out[self.htail_idx] = tail
-        return out
-
     def _crc_inputs(self, prot, top, ymsb):
         core = np.concatenate([prot[self.core_prot_indices], top[self.core_top_indices],
                                ymsb[self.core_y_indices]])

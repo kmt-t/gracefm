@@ -12,14 +12,14 @@
 """
 import numpy as np
 
-from . import framing, fusion, modem, plc
-from .codec import (attenuator_expanded, exp_range, FRAC, haar_inverse, ms_to_lr, offset_of, qmax_of, qmin_of)
+from . import fec, framing, fusion, modem, plc
+from .codec import (attenuator_expanded, encode_block, exp_range, FRAC, haar_inverse, ms_to_lr, offset_of, qmax_of, qmin_of)
 from .crypto import unwrap_counter
 from .dsp import log2_q8, saturate, shift_signed, sigmoid_q15
+from .fusion import INF_LOG
 from .layout import Layout
 from .profiles import Profile
 
-INF_LOG = 1 << 40                                       # 情報なし (誤差分散が無限大)
 ONE_TWELFTH_Q15 = 2731                                  # 1/12 (量子化誤差の分散。仮数の最下位bit単位) を Q15 で
 
 
@@ -40,7 +40,6 @@ class Transmitter:
 
     def frame(self, xblock):
         """xblock: (block, 2) の符号つき24 bit整数 → 1フレームぶんのシンボル (n, 2)"""
-        from .codec import encode_block
         bd = encode_block(xblock, self.p, self.clip_opt)
         ks = None
         if self.cipher is not None:
@@ -147,10 +146,10 @@ class StreamDecoder:
                     extra = 0
                 m_q15 = np.clip(m_q15, qmin << 15, qmax << 15)
                 a = attenuator_expanded(bd.attn[ch][k], p.attenuator_group(ch, k), n)
-                s = int(bd.eidx[ch][k]) + exp_range(k, b, p, ch)[0] + FRAC - a                   # 係数ごとの刻みの指数
+                s = int(bd.eidx[ch][k]) + exp_range(k, b, p)[0] + FRAC - a                   # 係数ごとの刻みの指数
                 coefs[ch].append(saturate(shift_signed(m_q15, s - 15)))
                 rv = (var[o:o + n] + extra + ONE_TWELFTH_Q15) >> (2 * a)                         # 刻み 2^s の二乗を除いた分散 (Q15)
-                exp_two = 2 * (int(bd.eidx[ch][k]) + exp_range(k, b, p, ch)[0] + FRAC) - 15
+                exp_two = 2 * (int(bd.eidx[ch][k]) + exp_range(k, b, p)[0] + FRAC) - 15
                 if n >= 2:
                     halves = (int(rv[: n // 2].sum()) // (n // 2), int(rv[n // 2:].sum()) // (n // 2))
                 else:
@@ -224,7 +223,6 @@ class StreamDecoder:
 
 
 def fec_parity(msb):
-    from . import fec
     return fec.rsc_parity(msb)[0][:len(msb)]
 
 
