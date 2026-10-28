@@ -1,10 +1,10 @@
 """
 音声符号化: M/S → ブロック内 Haar 多段分解 → 帯域ごとのブロック浮動小数点量子化。すべて整数演算。
 
-PCM は符号つき24 bit整数 (±1 = 2^23)。係数は小数21 bit (±1 = 2^21) の整数で、M/S は M = (L+R)/2、S = (L-R)/2 を
-最後の3 bit を四捨五入して作る。Haar の各段の出力は最大で 2^(段/2) 倍になり、4段の最低域で最大 ±2^23 に達する
-(乗算器の入力 25 bit 符号つきの範囲に余裕がある) ので、飽和は起きない。共有指数 s = e + 21 は、最小の刻みを s >= 1 に
-制限して、アッテネータの半刻みも整数にする (e < -20 の細かい刻みは使わない。デコーダは s <= 0 でも右シフトで復号する)。
+PCM は符号つき24 bit整数 (±1 = 2^23)。係数は小数22 bit (±1 = 2^22) の整数で、M/S は M = (L+R)/2、S = (L-R)/2 を
+最後の2 bit を四捨五入して作る。Haar の各段の出力は最大で 2^(段/2) 倍になり、4段の最低域は満点の直流で ±2^24 に達して、
+乗算器の入力 25 bit 符号つきの上限 2^24 - 1 を 1 だけ超える。この 1 LSB (2^-22) は飽和で切る (saturate)。共有指数 s = e + 22 は、最小の刻みを s >= 1 に
+制限して、アッテネータの半刻みも整数にする (e < -21 の細かい刻みは使わない。デコーダは s <= 0 でも右シフトで復号する)。
 DSP に依存する演算は gracefm.dsp にある (docs/FIXED.md)。
 
 すべての処理はブロック (= フレーム) の中で完結し、先読みはない。
@@ -59,7 +59,7 @@ def attenuator_expanded(attn, group, n):
     return np.repeat(np.asarray(attn, np.int64), group, axis=-1)
 
 
-FRAC = 21                       # 係数の小数bit数 (±1 = 2^21)
+FRAC = 22                       # 係数の小数bit数 (±1 = 2^22)
 PCM_BITS = 24                   # PCM の幅 (符号つき)
 
 
@@ -139,7 +139,7 @@ def dequantize(m, eidx, k, b, profile: Profile, ch="M", attn=None):
 def encode_block(x, profile: Profile, clip_opt=True) -> BlockData:
     """x: (block, 2) の L/R、符号つき24 bit整数 (|x| < 2^23)"""
     x = np.asarray(x, np.int64)
-    ms = {"M": (x[:, 0] + x[:, 1] + 4) >> 3, "S": (x[:, 0] - x[:, 1] + 4) >> 3}      # 24 bit PCM → 21 bit小数 (M=(L+R)/2)
+    ms = {"M": (x[:, 0] + x[:, 1] + 2) >> 2, "S": (x[:, 0] - x[:, 1] + 2) >> 2}      # 24 bit PCM → 22 bit小数 (M=(L+R)/2)
     mant, eidx, attn = {}, {}, {}
     for ch, bits in (("M", profile.bits_m), ("S", profile.bits_s)):
         bands = haar_forward(ms[ch], profile.levels)
@@ -175,7 +175,7 @@ def roundtrip(x, profile: Profile):
 
 
 def decode_coeffs(bd: BlockData, profile: Profile):
-    """BlockData → {ch: [帯域係数 (整数、小数21 bit)]}"""
+    """BlockData → {ch: [帯域係数 (整数、小数22 bit)]}"""
     coefs = {}
     for ch, bits in (("M", profile.bits_m), ("S", profile.bits_s)):
         coefs[ch] = []
@@ -188,5 +188,5 @@ def decode_coeffs(bd: BlockData, profile: Profile):
 
 
 def ms_to_lr(M, S):
-    """M/S (小数21 bit) → L/R (符号つき24 bit PCM)。L = M + S、R = M - S"""
-    return saturate_bits(np.stack([(M + S) << 2, (M - S) << 2], axis=-1), PCM_BITS)
+    """M/S (小数22 bit) → L/R (符号つき24 bit PCM)。L = M + S、R = M - S"""
+    return saturate_bits(np.stack([(M + S) << 1, (M - S) << 1], axis=-1), PCM_BITS)

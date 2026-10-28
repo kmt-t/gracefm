@@ -27,33 +27,33 @@
         "sine_1khz": 50.9
       },
       "-60": {
-        "piano": 46.1,
-        "sine_1khz": 50.6
+        "piano": 47.0,
+        "sine_1khz": 50.5
       },
       "-80": {
-        "piano": 26.2,
-        "sine_1khz": 38.4
+        "piano": 27.3,
+        "sine_1khz": 40.4
       },
       "-90": {
-        "piano": 18.2,
-        "sine_1khz": 28.6
+        "piano": 19.5,
+        "sine_1khz": 28.9
       },
       "-100": {
-        "piano": 12.3,
-        "sine_1khz": 18.7
+        "piano": 14.5,
+        "sine_1khz": 20.2
       },
       "-110": {
-        "piano": 3.6,
-        "sine_1khz": 10.9
+        "piano": 8.2,
+        "sine_1khz": 12.8
       },
       "-120": {
-        "piano": -1.4,
-        "sine_1khz": 6.7
+        "piano": -0.0,
+        "sine_1khz": 5.7
       }
     },
-    "floor_level_sine_db": -98.7,
-    "floor_level_piano_db": -87.8,
-    "pcm_bits_at_floor_sine": 19.4
+    "floor_level_sine_db": -100.3,
+    "floor_level_piano_db": -89.4,
+    "pcm_bits_at_floor_sine": 19.7
   },
   {
     "name": "B200",
@@ -83,33 +83,33 @@
         "sine_1khz": 50.9
       },
       "-60": {
-        "piano": 43.3,
-        "sine_1khz": 50.6
+        "piano": 44.0,
+        "sine_1khz": 50.5
       },
       "-80": {
-        "piano": 23.4,
-        "sine_1khz": 38.4
+        "piano": 24.2,
+        "sine_1khz": 40.4
       },
       "-90": {
-        "piano": 15.5,
-        "sine_1khz": 28.6
+        "piano": 16.3,
+        "sine_1khz": 28.9
       },
       "-100": {
-        "piano": 10.1,
-        "sine_1khz": 18.7
+        "piano": 11.7,
+        "sine_1khz": 20.2
       },
       "-110": {
-        "piano": 2.8,
-        "sine_1khz": 10.9
+        "piano": 7.1,
+        "sine_1khz": 12.8
       },
       "-120": {
-        "piano": -1.0,
-        "sine_1khz": 6.7
+        "piano": -0.3,
+        "sine_1khz": 5.7
       }
     },
-    "floor_level_sine_db": -98.7,
-    "floor_level_piano_db": -84.3,
-    "pcm_bits_at_floor_sine": 19.4
+    "floor_level_sine_db": -100.3,
+    "floor_level_piano_db": -85.3,
+    "pcm_bits_at_floor_sine": 19.7
   },
   {
     "name": "B200MY",
@@ -135,37 +135,37 @@
         "sine_1khz": 47.1
       },
       "-40": {
-        "piano": 54.1,
+        "piano": 54.2,
         "sine_1khz": 50.9
       },
       "-60": {
-        "piano": 48.4,
+        "piano": 50.1,
         "sine_1khz": 50.8
       },
       "-80": {
-        "piano": 28.7,
-        "sine_1khz": 39.1
+        "piano": 30.8,
+        "sine_1khz": 43.4
       },
       "-90": {
-        "piano": 19.6,
-        "sine_1khz": 32.2
+        "piano": 21.2,
+        "sine_1khz": 33.8
       },
       "-100": {
-        "piano": 12.3,
-        "sine_1khz": 20.4
+        "piano": 14.5,
+        "sine_1khz": 22.6
       },
       "-110": {
-        "piano": 3.6,
-        "sine_1khz": 10.9
+        "piano": 8.2,
+        "sine_1khz": 12.8
       },
       "-120": {
-        "piano": -1.4,
-        "sine_1khz": 6.7
+        "piano": -0.0,
+        "sine_1khz": 5.7
       }
     },
-    "floor_level_sine_db": -100.4,
-    "floor_level_piano_db": -89.6,
-    "pcm_bits_at_floor_sine": 19.7
+    "floor_level_sine_db": -102.7,
+    "floor_level_piano_db": -91.8,
+    "pcm_bits_at_floor_sine": 20.1
   },
   {
     "name": "B200Y",
@@ -191,37 +191,37 @@
         "sine_1khz": 47.1
       },
       "-40": {
-        "piano": 53.8,
+        "piano": 53.9,
         "sine_1khz": 50.9
       },
       "-60": {
-        "piano": 46.8,
+        "piano": 48.5,
         "sine_1khz": 50.8
       },
       "-80": {
-        "piano": 27.0,
-        "sine_1khz": 39.1
+        "piano": 29.0,
+        "sine_1khz": 43.4
       },
       "-90": {
-        "piano": 18.3,
-        "sine_1khz": 32.2
+        "piano": 19.9,
+        "sine_1khz": 33.8
       },
       "-100": {
-        "piano": 11.0,
-        "sine_1khz": 20.4
+        "piano": 13.7,
+        "sine_1khz": 22.6
       },
       "-110": {
-        "piano": 2.8,
-        "sine_1khz": 10.9
+        "piano": 7.3,
+        "sine_1khz": 12.8
       },
       "-120": {
-        "piano": -1.0,
-        "sine_1khz": 6.7
+        "piano": -0.2,
+        "sine_1khz": 5.7
       }
     },
-    "floor_level_sine_db": -100.4,
-    "floor_level_piano_db": -88.0,
-    "pcm_bits_at_floor_sine": 19.7
+    "floor_level_sine_db": -102.7,
+    "floor_level_piano_db": -89.9,
+    "pcm_bits_at_floor_sine": 20.1
   },
   {
     "name": "SUB50M",
@@ -277,37 +277,37 @@
         "sine_1khz": 54.4
       },
       "-40": {
-        "piano": 56.5,
+        "piano": 56.6,
         "sine_1khz": 51.2
       },
       "-60": {
-        "piano": 46.3,
-        "sine_1khz": 53.7
+        "piano": 47.2,
+        "sine_1khz": 54.1
       },
       "-80": {
-        "piano": 26.4,
-        "sine_1khz": 41.5
+        "piano": 27.5,
+        "sine_1khz": 41.2
       },
       "-90": {
-        "piano": 19.9,
-        "sine_1khz": 28.6
+        "piano": 21.3,
+        "sine_1khz": 29.4
       },
       "-100": {
-        "piano": 13.2,
-        "sine_1khz": 16.4
+        "piano": 16.0,
+        "sine_1khz": 18.1
       },
       "-110": {
-        "piano": 4.0,
-        "sine_1khz": 15.1
+        "piano": 8.8,
+        "sine_1khz": 16.3
       },
       "-120": {
-        "piano": -0.7,
-        "sine_1khz": 7.0
+        "piano": 0.4,
+        "sine_1khz": 8.0
       }
     },
-    "floor_level_sine_db": -97.0,
-    "floor_level_piano_db": -89.8,
-    "pcm_bits_at_floor_sine": 19.1
+    "floor_level_sine_db": -98.3,
+    "floor_level_piano_db": -92.5,
+    "pcm_bits_at_floor_sine": 19.4
   },
   {
     "name": "M700",
@@ -337,33 +337,33 @@
         "sine_1khz": 51.2
       },
       "-60": {
-        "piano": 35.9,
-        "sine_1khz": 53.7
+        "piano": 36.0,
+        "sine_1khz": 54.1
       },
       "-80": {
-        "piano": 23.6,
-        "sine_1khz": 41.5
+        "piano": 24.4,
+        "sine_1khz": 41.2
       },
       "-90": {
-        "piano": 16.8,
-        "sine_1khz": 28.6
+        "piano": 17.7,
+        "sine_1khz": 29.4
       },
       "-100": {
-        "piano": 11.4,
-        "sine_1khz": 16.4
+        "piano": 13.7,
+        "sine_1khz": 18.1
       },
       "-110": {
-        "piano": 3.3,
-        "sine_1khz": 15.1
+        "piano": 7.9,
+        "sine_1khz": 16.3
       },
       "-120": {
-        "piano": -0.5,
-        "sine_1khz": 7.0
+        "piano": 0.3,
+        "sine_1khz": 8.0
       }
     },
-    "floor_level_sine_db": -97.0,
-    "floor_level_piano_db": -85.3,
-    "pcm_bits_at_floor_sine": 19.1
+    "floor_level_sine_db": -98.3,
+    "floor_level_piano_db": -86.6,
+    "pcm_bits_at_floor_sine": 19.4
   },
   {
     "name": "M700MY",
@@ -389,37 +389,37 @@
         "sine_1khz": 54.3
       },
       "-40": {
-        "piano": 57.1,
+        "piano": 57.2,
         "sine_1khz": 51.1
       },
       "-60": {
-        "piano": 48.7,
-        "sine_1khz": 53.6
+        "piano": 50.5,
+        "sine_1khz": 54.1
       },
       "-80": {
-        "piano": 28.9,
-        "sine_1khz": 43.1
+        "piano": 30.8,
+        "sine_1khz": 43.2
       },
       "-90": {
-        "piano": 20.5,
-        "sine_1khz": 32.0
+        "piano": 22.1,
+        "sine_1khz": 32.4
       },
       "-100": {
-        "piano": 13.2,
-        "sine_1khz": 21.0
+        "piano": 16.0,
+        "sine_1khz": 23.9
       },
       "-110": {
-        "piano": 4.0,
-        "sine_1khz": 15.1
+        "piano": 8.8,
+        "sine_1khz": 16.3
       },
       "-120": {
-        "piano": -0.7,
-        "sine_1khz": 7.0
+        "piano": 0.4,
+        "sine_1khz": 8.0
       }
     },
-    "floor_level_sine_db": -101.7,
-    "floor_level_piano_db": -90.7,
-    "pcm_bits_at_floor_sine": 19.9
+    "floor_level_sine_db": -105.1,
+    "floor_level_piano_db": -93.4,
+    "pcm_bits_at_floor_sine": 20.5
   },
   {
     "name": "M700Y",
@@ -445,37 +445,37 @@
         "sine_1khz": 54.3
       },
       "-40": {
-        "piano": 56.7,
+        "piano": 56.8,
         "sine_1khz": 51.1
       },
       "-60": {
-        "piano": 47.0,
-        "sine_1khz": 53.6
+        "piano": 48.8,
+        "sine_1khz": 54.1
       },
       "-80": {
-        "piano": 27.2,
-        "sine_1khz": 43.1
+        "piano": 29.1,
+        "sine_1khz": 43.2
       },
       "-90": {
-        "piano": 19.3,
-        "sine_1khz": 32.0
+        "piano": 21.0,
+        "sine_1khz": 32.4
       },
       "-100": {
-        "piano": 11.9,
-        "sine_1khz": 21.0
+        "piano": 15.3,
+        "sine_1khz": 23.9
       },
       "-110": {
-        "piano": 3.2,
-        "sine_1khz": 15.1
+        "piano": 7.8,
+        "sine_1khz": 16.3
       },
       "-120": {
-        "piano": -0.5,
-        "sine_1khz": 7.0
+        "piano": 0.3,
+        "sine_1khz": 8.0
       }
     },
-    "floor_level_sine_db": -101.7,
-    "floor_level_piano_db": -89.1,
-    "pcm_bits_at_floor_sine": 19.9
+    "floor_level_sine_db": -105.1,
+    "floor_level_piano_db": -91.8,
+    "pcm_bits_at_floor_sine": 20.5
   },
   {
     "name": "SUB100-48K",
