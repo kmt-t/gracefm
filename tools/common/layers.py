@@ -14,8 +14,20 @@ K=1 なら基本層 2N-1、拡張層 2N）。
 """
 from dataclasses import replace
 
-from .layout import Layout
-from .profiles import Profile, default_split
+from gracefm.profiles import Profile
+
+
+def default_split(widths, protect_bits):
+    """位相部 (基本層の仮数 + パリティ) と振幅部 (拡張層) が同じ大きさになる基本層を仮に置く。FEC長の計算用。"""
+    out = []
+    for k, w in enumerate(widths):
+        if not w:
+            out.append(0)
+            continue
+        kk = protect_bits(k)
+        cands = range(max(kk, 1), w - 1, 2)
+        out.append(min(cands, key=lambda a: abs(a + kk - (w - a))) if len(cands) else 1)
+    return tuple(out)
 
 
 def _bands(p: Profile):
@@ -28,10 +40,7 @@ def _bands(p: Profile):
 def solve(p: Profile):
     """p の全幅・FEC・変調はそのままに、釣り合う基本層 (位相部に置く仮数bit。パリティを除く) のbit数 (base_m, base_s) を返す"""
     bands = _bands(p)
-    lay = Layout(p)
-    n_x = 0                                      # ヘッダと終端は位相部と振幅部に同数ずつ置くので差に効かない
-    # S - W = n_x + Σ n (2 a + K - w) を 0 に近づける。状態 = Σ n (2 a + K - w)。
-    target = -n_x
+    # ヘッダと終端は位相部と振幅部に同数ずつ置くので差に効かない。S - W = Σ n (2 a + K - w) を 0 に近づける。状態 = Σ n (2 a + K - w)。
     states = {0: (0, [])}
     for ch, k, w, n in bands:
         nxt = {}
@@ -43,7 +52,7 @@ def solve(p: Profile):
                 if s_ not in nxt or c < nxt[s_][0]:
                     nxt[s_] = (c, picks + [(ch, k, a)])
         states = nxt
-    best = min(states, key=lambda s_: (abs(s_ - target), states[s_][0]))
+    best = min(states, key=lambda s_: (abs(s_), states[s_][0]))
     chosen = {(ch, k): a for ch, k, a in states[best][1]}
     base_m = tuple(chosen.get(("M", k), 1 if p.bits_m[k] else 0) for k in range(p.nbands))
     base_s = tuple(chosen.get(("S", k), 1 if p.bits_s[k] else 0) for k in range(p.nbands))

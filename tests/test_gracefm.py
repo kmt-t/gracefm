@@ -15,6 +15,7 @@ from gracefm.framing import pack, unpack  # noqa: E402
 from gracefm.layout import Layout  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 from gracefm.txrx import StreamDecoder, Transmitter, receive  # noqa: E402
+from helpers import header_info, with_header  # noqa: E402
 
 
 def _signal(n, fs, seed=0):
@@ -33,7 +34,7 @@ def pcm(x):
 def noisy(frames, snr_db, rng):
     """試験用: 通信路 (雑音と12 bit ADC) を通したシンボル"""
     from gracefm import channel
-    return [channel.adc(channel.awgn(f / float(1 << modem.FRAC), snr_db, rng)) for f in frames]
+    return [channel.adc(channel.awgn(f / float(1 << modem.SYM_FRAC), snr_db, rng)) for f in frames]
 
 
 def test_haar_perfect_reconstruction():
@@ -53,9 +54,9 @@ def test_fec_roundtrip_and_correction():
 
 def test_crc_detects_error():
     bits = np.random.default_rng(3).integers(0, 2, 200)
-    c = fec.crc16(bits)
+    c = fec.crc_core(bits)
     bits[17] ^= 1
-    assert not np.array_equal(fec.crc16(bits), c)
+    assert not np.array_equal(fec.crc_core(bits), c)
 
 
 def test_frame_roundtrip_bit_exact():
@@ -92,9 +93,9 @@ def test_attenuator_roundtrip():
     wrong_layout = Layout(replace(p, pid=15))
     wrong, _ = unpack(wrong_layout, 8 * (1 - 2 * frame), frame)
     assert wrong is None
-    body = lay.header_info(frame)
+    body = header_info(lay, frame)
     body[lay.header_bits + 5 * 4] ^= 1  # 最初のアッテネータbitを壊す
-    damaged = lay.with_header(frame, body)
+    damaged = with_header(lay, frame, body)
     recovered, hdr = unpack(lay, 8 * (1 - 2 * damaged), damaged)
     assert recovered is not None and hdr["high_ok"] is False
 

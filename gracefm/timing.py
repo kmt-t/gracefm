@@ -67,17 +67,3 @@ def min_latency(profile: Profile, two_streams=True, tm: Timing = Timing(), nunit
         ready = max([tA[i] for i in fa] + [tB[i] for i in fb]) + tm.t_out
         need = max(need, ready - t0)
     return need
-
-
-def rrc_equalizer_delay(profile: Profile, lookahead_symbols=0):
-    """Transmit plus receive RRC group delay and FIR equalizer lookahead [s]."""
-    from .channel import symbol_rate
-    if lookahead_symbols < 0:
-        raise ValueError("lookahead_symbols must be nonnegative")
-    return Fraction(profile.pulse_span + lookahead_symbols, symbol_rate(profile))
-
-
-def waveform_timing(main: Profile, sub: Profile | None = None, lookahead_symbols=4):
-    """Timing for the reference static equalizer, excluding compute time."""
-    return Timing(t_filt=rrc_equalizer_delay(main, lookahead_symbols),
-                  t_filt_b=None if sub is None else rrc_equalizer_delay(sub, lookahead_symbols))

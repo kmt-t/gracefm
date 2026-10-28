@@ -12,12 +12,13 @@ from gracefm import modem  # noqa: E402
 from gracefm.crypto import StreamCipher  # noqa: E402
 from gracefm.equalizer import equalize_static, estimate_channel, header_training_symbols  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
-from gracefm.timing import min_latency, waveform_timing  # noqa: E402
+from gracefm.timing import min_latency  # noqa: E402
+from helpers import waveform_timing  # noqa: E402
 from gracefm.txrx import Transmitter  # noqa: E402
 from tools.common.pulse import rrc_taps  # noqa: E402
 from tools.sim.multipath import matched_channel_taps, through_matched_channel  # noqa: E402
 
-ONE = float(1 << modem.FRAC)
+ONE = float(1 << modem.SYM_FRAC)
 
 
 def _complex(sym):

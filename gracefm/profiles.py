@@ -5,9 +5,8 @@
 FEC で保護する仮数の上位ビット数・変調方式を固定する。受信機はフレームヘッダの
 プロファイル ID からこれらを決める。
 """
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 from fractions import Fraction
-from math import gcd
 from typing import Optional, Tuple
 
 
@@ -80,7 +79,7 @@ class Profile:
             if self.y_start_k not in range(self.nbands - 3, self.nbands) or self.fs not in (32000, 48000) or self.block != 64:
                 raise ValueError("Y境界は32/48kHz・64サンプルの、高域側3帯域から選んでください")
             if not 5 <= self.y_bits <= 16:
-                raise ValueError("Y仮数幅は6〜16bitにしてください")
+                raise ValueError("Y仮数幅は5〜16bitにしてください")
             num, den = self.y_step
             if not 0 < num * (2 ** (self.y_bits - 1) - 1) < 2 * den:
                 raise ValueError("半径の最小値が正になる変調度にしてください")
@@ -172,81 +171,6 @@ def band_level(k: int, levels: int) -> int:
     """係数群 k の分解段数（k=0 は低域近似、k=1..levels は詳細帯域）。"""
     return levels if k == 0 else levels + 1 - k
 
-
-def default_split(widths, protect_bits):
-    """位相部 (基本層の仮数 + パリティ) と振幅部 (拡張層) が同じ大きさになる基本層を仮に置く。FEC長の計算用。"""
-    out = []
-    for k, w in enumerate(widths):
-        if not w:
-            out.append(0)
-            continue
-        kk = protect_bits(k)
-        cands = range(max(kk, 1), w - 1, 2)
-        out.append(min(cands, key=lambda a: abs(a + kk - (w - a))) if len(cands) else 1)
-    return tuple(out)
-
-
-def _reduce(num, den):
-    g = gcd(num, den)
-    return (num // g, den // g)
-
-
-def make_y_profile(base: Profile, name: str, pid: int, start_k: Optional[int] = None,
-                amplitude: Tuple[int, int] = (2, 25), mantissa_bits: int = 7,
-                channels: Tuple[str, ...] = ("M",), format_id: int = 3,
-                bits_m: Optional[Tuple[int, ...]] = None,
-                bits_s: Optional[Tuple[int, ...]] = None) -> Profile:
-    """対象成分の境界以上だけをY(位相・半径シンボル)にし、他の成分は既存主系のままにする。
-
-    amplitude = (分子, 分母) は半径の段が64 (仮数7bit) のときの隣接半径間隔 (既定 2/25 = 0.08) で、幅変更時は最大変調度を保つ。
-    bits_m / bits_s を指定すると、M / Sの仮数幅を主系と別の値にする (Y系だけ音質と帯域の釣り合いを変えるとき)。
-    """
-    if not 5 <= mantissa_bits <= 16:
-        raise ValueError("Y仮数幅は5〜16bitにしてください")
-    if start_k is None:
-        start_k = base.nbands - 3
-
-    def widths(ch, bits):
-        return tuple(b if k < start_k or b == 0 or ch not in channels else mantissa_bits
-                     for k, b in enumerate(bits))
-
-    attenuator_s = base.attn_group_s
-    if bits_s is not None:
-        top = max((k for k, w in enumerate(bits_s) if w), default=None)
-        attenuator_s = tuple(min(4, base.ncoef(k)) if k == top else 0 for k in range(base.nbands))
-    if "S" in channels:                                  # SもY帯域にするときは、MのY帯域と同じ4区間ずつ
-        sbits = base.bits_s if bits_s is None else bits_s
-        groups_s = list(attenuator_s or (0,) * base.nbands)
-        for k in range(start_k, base.nbands):
-            if sbits[k]:
-                groups_s[k] = max(1, base.ncoef(k) // 4)
-        attenuator_s = tuple(groups_s)
-    attenuator_m = base.attn_group_m
-    if "M" in channels:
-        groups = list(attenuator_m or (0,) * base.nbands)
-        for k in range(start_k, base.nbands):
-            groups[k] = max(1, base.ncoef(k) // 4)
-        attenuator_m = tuple(groups)
-    new_m = widths("M", base.bits_m if bits_m is None else bits_m)
-    new_s = widths("S", base.bits_s if bits_s is None else bits_s)
-
-    def keep_where_width_unchanged(groups, new, old):
-        """主系と仮数幅が変わった非Y帯域のアッテネータは引き継がない"""
-        return None if groups is None else tuple(0 if k < start_k and new[k] != old[k] else g for k, g in enumerate(groups))
-    attenuator_m = keep_where_width_unchanged(attenuator_m, new_m, base.bits_m)
-    attenuator_s = keep_where_width_unchanged(attenuator_s, new_s, base.bits_s)
-    y = replace(base, pid=pid, name=name, bits_m=new_m, bits_s=new_s,
-                base_m=default_split(new_m, base.protect_bits) if base.layered else None,
-                base_s=default_split(new_s, base.protect_bits) if base.layered else None,
-                attn_group_m=attenuator_m, attn_group_s=attenuator_s,
-                y_start_k=start_k,
-                y_step=_reduce(15 * amplitude[0], amplitude[1] * (2 ** (mantissa_bits - 1) - 1)),
-                y_bits=mantissa_bits, y_channels=channels,
-                format_id=format_id)
-    if not y.layered:
-        return y
-    from .layers import balanced      # Yの専用シンボル分だけ強弱の釣り合いが変わるので配分を取り直す
-    return balanced(y)
 
 # Standard catalog. All active M/S components have interval attenuation.
 # IDs: 1–4 32kHz main, 5–6 32kHz secondary, 7–10 48kHz main, 11 48kHz secondary. 0 and 12–15 are reserved.

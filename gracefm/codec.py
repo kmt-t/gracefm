@@ -30,7 +30,7 @@ def offset_of(b, profile: Profile, ch: str, k: int):
     return -qmin_of(b, profile, ch, k)
 
 
-def exp_range(k, b, profile: Profile, ch="M"):
+def exp_range(k, b, profile: Profile):
     """帯域 k・仮数幅 b・プロファイルで固定する指数範囲 [emin, emax]。
 
     emax は、その帯域で取りうる最大振幅 2^(lev/2) (入力 |x| <= 1) を、最大の仮数 qmax で表せる最小の指数
@@ -95,7 +95,7 @@ def quantize(c, k, b, profile: Profile, clip_opt=True, ch="M"):
     c = np.asarray(c, np.int64)
     group = profile.attenuator_group(ch, k)
     qmax, qmin = qmax_of(b), qmin_of(b, profile, ch, k)
-    emin, emax = exp_range(k, b, profile, ch)
+    emin, emax = exp_range(k, b, profile)
     peak = np.abs(c).max(axis=-1)
     e_floor = max(emin, 1 - FRAC)                       # 刻みの最小は s = 1
     e0 = _shared_exponent(peak, qmax, e_floor, emax)
@@ -127,7 +127,7 @@ def quantize(c, k, b, profile: Profile, clip_opt=True, ch="M"):
 
 
 def dequantize(m, eidx, k, b, profile: Profile, ch="M", attn=None):
-    emin, _ = exp_range(k, b, profile, ch)
+    emin, _ = exp_range(k, b, profile)
     s = int(eidx) + emin + FRAC
     if attn is None or not len(attn):
         return saturate(shift_signed(m, s))

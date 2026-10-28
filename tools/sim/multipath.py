@@ -45,7 +45,7 @@ def matched_channel_taps(profile: Profile, paths=(), rf_offset_hz=0.0, sps=8):
 def through_matched_channel(frames, profile: Profile, esn0_db, paths=(), rf_offset_hz=0.0, seed=1):
     """連続フレーム (整数のシンボル (n, 2) のリスト) を静的な RRC マルチパスと AWGN に通す。
     返り値: 受信フレーム (整数、nf × n × 2) と、雑音のない通信路 (ラグ, タップ)。固定の乱数で等化あり・なしを対にして比べられる。"""
-    scale = float(1 << modem.FRAC)
+    scale = float(1 << modem.SYM_FRAC)
     symbols = np.concatenate(frames) / scale
     z = symbols[:, 0] + 1j * symbols[:, 1]
     lags, taps = matched_channel_taps(profile, paths, rf_offset_hz)
