@@ -6,7 +6,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from gracefm.fixed import decode_block_int, encode_block_int  # noqa: E402
+from gracefm.codec import decode_block, encode_block  # noqa: E402
 from gracefm.link_fixed import FixedLink  # noqa: E402
 from gracefm.modem_fixed import FRAC  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
@@ -32,7 +32,7 @@ def test_noiseless_link_equals_integer_codec_output():
             i_sym, q_sym = tx.transmit(block)
             out = rx.receive(i_sym, q_sym)
             assert out is not None
-            assert np.array_equal(out, decode_block_int(encode_block_int(block, p), p)), name
+            assert np.array_equal(out, decode_block(encode_block(block, p), p)), name
 
 
 def test_link_survives_moderate_noise():

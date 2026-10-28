@@ -10,7 +10,7 @@ import numpy as np
 from . import framing, modem
 from .codec import BlockData
 from .fec_fixed import rsc_decode_int
-from .fixed import decode_block_int, encode_block_int
+from .codec import decode_block, encode_block
 from .layout import Layout
 from .modem_fixed import N_PREAMBLE, bits_per_symbol, demodulate, modulate
 from .profiles import Profile
@@ -33,7 +33,7 @@ class FixedLink:
     # ---------------------------------------------------------------- 送信
     def transmit(self, block):
         """block: (64, 2) の符号つき24 bit整数 → (I, Q) の整数 (プリアンブルを含む)"""
-        bd = encode_block_int(block, self.p)
+        bd = encode_block(block, self.p)
         bits = framing.pack(self.layout, bd, self.sid, self.frame_no)
         self.frame_no += 1
         buf = np.zeros(self.nsym * bits_per_symbol(self.p.modulation), np.int64)
@@ -55,7 +55,7 @@ class FixedLink:
             return None
         if not header["high_ok"]:
             bd = self._erase_high(bd)
-        return decode_block_int(bd, p)
+        return decode_block(bd, p)
 
     def _erase_high(self, bd: BlockData):
         for ch in ("M", "S"):
