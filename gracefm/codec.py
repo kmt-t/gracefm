@@ -1,5 +1,11 @@
 """
-音声符号化: M/S → ブロック内 Haar 多段分解 → 帯域ごとのブロック浮動小数点量子化。
+音声符号化: M/S → ブロック内 Haar 多段分解 → 帯域ごとのブロック浮動小数点量子化。すべて整数演算。
+
+PCM は符号つき24 bit整数 (±1 = 2^23)。係数は小数21 bit (±1 = 2^21) の整数で、M/S は M = (L+R)/2、S = (L-R)/2 を
+最後の3 bit を四捨五入して作る。Haar の各段の出力は最大で 2^(段/2) 倍になり、4段の最低域で最大 ±2^23 に達する
+(乗算器の入力 25 bit 符号つきの範囲に余裕がある) ので、飽和は起きない。共有指数 s = e + 21 は、最小の刻みを s >= 1 に
+制限して、アッテネータの半刻みも整数にする (e < -20 の細かい刻みは使わない。デコーダは s <= 0 でも右シフトで復号する)。
+DSP に依存する演算は gracefm.dsp にある (docs/FIXED.md)。
 
 すべての処理はブロック (= フレーム) の中で完結し、先読みはない。
 配列の最後の軸がブロック内のサンプル (または係数) で、それより前の軸はブロックの並び
@@ -7,35 +13,9 @@
 """
 import numpy as np
 
+from .dsp import bit_length, mac_sq2_inv, round_shift, saturate, saturate_bits, shift_signed, sq_err_sum, ERR_FRAC_BITS
 from .profiles import Profile, band_level
 
-SQ2 = np.sqrt(2.0)
-
-
-# ---------------------------------------------------------------- Haar (正規直交)
-
-def haar_forward(x, levels):
-    """x: (..., N) → [近似 (最低域), 詳細 (低い方) ..., 詳細 (最高域)]"""
-    a = np.asarray(x, dtype=float)
-    details = []
-    for _ in range(levels):
-        e, o = a[..., 0::2], a[..., 1::2]
-        details.append((e - o) / SQ2)
-        a = (e + o) / SQ2
-    return [a] + details[::-1]
-
-
-def haar_inverse(bands):
-    a = bands[0]
-    for d in bands[1:]:
-        x = np.empty(a.shape[:-1] + (a.shape[-1] * 2,))
-        x[..., 0::2] = (a + d) / SQ2
-        x[..., 1::2] = (a - d) / SQ2
-        a = x
-    return a
-
-
-# ---------------------------------------------------------------- ブロック浮動小数点量子化
 
 def qmax_of(b):
     return 2 ** (b - 1) - 1
@@ -53,103 +33,15 @@ def offset_of(b, profile: Profile, ch: str, k: int):
 def exp_range(k, b, profile: Profile, ch="M"):
     """帯域 k・仮数幅 b・プロファイルで固定する指数範囲 [emin, emax]。
 
-    送受信で同じ値を計算する。フレームにはオフセット emin を送らず、
-    eidx = e - emin だけを格納する。
+    emax は、その帯域で取りうる最大振幅 2^(lev/2) (入力 |x| <= 1) を、最大の仮数 qmax で表せる最小の指数
+    ceil(log2(2^(lev/2) × 2 / qmax)) で、整数だけで (lev // 2) + 3 - b と書ける。
+    送受信で同じ値を計算する。フレームにはオフセット emin を送らず、eidx = e - emin だけを格納する。
     """
     lev = band_level(k, profile.levels)
-    gain = 2.0 ** (lev / 2)                     # その帯域で取りうる最大振幅 (入力 |x|<=1)
-    emax = int(np.ceil(np.log2(gain * 2.0 / qmax_of(b))))
+    emax = (lev >> 1) + 3 - b
     emin = emax - (2 ** profile.exp_bits - 1)
     return emin, emax
 
-
-def quantize(c, k, b, profile: Profile, clip_opt=True, ch="M"):
-    """
-    c: (..., ncoef) → (仮数 m (..., ncoef) int, 指数インデックス eidx (...) int)
-    指数 e はブロックごとに共有。通常は m = clip(round(c / 2^e), -qmax, qmax)。
-    Y高域だけ負端を -2^(b-1) として全2^b値を使う。
-    clip_opt: 指数を 1 つ下げて少しクリップした方が誤差が小さければそちらを選ぶ
-              (エンコーダ側だけの選択。デコーダは変わらない)。
-    """
-    qmax = qmax_of(b)
-    qmin = qmin_of(b, profile, ch, k)
-    emin, emax = exp_range(k, b, profile, ch)
-    peak = np.abs(c).max(axis=-1)
-    e = np.ceil(np.log2(np.maximum(peak, 1e-300) / qmax))
-    e = np.clip(e, emin, emax)
-
-    def q(ev):
-        m = np.clip(np.round(c / np.exp2(ev)[..., None]), qmin, qmax)
-        return m, ((c - m * np.exp2(ev)[..., None]) ** 2).sum(axis=-1)
-
-    m, err = q(e)
-    if clip_opt:
-        e2 = np.maximum(e - 1, emin)
-        m2, err2 = q(e2)
-        better = err2 < err
-        e = np.where(better, e2, e)
-        m = np.where(better[..., None], m2, m)
-    return m.astype(np.int64), (e - emin).astype(np.int64)
-
-
-def quantize_attenuated(c, k, b, profile: Profile, clip_opt=True, ch="M"):
-    """共有指数に加え、各区間で量子化刻みを 1 または 1/2 にする。"""
-    group = profile.attenuator_group(ch, k)
-    if not group:
-        m, e = quantize(c, k, b, profile, clip_opt, ch)
-        return m, e, np.zeros(np.shape(c)[:-1] + (0,), np.int64)
-    c = np.asarray(c)
-    qmax = qmax_of(b)
-    qmin = qmin_of(b, profile, ch, k)
-    emin, emax = exp_range(k, b, profile, ch)
-    peak = np.max(np.abs(c), axis=-1)
-    e0 = np.clip(np.ceil(np.log2(np.maximum(peak, 1e-300) / qmax)), emin, emax)
-    cg = c.reshape(c.shape[:-1] + (-1, group))
-
-    def candidate(e):
-        st = np.exp2(e)[..., None, None]
-        m0 = np.clip(np.round(cg / st), qmin, qmax)
-        m1 = np.clip(np.round(cg / (st * 0.5)), qmin, qmax)
-        err0 = np.sum((cg - m0 * st) ** 2, axis=-1)
-        err1 = np.sum((cg - m1 * st * 0.5) ** 2, axis=-1)
-        attn = (err1 < err0).astype(np.int64)
-        chosen = np.where(attn[..., None], m1, m0)
-        total = np.sum(np.minimum(err0, err1), axis=-1)
-        return chosen.reshape(c.shape).astype(np.int64), attn, total
-
-    m, a, err = candidate(e0)
-    if clip_opt:
-        e1 = np.maximum(e0 - 1, emin)
-        m1, a1, err1 = candidate(e1)
-        better = err1 < err
-        e0 = np.where(better, e1, e0)
-        m = np.where(better[..., None], m1, m)
-        a = np.where(better[..., None], a1, a)
-    return m, (e0 - emin).astype(np.int64), a
-
-
-def attenuator_expanded(attn, group, n):
-    """係数ごとの 0/1 減衰量。区間長0の帯域は全係数 0。"""
-    if not group:
-        return np.zeros(n, np.int64)
-    return np.repeat(np.asarray(attn, np.int64), group, axis=-1)
-
-
-def _step(m, eidx, emin):
-    """量子化ステップ。eidx はブロックで1つ (スカラー/(...)) か、係数ごと (m と同じ形)"""
-    st = np.exp2(np.asarray(eidx, dtype=float) + emin)
-    return st if st.shape == np.shape(m) else st[..., None]
-
-
-def dequantize(m, eidx, k, b, profile: Profile, ch="M", attn=None):
-    emin, _ = exp_range(k, b, profile, ch)
-    step = _step(m, eidx, emin)
-    if attn is not None:
-        step = step * np.exp2(-attenuator_expanded(attn, profile.attenuator_group(ch, k), np.shape(m)[-1]))
-    return m * step
-
-
-# ---------------------------------------------------------------- ブロック単位のエンコーダ / デコーダ
 
 class BlockData:
     """1ブロックぶんの量子化結果。mant[ch][k], eidx[ch][k] (0bit の帯域は None)"""
@@ -160,9 +52,94 @@ class BlockData:
         self.attn = attn if attn is not None else {ch: [None] * len(eidx[ch]) for ch in ("M", "S")}
 
 
+def attenuator_expanded(attn, group, n):
+    """係数ごとの 0/1 減衰量。区間長0の帯域は全係数 0。"""
+    if not group:
+        return np.zeros(n, np.int64)
+    return np.repeat(np.asarray(attn, np.int64), group, axis=-1)
+
+
+FRAC = 21                       # 係数の小数bit数 (±1 = 2^21)
+PCM_BITS = 24                   # PCM の幅 (符号つき)
+
+
+def haar_forward(x, levels):
+    a = saturate(np.asarray(x, np.int64))
+    details = []
+    for _ in range(levels):
+        e, o = a[..., 0::2], a[..., 1::2]
+        details.append(mac_sq2_inv(e, o, -1))
+        a = mac_sq2_inv(e, o, 1)
+    return [a] + details[::-1]
+
+
+def haar_inverse(bands):
+    a = bands[0]
+    for d in bands[1:]:
+        x = np.empty(a.shape[:-1] + (a.shape[-1] * 2,), np.int64)
+        x[..., 0::2] = mac_sq2_inv(a, d, 1)
+        x[..., 1::2] = mac_sq2_inv(a, d, -1)
+        a = x
+    return a
+
+
+def _shared_exponent(peak, qmax, emin, emax):
+    """peak <= qmax * 2^s を満たす最小の s から指数 e = s - FRAC を決め、[emin, emax] に収める"""
+    ratio = (peak + qmax - 1) // qmax                   # ceil(peak / qmax)
+    s = bit_length(np.maximum(ratio, 1) - 1)
+    return np.clip(s - FRAC, emin, emax)
+
+
+def quantize(c, k, b, profile: Profile, clip_opt=True, ch="M"):
+    """整数係数 c (..., ncoef) → (仮数 m, 指数インデックス, アッテネータ)。アッテネータの定義は gracefm.profiles の attenuator_group で決まる"""
+    c = np.asarray(c, np.int64)
+    group = profile.attenuator_group(ch, k)
+    qmax, qmin = qmax_of(b), qmin_of(b, profile, ch, k)
+    emin, emax = exp_range(k, b, profile, ch)
+    peak = np.abs(c).max(axis=-1)
+    e_floor = max(emin, 1 - FRAC)                       # 刻みの最小は s = 1
+    e0 = _shared_exponent(peak, qmax, e_floor, emax)
+    cg = c.reshape(c.shape[:-1] + (-1, group)) if group else c[..., None, :]
+
+    err_shift = np.maximum(e0 + FRAC - ERR_FRAC_BITS, 0)[..., None, None]     # 候補どうしで同じ尺度の誤差を比べる
+
+    def candidate(e):
+        s = (e + FRAC)[..., None, None]
+        m0 = np.clip(round_shift(cg, s), qmin, qmax)
+        err0 = sq_err_sum(cg - (m0 << s), err_shift)
+        if not group:
+            return m0.reshape(c.shape), np.zeros(c.shape[:-1] + (0,), np.int64), err0.sum(axis=-1)
+        m1 = np.clip(round_shift(cg, s - 1), qmin, qmax)
+        err1 = sq_err_sum(cg - (m1 << (s - 1)), err_shift)
+        attn = (err1 < err0).astype(np.int64)
+        chosen = np.where(attn[..., None], m1, m0)
+        return chosen.reshape(c.shape), attn, np.minimum(err0, err1).sum(axis=-1)
+
+    m, a, err = candidate(e0)
+    if clip_opt:
+        e1 = np.maximum(e0 - 1, e_floor)
+        m1, a1, err1 = candidate(e1)
+        better = err1 < err
+        e0 = np.where(better, e1, e0)
+        m = np.where(better[..., None], m1, m)
+        a = np.where(better[..., None], a1, a)
+    return m.astype(np.int64), (e0 - emin).astype(np.int64), a
+
+
+def dequantize(m, eidx, k, b, profile: Profile, ch="M", attn=None):
+    emin, _ = exp_range(k, b, profile, ch)
+    s = int(eidx) + emin + FRAC
+    if attn is None or not len(attn):
+        return saturate(shift_signed(m, s))
+    group = profile.attenuator_group(ch, k)
+    shift = s - np.repeat(np.asarray(attn, np.int64), group, axis=-1)
+    return saturate(shift_signed(m, shift))
+
+
 def encode_block(x, profile: Profile, clip_opt=True) -> BlockData:
-    """x: (block, 2) L/R, 振幅は ±1 以内"""
-    ms = {"M": (x[:, 0] + x[:, 1]) / 2, "S": (x[:, 0] - x[:, 1]) / 2}
+    """x: (block, 2) の L/R、符号つき24 bit整数 (|x| < 2^23)"""
+    x = np.asarray(x, np.int64)
+    ms = {"M": (x[:, 0] + x[:, 1] + 4) >> 3, "S": (x[:, 0] - x[:, 1] + 4) >> 3}      # 24 bit PCM → 21 bit小数 (M=(L+R)/2)
     mant, eidx, attn = {}, {}, {}
     for ch, bits in (("M", profile.bits_m), ("S", profile.bits_s)):
         bands = haar_forward(ms[ch], profile.levels)
@@ -173,43 +150,43 @@ def encode_block(x, profile: Profile, clip_opt=True) -> BlockData:
                 eidx[ch].append(None)
                 attn[ch].append(None)
                 continue
-            m, e, a = quantize_attenuated(c, k, b, profile, clip_opt, ch)
+            m, e, a = quantize(c, k, b, profile, clip_opt, ch)
             mant[ch].append(m)
             eidx[ch].append(int(e))
             attn[ch].append(a)
     return BlockData(mant, eidx, attn)
 
 
-def decode_coeffs(bd: BlockData, profile: Profile):
-    """BlockData → {ch: [帯域係数]}"""
-    coefs = {}
-    for ch, bits in (("M", profile.bits_m), ("S", profile.bits_s)):
-        coefs[ch] = []
-        for k, b in enumerate(bits):
-            n = profile.ncoef(k)
-            if b == 0:
-                coefs[ch].append(np.zeros(n))
-                continue
-            coefs[ch].append(dequantize(bd.mant[ch][k], np.int64(bd.eidx[ch][k]), k, b, profile, ch, bd.attn[ch][k]))
-    return coefs
-
-
-def ms_to_lr(M, S):
-    return np.stack([M + S, M - S], axis=-1)
-
-
 def decode_block(bd: BlockData, profile: Profile):
-    """BlockData → (block, 2) L/R"""
+    """BlockData → (block, 2) の L/R、符号つき24 bit整数"""
     coefs = decode_coeffs(bd, profile)
     return ms_to_lr(haar_inverse(coefs["M"]), haar_inverse(coefs["S"]))
 
 
 def roundtrip(x, profile: Profile):
-    """通信路なしの符号化と復号 (ブロックごと)。x は (n, 2) の L/R"""
-    nfr = int(np.ceil(len(x) / profile.block))
-    xp = np.pad(x, ((0, nfr * profile.block - len(x)), (0, 0)))
+    """通信路なしの符号化と復号 (ブロックごと)。x は (n, 2) の符号つき24 bit整数"""
+    n = profile.block
+    nfr = -(-len(x) // n)
+    xp = np.pad(np.asarray(x, np.int64), ((0, nfr * n - len(x)), (0, 0)))
     out = np.zeros_like(xp)
     for i in range(nfr):
-        out[i * profile.block:(i + 1) * profile.block] = decode_block(
-            encode_block(xp[i * profile.block:(i + 1) * profile.block], profile), profile)
+        out[i * n:(i + 1) * n] = decode_block(encode_block(xp[i * n:(i + 1) * n], profile), profile)
     return out[:len(x)]
+
+
+def decode_coeffs(bd: BlockData, profile: Profile):
+    """BlockData → {ch: [帯域係数 (整数、小数21 bit)]}"""
+    coefs = {}
+    for ch, bits in (("M", profile.bits_m), ("S", profile.bits_s)):
+        coefs[ch] = []
+        for k, b in enumerate(bits):
+            if b == 0:
+                coefs[ch].append(np.zeros(profile.ncoef(k), np.int64))
+            else:
+                coefs[ch].append(dequantize(bd.mant[ch][k], bd.eidx[ch][k], k, b, profile, ch, bd.attn[ch][k]))
+    return coefs
+
+
+def ms_to_lr(M, S):
+    """M/S (小数21 bit) → L/R (符号つき24 bit PCM)。L = M + S、R = M - S"""
+    return saturate_bits(np.stack([(M + S) << 2, (M - S) << 2], axis=-1), PCM_BITS)
