@@ -27,6 +27,12 @@ def saturate(v):
     return np.clip(v, MULT_MIN, MULT_MAX)
 
 
+def saturate_bits(v, bits):
+    """符号つき bits bit に飽和させる (対称: ±(2^(bits-1) - 1))"""
+    lim = (1 << (bits - 1)) - 1
+    return np.clip(v, -lim, lim)
+
+
 def mac_sq2_inv(p, q, sign=1):
     """(p + sign*q) / √2。p*C + sign*q*C をアキュムレータで足し合わせ、四捨五入して右シフトする"""
     acc = np.asarray(p, np.int64) * SQ2_INV + sign * np.asarray(q, np.int64) * SQ2_INV
@@ -55,3 +61,17 @@ def bit_length(n):
     for k in range(48):
         out += (n >> k) > 0
     return out
+
+
+ERR_FRAC_BITS = 8               # 誤差の二乗和を取るときの相対精度 (量子化刻みに対する bit 数)
+
+
+def sq_err_sum(err, shift):
+    """
+    誤差 err の二乗和 (最後の軸で足す)。乗算器は 25 bit × 18 bit なので、err を右シフトして 18 bit符号つきに
+    切り詰めてから二乗する (二乗は 18 × 18 bit)。shift は量子化刻みの bit 数から ERR_FRAC_BITS を引いた値 (0 以上)。
+    刻みの異なる候補を比べるときは、同じ shift を使う。
+    """
+    r = np.clip(np.asarray(err, np.int64) >> np.asarray(shift, np.int64),
+                -(1 << (CONST_BITS - 1)), (1 << (CONST_BITS - 1)) - 1)
+    return np.sum(r * r, axis=-1)

@@ -13,10 +13,11 @@ BlockData は gracefm.codec と同じなので、フレーム化 (framing)・変
 import numpy as np
 
 from .codec import BlockData, exp_range, qmax_of, qmin_of
-from .dsp import bit_length, mac_sq2_inv, round_shift, saturate, shift_signed
+from .dsp import ERR_FRAC_BITS, bit_length, mac_sq2_inv, round_shift, saturate, saturate_bits, shift_signed, sq_err_sum
 from .profiles import Profile
 
 FRAC = 21                       # 係数の小数bit数 (±1 = 2^21)
+PCM_BITS = 24                   # PCM の幅 (符号つき)
 
 
 def haar_forward_int(x, levels):
@@ -57,14 +58,16 @@ def quantize_int(c, k, b, profile: Profile, clip_opt=True, ch="M"):
     e0 = _shared_exponent(peak, qmax, e_floor, emax)
     cg = c.reshape(c.shape[:-1] + (-1, group)) if group else c[..., None, :]
 
+    err_shift = np.maximum(e0 + FRAC - ERR_FRAC_BITS, 0)[..., None, None]     # 候補どうしで同じ尺度の誤差を比べる
+
     def candidate(e):
         s = (e + FRAC)[..., None, None]
         m0 = np.clip(round_shift(cg, s), qmin, qmax)
-        err0 = np.sum((cg - (m0 << s)) ** 2, axis=-1)
+        err0 = sq_err_sum(cg - (m0 << s), err_shift)
         if not group:
             return m0.reshape(c.shape), np.zeros(c.shape[:-1] + (0,), np.int64), err0.sum(axis=-1)
         m1 = np.clip(round_shift(cg, s - 1), qmin, qmax)
-        err1 = np.sum((cg - (m1 << (s - 1))) ** 2, axis=-1)
+        err1 = sq_err_sum(cg - (m1 << (s - 1)), err_shift)
         attn = (err1 < err0).astype(np.int64)
         chosen = np.where(attn[..., None], m1, m0)
         return chosen.reshape(c.shape), attn, np.minimum(err0, err1).sum(axis=-1)
@@ -122,8 +125,7 @@ def decode_block_int(bd: BlockData, profile: Profile):
             else:
                 bands.append(dequantize_int(bd.mant[ch][k], bd.eidx[ch][k], k, b, profile, ch, bd.attn[ch][k]))
         out[ch] = haar_inverse_int(bands)
-    lim = (1 << 23) - 1
-    return np.clip(np.stack([(out["M"] + out["S"]) << 2, (out["M"] - out["S"]) << 2], axis=-1), -lim, lim)
+    return saturate_bits(np.stack([(out["M"] + out["S"]) << 2, (out["M"] - out["S"]) << 2], axis=-1), PCM_BITS)
 
 
 def roundtrip_int(x, profile: Profile):
