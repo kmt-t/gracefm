@@ -1,91 +1,69 @@
-"""Static multipath at the RRC matched-filter output and a trained MMSE equalizer.
-
-The channel impulse response is obtained from the transmit/receive RRC pair at
-eight samples per symbol, then sampled at symbol times. Convolution with this
-response is equivalent to pulse shaping, a static linear channel, matched
-filtering and ideal timing recovery. Noise is added at the matched-filter
-output with the requested Es/N0. Carrier and timing acquisition are outside
-this model.
 """
-from __future__ import annotations
+訓練つきの MMSE 等化器 (静的な通信路)。すべて整数演算。シンボルは (n, 2) の整数 (Q FRAC)、複素数は (実部, 虚部) の組。
 
+通信路は、フレーム先頭の既知のシンボル (プリアンブルとヘッダの位相部) を使った最小二乗法で推定する (過去のフレームだけ)。
+正規方程式 (XᴴX + 正則化) h = Xᴴ y は gracefm.linalg の整数コレスキー分解で解く。等化器の重みも、通信路のタップから
+(HᴴH + σ²I) w = Hᴴ d を同じソルバで解いて作り、先読み量 (0〜max_lookahead) は予測誤差が最小のものを選ぶ。
+FIR は重みを DSP の乗算器の幅に収まる Q14 の整数にして畳み込む (gracefm.dsp)。判定指向の再推定を passes 回行う。
+通信路のモデル (RRC の応答、エコー、雑音) は評価の道具 tools/sim/multipath.py にある。
+"""
 import numpy as np
-from scipy.interpolate import CubicSpline
-from scipy.signal import fftconvolve
 
 from . import fec, modem
+from .dsp import saturate
 from .layout import Layout, int_bits
+from .linalg import FRAC as W_FRAC, hermitian_solve
 from .profiles import Profile
-from .pulse import rrc_taps
 
-
-def matched_channel_taps(profile: Profile, paths=(), rf_offset_hz=0.0, sps=8):
-    """Return (lags, taps) for a unit direct path and (delay_s, dB, phase) echoes.
-
-    The phase of an echo at another carrier is phase - 2*pi*rf_offset_hz*delay_s.
-    C/N0 is referenced to the direct path, so no received-power normalization
-    is performed after adding echoes.
-    """
-    from .channel import symbol_rate
-
-    paths = tuple(paths)
-    rs = symbol_rate(profile)
-    root = rrc_taps(profile.pulse_beta, sps, profile.pulse_span)
-    pulse = np.convolve(root, root[::-1])
-    t = (np.arange(len(pulse)) - (len(pulse) - 1) / 2) / sps
-    interp = CubicSpline(t, pulse, extrapolate=False)
-    max_delay = max((delay * rs for delay, _, _ in paths), default=0.0)
-    lags = np.arange(-profile.pulse_span, profile.pulse_span + int(np.ceil(max_delay)) + 1)
-
-    def sample(at):
-        out = interp(at)
-        return np.where(np.isfinite(out), out, 0.0)
-
-    taps = sample(lags).astype(complex)
-    for delay, rel_db, phase in paths:
-        if delay < 0:
-            raise ValueError("echo delay must be nonnegative")
-        gain = 10 ** (rel_db / 20) * np.exp(1j * (phase - 2 * np.pi * rf_offset_hz * delay))
-        taps += gain * sample(lags - delay * rs)
-    return lags, taps
-
-
-def through_matched_channel(frames, profile: Profile, esn0_db, paths=(),
-                            rf_offset_hz=0.0, seed=1):
-    """Transmit continuous frames through static RRC multipath and AWGN.
-
-    Returns received frames and the noiseless symbol-spaced channel. A fixed
-    seed makes comparisons between equalized and unequalized reception paired.
-    """
-    symbols = np.concatenate(frames)
-    lags, taps = matched_channel_taps(profile, paths, rf_offset_hz)
-    y = fftconvolve(symbols, taps, mode="full")[int(-lags[0]):int(-lags[0]) + len(symbols)]
-    n0 = 10 ** (-esn0_db / 10)
-    rng = np.random.default_rng(seed)
-    y += np.sqrt(n0 / 2) * (rng.standard_normal(len(y)) + 1j * rng.standard_normal(len(y)))
-    return y.reshape(len(frames), len(frames[0])), (lags, taps)
+CORR_SHIFT = 11                     # 相関を取る前にシンボルを Q10 に縮める
+FIR_FRAC = 14                       # FIR の重みの小数bit数 (18 bit符号つきに収まる)
 
 
 def header_training_symbols(profile: Profile, stream_id: int, frame_no: int, encrypted=False):
-    """Preamble and expected header symbols (the parity-carrying phase of the first symbols), with known QAM signs only.
-
-    The frame counter must already be tracked for the header to be usable as
-    training. QAM position bits are payload; their axis amplitude is replaced
-    by its equally likely mean, and decision-directed training refines it.
-    """
+    """プリアンブルと、ヘッダの位相部の期待値 (QAM の符号が既知の分だけ) → (n, 2) の整数。
+    フレーム番号が追跡できていれば、ヘッダは訓練に使える。QAM の位置ビットは仮数なので、軸の大きさは等確率の平均で置き換える。"""
     width = Layout(profile, encrypted=encrypted).header_bits
     tag = int_bits(profile.format_id, 2)
-    header = (int_bits(profile.pid, 4) + int_bits(stream_id, 1) +
-              [int(encrypted)] + tag +
-              int_bits(frame_no & ((1 << (width - 8)) - 1), width - 8))
+    header = (int_bits(profile.pid, 4) + int_bits(stream_id, 1) + [int(encrypted)] + tag
+              + int_bits(frame_no & ((1 << (width - 8)) - 1), width - 8))
     # ヘッダのパリティは因果的 (t 番目のパリティは先頭 t+1 bit だけで決まる) なので、先頭のヘッダ bit 数ぶんの
     # パリティ = 先頭の width/2 シンボルの象限 (位相部) は、既知のヘッダだけから分かる。
     parity = fec.rsc_parity(np.asarray(header, np.int64))[0][:width]
     hp = parity ^ modem.prbs(len(parity))
-    half_axis = modem.HALF_AXIS_POINTS[profile.modulation]
-    amplitude = float(np.mean(modem._axis_pos(half_axis, profile.alpha if half_axis > 1 else 1.0)))
+    mags = modem.axis_points(profile.modulation, profile.alpha)[3]
+    amplitude = sum(mags) // len(mags)
     axis = (1 - 2 * hp) * amplitude
-    return np.concatenate([modem.PREAMBLE, axis[0::2] + 1j * axis[1::2]])
+    return np.concatenate([modem.PREAMBLE, np.stack([axis[0::2], axis[1::2]], axis=1)])
+
+
+def _normal_equations(X, y):
+    """X (rows, n, 2)、y (rows, 2) (Q10) → A = XᴴX の (実部, 虚部)、b = Xᴴ y の (実部, 虚部) (Q20)"""
+    xr, xi, yr, yi = X[..., 0], X[..., 1], y[:, 0], y[:, 1]
+    Ar = xr.T @ xr + xi.T @ xi
+    Ai = xr.T @ xi - xi.T @ xr
+    br = xr.T @ yr + xi.T @ yi
+    bi = xr.T @ yi - xi.T @ yr
+    return Ar, Ai, br, bi
+
+
+def _solve_taps(X, y):
+    """最小二乗の通信路タップ (n, 2) (Q W_FRAC) と、残差の電力 (Q20)"""
+    Ar, Ai, br, bi = _normal_equations(X, y)
+    top = int(max(Ar[i, i] for i in range(len(br))))
+    hr, hi = hermitian_solve(Ar.tolist(), Ai.tolist(), br.tolist(), bi.tolist(), ridge=top >> 24)
+    taps = np.stack([np.array(hr, np.int64), np.array(hi, np.int64)], axis=1)
+    xr, xi = X[..., 0], X[..., 1]
+    pr = xr @ taps[:, 0] - xi @ taps[:, 1]
+    pim = xr @ taps[:, 1] + xi @ taps[:, 0]
+    rr = (y[:, 0] << W_FRAC) - pr
+    ri = (y[:, 1] << W_FRAC) - pim
+    rr, ri = rr >> 20, ri >> 20                                  # 残差 (Q10 + Q24 = Q34) を Q14 に
+    noise = int((rr ** 2 + ri ** 2).sum() // len(y)) >> 8        # Q28 → Q20
+    return taps, noise
+
+
+def _q10(sym):
+    return np.asarray(sym, np.int64) >> CORR_SHIFT
 
 
 def _training_matrix(received, profile, stream_id, frame_numbers, lag_min, lag_max, encrypted):
@@ -98,46 +76,59 @@ def _training_matrix(received, profile, stream_id, frame_numbers, lag_min, lag_m
             raise ValueError("header exceeds frame length")
         for j in range(lag_max, len(pilot) + lag_min):
             rows.append(pilot[j - lags])
-            targets.append(received[frame_no, j])
-    return np.asarray(rows), np.asarray(targets)
+            targets.append(received[frame_no][j])
+    return _q10(np.asarray(rows)), _q10(np.asarray(targets))
 
 
 def estimate_channel(received, profile: Profile, stream_id=0, training_frames=100,
                      lag_min=-4, lag_max=10, encrypted=False):
-    """Causal calibration from the first training_frames, without payload symbols."""
+    """過去の training_frames フレームの既知シンボルだけから通信路を推定する (ペイロードは使わない)。
+    返り値: (ラグ, タップ (n, 2) Q24, 残差の電力 Q20)"""
     count = min(training_frames, len(received))
     if count < 1:
         raise ValueError("at least one training frame is required")
     X, y = _training_matrix(received, profile, stream_id, range(count), lag_min, lag_max, encrypted)
-    if len(X) < len(X[0]) or np.linalg.matrix_rank(X) < X.shape[1]:
+    if len(X) < X.shape[1]:
         raise ValueError("header training does not span the requested channel taps")
-    taps = np.linalg.lstsq(X, y, rcond=None)[0]
-    residual = y - X @ taps
-    return np.arange(lag_min, lag_max + 1), taps, float(np.mean(np.abs(residual) ** 2))
+    taps, noise = _solve_taps(X, y)
+    return np.arange(lag_min, lag_max + 1), taps, noise
 
 
 def design_mmse_equalizer(lags, taps, noise_power, ntaps=11, max_lookahead=4):
-    """Linear FIR with unity desired-tap gain; choose causal lookahead by MSE."""
+    """単位ゲインの FIR。因果的な先読み量は予測誤差で選ぶ。返り値: (先読み, 重み (ntaps, 2) Q24, 予測誤差 Q24)"""
     if ntaps < 1 or max_lookahead >= ntaps or noise_power < 0:
         raise ValueError("invalid equalizer size or noise power")
     best = None
     lo, hi = int(lags[0]), int(lags[-1])
+    noise_q24 = max(noise_power << 4, 1)
     for lead in range(max_lookahead + 1):
         q = np.arange(-lead, ntaps - lead)
-        effective_lags = np.arange(lo + q[0], hi + q[-1] + 1)
-        H = np.zeros((len(effective_lags), ntaps), complex)
+        eff = np.arange(lo + q[0], hi + q[-1] + 1)
+        H = np.zeros((len(eff), ntaps, 2), np.int64)
         for j, shift in enumerate(q):
-            src = effective_lags - shift
+            src = eff - shift
             valid = (src >= lo) & (src <= hi)
             H[valid, j] = taps[src[valid] - lo]
-        desired = (effective_lags == 0).astype(complex)
-        w = np.linalg.solve(H.conj().T @ H + max(noise_power, 1e-10) * np.eye(ntaps), H.conj().T @ desired)
-        response = H @ w
-        gain = response[np.flatnonzero(effective_lags == 0)[0]]
-        if abs(gain) < 1e-8:
+        zero = int(np.flatnonzero(eff == 0)[0])
+        hr, hi_ = H[..., 0], H[..., 1]
+        Ar = (hr.T @ hr + hi_.T @ hi_) >> W_FRAC
+        Ai = (hr.T @ hi_ - hi_.T @ hr) >> W_FRAC
+        br, bi = hr[zero].copy(), -hi_[zero]                        # Hᴴ d  (d は 0 ラグだけ 1)
+        wr, wi = hermitian_solve(Ar.tolist(), Ai.tolist(), br.tolist(), bi.tolist(), ridge=noise_q24)
+        w = np.stack([np.array(wr, np.int64), np.array(wi, np.int64)], axis=1)
+        gr = int((hr[zero] * w[:, 0] - hi_[zero] * w[:, 1]).sum() >> W_FRAC)
+        gi = int((hr[zero] * w[:, 1] + hi_[zero] * w[:, 0]).sum() >> W_FRAC)
+        mag2 = (gr * gr + gi * gi) >> W_FRAC
+        if mag2 < (1 << W_FRAC) >> 16:
             continue
-        w /= gain
-        mse = float(np.sum(np.abs(H @ w - desired) ** 2) + noise_power * np.sum(np.abs(w) ** 2))
+        nr = (w[:, 0] * gr + w[:, 1] * gi) >> W_FRAC                # w · conj(g)
+        ni = (w[:, 1] * gr - w[:, 0] * gi) >> W_FRAC
+        w = np.stack([(nr << W_FRAC) // mag2, (ni << W_FRAC) // mag2], axis=1)
+        rr = ((hr @ w[:, 0] - hi_ @ w[:, 1]) >> W_FRAC)
+        ri = ((hr @ w[:, 1] + hi_ @ w[:, 0]) >> W_FRAC)
+        rr[zero] -= 1 << W_FRAC
+        err = int(((rr >> 8) ** 2 + (ri >> 8) ** 2).sum())                         # Q32
+        mse = err + int((noise_q24 * ((w[:, 0] >> 8) ** 2 + (w[:, 1] >> 8) ** 2).sum()) >> W_FRAC)
         if best is None or mse < best[0]:
             best = mse, lead, w
     if best is None:
@@ -146,68 +137,62 @@ def design_mmse_equalizer(lags, taps, noise_power, ntaps=11, max_lookahead=4):
 
 
 def apply_equalizer(received, lead, weights):
-    flat = np.asarray(received).reshape(-1)
-    out = fftconvolve(flat, weights, mode="full")[lead:lead + len(flat)]
-    return out.reshape(np.shape(received))
+    """received (..., n, 2) を一列にして FIR を掛け、同じ形で返す。重みは Q14 に縮めて畳み込む"""
+    arr = np.asarray(received, np.int64)
+    flat = arr.reshape(-1, 2)
+    w = (np.asarray(weights, np.int64) + (1 << (W_FRAC - FIR_FRAC - 1))) >> (W_FRAC - FIR_FRAC)
+    xr, xi = flat[:, 0], flat[:, 1]
+    re = np.convolve(xr, w[:, 0]) - np.convolve(xi, w[:, 1])
+    im = np.convolve(xr, w[:, 1]) + np.convolve(xi, w[:, 0])
+    out = np.stack([re[lead:lead + len(flat)], im[lead:lead + len(flat)]], axis=1)
+    out = (out + (1 << (FIR_FRAC - 1))) >> FIR_FRAC
+    return saturate(out).reshape(arr.shape)
 
 
 def _slice_constellation(values, profile: Profile):
-    levels = modem.HALF_AXIS_POINTS[profile.modulation]
-    points = modem._axis_pos(levels, profile.alpha if levels > 1 else 1.0)
-    result = np.empty_like(values)
-    for v, out in ((values.real, result.real), (values.imag, result.imag)):
-        nearest = points[np.abs(np.abs(v)[:, None] - points).argmin(axis=1)]
-        out[:] = np.where(v < 0, -nearest, nearest)
+    """受信点 (n, 2) → 最も近い信号点 (n, 2)"""
+    vals = modem.axis_points(profile.modulation, profile.alpha)[0]
+    values = np.asarray(values, np.int64)
+    result = vals[np.abs(values[..., None] - vals[None, None, :]).argmin(axis=-1)]
     if profile.has_y:
         lay = Layout(profile)
         digital = modem.n_symbols(lay.n_tx, lay.n_strong, profile.modulation)
-        frame_len = len(modem.PREAMBLE) + digital + lay.n_y
+        frame_len = modem.N_PREAMBLE + digital + lay.n_y
         if len(result) % frame_len:
             raise ValueError("等化器の入力がフレーム長の整数倍ではありません")
-        src = np.asarray(values).reshape(-1, frame_len)
-        dst = result.reshape(-1, frame_len)
-        high = src[:, len(modem.PREAMBLE) + digital:]
-        dst[:, len(modem.PREAMBLE) + digital:] = modem.y_slice(
-            high, profile.y_amplitude, profile.y_bits - 1).reshape(high.shape)
+        src = values.reshape(-1, frame_len, 2)
+        dst = result.reshape(-1, frame_len, 2)
+        high = src[:, modem.N_PREAMBLE + digital:].reshape(-1, 2)
+        quadrant, level = modem.y_slice(high, profile.y_step, profile.y_bits - 1)
+        dst[:, modem.N_PREAMBLE + digital:] = modem.y_points(quadrant, level, profile.y_step, profile.y_bits - 1).reshape(-1, lay.n_y, 2)
     return result
 
 
 def refine_channel_decisions(received, profile: Profile, lags, taps, noise_power,
                              training_frames=100, ntaps=11, max_lookahead=4, passes=2):
-    """Refine static channel using decisions from calibration frames only."""
+    """較正用のフレームの判定結果を使って静的な通信路を精密化する"""
     count = min(training_frames, len(received))
-    flat = np.asarray(received[:count]).reshape(-1)
+    flat = np.asarray(received[:count]).reshape(-1, 2)
     frame_len = len(received[0])
     lag_min, lag_max = int(lags[0]), int(lags[-1])
     fitted = np.asarray(taps)
     for _ in range(passes):
         lead, w, _ = design_mmse_equalizer(lags, fitted, noise_power, ntaps, max_lookahead)
-        decisions = _slice_constellation(apply_equalizer(flat, lead, w), profile).reshape(count, frame_len)
-        decisions[:, :len(modem.PREAMBLE)] = modem.PREAMBLE
-        rows = []
-        target = []
+        decisions = _slice_constellation(apply_equalizer(flat, lead, w), profile).reshape(count, frame_len, 2)
+        decisions[:, :modem.N_PREAMBLE] = modem.PREAMBLE
+        rows, target = [], []
         for f in range(count):
             for j in range(lag_max, frame_len + lag_min):
                 rows.append(decisions[f, j - lags])
-                target.append(received[f, j])
-        X, y = np.asarray(rows), np.asarray(target)
-        candidate = np.linalg.lstsq(X, y, rcond=None)[0]
-        residual = y - X @ candidate
-        fitted = candidate
-        noise_power = float(np.mean(np.abs(residual) ** 2))
+                target.append(received[f][j])
+        fitted, noise_power = _solve_taps(_q10(np.asarray(rows)), _q10(np.asarray(target)))
     return fitted, noise_power
 
 
 def equalize_static(received, profile: Profile, stream_id=0, training_frames=100,
                     ntaps=11, max_lookahead=4, decision_passes=2, encrypted=False):
-    """Calibrate on past frames, then return equalized symbols and diagnostics.
-
-    Callers should evaluate only frames after training_frames; returning the
-    complete signal simplifies subsequent frame decoding and steady-state
-    benchmark cropping.
-    """
-    lags, taps, noise = estimate_channel(received, profile, stream_id, training_frames,
-                                         encrypted=encrypted)
+    """過去のフレームで較正し、等化後のシンボルと診断を返す。評価は training_frames より後のフレームで行うこと。"""
+    lags, taps, noise = estimate_channel(received, profile, stream_id, training_frames, encrypted=encrypted)
     if decision_passes:
         taps, noise = refine_channel_decisions(received, profile, lags, taps, noise,
                                                training_frames, ntaps, max_lookahead, decision_passes)
@@ -215,5 +200,4 @@ def equalize_static(received, profile: Profile, stream_id=0, training_frames=100
     output = apply_equalizer(received, lead, weights)
     return output, dict(training_frames=min(training_frames, len(received)), lookahead_symbols=lead,
                         residual_power=noise, predicted_mse=predicted_mse,
-                        channel_lags=lags.tolist(),
-                        channel_taps=[[float(z.real), float(z.imag)] for z in taps])
+                        channel_lags=lags.tolist(), channel_taps=taps.tolist())

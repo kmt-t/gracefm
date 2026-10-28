@@ -6,19 +6,19 @@ from gracefm.txrx import StreamDecoder, Transmitter
 
 
 class BaseLayerDecoder(StreamDecoder):
-    def soft_coeffs(self, bd, probabilities, high_ok=True):
+    def soft_coeffs(self, bd, probabilities, y_mant, y_var, high_ok=True):
         bd = copy.deepcopy(bd)
-        probabilities = np.array(probabilities, copy=True)
+        probabilities = np.array(probabilities, np.int64, copy=True)
         # soft_coeffs expects mantissas to contain the hard decisions for its probabilities.
-        # An erased bit has p=0.5 and hard decision 0, so clear that bit before taking its mean.
+        # An erased bit has p=0.5 (16384 in Q15) and hard decision 0, so clear that bit before taking its mean.
         for ch, k, j, pos in self.layout.coef_items[self.layout.n_base_bits:]:
             bits = self.p.bits_m if ch == "M" else self.p.bits_s
             offset = offset_of(bits[k], self.p, ch, k)
             value = int(bd.mant[ch][k][j]) + offset
             bd.mant[ch][k][j] = (value & ~(1 << pos)) - offset
         # Only the extension layer evidence is erased (the base layer stays in the strong positions).
-        probabilities[self.layout.n_base_bits:] = 0.5
-        return super().soft_coeffs(bd, probabilities, high_ok)
+        probabilities[self.layout.n_base_bits:] = 16384                    # 確率 0.5 (Q15)
+        return super().soft_coeffs(bd, probabilities, y_mant, y_var, high_ok)
 
 
 def base_layer_audio(audio, profile):

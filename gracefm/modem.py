@@ -1,19 +1,30 @@
 """
-変調と通信路モデル。
+変調と復調 (QPSK、階層16QAM、Y方式)。すべて整数演算。シンボルは (I, Q) の整数の組で、配列の形は (n, 2)。
+信号点は小数 FRAC bit の固定小数点 (±1 = 2^FRAC)、平均シンボルエネルギーは 1。
 
-QPSK (基本): 1シンボル = 2bit。ビット列を (I, Q, I, Q, ...) の順に各軸へ。bit0 → +, bit1 → −。
-階層 QAM (オプション): 各軸の点 = ±(α, α+2, ...), α=1 で通常の QAM。
-  16QAM: 1軸 = 符号 (HP) 1bit + 位置 (LP1) 1bit
-  ビット列は「全シンボルの HP 位置 → 全シンボルの LP1 位置 → LP2 位置」の順に埋める
-  (送信順の前方ほど強い位置に入る。保護部の符号化ビットは必ず HP 位置に収まる長さにする)。
-平均シンボルエネルギーは 1。フレーム先頭に既知のプリアンブル (QPSK 16シンボル) を付ける。
-プリアンブル以外のビット (端数の詰め物を含む) は、フレームごとに先頭から始める PRBS と排他的論理和をとって
-送る (スクランブル。送信スペクトルに線スペクトルが立たないようにする)。
+変調: ビット列 → (n, 2)。ビット列の並びは「全シンボルの強い位置 (符号) → 全シンボルの弱い位置 (位置の Gray 符号)」の順。
+  フレーム先頭に既知のプリアンブル (QPSK 16シンボル) を付ける。プリアンブル以外のビット (端数の詰め物を含む) は、
+  フレームごとに先頭から始める PRBS と排他的論理和をとって送る (スクランブル。送信スペクトルに線スペクトルが立たないように)。
+復調: 軸ごとに独立な max-log の LLR (正 = 0 らしい) を整数で作る。LLR(bit) = (D1 - D0) / (2 σ²)。D は、そのビットが
+  1 / 0 の信号点のうち受信点に最も近いものとの距離の二乗 (乗算器の幅 18 bit に収めるため、距離は右シフトして二乗する)。
+  σ² (軸あたりの雑音分散) は、フレームごとに、受信点と最寄りの信号点との差から求める。
+Y方式 (QASK): 1係数 = 1シンボル。位相の2 bit は (仮数の最上位 bit, そのパリティ)、半径が残りの仮数 (lower_bits)。
+  象限は (パリティ → I軸の符号、最上位bit → Q軸の符号) に割り当てる。半径は、段 L に応じて (1 + a·(L - 中心)) / 規格化 で、
+  a は隣接する半径の段の間隔 (分数 num/den)。
+DSP に依存する幅は gracefm.dsp にある。
 """
+from math import isqrt
+
 import numpy as np
 
-PREAMBLE = np.array([1, 1, 1, -1, -1, 1, 1, -1, 1, -1, -1, -1, 1, 1, -1, 1], float)
-PREAMBLE = (PREAMBLE + 1j * np.roll(PREAMBLE, 5)) / np.sqrt(2)
+from .dsp import CONST_BITS
+
+FRAC = 21
+DIST_BITS = CONST_BITS - 1                      # 二乗する距離の幅 (符号を除く)
+DIST_SHIFT = FRAC + 1 - DIST_BITS               # 距離 (Q FRAC、最大 約±2) を DIST_BITS bit に収める右シフト
+LLR_BITS = 8
+LLR_MAX = (1 << (LLR_BITS - 1)) - 1
+LLR_FRAC = 2                                    # LLR の小数bit数 (整数 LLR = LLR × 2^LLR_FRAC)
 
 HALF_AXIS_POINTS = {"qpsk": 1, "qam16h": 2}
 
@@ -35,23 +46,44 @@ def prbs(n):
 
 
 def bits_per_symbol(mod):
-    L = HALF_AXIS_POINTS[mod]
-    return 2 * (1 + int(np.log2(L)))
+    return 2 * HALF_AXIS_POINTS[mod].bit_length()
 
 
 def n_symbols(n_tx, n_coded, mod):
     bps = bits_per_symbol(mod)
-    return int(max(np.ceil(n_tx / bps), np.ceil(n_coded / 2)))
+    return max(-(-n_tx // bps), -(-n_coded // 2))
 
 
-def _axis_pos(L, alpha):
-    pos = alpha + 2 * np.arange(L, dtype=float)
-    return pos / np.sqrt(np.mean(pos ** 2) * 2)
+INV_SQRT2 = isqrt(1 << (2 * FRAC - 1))          # 1/√2 を Q FRAC で
+
+PREAMBLE_BITS = np.array([1, 1, 1, -1, -1, 1, 1, -1, 1, -1, -1, -1, 1, 1, -1, 1], np.int64)
+PREAMBLE = np.stack([PREAMBLE_BITS * INV_SQRT2, np.roll(PREAMBLE_BITS, 5) * INV_SQRT2], axis=1)    # (16, 2)
+N_PREAMBLE = len(PREAMBLE)
 
 
-def modulate(bits, nsym, mod="qpsk", alpha=1.0):
+def axis_points(mod, alpha):
+    """1軸の信号点の値 (整数、Q FRAC)、ラベル (符号ビット, 位置ビット...)、位置ビット数、大きさの表、Gray→位置の表。alpha は整数"""
     L = HALF_AXIS_POINTS[mod]
-    nlp = int(np.log2(L)) if L > 1 else 0
+    a = alpha if L > 1 else 1
+    nlp = L.bit_length() - 1
+    pos = [a + 2 * i for i in range(L)]
+    r = isqrt(((2 * sum(p * p for p in pos)) << (2 * FRAC)) // L)       # √(2 × 平均エネルギー) × 2^FRAC
+    mags = [(p << (2 * FRAC)) // r for p in pos]
+    vals, labels = [], []
+    for hp in (0, 1):
+        for idx in range(L):
+            g = idx ^ (idx >> 1)
+            vals.append((1 - 2 * hp) * mags[idx])
+            labels.append([hp] + [(g >> (nlp - 1 - j)) & 1 for j in range(nlp)])
+    g2i = [0] * L
+    for i in range(L):
+        g2i[i ^ (i >> 1)] = i
+    return np.array(vals, np.int64), np.array(labels, np.int64), nlp, mags, g2i
+
+
+def modulate(bits, nsym, mod="qpsk", alpha=1):
+    """ビット列 → (n, 2) の整数。プリアンブル (N_PREAMBLE シンボル) を先頭に付ける"""
+    _, _, nlp, mags, g2i = axis_points(mod, alpha)
     nslot = 2 * nsym
     buf = np.zeros(nslot * (1 + nlp), np.int64)
     buf[: len(bits)] = bits
@@ -59,106 +91,60 @@ def modulate(bits, nsym, mod="qpsk", alpha=1.0):
     code = np.zeros(nslot, np.int64)
     for j in range(nlp):
         code = (code << 1) | buf[nslot * (1 + j): nslot * (2 + j)]
-    g2i = np.zeros(max(L, 1), np.int64)
-    for i in range(L):
-        g2i[i ^ (i >> 1)] = i
-    v = np.where(hp == 1, -1.0, 1.0) * _axis_pos(L, alpha if L > 1 else 1.0)[g2i[code]]
-    return np.concatenate([PREAMBLE, v[0::2] + 1j * v[1::2]])
+    mag = np.array(mags, np.int64)[np.array(g2i, np.int64)[code]]
+    v = np.where(hp == 1, -mag, mag)
+    return np.concatenate([PREAMBLE, np.stack([v[0::2], v[1::2]], axis=1)])
 
 
-def demodulate(sym, n_bits, mod="qpsk", alpha=1.0):
-    """返り値: (軟値 [HP 位置のみ, 送信順], 硬判定ビット [全位置, 送信順])"""
-    L = HALF_AXIS_POINTS[mod]
-    nlp = int(np.log2(L)) if L > 1 else 0
-    s = sym[len(PREAMBLE):]
-    nslot = 2 * len(s)
-    v = np.empty(nslot)
-    v[0::2] = s.real
-    v[1::2] = s.imag
-    hard = np.zeros(nslot * (1 + nlp), np.int64)
-    hard[:nslot] = v < 0
-    if nlp:
-        pos = _axis_pos(L, alpha)
-        idx = np.abs(np.abs(v)[:, None] - pos).argmin(axis=1)
-        g = idx ^ (idx >> 1)
-        for j in range(nlp):
-            hard[nslot * (1 + j): nslot * (2 + j)] = (g >> (nlp - 1 - j)) & 1
-    return v, hard[:n_bits]
+def _sq(d):
+    """距離 d (Q FRAC) の二乗。乗算器の幅に収めるため、d を右シフトして DIST_BITS bit にしてから二乗する"""
+    r = np.clip(d >> DIST_SHIFT, -(1 << DIST_BITS), (1 << DIST_BITS) - 1)
+    return r * r
 
 
-def _axis_points(mod, alpha):
-    """1軸の信号点の値と、そのビットのラベル (象限ビット, 位置ビット1, 2, ...)"""
-    L = HALF_AXIS_POINTS[mod]
-    nlp = int(np.log2(L)) if L > 1 else 0
-    pos = _axis_pos(L, alpha if L > 1 else 1.0)
-    vals, labels = [], []
-    for hp in (0, 1):
-        for idx in range(L):
-            g = idx ^ (idx >> 1)
-            vals.append((1 - 2 * hp) * pos[idx])
-            labels.append([hp] + [(g >> (nlp - 1 - j)) & 1 for j in range(nlp)])
-    return np.array(vals), np.array(labels), nlp
-
-
-def bit_probs(sym, n_bits, mod="qpsk", alpha=1.0):
+def demodulate(sym, n_bits, mod="qpsk", alpha=1):
     """
-    各ビットが 1 である事後確率 (送信順) と、保護部のビタビに渡す対数尤度比 (正 = 0 らしい)。
-
-    受信点を複素平面 (I, Q) の 2次元で扱い、雑音を 2変量正規分布 N(0, Σ) とする。Σ (2×2) はフレームごとに、
-    各受信点と最寄りの信号点の差から推定する (I と Q の雑音の大きさの違いや相関も含む)。
-    各シンボルについて全信号点の尤度 exp(-½ dᵀ Σ⁻¹ d) を求め、ビットごとに「そのビットが 1 の点」の
-    尤度の和の割合を事後確率とする (信号点は等確率と仮定)。
+    プリアンブルを除いた (n, 2) の受信シンボル → (LLR (整数、送信順)、硬判定ビット、軸あたりの雑音分散)
+    分散の単位は、距離を DIST_SHIFT bit 縮めた単位の二乗。
     """
-    s = sym[len(PREAMBLE):]
-    y = np.stack([s.real, s.imag], axis=1)
-    v, lab, nlp = _axis_points(mod, alpha)
-    # 最寄りの信号点 (軸ごと) との差から共分散を推定
-    near = np.stack([v[np.abs(y[:, a][:, None] - v[None, :]).argmin(1)] for a in (0, 1)], axis=1)
-    r = y - near
-    cov = r.T @ r / len(r) + np.eye(2) * 1e-6
-    ic = np.linalg.inv(cov)
-    P = np.array([(vi, vq) for vi in v for vq in v])                     # 2次元の信号点
-    LI = np.repeat(lab, len(v), axis=0)                                  # I 軸のラベル
-    LQ = np.tile(lab, (len(v), 1))                                       # Q 軸のラベル
-    d = y[:, None, :] - P[None, :, :]
-    ll = -0.5 * np.einsum("nmi,ij,nmj->nm", d, ic, d)
-    ll -= ll.max(axis=1, keepdims=True)
-    w = np.exp(ll)
-    tot = w.sum(axis=1)
-    nsym = len(s)
+    vals, lab, nlp = axis_points(mod, alpha)[:3]
+    y = np.asarray(sym, np.int64)                                # (n, 2)
+    nsym = len(y)
+    near = vals[np.abs(y[..., None] - vals[None, None, :]).argmin(axis=-1)]
+    var = max(int(_sq(y - near).sum() // max(2 * nsym, 1)), 1)
+    dist = _sq(y[..., None] - vals[None, None, :])               # (n, 2, 2L)
     nslot = 2 * nsym
-    p1 = np.zeros(nslot * (1 + nlp))
+    llr = np.zeros(nslot * (1 + nlp), np.int64)
+    hard = np.zeros(nslot * (1 + nlp), np.int64)
+    best = np.argmin(dist, axis=-1)                              # (n, 2)
+    big = np.iinfo(np.int64).max
     for level in range(1 + nlp):
-        for axis, Lab in ((0, LI), (1, LQ)):
-            pr = (w * (Lab[:, level] == 1)[None, :]).sum(axis=1) / tot
-            p1[nslot * level + axis: nslot * (level + 1): 2] = pr
-    p1 = np.clip(p1[:n_bits], 1e-12, 1 - 1e-12)
-    llr = np.log((1 - p1) / p1)
-    return p1, llr
+        bit1 = (lab[:, level] == 1)
+        d1 = np.where(bit1[None, None, :], dist, big).min(axis=-1)
+        d0 = np.where(~bit1[None, None, :], dist, big).min(axis=-1)
+        llr[nslot * level: nslot * (level + 1)] = np.clip(((d1 - d0) << LLR_FRAC) // (2 * var), -LLR_MAX, LLR_MAX).reshape(-1)
+        hard[nslot * level: nslot * (level + 1)] = lab[best, level].reshape(-1)
+    return llr[:n_bits], hard[:n_bits], var
 
 
-def awgn(sym, snr_db, rng):
-    """Es/N0 = snr_db の複素白色雑音"""
-    n0 = 10 ** (-snr_db / 10)
-    return sym + (rng.normal(0, np.sqrt(n0 / 2), sym.shape)
-                  + 1j * rng.normal(0, np.sqrt(n0 / 2), sym.shape))
-
-
-def y_scale(amplitude, lower_bits=6):
-    """全点の平均シンボルエネルギーを1にする半径の倍率。"""
-    levels = 1 << lower_bits
-    radii = 1 + amplitude * (np.arange(levels) - (levels - 1) / 2)
-    return float(np.sqrt(np.mean(radii ** 2)))
-
-
-# Y方式 (QASK): 1係数 = 1複素シンボル。位相の2bitは (仮数の最上位bit, そのパリティ)、半径が残りの仮数 (lower_bits)。
-# 位相は象限を (パリティ → I軸の符号, 最上位bit → Q軸の符号) に割り当てるので、1bitの誤りは隣の象限に当たる。
-_QUADRANT = np.array([0, 1, 3, 2])          # 2*最上位bit + パリティ → 象限番号 (位相 = π/4 + 象限·π/2)
+# ---------------------------------------------------------------- Y方式 (QASK)
+_QUADRANT = np.array([0, 1, 3, 2])          # 2*最上位bit + パリティ → 象限番号 (0: ++, 1: -+, 2: --, 3: +-)
 _QUADRANT_BITS = np.argsort(_QUADRANT)      # 象限番号 → 2*最上位bit + パリティ
+_QUADRANT_SIGN = np.array([[1, 1], [-1, 1], [-1, -1], [1, -1]], np.int64)       # 象限番号 → (I, Q) の符号
 
 
-def y_modulate(u, parity, amplitude=0.08, scramble=None, lower_bits=6):
-    """u = 最上位bit·2^lower_bits + 半径の段 (0〜2^(lower_bits+1)-1)、parity = 最上位bitのパリティ (0/1)。"""
+def y_radii(step, lower_bits=6):
+    """半径の段 L = 0 … 2^lower_bits - 1 の半径 (Q FRAC)。step = (分子, 分母)"""
+    num, den = step
+    levels = 1 << lower_bits
+    scale = isqrt((((12 * den * den + num * num * (levels * levels - 1)) << (2 * FRAC)) // (12 * den * den)))
+    ls = np.arange(levels, dtype=np.int64)
+    top = 2 * den + num * (2 * ls - (levels - 1))
+    return (top << (2 * FRAC)) // (2 * den * scale), scale
+
+
+def y_modulate(u, parity, step=(2, 105), scramble=None, lower_bits=6):
+    """u = 最上位bit·2^lower_bits + 半径の段 (0〜2^(lower_bits+1)-1)、parity = 最上位bitのパリティ (0/1) → (n, 2)"""
     u = np.asarray(u, np.int64)
     parity = np.asarray(parity, np.int64)
     levels = 1 << lower_bits
@@ -172,85 +158,91 @@ def y_modulate(u, parity, amplitude=0.08, scramble=None, lower_bits=6):
         msb = msb ^ mask[:, 0]
         parity = parity ^ mask[:, 1]
         L = np.where(mask[:, 2] != 0, levels - 1 - L, L)
-    theta = np.pi / 4 + _QUADRANT[2 * msb + parity] * np.pi / 2
-    radius = (1 + amplitude * (L - (levels - 1) / 2)) / y_scale(amplitude, lower_bits)
-    return radius * np.exp(1j * theta)
+    radius = y_radii(step, lower_bits)[0][L]
+    sign = _QUADRANT_SIGN[_QUADRANT[2 * msb + parity]]
+    return np.stack([sign[:, 0] * radius, sign[:, 1] * radius], axis=1) * INV_SQRT2 >> FRAC
 
 
-def _y_candidates(y, amplitude, lower_bits):
-    """4つの象限それぞれを仮定したときの (射影した半径, 接線方向の誤差, 二乗誤差)。"""
-    levels = 1 << lower_bits
-    center = (levels - 1) / 2
-    scale = y_scale(amplitude, lower_bits)
-    rmin, rmax = (1 - center * amplitude) / scale, (1 + center * amplitude) / scale
-    unit = np.exp(1j * (np.pi / 4 + np.arange(4) * np.pi / 2))
-    rotated = y[:, None] * np.conj(unit)[None, :]
-    proj, tangent = rotated.real, rotated.imag
-    err2 = (proj - np.clip(proj, rmin, rmax)) ** 2 + tangent ** 2
-    return proj, tangent, err2, scale, center
+def _magnitude(y):
+    """|z| (Q FRAC)。距離を DIST_SHIFT bit 縮めて二乗和の整数平方根を取る (ハードウェアでは CORDIC など)"""
+    r = y >> DIST_SHIFT
+    return isqrt_array((r * r).sum(axis=-1)) << DIST_SHIFT
 
 
-def _y_sigma2(y, tangent, err2, preamble):
-    """既知プリアンブルと、最良の象限での接線方向の残差から、複素雑音の1軸分散を推定する。"""
-    best = np.argmin(err2, axis=1)
-    pilot_var = 0.0 if preamble is None else float(np.mean(np.abs(np.asarray(preamble) - PREAMBLE) ** 2) / 2)
-    tangent_var = float(np.median(tangent[np.arange(len(y)), best] ** 2)) / 0.455 if len(y) else 0.0
-    return max(1e-10, (pilot_var + tangent_var) / 2)
+def isqrt_array(v):
+    return np.array([isqrt(int(x)) for x in np.asarray(v).reshape(-1)], np.int64).reshape(np.shape(v))
 
 
-def y_phase_llr(symbols, amplitude=0.08, scramble=None, preamble=None, lower_bits=6):
-    """専用シンボルの位相だけから、最上位bitとパリティの対数尤度比 (正 = 0 らしい) と1軸の雑音分散を返す。"""
-    y = np.asarray(symbols, complex)
+def y_slice(values, step=(2, 105), lower_bits=6):
+    """受信点を最も近いY方式の信号点 (象限・半径の段) に判定する → (象限番号, 半径の段)。スクランブルの影響を受けない"""
+    y = np.asarray(values, np.int64)
+    quadrant = np.where(y[:, 0] >= 0, np.where(y[:, 1] >= 0, 0, 3), np.where(y[:, 1] >= 0, 1, 2))
+    radii = y_radii(step, lower_bits)[0]
+    mag = _magnitude(y)
+    level = np.abs(mag[:, None] - radii[None, :]).argmin(axis=1)
+    return quadrant, level
+
+
+def y_points(quadrant, level, step=(2, 105), lower_bits=6):
+    """象限番号と半径の段 → 信号点 (n, 2) (Q FRAC)"""
+    radius = y_radii(step, lower_bits)[0][np.asarray(level, np.int64)]
+    sign = _QUADRANT_SIGN[np.asarray(quadrant, np.int64)]
+    return (sign * radius[:, None] * INV_SQRT2) >> FRAC
+
+
+def y_phase_llr(sym, step=(2, 105), scramble=None, var=1, lower_bits=6):
+    """
+    専用シンボルの位相だけから、最上位bitとパリティの LLR (整数、正 = 0 らしい) を返す。
+    象限は (パリティ → I軸の符号、最上位bit → Q軸の符号) なので、2 つの bit は独立で、LLR = 2 · 軸の値 · (半径/√2) / σ²。
+    半径は受信点の大きさを、取りうる範囲に制限した値。var は軸あたりの雑音分散 (demodulate と同じ単位)。
+    """
+    y = np.asarray(sym, np.int64)
     mask = np.zeros((len(y), 3), np.int64) if scramble is None else np.asarray(scramble, np.int64).reshape(-1, 3)
     if len(mask) != len(y):
         raise ValueError("スクランブル長が係数数と一致しません")
-    _, tangent, err2, _, _ = _y_candidates(y, amplitude, lower_bits)
-    sigma2 = _y_sigma2(y, tangent, err2, preamble)
-    w = np.exp(-np.clip((err2 - err2.min(axis=1, keepdims=True)) / (2 * sigma2), 0, 700))
-    w /= w.sum(axis=1, keepdims=True)
-    sent = _QUADRANT_BITS[None, :]                       # (1, 4): 各象限で送られた 2*msb+parity
-    msb_true = (sent >> 1) ^ mask[:, :1]
-    par_true = (sent & 1) ^ mask[:, 1:2]
-    p_msb = np.clip((w * msb_true).sum(axis=1), 1e-9, 1 - 1e-9)
-    p_par = np.clip((w * par_true).sum(axis=1), 1e-9, 1 - 1e-9)
-    return np.log((1 - p_msb) / p_msb), np.log((1 - p_par) / p_par), sigma2
+    radii = y_radii(step, lower_bits)[0]
+    r = np.clip(_magnitude(y), radii[0], radii[-1])
+    unit = (r * INV_SQRT2) >> FRAC                                  # 1軸の大きさ (Q FRAC)
+    llr_par = np.clip(((((y[:, 0] >> DIST_SHIFT) * (unit >> DIST_SHIFT)) << (LLR_FRAC + 1)) // max(var, 1)), -LLR_MAX, LLR_MAX)
+    llr_msb = np.clip(((((y[:, 1] >> DIST_SHIFT) * (unit >> DIST_SHIFT)) << (LLR_FRAC + 1)) // max(var, 1)), -LLR_MAX, LLR_MAX)
+    # 送信側で msb・parity をスクランブルのマスクで反転しているので、LLR の符号も戻す
+    llr_msb = np.where(mask[:, 0] == 1, -llr_msb, llr_msb)
+    llr_par = np.where(mask[:, 1] == 1, -llr_par, llr_par)
+    return llr_msb, llr_par
 
 
-def y_demodulate(symbols, msb, parity, amplitude=0.08, scramble=None,
-                      preamble=None, lower_bits=6, phase_only=False):
+MANT_FRAC = 1                                                           # Y の半径の推定値の小数bit数 (段 6 bit + 小数 1 bit = 7 bit)
+
+
+def y_demodulate(sym, msb, parity, step=(2, 105), scramble=None, var=1, lower_bits=6, phase_only=False):
     """
-    最上位bitとパリティ (ヘッダ部のFECで確定した値) を使って象限を決め、半径の連続推定値と分散を返す。
-    返り値: (u = 最上位bit·2^lower_bits + 半径の段の推定値, 半径の段の分散, 1軸の雑音分散)
+    最上位bitとパリティ (ヘッダ部のFECで確定した値) で象限を決め、半径の段の推定値を返す。
+    返り値: (u = 最上位bit·2^lower_bits + 半径の段の推定値 (小数 MANT_FRAC bit の整数), 半径の段の誤差分散 (同じ小数bit数の二乗))
+    段の推定値は、受信から求めた観測値を、取りうる段の一様な事前分布へ向けて縮める (ウィナー型): 利得 = 事前分散 / (事前分散 + 雑音)。
     """
-    y = np.asarray(symbols, complex)
+    y = np.asarray(sym, np.int64)
     msb = np.asarray(msb, np.int64)
     parity = np.asarray(parity, np.int64)
     if len(y) != len(msb) or len(y) != len(parity):
-        raise ValueError("高域シンボル数が一致しません")
+        raise ValueError("Y帯域のシンボル数が一致しません")
     mask = np.zeros((len(y), 3), np.int64) if scramble is None else np.asarray(scramble, np.int64).reshape(-1, 3)
-    if len(mask) != len(y):
-        raise ValueError("スクランブル長が係数数と一致しません")
-    proj, tangent, err2, scale, center = _y_candidates(y, amplitude, lower_bits)
     levels = 1 << lower_bits
+    radii, scale = y_radii(step, lower_bits)
     quadrant = _QUADRANT[2 * (msb ^ mask[:, 0]) + (parity ^ mask[:, 1])]
-    rows = np.arange(len(y))
-    sigma2 = _y_sigma2(y, tangent, err2, preamble)
-    obs_l = (proj[rows, quadrant] * scale - 1) / amplitude + center
-    obs_l = np.where(mask[:, 2] != 0, levels - 1 - obs_l, obs_l)
-    noise_l = sigma2 * scale ** 2 / amplitude ** 2
-    prior_var = (levels ** 2 - 1) / 12
-    gain = 0.0 if phase_only else prior_var / (prior_var + noise_l)
-    l_est = np.clip(center + gain * (obs_l - center), 0, levels - 1)
-    return msb * levels + l_est, np.full(len(y), gain * noise_l), sigma2
-
-
-def y_slice(values, amplitude=0.08, lower_bits=6):
-    """受信点を最も近いY方式の信号点 (象限・半径の段) に判定する。スクランブルの影響を受けない。"""
-    y = np.asarray(values, complex)
-    levels = 1 << lower_bits
-    center = (levels - 1) / 2
-    scale = y_scale(amplitude, lower_bits)
-    quadrant = np.mod(np.rint((np.angle(y) - np.pi / 4) / (np.pi / 2)).astype(np.int64), 4)
-    radial = np.clip(np.rint((np.abs(y) * scale - 1) / amplitude + center), 0, levels - 1)
-    radius = (1 + amplitude * (radial - center)) / scale
-    return radius * np.exp(1j * (np.pi / 4 + quadrant * np.pi / 2))
+    sign = _QUADRANT_SIGN[quadrant]
+    proj = ((sign[:, 0] * y[:, 0] + sign[:, 1] * y[:, 1]) * INV_SQRT2) >> FRAC          # 象限の軸への射影 (Q FRAC)
+    num, den = step
+    # 観測された段 = (proj × scale − 1) / a + 中心。a = num/den、中心 = (levels − 1)/2。小数 MANT_FRAC bit
+    scaled = (proj * scale) >> FRAC                                                     # proj × scale (Q FRAC)
+    obs = ((((scaled - (1 << FRAC)) * den) << MANT_FRAC) + ((num << FRAC) >> 1)) // (num << FRAC) + (((levels - 1) << MANT_FRAC) >> 1)
+    obs = np.where(mask[:, 2] != 0, ((levels - 1) << MANT_FRAC) - obs, obs)
+    center = ((levels - 1) << MANT_FRAC) >> 1
+    # 雑音の段あたりの分散 = σ² × scale² / a² (σ² は demodulate と同じ単位 → Q FRAC の二乗へ戻す)
+    sigma2 = (max(var, 1) << (2 * DIST_SHIFT))                                          # (Q FRAC)² 単位
+    noise = ((sigma2 >> FRAC) * ((scale * scale) >> FRAC) >> FRAC) * den * den // (num * num)
+    noise_l = (noise << (2 * MANT_FRAC)) >> FRAC                                       # 段² を小数 MANT_FRAC 桁の二乗で
+    prior = ((levels * levels - 1) << (2 * MANT_FRAC)) // 12
+    gain = 0 if phase_only else (prior << 15) // (prior + noise_l + 1)                 # Q15
+    est = np.clip(center + ((gain * (obs - center) + (1 << 14)) >> 15), 0, (levels - 1) << MANT_FRAC)
+    variance = (gain * noise_l) >> 15
+    return (msb * levels << MANT_FRAC) + est, np.full(len(y), variance, np.int64)

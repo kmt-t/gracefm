@@ -20,39 +20,40 @@
 処理時間を 0 とすると、1系統も 2系統も D = 2B (蓄積 B + 直列化 B。系統 B の待ちは生じない)。
 """
 from dataclasses import dataclass
-
-import numpy as np
+from fractions import Fraction
+from typing import Optional
 
 from .profiles import Profile
 
 
 @dataclass
 class Timing:
-    t_enc: float = 0.0       # 符号化・フレーム化 [s]
-    t_filt: float = 0.0      # 送受信フィルタと等化器の先読みの遅延 [s]
-    t_dec: float = 0.0       # 復調・復号 [s]
-    t_out: float = 0.0       # 融合・PLC・出力バッファ [s]
-    t_filt_b: float | None = None  # 副系が異なるシンボルレート・フィルタを使うとき [s]
+    t_enc: Fraction = Fraction(0)       # 符号化・フレーム化 [s]
+    t_filt: Fraction = Fraction(0)      # 送受信フィルタと等化器の先読みの遅延 [s]
+    t_dec: Fraction = Fraction(0)       # 復調・復号 [s]
+    t_out: Fraction = Fraction(0)       # 融合・PLC・出力バッファ [s]
+    t_filt_b: Optional[Fraction] = None  # 副系が異なるシンボルレート・フィルタを使うとき [s]
 
 
 def frame_times(profile: Profile, stream: str, nframes: int, tm: Timing = Timing()):
     """系統 'A' / 'B' のフレームごとの時刻 [s] (dict of arrays)"""
-    B = profile.block / profile.fs
-    j = np.arange(nframes)
-    start = j * B
-    cap_end = start + B
-    tx_start = cap_end + tm.t_enc
-    tx_end = tx_start + B                          # T_ser = B
+    B = Fraction(profile.block, profile.fs)
     filter_delay = tm.t_filt_b if stream == "B" and tm.t_filt_b is not None else tm.t_filt
-    rx_end = tx_end + filter_delay
-    done = rx_end + tm.t_dec
-    return {"start": start, "capture_end": cap_end, "tx_start": tx_start, "tx_end": tx_end,
-            "rx_end": rx_end, "decoded": done}
+    out = {k: [] for k in ("start", "capture_end", "tx_start", "tx_end", "rx_end", "decoded")}
+    for j in range(nframes):
+        start = j * B
+        cap_end = start + B
+        tx_start = cap_end + tm.t_enc
+        tx_end = tx_start + B                      # T_ser = B
+        rx_end = tx_end + filter_delay
+        for k, v in zip(out, (start, cap_end, tx_start, tx_end, rx_end, rx_end + tm.t_dec)):
+            out[k].append(v)
+    return out
 
 
 def units(profile: Profile, two_streams: bool, nunits: int):
     """出力ブロックごとに (原音での開始時刻, 使う A のフレーム, 使う B のフレーム一覧)"""
-    B = profile.block / profile.fs
+    B = Fraction(profile.block, profile.fs)
     return [(j * B, [j], [j] if two_streams else []) for j in range(nunits)]
 
 
@@ -61,7 +62,7 @@ def min_latency(profile: Profile, two_streams=True, tm: Timing = Timing(), nunit
     n = nunits + 4
     tA = frame_times(profile, "A", n, tm)["decoded"]
     tB = frame_times(profile, "B", n, tm)["decoded"]
-    need = 0.0
+    need = Fraction(0)
     for t0, fa, fb in units(profile, two_streams, nunits):
         ready = max([tA[i] for i in fa] + [tB[i] for i in fb]) + tm.t_out
         need = max(need, ready - t0)
@@ -73,7 +74,7 @@ def rrc_equalizer_delay(profile: Profile, lookahead_symbols=0):
     from .channel import symbol_rate
     if lookahead_symbols < 0:
         raise ValueError("lookahead_symbols must be nonnegative")
-    return (profile.pulse_span + lookahead_symbols) / symbol_rate(profile)
+    return Fraction(profile.pulse_span + lookahead_symbols, symbol_rate(profile))
 
 
 def waveform_timing(main: Profile, sub: Profile | None = None, lookahead_symbols=4):

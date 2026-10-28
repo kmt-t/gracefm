@@ -10,12 +10,20 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from gracefm import modem  # noqa: E402
 from gracefm.crypto import StreamCipher  # noqa: E402
-from gracefm.equalizer import (equalize_static, estimate_channel, header_training_symbols,
-                               matched_channel_taps, through_matched_channel)  # noqa: E402
+from gracefm.equalizer import equalize_static, estimate_channel, header_training_symbols  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
-from gracefm.pulse import rrc_taps  # noqa: E402
 from gracefm.timing import min_latency, waveform_timing  # noqa: E402
 from gracefm.txrx import Transmitter  # noqa: E402
+from tools.common.pulse import rrc_taps  # noqa: E402
+from tools.sim.multipath import matched_channel_taps, through_matched_channel  # noqa: E402
+
+ONE = float(1 << modem.FRAC)
+
+
+def _complex(sym):
+    """試験用: 整数のシンボル (..., 2) → 複素数 (±1)"""
+    s = np.asarray(sym) / ONE
+    return s[..., 0] + 1j * s[..., 1]
 
 
 def test_header_training_matches_transmitted_quadrants():
@@ -25,25 +33,23 @@ def test_header_training_matches_transmitted_quadrants():
         transmitter = Transmitter(p, sid)
         pilot = header_training_symbols(p, sid, 7)
         transmitter.frame_no = 7
-        transmitted = transmitter.frame(np.zeros((p.block, 2)))
-        assert np.array_equal(pilot[:len(modem.PREAMBLE)], transmitted[:len(modem.PREAMBLE)])
-        actual = transmitted[len(modem.PREAMBLE):len(pilot)]
-        expected = pilot[len(modem.PREAMBLE):]
-        assert np.array_equal(np.sign(actual.real), np.sign(expected.real))
-        assert np.array_equal(np.sign(actual.imag), np.sign(expected.imag))
+        transmitted = transmitter.frame(np.zeros((p.block, 2), np.int64))
+        assert np.array_equal(pilot[:modem.N_PREAMBLE], transmitted[:modem.N_PREAMBLE])
+        actual = transmitted[modem.N_PREAMBLE:len(pilot)]
+        expected = pilot[modem.N_PREAMBLE:]
+        assert np.array_equal(np.sign(actual), np.sign(expected))
         if p.modulation == "qpsk":
-            assert np.allclose(actual, expected)
+            assert np.array_equal(actual, expected)
 
     p = PROFILES["B200M"]
     cipher = StreamCipher(bytes(range(16)), bytes(8))
     transmitter = Transmitter(p, 0, cipher=cipher)
     transmitter.frame_no = 7
     pilot = header_training_symbols(p, 0, 7, encrypted=True)
-    transmitted = transmitter.frame(np.zeros((p.block, 2)))
-    actual = transmitted[len(modem.PREAMBLE):len(pilot)]
-    expected = pilot[len(modem.PREAMBLE):]
-    assert np.array_equal(np.sign(actual.real), np.sign(expected.real))
-    assert np.array_equal(np.sign(actual.imag), np.sign(expected.imag))
+    transmitted = transmitter.frame(np.zeros((p.block, 2), np.int64))
+    actual = transmitted[modem.N_PREAMBLE:len(pilot)]
+    expected = pilot[modem.N_PREAMBLE:]
+    assert np.array_equal(np.sign(actual), np.sign(expected))
 
 
 def test_frequency_separation_can_align_the_same_fade():
@@ -60,9 +66,9 @@ def test_symbol_channel_matches_shaped_fractional_delay_waveform():
     from gracefm.channel import symbol_rate
 
     p = PROFILES["B200M"]
-    symbols = np.concatenate(Transmitter(p).run(np.zeros((p.block * 30, 2))))
+    symbols = _complex(np.concatenate(Transmitter(p).run(np.zeros((p.block * 30, 2), np.int64))))
     sps = 8
-    pulse = rrc_taps(p.pulse_beta, sps, p.pulse_span)
+    pulse = rrc_taps(p.pulse_beta_pct / 100, sps, p.pulse_span)
     up = np.zeros((len(symbols) + p.pulse_span + 2) * sps, complex)
     up[::sps][:len(symbols)] = symbols
     shaped = lfilter(pulse, 1, up)
@@ -79,20 +85,20 @@ def test_symbol_channel_matches_shaped_fractional_delay_waveform():
 
 def test_trained_equalizer_removes_static_echo_without_future_training():
     p = PROFILES["B200M"]
-    frames = Transmitter(p).run(np.zeros((p.block * 150, 2)))
+    frames = Transmitter(p).run(np.zeros((p.block * 150, 2), np.int64))
     y, _ = through_matched_channel(frames, p, 24.0, ((5e-6, -10, np.pi / 3),))
     direct, _ = through_matched_channel(frames, p, 24.0)
-    s = np.asarray(frames)
-    assert np.mean(np.abs(direct[100:] - s[100:]) ** 2) < 0.006
+    s = _complex(np.asarray(frames))
+    assert np.mean(np.abs(_complex(direct[100:]) - s[100:]) ** 2) < 0.006
     lags, taps, noise = estimate_channel(y, p, training_frames=100)
     changed = y.copy()
     changed[100:] = 0
     lags2, taps2, noise2 = estimate_channel(changed, p, training_frames=100)
     assert np.array_equal(lags, lags2)
-    assert np.allclose(taps, taps2) and np.isclose(noise, noise2)
+    assert np.array_equal(taps, taps2) and noise == noise2                 # 較正は過去のフレームだけを使う
     equalized, diag = equalize_static(y, p, training_frames=100)
-    raw_error = np.mean(np.abs(y[100:] - s[100:]) ** 2)
-    eq_error = np.mean(np.abs(equalized[100:] - s[100:]) ** 2)
+    raw_error = np.mean(np.abs(_complex(y[100:]) - s[100:]) ** 2)
+    eq_error = np.mean(np.abs(_complex(equalized[100:]) - s[100:]) ** 2)
     assert diag["lookahead_symbols"] <= 4
     assert eq_error < raw_error / 5
 
@@ -100,10 +106,10 @@ def test_trained_equalizer_removes_static_echo_without_future_training():
 def test_filter_and_equalizer_delay_is_accounted_per_stream():
     mono, sub = PROFILES["B200M"], PROFILES["SUB50M"]
     tm = waveform_timing(mono, sub, lookahead_symbols=4)
-    assert np.isclose(min_latency(mono, True, tm) * 1000, 4.3278689, atol=1e-5)
+    assert np.isclose(float(min_latency(mono, True, tm) * 1000), 4.3278689, atol=1e-5)
     stereo, sub_st = PROFILES["B200"], PROFILES["SUB100"]
     ts = waveform_timing(stereo, sub_st, lookahead_symbols=4)
-    assert np.isclose(min_latency(stereo, True, ts) * 1000, 4.2272727, atol=1e-5)
+    assert np.isclose(float(min_latency(stereo, True, ts) * 1000), 4.2272727, atol=1e-5)
 
 
 if __name__ == "__main__":

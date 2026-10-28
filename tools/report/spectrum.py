@@ -32,7 +32,7 @@ from gracefm import channel  # noqa: E402
 from tools.common import wavio  # noqa: E402
 from tools.common.analog_fm import AnalogFM  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
-from gracefm.pulse import shape  # noqa: E402
+from tools.common.pulse import shape  # noqa: E402
 from gracefm.txrx import Transmitter  # noqa: E402
 from gracefm.codec import roundtrip as codec  # noqa: E402
 from tools.common.demo_signal import make_demo  # noqa: E402
