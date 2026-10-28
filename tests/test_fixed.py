@@ -57,3 +57,22 @@ def test_encoder_output_is_block_data_with_integer_fields():
     assert isinstance(bd, BlockData)
     assert all(isinstance(e, int) for e in bd.eidx["M"] if e is not None)
     assert decode_block_int(bd, p).dtype == np.int64
+
+
+def test_hardware_modules_contain_no_floating_point():
+    """ハードウェア向けのモジュールでは float を使わない (リテラル、float 型、真の除算、浮動小数点の関数)"""
+    import ast
+    import pathlib
+    forbidden_names = {"float", "float32", "float64", "sqrt", "log", "log2", "exp", "exp2", "sin", "cos", "rint",
+                       "mean", "std", "power", "pi", "nan", "inf"}
+    root = pathlib.Path(__file__).resolve().parents[1] / "gracefm"
+    for name in ("dsp.py", "fixed.py", "fec_fixed.py"):
+        tree = ast.parse((root / name).read_text())
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Constant) and isinstance(node.value, float):
+                raise AssertionError(f"{name}:{node.lineno} float literal {node.value}")
+            if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+                raise AssertionError(f"{name}:{node.lineno} true division")
+            ident = node.attr if isinstance(node, ast.Attribute) else node.id if isinstance(node, ast.Name) else None
+            if ident in forbidden_names:
+                raise AssertionError(f"{name}:{node.lineno} forbidden name {ident}")
