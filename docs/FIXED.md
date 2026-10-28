@@ -2,7 +2,7 @@
 
 ハードウェアに載せるための、整数だけで動く参照実装の仕様である。**この文書の幅と演算は、想定する DSP（Zynq-7010 の DSP48E1）に依存する**。ハードウェアが変わるときは、DSP に依存する演算を集めた [`gracefm/dsp.py`](../gracefm/dsp.py) の幅と関数だけを差し替える。
 
-**float は使わない。** ハードウェア向けのモジュール（`dsp.py`、`fixed.py`、`fec_fixed.py`）には、float のリテラル、float 型、真の除算、浮動小数点の関数を書かない。`tests/test_fixed.py` が検査する。浮動小数点の参照実装（`codec.py` など）は、設計の評価用で、ハードウェアの仕様ではない。
+**float は使わない。** ハードウェア向けのモジュール（`dsp.py`、`fixed.py`、`fec_fixed.py`、`modem_fixed.py`）には、float のリテラル、float 型、真の除算、浮動小数点の関数を書かない。`tests/test_fixed.py` が検査する。浮動小数点の参照実装（`codec.py` など）は、設計の評価用で、ハードウェアの仕様ではない。
 
 ## 1. 想定ハードウェアと制約
 
@@ -41,7 +41,8 @@
 | DSP 依存の演算 | [`gracefm/dsp.py`](../gracefm/dsp.py) |
 | 固定小数点コーデック | [`gracefm/fixed.py`](../gracefm/fixed.py)（`encode_block_int`、`decode_block_int`、`roundtrip_int`） |
 | 整数ビタビ | [`gracefm/fec_fixed.py`](../gracefm/fec_fixed.py)（`viterbi_decode_int`、`rsc_decode_int`） |
-| 検査 | [`tests/test_fixed.py`](../tests/test_fixed.py)（乗数の幅、Haar が 25 bit に収まること、全プロファイルの SNR）、[`tests/test_fec_fixed.py`](../tests/test_fec_fixed.py)（整数ビタビ） |
+| 整数の変調・復調 | [`gracefm/modem_fixed.py`](../gracefm/modem_fixed.py)（`modulate`、`demodulate`） |
+| 検査 | [`tests/test_fixed.py`](../tests/test_fixed.py)（乗数の幅、Haar が 25 bit に収まること、全プロファイルの SNR）、[`tests/test_fec_fixed.py`](../tests/test_fec_fixed.py)（整数ビタビ）、[`tests/test_modem_fixed.py`](../tests/test_modem_fixed.py)（整数の変調・復調） |
 
 `BlockData` は浮動小数点の参照実装と同じ形で、フレーム化・変調以降はそのまま使える。
 
@@ -50,6 +51,13 @@
 - 軟値は符号つき 6 bit（±31）の整数 LLR（正 = 0 らしい）。経路メトリックは符号つき 12 bit で、毎ステップで最大値を引いて正規化し、範囲に飽和させる。到達できない状態は最小値から始める。
 - 枝メトリックは、期待される符号（±1）と 2 つの軟値の和・差だけで作る。**乗算を使わず**、加算・比較・選択だけなので、DSP48E1 の乗算器は要らない（加算はロジックまたは DSP のアキュムレータで書ける）。
 - LLR を 6 bit に量子化したときの復号を、雑音を加えた符号語で検査した（σ = 0.7、40 フレーム × 120 bit）。軟判定は誤りが 0 個、硬判定（±1）は誤り率 3.0% だった。他の C/N0 や LLR の幅（4〜8 bit）で、復号がどれだけ変わるかは測っていない。
+
+### 3.2 整数の変調・復調
+
+- 信号点は小数 21 bit の整数（±1 = 2^21、平均シンボルエネルギー 1）。平均エネルギーの正規化は整数の平方根（`isqrt`）で行い、定数は起動時に整数だけで作る。α は整数（5 または 1）。
+- LLR は軸ごとに独立な max-log で作る: LLR = (D1 − D0) / (2σ²)。D は、そのビットが 1 / 0 の信号点のうち最も近いものとの距離の二乗。距離は右シフトして 17 bit にしてから二乗する（二乗は 18 bit の乗算器の幅に収まる）。LLR は小数 2 bit の 6 bit 整数（±31）。
+- σ²（軸あたりの雑音分散）は、受信点と最寄りの信号点の差の二乗平均から、フレームごとに求める。I と Q の雑音の相関と大きさの違いは見ない（共分散行列の逆行列は使わない）。
+- 検査は、無雑音で完全に戻ること、雑音のもとで LLR の符号が硬判定と一致すること、誤りが少ないことである。**通信路を通した品質（ViSQOL）は、まだ測っていない。**
 
 ## 4. 評価（通信路なし、元の音源との比較）
 
@@ -68,4 +76,4 @@
 
 ## 5. 未実装
 
-- 12 bit IQ を入力とする受信側のうち、ビタビ以外（ADC の量子化、AGC、RRC 整合フィルタ、等化器、シンボル判定と LLR の生成、融合、LPC 補間）。
+- 12 bit IQ を入力とする受信側のうち、ビタビと変調・復調以外（ADC の 24 bit 化と AGC、RRC 整合フィルタ、等化器、仮数の期待値による復号と誤差分散、Y 帯域の復調、融合、LPC 補間、ポストフィルタ）。

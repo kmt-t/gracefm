@@ -66,7 +66,7 @@ def test_hardware_modules_contain_no_floating_point():
     forbidden_names = {"float", "float32", "float64", "sqrt", "log", "log2", "exp", "exp2", "sin", "cos", "rint",
                        "mean", "std", "power", "pi", "nan", "inf"}
     root = pathlib.Path(__file__).resolve().parents[1] / "gracefm"
-    for name in ("dsp.py", "fixed.py", "fec_fixed.py"):
+    for name in ("dsp.py", "fixed.py", "fec_fixed.py", "modem_fixed.py", "link_fixed.py"):
         tree = ast.parse((root / name).read_text())
         for node in ast.walk(tree):
             if isinstance(node, ast.Constant) and isinstance(node.value, float):
