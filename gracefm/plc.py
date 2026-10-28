@@ -8,16 +8,33 @@ LPC は、ハン窓をかけた履歴の自己相関 (窓かけ後の値を 15 b
 import numpy as np
 
 from .dsp import bit_length, saturate_bits
-from .tables import HANN128_Q15
+from .tables import HANN_2COS_Q28
 
 PCM_BITS = 24
+
+
+_HANN = None
+
+
+def _hann128():
+    """ハン窓 128 点 (Q15)。cos の漸化式 (整数、Q28) で作る。表は使わない"""
+    global _HANN
+    if _HANN is None:
+        one, c = 1 << 28, HANN_2COS_Q28
+        prev, cur = one, c >> 1                                          # cos(0), cos(θ)
+        cosines = [prev, cur]
+        for _ in range(126):
+            prev, cur = cur, ((c * cur) >> 28) - prev
+            cosines.append(cur)
+        _HANN = np.array([(one - v) >> 14 for v in cosines], np.int64)    # 0.5 (1 - cos) を Q15 で
+    return _HANN
 
 
 def lpc(x, order):
     """x: 整数の履歴 → LPC 係数 a[0..order] (Q15、a[0] = 1)"""
     x = np.asarray(x, np.int64)
     n = len(x)
-    hann = np.array(HANN128_Q15, np.int64)
+    hann = _hann128()
     win = hann[(np.arange(n) * (len(hann) - 1)) // max(n - 1, 1)]
     w = (x * win) >> 15
     shift = max(0, int(bit_length(np.array([np.abs(w).max()]))[0]) - 15)           # 15 bit に正規化 (積は 30 bit)
