@@ -14,7 +14,7 @@ K=1 なら基本層 2N-1、拡張層 2N）。
 """
 from dataclasses import replace
 
-from .framing import YLayout, Layout
+from .layout import Layout
 from .profiles import Profile, default_split
 
 
@@ -28,7 +28,7 @@ def _bands(p: Profile):
 def solve(p: Profile):
     """p の全幅・FEC・変調はそのままに、釣り合う基本層 (位相部に置く仮数bit。パリティを除く) のbit数 (base_m, base_s) を返す"""
     bands = _bands(p)
-    lay = (YLayout if p.has_y else Layout)(p)
+    lay = Layout(p)
     n_x = 0                                      # ヘッダと終端は位相部と振幅部に同数ずつ置くので差に効かない
     # S - W = n_x + Σ n (2 a + K - w) を 0 に近づける。状態 = Σ n (2 a + K - w)。
     target = -n_x
