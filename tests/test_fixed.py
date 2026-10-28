@@ -28,14 +28,14 @@ def test_multiplier_constant_fits_18_bit_signed():
 def test_haar_stays_within_multiplier_width_and_inverts():
     rng = np.random.default_rng(1)
     for levels in (4,):
-        x = rng.integers(-(1 << 21), 1 << 21, (50, 1 << levels * 2)).astype(np.int64)
+        x = rng.integers(-(1 << 22), 1 << 22, (50, 1 << levels * 2)).astype(np.int64)
         bands = haar_forward(x, levels)
         assert all(b.max() <= MULT_MAX and b.min() >= MULT_MIN for b in bands)
         y = haar_inverse(bands)
-        assert np.abs(y - x).max() <= 64                # 定数46341/65536の誤差 (約1e-6) と丸めの累積。21 bitの満点 2^21 に対し約 -90 dB 以下
-    full = np.full((1, 64), 1 << 21, np.int64)                  # 満点の直流: 最低域が最大 (4倍)
+        assert np.abs(y - x).max() <= 64                # 定数46341/65536の誤差 (約1e-6) と丸めの累積。22 bitの満点 2^22 に対し約 -96 dB 以下
+    full = np.full((1, 64), 1 << 22, np.int64)                  # 満点の直流: 最低域が最大 (4倍)
     peak = max(np.abs(b).max() for b in haar_forward(full, 4))
-    assert peak <= (1 << 23) + 64                               # 25 bitの上限 2^24 に届かず、飽和は起きない
+    assert peak <= (1 << 24) + 64                               # 満点の直流は 25 bitの上限 2^24 - 1 を 1 LSB (2^-22) だけ超え、飽和で切る
 
 
 def test_roundtrip_matches_original_audio_for_all_profiles():

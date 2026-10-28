@@ -27,8 +27,8 @@ def weight_a(la, lb):
 def _to_ms(y, ns, seg):
     """PCM (n, 2) → M/S (小数 FRAC bit、codec と同じ) の (ns, seg, 2)"""
     y = np.pad(y, ((0, ns * seg - len(y)), (0, 0)))
-    m = ((y[:, 0] + y[:, 1] + 4) >> 3).reshape(ns, seg)
-    s = ((y[:, 0] - y[:, 1] + 4) >> 3).reshape(ns, seg)
+    m = ((y[:, 0] + y[:, 1] + 2) >> 2).reshape(ns, seg)
+    s = ((y[:, 0] - y[:, 1] + 2) >> 2).reshape(ns, seg)
     return np.stack([m, s], axis=2)
 
 
