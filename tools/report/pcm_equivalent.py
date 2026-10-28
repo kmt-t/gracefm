@@ -67,6 +67,20 @@ def level_curve(name):
     return name, curve
 
 
+def floor_level(curve, source, target=20.0):
+    """波形SNRが target dB を下回り始める入力レベル [dB]。測定点の間は直線補間"""
+    points = sorted(((level, row[source]) for level, row in curve.items()), reverse=True)
+    for (l0, s0), (l1, s1) in zip(points, points[1:]):
+        if s0 >= target > s1:
+            return round(l0 + (l1 - l0) * (s0 - target) / (s0 - s1), 1)
+    return None
+
+
+def pcm_bits_at(level, target=20.0):
+    """1 kHz正弦波 (ピークが level dB) で SNR target dB を得るのに必要な理想PCMのbit数: SNR = 6.02 n + 1.76 + level"""
+    return round((target - 1.76 - level) / 6.02, 1)
+
+
 MAIN = ("B200M", "B200MY", "B200", "B200Y", "M700M", "M700MY", "M700", "M700Y")
 
 
@@ -77,6 +91,10 @@ def main():
     for r in rows:
         if r["name"] in curves:
             r["snr_by_input_level_db"] = curves[r["name"]]
+            sine = floor_level(curves[r["name"]], "sine_1khz")
+            r["floor_level_sine_db"] = sine
+            r["floor_level_piano_db"] = floor_level(curves[r["name"]], "piano")
+            r["pcm_bits_at_floor_sine"] = pcm_bits_at(sine)
     (ROOT / "docs/results/pcm_equivalent.json").write_text(json.dumps(rows, ensure_ascii=False, indent=2) + "\n")
     for r in rows:
         print(r["name"], r["audio_kbps"], r["compression_ratio"], r["snr_db"], r["pcm_bits"])
