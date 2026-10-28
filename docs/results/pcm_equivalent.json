@@ -12,6 +12,44 @@
       "demo": 63.4,
       "piano": 53.5,
       "percussion": 57.4
+    },
+    "snr_by_input_level_db": {
+      "0": {
+        "piano": 53.5,
+        "sine_1khz": 49.1
+      },
+      "-20": {
+        "piano": 53.6,
+        "sine_1khz": 47.1
+      },
+      "-40": {
+        "piano": 53.6,
+        "sine_1khz": 50.9
+      },
+      "-60": {
+        "piano": 47.4,
+        "sine_1khz": 50.4
+      },
+      "-80": {
+        "piano": 27.8,
+        "sine_1khz": 40.6
+      },
+      "-90": {
+        "piano": 20.0,
+        "sine_1khz": 29.6
+      },
+      "-100": {
+        "piano": 15.8,
+        "sine_1khz": 20.9
+      },
+      "-110": {
+        "piano": 12.9,
+        "sine_1khz": 13.0
+      },
+      "-120": {
+        "piano": 8.6,
+        "sine_1khz": 7.1
+      }
     }
   },
   {
@@ -27,6 +65,44 @@
       "demo": 62.1,
       "piano": 51.3,
       "percussion": 56.6
+    },
+    "snr_by_input_level_db": {
+      "0": {
+        "piano": 51.3,
+        "sine_1khz": 49.1
+      },
+      "-20": {
+        "piano": 51.3,
+        "sine_1khz": 47.1
+      },
+      "-40": {
+        "piano": 51.2,
+        "sine_1khz": 50.9
+      },
+      "-60": {
+        "piano": 44.3,
+        "sine_1khz": 50.4
+      },
+      "-80": {
+        "piano": 24.5,
+        "sine_1khz": 40.6
+      },
+      "-90": {
+        "piano": 16.6,
+        "sine_1khz": 29.6
+      },
+      "-100": {
+        "piano": 12.4,
+        "sine_1khz": 20.9
+      },
+      "-110": {
+        "piano": 10.8,
+        "sine_1khz": 13.0
+      },
+      "-120": {
+        "piano": 7.3,
+        "sine_1khz": 7.1
+      }
     }
   },
   {
@@ -42,6 +118,44 @@
       "demo": 63.4,
       "piano": 54.1,
       "percussion": 58.0
+    },
+    "snr_by_input_level_db": {
+      "0": {
+        "piano": 54.1,
+        "sine_1khz": 49.1
+      },
+      "-20": {
+        "piano": 54.2,
+        "sine_1khz": 47.1
+      },
+      "-40": {
+        "piano": 54.2,
+        "sine_1khz": 50.9
+      },
+      "-60": {
+        "piano": 50.9,
+        "sine_1khz": 50.6
+      },
+      "-80": {
+        "piano": 31.7,
+        "sine_1khz": 44.5
+      },
+      "-90": {
+        "piano": 22.1,
+        "sine_1khz": 34.6
+      },
+      "-100": {
+        "piano": 15.8,
+        "sine_1khz": 24.1
+      },
+      "-110": {
+        "piano": 12.9,
+        "sine_1khz": 13.5
+      },
+      "-120": {
+        "piano": 8.6,
+        "sine_1khz": 7.1
+      }
     }
   },
   {
@@ -57,6 +171,44 @@
       "demo": 62.0,
       "piano": 53.8,
       "percussion": 57.7
+    },
+    "snr_by_input_level_db": {
+      "0": {
+        "piano": 53.8,
+        "sine_1khz": 49.1
+      },
+      "-20": {
+        "piano": 53.9,
+        "sine_1khz": 47.1
+      },
+      "-40": {
+        "piano": 53.9,
+        "sine_1khz": 50.9
+      },
+      "-60": {
+        "piano": 49.3,
+        "sine_1khz": 50.6
+      },
+      "-80": {
+        "piano": 29.8,
+        "sine_1khz": 44.5
+      },
+      "-90": {
+        "piano": 20.7,
+        "sine_1khz": 34.6
+      },
+      "-100": {
+        "piano": 15.0,
+        "sine_1khz": 24.1
+      },
+      "-110": {
+        "piano": 12.2,
+        "sine_1khz": 13.5
+      },
+      "-120": {
+        "piano": 7.4,
+        "sine_1khz": 7.1
+      }
     }
   },
   {
@@ -102,6 +254,44 @@
       "demo": 61.5,
       "piano": 56.6,
       "percussion": 59.9
+    },
+    "snr_by_input_level_db": {
+      "0": {
+        "piano": 56.6,
+        "sine_1khz": 52.3
+      },
+      "-20": {
+        "piano": 56.6,
+        "sine_1khz": 54.4
+      },
+      "-40": {
+        "piano": 56.6,
+        "sine_1khz": 51.2
+      },
+      "-60": {
+        "piano": 47.6,
+        "sine_1khz": 54.3
+      },
+      "-80": {
+        "piano": 28.0,
+        "sine_1khz": 42.1
+      },
+      "-90": {
+        "piano": 22.0,
+        "sine_1khz": 29.4
+      },
+      "-100": {
+        "piano": 17.8,
+        "sine_1khz": 18.8
+      },
+      "-110": {
+        "piano": 15.2,
+        "sine_1khz": 16.5
+      },
+      "-120": {
+        "piano": 9.7,
+        "sine_1khz": 10.2
+      }
     }
   },
   {
@@ -117,6 +307,44 @@
       "demo": 40.4,
       "piano": 49.6,
       "percussion": 54.4
+    },
+    "snr_by_input_level_db": {
+      "0": {
+        "piano": 49.6,
+        "sine_1khz": 52.3
+      },
+      "-20": {
+        "piano": 49.6,
+        "sine_1khz": 54.4
+      },
+      "-40": {
+        "piano": 49.4,
+        "sine_1khz": 51.2
+      },
+      "-60": {
+        "piano": 36.1,
+        "sine_1khz": 54.3
+      },
+      "-80": {
+        "piano": 24.6,
+        "sine_1khz": 42.1
+      },
+      "-90": {
+        "piano": 18.0,
+        "sine_1khz": 29.4
+      },
+      "-100": {
+        "piano": 14.8,
+        "sine_1khz": 18.8
+      },
+      "-110": {
+        "piano": 13.2,
+        "sine_1khz": 16.5
+      },
+      "-120": {
+        "piano": 8.5,
+        "sine_1khz": 10.2
+      }
     }
   },
   {
@@ -132,6 +360,44 @@
       "demo": 61.3,
       "piano": 57.2,
       "percussion": 60.5
+    },
+    "snr_by_input_level_db": {
+      "0": {
+        "piano": 57.2,
+        "sine_1khz": 52.2
+      },
+      "-20": {
+        "piano": 57.2,
+        "sine_1khz": 54.3
+      },
+      "-40": {
+        "piano": 57.2,
+        "sine_1khz": 51.1
+      },
+      "-60": {
+        "piano": 51.4,
+        "sine_1khz": 54.2
+      },
+      "-80": {
+        "piano": 31.7,
+        "sine_1khz": 44.7
+      },
+      "-90": {
+        "piano": 23.0,
+        "sine_1khz": 33.6
+      },
+      "-100": {
+        "piano": 17.8,
+        "sine_1khz": 25.9
+      },
+      "-110": {
+        "piano": 15.2,
+        "sine_1khz": 16.5
+      },
+      "-120": {
+        "piano": 9.7,
+        "sine_1khz": 10.2
+      }
     }
   },
   {
@@ -147,6 +413,44 @@
       "demo": 59.0,
       "piano": 56.9,
       "percussion": 60.2
+    },
+    "snr_by_input_level_db": {
+      "0": {
+        "piano": 56.9,
+        "sine_1khz": 52.2
+      },
+      "-20": {
+        "piano": 56.9,
+        "sine_1khz": 54.3
+      },
+      "-40": {
+        "piano": 56.9,
+        "sine_1khz": 51.1
+      },
+      "-60": {
+        "piano": 49.6,
+        "sine_1khz": 54.2
+      },
+      "-80": {
+        "piano": 29.9,
+        "sine_1khz": 44.7
+      },
+      "-90": {
+        "piano": 21.9,
+        "sine_1khz": 33.6
+      },
+      "-100": {
+        "piano": 17.2,
+        "sine_1khz": 25.9
+      },
+      "-110": {
+        "piano": 14.3,
+        "sine_1khz": 16.5
+      },
+      "-120": {
+        "piano": 8.5,
+        "sine_1khz": 10.2
+      }
     }
   },
   {
