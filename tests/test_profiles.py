@@ -28,9 +28,9 @@ def test_catalog_ids_and_standard_attenuation():
     assert all(PROFILES[name].modulation == 'qpsk' for name in ('SUB50M', 'SUB100', 'SUB100-48K'))
     assert all(PROFILES[name].modulation == 'qam16h' for name in ('B200M', 'B200', 'B200MY', 'B200Y'))
     assert all(PROFILES[name].modulation == 'qam16h' for name in ('M700M', 'M700', 'M700MY', 'M700Y'))
-    assert PROFILES['M700M'].bits_s == PROFILES['M700MY'].bits_s == (0,) * 7
-    assert PROFILES['M700M'].base_s == PROFILES['M700MY'].base_s == (0,) * 7
-    assert all(PROFILES[name].bits_s != (0,) * 7 for name in ('M700', 'M700Y'))
+    assert PROFILES['M700M'].bits_s == PROFILES['M700MY'].bits_s == (0,) * 5
+    assert PROFILES['M700M'].base_s == PROFILES['M700MY'].base_s == (0,) * 5
+    assert all(PROFILES[name].bits_s != (0,) * 5 for name in ('M700', 'M700Y'))
     assert not {'M700Q16', 'B150', 'B150M', 'S85M', 'B200M-A4', 'B200-A4'} & PROFILES.keys()
     for p in PROFILES.values():
         assert p.format_id == 3 and BY_ID[p.pid] is p
@@ -53,15 +53,20 @@ def test_all_profiles_roundtrip_and_attenuator_crc():
         expected = decode_block(encode_block(x, p), p)
         assert valid.all() and np.allclose(decoded, expected), p.name
         lay = tx.layout
-        packed = lay.pack(encode_block(x, p), 0, 0)
+        bd = encode_block(x, p)
+        packed = lay.pack(bd, 0, 0)
         body = lay.header_info(packed)
         first = lay.header_bits + sum(p.exp_bits for ch, k in lay.exp_items)
         assert lay.attn_items
+        kwargs = {}
+        if p.has_y:                                  # Y帯域の最上位bitは専用シンボルの位相から得る
+            u, parity, _ = lay.y_parts(bd)
+            kwargs["y_soft"] = (8.0 * (1.0 - 2.0 * (u >> (p.y_bits - 1))), 8.0 * (1.0 - 2.0 * parity))
         for index in {first, first + len(lay.attn_items) - 1}:
             damaged = body.copy()
             damaged[index] ^= 1
             frame = lay.with_header(packed, damaged)
-            recovered, header = lay.unpack(1.0 - 2.0 * frame, frame)
+            recovered, header = lay.unpack(1.0 - 2.0 * frame, frame, **kwargs)
             if index in lay.high_prot_indices:
                 assert recovered is not None and header['high_ok'] is False
             else:
@@ -83,8 +88,8 @@ def test_layer_assignment_matches_physical_positions():
 
 def test_b200y_stereo_side_uses_qam_strong_positions():
     p = PROFILES['B200Y']
-    assert p.y_channels == ('M', 'S') and p.bits_s == (11, 11, 11, 11, 7, 7, 7)
-    assert p.base_s[:5] == (5, 5, 5, 5, 3)
+    assert p.y_channels == ('M', 'S') and p.bits_s == (11, 11, 7, 7, 7)
+    assert p.base_s[:2] == (5, 5)
     lay = YLayout(p)
     assert any(ch == 'S' for ch, *_ in lay.coef_items)
     assert lay.n_strong == 2 * modem.n_symbols(lay.n_tx, lay.n_strong, p.modulation)
@@ -190,13 +195,13 @@ def test_high_crc_erases_only_h1_h2_in_receiver():
         for channel in (0, 1):
             good_bands = haar_forward(good[:, channel], p.levels)
             damaged_bands = haar_forward(damaged[:, channel], p.levels)
-            for k in range(5):
+            for k in range(p.high_k):
                 assert np.allclose(damaged_bands[k], good_bands[k], atol=1e-10)
-            for k in (5, 6):
+            for k in range(p.high_k, p.nbands):
                 assert np.allclose(damaged_bands[k], 0, atol=1e-10)
         if soft:
-            assert np.isinf(decoder.last_rb[:, :, 5:]).all()
-            assert np.isfinite(decoder.last_rb[:, :, :5]).all()
+            assert np.isinf(decoder.last_rb[:, :, p.high_k:]).all()
+            assert np.isfinite(decoder.last_rb[:, :, :p.high_k]).all()
         core_damaged = protected.copy()
         core_damaged[lay.core_prot_indices[-1]] ^= 1
         _, ok = decoder.decode(symbols(core_damaged))
@@ -226,16 +231,16 @@ def test_y_high_crc_keeps_lower_y_band():
     for channel in (0, 1):
         g = haar_forward(good[:, channel], p.levels)
         r = haar_forward(recovered[:, channel], p.levels)
-        assert np.allclose(r[4], g[4], atol=1e-10)
-        assert np.allclose(r[5], 0, atol=1e-10)
-        assert np.allclose(r[6], 0, atol=1e-10)
+        assert np.allclose(r[2], g[2], atol=1e-10)
+        assert np.allclose(r[3], 0, atol=1e-10)
+        assert np.allclose(r[4], 0, atol=1e-10)
 
 
 def test_broadcast_main_occupied_bandwidth():
     from scipy.signal import welch
     from gracefm.pulse import shape
     audio = np.random.default_rng(2026).uniform(-0.4, 0.4, (64 * 200, 2))
-    expected = {'B200M': 123_000, 'B200': 176_500}     # 99%占有帯域 (ランダム音声での実測)
+    expected = {'B200M': 109_000, 'B200': 176_500}     # 99%占有帯域 (ランダム音声での実測)
     for name, reference in expected.items():
         p = PROFILES[name]
         tx = Transmitter(p)

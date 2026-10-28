@@ -12,10 +12,10 @@
   タグ0の旧16bitヘッダは互換性検証用の明示的な設定でのみ使用する。
   (暗号化するとき 32bit: プロファイルID 4 | 系統ID 1 | 暗号化 1 (=1) | 形式識別子 2 | フレーム番号 24)
   現行カタログは全てタグ3・ヘッダ24bit。タグ0/1/2の旧フレームとは互換性がない。
-  指数           : M の係数群 0→6, 続いて S の係数群 0→6 (0bit の群は無し)。k=0 は低域近似、k=1..6 は詳細帯域。各 exp_bits, MSB から
+  指数           : M の係数群 0→最高域, 続いて S の係数群 0→最高域 (0bit の群は無し)。k=0 は低域近似、k=1.. は詳細帯域。各 exp_bits, MSB から
   区間アッテネータ: 全登録プロファイルに標準装備。M→S、帯域低→高、区間先頭→末尾の順に1bitずつ
-  CRC            : 基本CRC (12bit) (ヘッダ・k=0..4 の指数/アッテネータ・k=0..4 の仮数上位K bit) と、
-                   高域CRC (10bit。k=5,6 の指数/アッテネータ・仮数上位K bit・Y帯域の最上位bit)。高域を送らないプロファイルは基本CRCのみ。
+  CRC            : 基本CRC (12bit) (ヘッダ・高域より低い帯域の指数/アッテネータ・仮数上位K bit) と、
+                   高域CRC (10bit。最後の2帯域 (H2/H1) の指数/アッテネータ・仮数上位K bit・Y帯域の最上位bit)。高域を送らないプロファイルは基本CRCのみ。
 Haar係数部 (ヘッダの直後。係数順 = 成分M→S、帯域 低→高、係数 先頭→末尾):
   終端: 仮数上位bit用の系統符号の終端 (パリティ6bit | 情報6bit)。Y帯域があればその分もう一組
   位相部の列: 係数ごとに [その係数の上位K bit のパリティ K bit | 基本層の仮数bit (rank の小さい順)]
@@ -86,17 +86,17 @@ class Layout:
         for items, widths in ((self.exp_items, (p.exp_bits for ch, k in self.exp_items)),
                               (self.attn_items, (1 for _ in self.attn_items))):
             for item, width in zip(items, widths):
-                (high if item[1] >= 5 else core).extend(range(bit, bit + width))
+                (high if item[1] >= p.high_k else core).extend(range(bit, bit + width))
                 bit += width
         assert bit == self.n_prot
         top_k = [k for k in top_k]
         self.core_prot_indices = np.asarray(core, np.int64)
         self.high_prot_indices = np.asarray(high, np.int64)
-        self.core_top_indices = np.asarray([t for t, k in enumerate(top_k) if k < 5], np.int64)
-        self.high_top_indices = np.asarray([t for t, k in enumerate(top_k) if k >= 5], np.int64)
+        self.core_top_indices = np.asarray([t for t, k in enumerate(top_k) if k < p.high_k], np.int64)
+        self.high_top_indices = np.asarray([t for t, k in enumerate(top_k) if k >= p.high_k], np.int64)
         y_k = [k for _, k, _ in self.y_items]
-        self.core_y_indices = np.asarray([t for t, k in enumerate(y_k) if k < 5], np.int64)
-        self.high_y_indices = np.asarray([t for t, k in enumerate(y_k) if k >= 5], np.int64)
+        self.core_y_indices = np.asarray([t for t, k in enumerate(y_k) if k < p.high_k], np.int64)
+        self.high_y_indices = np.asarray([t for t, k in enumerate(y_k) if k >= p.high_k], np.int64)
         self.has_high_crc = bool(len(high) or len(self.high_top_indices) or len(self.high_y_indices))
         self.n_prot_crc = self.n_prot + fec.CRC_CORE[0] + (fec.CRC_HIGH[0] if self.has_high_crc else 0)
         T = fec.K - 1                                                   # 終端 6 bit

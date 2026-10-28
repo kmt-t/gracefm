@@ -61,24 +61,24 @@ def test_frame_roundtrip_bit_exact():
 
 def test_attenuator_roundtrip():
     from gracefm.codec import dequantize, quantize, quantize_attenuated
-    base = replace(PROFILES["B200M"], attn_group_m=(0,) * 7)
-    groups = (0, 0, 0, 0, 0, 0, 4)
+    base = replace(PROFILES["B200M"], attn_group_m=(0,) * 5)
+    groups = (0, 0, 0, 0, 4)
     p = replace(base, attn_group_m=groups)
     x = _signal(p.block, p.fs)
     bd = encode_block(x, p)
-    assert len(bd.attn["M"][6]) == 8
+    assert len(bd.attn["M"][4]) == 8
     lay = Layout(p)
     assert lay.n_prot == Layout(base).n_prot + 8
     frame = lay.pack(bd, 1, 5)
     recovered, hdr = lay.unpack(1.0 - 2.0 * frame, frame)
     assert hdr["pid"] == p.pid
-    assert np.array_equal(recovered.attn["M"][6], bd.attn["M"][6])
+    assert np.array_equal(recovered.attn["M"][4], bd.attn["M"][4])
     assert np.allclose(decode_block(recovered, p), decode_block(bd, p))
     wrong_layout = Layout(replace(p, pid=15))
     wrong, _ = wrong_layout.unpack(1.0 - 2.0 * frame, frame)
     assert wrong is None
     body = lay.header_info(frame)
-    body[lay.header_bits + 7 * 4] ^= 1  # 最初のアッテネータbitを壊す
+    body[lay.header_bits + 5 * 4] ^= 1  # 最初のアッテネータbitを壊す
     damaged = lay.with_header(frame, body)
     recovered, hdr = lay.unpack(1.0 - 2.0 * damaged, damaged)
     assert recovered is not None and hdr["high_ok"] is False
@@ -87,11 +87,11 @@ def test_attenuator_roundtrip():
     for _ in range(50):
         x = rng.uniform(-1, 1, (p.block, 2))
         bd = encode_block(x, p)
-        c = haar_forward((x[:, 0] + x[:, 1]) / 2, p.levels)[6]
-        m0, e0 = quantize(c, 6, p.bits_m[6], base)
-        m1, e1, a1 = quantize_attenuated(c, 6, p.bits_m[6], p)
-        err0 = np.sum((c - dequantize(m0, e0, 6, p.bits_m[6], base)) ** 2)
-        err1 = np.sum((c - dequantize(m1, e1, 6, p.bits_m[6], p, attn=a1)) ** 2)
+        c = haar_forward((x[:, 0] + x[:, 1]) / 2, p.levels)[4]
+        m0, e0 = quantize(c, 4, p.bits_m[4], base)
+        m1, e1, a1 = quantize_attenuated(c, 4, p.bits_m[4], p)
+        err0 = np.sum((c - dequantize(m0, e0, 4, p.bits_m[4], base)) ** 2)
+        err1 = np.sum((c - dequantize(m1, e1, 4, p.bits_m[4], p, attn=a1)) ** 2)
         assert err1 <= err0 + 1e-20
 
 
@@ -99,7 +99,7 @@ def test_attenuator_roundtrip():
 def test_adopted_attenuator_profile_end_to_end():
     p = PROFILES["B200M"]
     assert p.pid == 1 and p.exp_bits == 4 and p.attn_group_m[-1] == 4
-    assert Layout(p).n_prot_crc == 82
+    assert Layout(p).n_prot_crc == 78
     x = _signal(p.block * 12, p.fs)
     frames = Transmitter(p).run(x)
     y, valid = StreamDecoder(p).run(frames, len(x))
@@ -115,12 +115,13 @@ def test_broadcast_joint_stereo_attenuators():
     from gracefm.channel import symbol_rate
     assert symbol_rate(p) <= 180000
     assert p.attn_group_m[-1] == 4 and p.attn_group_s[-1] == 4
-    assert p.attenuator_bits("M", 6) == 8 and p.attenuator_bits("S", 6) == 8
-    assert Layout(p).n_prot_crc == 118
+    assert p.attenuator_bits("M", 4) == 8 and p.attenuator_bits("S", 4) == 8
+    assert p.attenuator_bits("M", 2) == 4 and p.attenuator_bits("S", 2) == 4
+    assert Layout(p).n_prot_crc == 110
     assert p.audio_kbps() == 504
     x = _signal(p.block * 8, p.fs)
     bd = encode_block(x[:p.block], p)
-    assert len(bd.attn["M"][6]) == 8 and len(bd.attn["S"][6]) == 8
+    assert len(bd.attn["M"][4]) == 8 and len(bd.attn["S"][4]) == 8
     frames = Transmitter(p).run(x)
     y, valid = StreamDecoder(p).run(frames, len(x))
     expected = np.concatenate([decode_block(encode_block(x[i:i + p.block], p), p)
@@ -269,14 +270,14 @@ def test_b200_link_preserves_high_side_signal():
     x = x * (0.89 / np.max(np.abs(x)))
     s_ref = (x[:, 0] - x[:, 1]) / 2
     ref = haar_forward(s_ref.reshape(-1, p.block), p.levels)
-    power_ref = sum(np.sum(a * a) for a in ref[5:])
+    power_ref = sum(np.sum(a * a) for a in ref[p.high_k:])
     for name in ("B200",):
         current = PROFILES[name]
         y, _, _ = channel.link(x, current, 66, sub="SUB100", seed=1)
         s_out = (y[:, 0] - y[:, 1]) / 2
         out = haar_forward(s_out.reshape(-1, current.block), current.levels)
-        power_out = sum(np.sum(a * a) for a in out[5:])
-        error = sum(np.sum((a - b) ** 2) for a, b in zip(ref[5:], out[5:]))
+        power_out = sum(np.sum(a * a) for a in out[p.high_k:])
+        error = sum(np.sum((a - b) ** 2) for a, b in zip(ref[p.high_k:], out[p.high_k:]))
         level_change_db = 10 * np.log10(power_out / power_ref)
         snr_db = 10 * np.log10(power_ref / error)
         assert abs(level_change_db) < 1.0
@@ -313,3 +314,23 @@ if __name__ == "__main__":
         if k.startswith("test_"):
             f()
             print("ok", k)
+
+
+def test_crossfade_switch_removes_step_only_where_pattern_changes():
+    from gracefm import plc
+    block, nb = 64, 8
+    t = np.arange(block * nb)
+    base = 0.5 * np.sin(2 * np.pi * 440 * t / 32000)
+    y = np.stack([base, base], axis=1)
+    y[4 * block:] += 0.2                                        # 4 ブロック目の先頭に段差 (情報のある帯域の組が変わる)
+    same = [(True, True)] * nb
+    assert np.array_equal(plc.crossfade_switch(y, same, block), y)          # 組が変わらなければ何もしない
+    changed = same[:4] + [(True, False)] * 4
+    out = plc.crossfade_switch(y, changed, block)
+    jump = lambda z: np.abs(np.diff(z[:, 0]))[4 * block - 1]
+    assert jump(out) < jump(y) / 4                                          # 境界の段差が小さくなる
+    assert np.array_equal(out[:4 * block], y[:4 * block])                  # 過去の出力は変えない (因果的)
+    assert np.array_equal(out[4 * block + 16:], y[4 * block + 16:])        # クロスフェードは先頭16サンプルだけ
+    lost = same[:4] + [(False, False)] * 2 + same[:2]
+    assert np.array_equal(plc.crossfade_switch(y, lost, block), y)         # 全て届かないブロックは PLC に任せる
+

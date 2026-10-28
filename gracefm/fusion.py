@@ -9,7 +9,7 @@ import numpy as np
 from .codec import haar_forward, haar_inverse
 
 
-def fuse_band(yA, vA, yB, vB, seg, rbA, rbB):
+def fuse_band(yA, vA, yB, vB, seg, levels, rbA, rbB):
     """
     帯域ごとの融合 (band)。2系統のブロックの格子は同じなので、ブロック (seg サンプル) の区間を Haar 変換すると、
     各帯域の係数が両系統で 1対1 に対応する。係数ごとに、各系統のデコーダが受信座標から見積もった係数あたりの
@@ -20,12 +20,12 @@ def fuse_band(yA, vA, yB, vB, seg, rbA, rbB):
     送っていない帯域 (ビット数 0) は R = ∞ (情報なし) なので、その帯域は送っている方の系統だけで決まる。
     主系と副系でビットレートが違っても (副系が高域を送らなくても)、帯域ごとに正しく重みが付く。
     遅延は soft と同じ (区間の両系統の出力がそろえば出せる)。
-    rbA, rbB: (n, 2, 帯域数) StreamDecoder.rb_trace。返り値: (y, valid, 区間ごとの M 最低域の w_A)
+    seg: ブロック長、levels: Haar の段数。rbA, rbB: (n, 2, 帯域数) StreamDecoder.rb_trace。返り値: (y, valid, 区間ごとの M 最低域の w_A)
     """
     n = len(yA)
     nb = rbA.shape[2]
-    lev = int(np.log2(seg))                         # ブロックの Haar の段数
-    assert nb == lev + 1, "帯域数とブロック長が合わない"
+    lev = levels                                    # ブロックの Haar の段数
+    assert nb == lev + 1, "帯域数と段数が合わない"
     ns = -(-n // seg)
     pad = ns * seg - n
     h = seg // 2

@@ -56,23 +56,23 @@ def test_y_quantizer_uses_both_extreme_codes():
     bd = encode_block(_audio(p, 1), p)
     low = -(1 << (p.y_bits - 1))
     high = (1 << (p.y_bits - 1)) - 1
-    bd.mant["M"][5][0] = low
-    bd.mant["M"][5][1] = high
+    bd.mant["M"][2][0] = low
+    bd.mant["M"][2][1] = high
     lay = YLayout(p)
     u = lay.y_u(bd)
     assert u[0] == 0 and u[1] == (1 << p.y_bits) - 1
     conventional = Layout(p)
     frame = conventional.pack(bd, 0, 0)
     recovered, _ = conventional.unpack(1.0 - 2.0 * frame, frame)
-    assert recovered.mant["M"][5][0] == low
-    assert recovered.mant["M"][5][1] == high
+    assert recovered.mant["M"][2][0] == low
+    assert recovered.mant["M"][2][1] == high
 
 
 def test_stereo_y_uses_registered_s_coefficients():
     y = PROFILES["B200Y"]
-    assert y.bits_s == (11, 11, 11, 11, 7, 7, 7)       # 音質を優先し、Y帯域の分の余裕でSの k=3 を11bitにする
-    assert y.base_s[:5] == (5, 5, 5, 5, 3)             # 位相部に置く仮数bit (パリティを除く)。拡張層はその+1 bit
-    assert y.y_channels == ("M", "S")             # Sの高域 (k=5,6) もY方式の専用シンボルで送る
+    assert y.bits_s == (11, 11, 7, 7, 7)               # Y帯域の分の余裕で、Sの最低域2帯域を11bitにする
+    assert y.base_s[:2] == (5, 5)                      # 位相部に置く仮数bit (パリティを除く)。拡張層はその+1 bit
+    assert y.y_channels == ("M", "S")             # Sの k=2〜4 もY方式の専用シンボルで送る
     assert y.modulation == "qam16h"
     x = _audio(y, 4)
     for i in range(4):
@@ -119,25 +119,26 @@ def test_y_bands_are_only_in_dedicated_symbols():
         assert valid.all() and np.allclose(decoded, reference, atol=1e-6)
 
 
-def test_broadcast_y_two_high_m_bands_have_protected_attenuator_bytes():
+def test_broadcast_y_bands_have_protected_attenuator_bytes():
     for name in ("B200MY", "B200Y"):
         p = PROFILES[name]
-        assert p.attenuator_group("M", 5) == 4
-        assert p.attenuator_group("M", 6) == 8
-        assert p.attenuator_bits("M", 5) == p.attenuator_bits("M", 6) == 4
+        assert p.attenuator_group("M", 2) == 2
+        assert p.attenuator_group("M", 3) == 4
+        assert p.attenuator_group("M", 4) == 8
+        assert p.attenuator_bits("M", 2) == p.attenuator_bits("M", 3) == p.attenuator_bits("M", 4) == 4
         layout = YLayout(p)
-        assert len([item for item in layout.attn_items if item[:2] == ("M", 5)]) == 4
+        assert len([item for item in layout.attn_items if item[:2] == ("M", 3)]) == 4
         bd = encode_block(_audio(p, 1), p)
         packed = layout.pack(bd, 0, 1)
-        restored, _ = layout.unpack(1.0 - 2.0 * packed, packed)
-        assert np.array_equal(restored.attn["M"][5], bd.attn["M"][5])
-        assert np.array_equal(restored.attn["M"][6], bd.attn["M"][6])
+        restored, _ = layout.unpack(1.0 - 2.0 * packed, packed, y_soft=_y_soft(layout, bd))
+        assert np.array_equal(restored.attn["M"][3], bd.attn["M"][3])
+        assert np.array_equal(restored.attn["M"][4], bd.attn["M"][4])
 
         protected = layout.header_info(packed)
         first_attn = layout.header_bits + sum(p.exp_bits for ch, k in layout.exp_items)
         protected[layout.high_prot_indices[0]] ^= 1
         corrupted = layout.with_header(packed, protected)
-        recovered, header = layout.unpack(1.0 - 2.0 * corrupted, corrupted)
+        recovered, header = layout.unpack(1.0 - 2.0 * corrupted, corrupted, y_soft=_y_soft(layout, bd))
         assert recovered is not None and header['high_ok'] is False
 
 
@@ -210,11 +211,11 @@ def test_m700y_radius_precision_does_not_use_extra_symbols_or_remove_fec():
     for bits in (8, 10, 12):
         p = make_y_profile(PROFILES["M700"], f"M700Y-R{bits}", 13,
                         mantissa_bits=bits, format_id=3, bits_s=baseline.bits_s,
-                        bits_m=baseline.bits_m[:5] + (bits, bits), channels=baseline.y_channels)
+                        bits_m=baseline.bits_m[:2] + (bits,) * 3, channels=baseline.y_channels)
         lay = YLayout(p)
-        assert p.bits_m[5:] == (bits, bits)
-        assert p.bits_s[:5] == baseline.bits_s[:5] and p.bits_s[5] == bits and p.bits_s[6] == bits   # SのY帯域(k=5,6)も同じ幅
-        assert lay.n_y == baseline_layout.n_y == 96
+        assert p.bits_m[2:] == (bits,) * 3
+        assert p.bits_s[:2] == baseline.bits_s[:2] and p.bits_s[2:] == (bits,) * 3   # SのY帯域(k=2〜4)も同じ幅
+        assert lay.n_y == baseline_layout.n_y == 112
         assert lay.n_coded == baseline_layout.n_coded
         assert Transmitter(p).nsym == Transmitter(baseline).nsym
         x = _audio(p, 4)
@@ -230,25 +231,22 @@ def test_m700_y_profiles_preserve_channel_mode_and_format_id():
     for old_name, y_name in (("M700M", "M700MY"), ("M700", "M700Y")):
         old, y = PROFILES[old_name], PROFILES[y_name]
         assert y.y_bits == 7
-        assert y.fs == 48000 and y.block == 64 and y.y_start_k == 5
-        # M700 は S の H1 (k=6) を 3bit で送り、Y 版 (M700Y) は S の k=6 も Y 帯域 (7bit) で送る
-        assert y.bits_s[:6] == old.bits_s[:6]
-        assert y.attn_group_s[:5] == old.attn_group_s[:5]
+        assert y.fs == 48000 and y.block == 64 and y.y_start_k == 2
+        # M700 は S の H1 (k=4) を 3bit で送り、Y 版 (M700Y) は S の k=2〜4 も Y 帯域 (7bit) で送る
+        assert y.bits_s[:2] == ((11, 11) if old_name == "M700" else (0, 0))      # M700YのSは最低域2帯域を11bitにする (B200Yと同じ)
         assert any(y.bits_s) == (old_name == "M700")
         assert y.pid != old.pid and y.format_id == old.format_id == 3
         assert BY_ID[y.pid] is y and BY_HEADER[(y.pid, 3)] is y
         lay, old_lay = YLayout(y), Layout(old)
         assert lay.header_bits == old_lay.header_bits == 24
-        if old_name == "M700M":
-            assert lay.n_prot == old_lay.n_prot       # Y帯域は4区間ずつ (8bit) で、元の最高域M (k=6, 8bit) と同じ
-        else:
-            assert lay.n_prot == old_lay.n_prot       # Sも同様 (Mのk=6とSのk=6が各8bit)
+        attn_bits = lambda q: sum(q.attenuator_bits(ch, k) for ch in "MS" for k in range(q.nbands))
+        assert lay.n_prot - old_lay.n_prot == attn_bits(y) - attn_bits(old)      # 差はアッテネータのbitだけ
         assert lay.n_header == 2 * (lay.n_prot_crc + 6)
-        assert lay.n_y == 48 + sum(y.ncoef(k) for k in (5, 6) if y.bits_s[k])
+        assert lay.n_y == sum(y.ncoef(k) for ch in y.y_channels for k in range(y.y_start_k, y.nbands)
+                              if (y.bits_m if ch == "M" else y.bits_s)[k])
         bd = encode_block(_audio(y, 1), y)
-        old_s = decode_coeffs(encode_block(_audio(y, 1), old), old)["S"]
         y_s = decode_coeffs(bd, y)["S"]
-        assert all(np.array_equal(a, b) for a, b in zip(old_s[:5], y_s[:5]))
+        assert all(len(band) == y.ncoef(k) for k, band in enumerate(y_s))
         packed = lay.pack(bd, 0, 0)
         soft = 1 - 2 * packed
         assert lay.unpack(soft, packed, y_soft=_y_soft(lay, bd))[0] is not None
@@ -301,26 +299,25 @@ def test_m700_y_bit_positions_preserve_s_codes():
 
     old = PROFILES["M700"]
     y_profile = PROFILES["M700Y"]
-    assert y_profile.bits_s[:6] == old.bits_s[:6] and y_profile.bits_s[6] == 7 and old.bits_s[6] == 3
-    assert y_profile.attn_group_s[:5] == old.attn_group_s[:5]
-    assert y_profile.base_s[:5] == (3, 3, 3, 3, 3)
-    assert y_profile.base_m == (5, 5, 5, 5, 5, 1, 1)
+    assert y_profile.bits_s == (11, 11, 7, 7, 7) and old.bits_s[4] == 3
+    assert y_profile.base_s[:2] == (5, 5)
+    assert y_profile.base_m == (5, 5, 1, 1, 1)
     assert BY_HEADER[(y_profile.pid, y_profile.format_id)] is y_profile
     old_lay, y_layout = Layout(old), YLayout(y_profile)
-    assert y_layout.n_prot == old_lay.n_prot       # Y帯域は4区間ずつ (8bit)
+    attn_bits = lambda q: sum(q.attenuator_bits(ch, k) for ch in "MS" for k in range(q.nbands))
+    assert y_layout.n_prot - old_lay.n_prot == attn_bits(y_profile) - attn_bits(old)      # Y帯域は4区間ずつ (4bit)
     strong_slots = 2 * Transmitter(y_profile).digital_nsym
     strong_s = [(k, pos) for i, (ch, k, _, pos) in enumerate(y_layout.coef_items)
                 if ch == "S" and y_layout.coef_stream_idx[i] < strong_slots]
     # S の基本層2bitはすべて強い位置に入り、拡張層は弱い位置に入る
-    assert len(strong_s) == sum(y_profile.ncoef(k) * y_profile.base_bits("S", k) for k in range(5))   # k=5 のSはY
+    assert len(strong_s) == sum(y_profile.ncoef(k) * y_profile.base_bits("S", k) for k in range(2))   # k=2 以上のSはY
     assert all(pos >= y_profile.bits_s[k] - y_profile.base_bits("S", k) for k, pos in strong_s)
-    assert Transmitter(y_profile).nsym + len(modem.PREAMBLE) == 260
+    assert Transmitter(y_profile).nsym + len(modem.PREAMBLE) == 240
     x = _audio(y_profile, 8)
     for start in range(0, len(x), y_profile.block):
         block = x[start:start + y_profile.block]
-        s_old = decode_coeffs(encode_block(block, old), old)["S"]
         s_y = decode_coeffs(encode_block(block, y_profile), y_profile)["S"]
-        assert all(np.array_equal(a, b) for a, b in zip(s_old[:5], s_y[:5]))
+        assert all(len(band) == y_profile.ncoef(k) for k, band in enumerate(s_y))
     y, valid = StreamDecoder(y_profile).run(Transmitter(y_profile).run(x), len(x))
     assert valid.all()
     expected = np.concatenate([decode_block(encode_block(x[i:i + y_profile.block], y_profile), y_profile)
