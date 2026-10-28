@@ -41,6 +41,8 @@
 
 [FM・aptX・HE-AAC・M700系比較](docs/COMPARISON.md)は方式ごとに条件と未測定項目を明示する。Y系の係数配置と伝送予算は[現行仕様](docs/SPEC.md)と[設定マトリクス](docs/PROFILES.md)を参照。
 
+[固定小数点実装（DSP依存）](docs/FIXED.md)は、Zynq-7010のDSP48E1の幅に合わせた整数コーデックの仕様である。
+
 [GraceFM/RTP](docs/RTP.md)は、受信したシンボル列をIP網でデコーダへ渡すRTPペイロード形式の設計である（実装・評価なし）。
 
 [試聴音源](samples/README.md)は標準アッテネータを含む現行設定で再生成する。ファイル名は[命名規則](samples/NAMING.md)に統一し、現行音源だけを掲載する。[全音源の設定・測定値・ハッシュ](samples/index.json)を参照。
