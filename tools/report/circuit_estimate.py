@@ -28,6 +28,7 @@ from gracefm.channel import DEFAULT_SUB, symbol_rate  # noqa: E402
 from gracefm.layout import Layout  # noqa: E402
 from gracefm.modem import bits_per_symbol, n_symbols  # noqa: E402
 from gracefm.postfilter import LANCZOS_A, LPF_TAPS, OUT_FS, OVERSAMPLE  # noqa: E402
+from gracefm.tables import LANCZOS_Q16, RESAMPLE_1_4_Q16, RESAMPLE_3_8_Q16  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 
 CLOCK_HZ = 100e6
@@ -35,7 +36,6 @@ UTILIZATION = 1.0
 DATA_BITS, COEF_BITS = 24, 18
 EQ_TAPS = 11
 LPC_ORDER, LPC_HIST = 16, 128
-RESAMPLE_TAPS = 2 * 10 * 16 + 1                  # resample_poly の既定 (最大 16 で上下したとき)
 
 
 def front_end(p):
@@ -65,9 +65,10 @@ def back_end(p, two_streams):
     fuse_per_block = (4 + 2) * haar + 2 * sum(p.ncoef(k) for k in range(p.nbands)) * 2 if two_streams else 0
     lpc_block = 2 * (LPC_HIST + LPC_HIST * (LPC_ORDER + 1) // 2 + LPC_ORDER * LPC_ORDER
                      + LPC_ORDER * (p.block + 16))                                 # 窓 + 自己相関 + Levinson + 外挿 (成分ごと)
-    lanczos = 2 * p.fs * (2 * LANCZOS_A * OVERSAMPLE // OVERSAMPLE) * OVERSAMPLE   # 8倍の各点が 2a 入力の和
-    lpf_sequential = 2 * p.fs * OVERSAMPLE * LPF_TAPS                              # 定義どおり: 8倍レートの全点
-    resample = 2 * OUT_FS * math.ceil(RESAMPLE_TAPS / 3)
+    lanczos = 2 * p.fs * (2 * LANCZOS_A * OVERSAMPLE // OVERSAMPLE) * OVERSAMPLE   # オーバーサンプルの各点が 2a 入力の和
+    lpf_sequential = 2 * p.fs * OVERSAMPLE * LPF_TAPS                              # 定義どおり: オーバーサンプル後のレートの全点
+    up_f, kernel = (3, RESAMPLE_3_8_Q16) if p.fs == 32000 else (1, RESAMPLE_1_4_Q16)
+    resample = 2 * OUT_FS * math.ceil(len(kernel) / up_f)
     lpf_at_output = 2 * OUT_FS * LPF_TAPS // 2                                     # 出力点だけ、対称な係数の半分
     return {
         "haar_synthesis_mac": haar_per_block // 2 * fps,
@@ -90,7 +91,7 @@ def memory_bits(p, lay, two_streams):
         "output_double_buffer": 2 * p.block * 2 * DATA_BITS * (2 if two_streams else 1),
         "plc_history": LPC_HIST * 2 * DATA_BITS,
         "postfilter_delay_line": (LPF_TAPS // 2 + LANCZOS_A * 2) * 2 * DATA_BITS,
-        "rom_coefficients": (LPF_TAPS // 2 + 1 + 129 + RESAMPLE_TAPS) * COEF_BITS + p.pulse_span * 2 * COEF_BITS,
+        "rom_coefficients": (LPF_TAPS // 2 + 1 + len(LANCZOS_Q16) + len(RESAMPLE_3_8_Q16 if p.fs == 32000 else RESAMPLE_1_4_Q16)) * COEF_BITS + p.pulse_span * 2 * COEF_BITS,
     }
 
 
