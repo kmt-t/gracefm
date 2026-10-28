@@ -14,14 +14,14 @@
   "fdkaac_version": "fdkaac 1.0.0",
   "ffmpeg_version": "ffmpeg version 7.0.2-static https://johnvansickle.com/ffmpeg/  Copyright (c) 2000-2024 the FFmpeg developers",
   "profile_signatures": {
-    "B200M": "Profile(pid=1, name='B200M', fs=32000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 3, 3, 3), base_s=(0, 0, 0, 0, 0), attn_group_m=(0, 0, 2, 0, 4), attn_group_s=(0, 0, 0, 0, 0), y_start_k=None, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
-    "B200": "Profile(pid=2, name='B200', fs=32000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(11, 7, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.1, pulse_span=32, base_m=(5, 5, 3, 3, 3), base_s=(5, 3, 3, 3, 3), attn_group_m=(0, 0, 2, 0, 4), attn_group_s=(0, 0, 2, 0, 4), y_start_k=None, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
-    "B200MY": "Profile(pid=3, name='B200MY', fs=32000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 1, 1, 1), base_s=(0, 0, 0, 0, 0), attn_group_m=(0, 0, 2, 4, 8), attn_group_s=(0, 0, 0, 0, 0), y_start_k=2, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
-    "B200Y": "Profile(pid=4, name='B200Y', fs=32000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(11, 11, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.1, pulse_span=32, base_m=(5, 5, 1, 1, 1), base_s=(5, 5, 1, 1, 1), attn_group_m=(0, 0, 2, 4, 8), attn_group_s=(0, 0, 2, 4, 8), y_start_k=2, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
-    "M700M": "Profile(pid=7, name='M700M', fs=48000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 3, 3, 3), base_s=(0, 0, 0, 0, 0), attn_group_m=(0, 0, 2, 0, 4), attn_group_s=(0, 0, 0, 0, 0), y_start_k=None, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
-    "M700": "Profile(pid=8, name='M700', fs=48000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(11, 7, 7, 7, 3), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 3, 3, 3), base_s=(5, 3, 3, 3, 1), attn_group_m=(0, 0, 2, 0, 4), attn_group_s=(0, 0, 2, 0, 4), y_start_k=None, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
-    "M700MY": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 1, 1, 1), base_s=(0, 0, 0, 0, 0), attn_group_m=(0, 0, 2, 4, 8), attn_group_s=(0, 0, 0, 0, 0), y_start_k=2, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
-    "M700Y": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(11, 11, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 1, 1, 1), base_s=(5, 5, 1, 1, 1), attn_group_m=(0, 0, 2, 4, 8), attn_group_s=(0, 0, 2, 4, 8), y_start_k=2, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)"
+    "B200M": "Profile(pid=1, name='B200M', fs=32000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5, pulse_beta_pct=25, pulse_span=16, base_m=(5, 5, 3, 3, 3), base_s=(0, 0, 0, 0, 0), attn_group_m=(0, 0, 2, 0, 4), attn_group_s=(0, 0, 0, 0, 0), y_start_k=None, y_step=(2, 105), y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "B200": "Profile(pid=2, name='B200', fs=32000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(11, 7, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5, pulse_beta_pct=10, pulse_span=32, base_m=(5, 5, 3, 3, 3), base_s=(5, 3, 3, 3, 3), attn_group_m=(0, 0, 2, 0, 4), attn_group_s=(0, 0, 2, 0, 4), y_start_k=None, y_step=(2, 105), y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "B200MY": "Profile(pid=3, name='B200MY', fs=32000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5, pulse_beta_pct=25, pulse_span=16, base_m=(5, 5, 1, 1, 1), base_s=(0, 0, 0, 0, 0), attn_group_m=(0, 0, 2, 4, 8), attn_group_s=(0, 0, 0, 0, 0), y_start_k=2, y_step=(2, 105), y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "B200Y": "Profile(pid=4, name='B200Y', fs=32000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(11, 11, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5, pulse_beta_pct=10, pulse_span=32, base_m=(5, 5, 1, 1, 1), base_s=(5, 5, 1, 1, 1), attn_group_m=(0, 0, 2, 4, 8), attn_group_s=(0, 0, 2, 4, 8), y_start_k=2, y_step=(2, 105), y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "M700M": "Profile(pid=7, name='M700M', fs=48000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5, pulse_beta_pct=25, pulse_span=16, base_m=(5, 5, 3, 3, 3), base_s=(0, 0, 0, 0, 0), attn_group_m=(0, 0, 2, 0, 4), attn_group_s=(0, 0, 0, 0, 0), y_start_k=None, y_step=(2, 105), y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "M700": "Profile(pid=8, name='M700', fs=48000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(11, 7, 7, 7, 3), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5, pulse_beta_pct=25, pulse_span=16, base_m=(5, 5, 3, 3, 3), base_s=(5, 3, 3, 3, 1), attn_group_m=(0, 0, 2, 0, 4), attn_group_s=(0, 0, 2, 0, 4), y_start_k=None, y_step=(2, 105), y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "M700MY": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5, pulse_beta_pct=25, pulse_span=16, base_m=(5, 5, 1, 1, 1), base_s=(0, 0, 0, 0, 0), attn_group_m=(0, 0, 2, 4, 8), attn_group_s=(0, 0, 0, 0, 0), y_start_k=2, y_step=(2, 105), y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "M700Y": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(11, 11, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5, pulse_beta_pct=25, pulse_span=16, base_m=(5, 5, 1, 1, 1), base_s=(5, 5, 1, 1, 1), attn_group_m=(0, 0, 2, 4, 8), attn_group_s=(0, 0, 2, 4, 8), y_start_k=2, y_step=(2, 105), y_bits=7, y_channels=('M', 'S'), format_id=3)"
   },
   "sources": [
     {
@@ -384,8 +384,8 @@
       "method": "B200M",
       "audio_kbps": 256.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 52.32,
-      "visqol_mean": 3.954
+      "snr_db": 52.31,
+      "visqol_mean": 3.955
     },
     {
       "material": "piano",
@@ -395,8 +395,8 @@
       "method": "B200MY",
       "audio_kbps": 256.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 52.76,
-      "visqol_mean": 3.996
+      "snr_db": 52.74,
+      "visqol_mean": 3.995
     },
     {
       "material": "piano",
@@ -406,8 +406,8 @@
       "method": "M700M",
       "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 56.38,
-      "visqol_mean": 4.2
+      "snr_db": 56.37,
+      "visqol_mean": 4.202
     },
     {
       "material": "piano",
@@ -417,7 +417,7 @@
       "method": "M700MY",
       "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 56.86,
+      "snr_db": 56.85,
       "visqol_mean": 4.298
     },
     {
@@ -429,7 +429,7 @@
       "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 56.77,
-      "visqol_mean": 4.023
+      "visqol_mean": 4.024
     },
     {
       "material": "piano",
@@ -440,7 +440,7 @@
       "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 57.33,
-      "visqol_mean": 4.203
+      "visqol_mean": 4.202
     },
     {
       "material": "piano",
@@ -450,8 +450,8 @@
       "method": "B200",
       "audio_kbps": 504.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 50.55,
-      "visqol_mean": 3.994
+      "snr_db": 50.54,
+      "visqol_mean": 3.993
     },
     {
       "material": "piano",
@@ -461,8 +461,8 @@
       "method": "B200Y",
       "audio_kbps": 512.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 52.51,
-      "visqol_mean": 4.128
+      "snr_db": 52.5,
+      "visqol_mean": 4.129
     },
     {
       "material": "piano",
@@ -473,7 +473,7 @@
       "audio_kbps": 660.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 52.31,
-      "visqol_mean": 3.255
+      "visqol_mean": 3.254
     },
     {
       "material": "piano",
@@ -483,8 +483,8 @@
       "method": "M700Y",
       "audio_kbps": 768.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 56.62,
-      "visqol_mean": 4.36
+      "snr_db": 56.6,
+      "visqol_mean": 4.361
     },
     {
       "material": "piano",
@@ -495,7 +495,7 @@
       "audio_kbps": 660.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 49.82,
-      "visqol_mean": 2.442
+      "visqol_mean": 2.444
     },
     {
       "material": "piano",
@@ -538,7 +538,7 @@
       "method": "M700M",
       "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 58.01,
+      "snr_db": 58.0,
       "visqol_mean": 4.642
     },
     {
@@ -549,7 +549,7 @@
       "method": "M700MY",
       "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 58.31,
+      "snr_db": 58.3,
       "visqol_mean": 4.642
     },
     {
@@ -572,7 +572,7 @@
       "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 60.44,
-      "visqol_mean": 4.728
+      "visqol_mean": 4.729
     },
     {
       "material": "percussion",
@@ -604,7 +604,7 @@
       "method": "M700",
       "audio_kbps": 660.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 55.69,
+      "snr_db": 55.68,
       "visqol_mean": 4.641
     },
     {
@@ -615,7 +615,7 @@
       "method": "M700Y",
       "audio_kbps": 768.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 57.93,
+      "snr_db": 57.92,
       "visqol_mean": 4.642
     },
     {
@@ -648,7 +648,7 @@
       "method": "B200M",
       "audio_kbps": 256.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 55.94,
+      "snr_db": 55.93,
       "visqol_mean": 4.447
     },
     {
@@ -659,7 +659,7 @@
       "method": "B200MY",
       "audio_kbps": 256.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 56.31,
+      "snr_db": 56.29,
       "visqol_mean": 4.447
     },
     {
@@ -670,7 +670,7 @@
       "method": "M700M",
       "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 59.73,
+      "snr_db": 59.71,
       "visqol_mean": 4.559
     },
     {
@@ -681,7 +681,7 @@
       "method": "M700MY",
       "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 60.03,
+      "snr_db": 60.02,
       "visqol_mean": 4.556
     },
     {
@@ -704,7 +704,7 @@
       "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
       "snr_db": 61.18,
-      "visqol_mean": 4.703
+      "visqol_mean": 4.704
     }
   ]
 }

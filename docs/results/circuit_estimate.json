@@ -3,8 +3,8 @@
     "name": "B200M",
     "sub": "SUB50M",
     "front_end_per_s": {
-      "rrc_mac": 10208000.0,
-      "eq_mac": 7018000.0,
+      "rrc_mac": 10208000,
+      "eq_mac": 7018000,
       "llr_mul": 1691000.0,
       "viterbi_acs": 7424000.0,
       "soft_mantissa_mul": 1104000.0
@@ -39,8 +39,8 @@
     "name": "B200",
     "sub": "SUB100",
     "front_end_per_s": {
-      "rrc_mac": 27712000.0,
-      "eq_mac": 11462000.0,
+      "rrc_mac": 27712000,
+      "eq_mac": 11462000,
       "llr_mul": 2943000.0,
       "viterbi_acs": 11456000.0,
       "soft_mantissa_mul": 2160000.0
@@ -75,8 +75,8 @@
     "name": "M700M",
     "sub": "SUB100-48K",
     "front_end_per_s": {
-      "rrc_mac": 16896000.0,
-      "eq_mac": 11616000.0,
+      "rrc_mac": 16896000,
+      "eq_mac": 11616000,
       "llr_mul": 2734500.0,
       "viterbi_acs": 11952000.0,
       "soft_mantissa_mul": 1776000.0
@@ -111,8 +111,8 @@
     "name": "M700",
     "sub": "SUB100-48K",
     "front_end_per_s": {
-      "rrc_mac": 22464000.0,
-      "eq_mac": 15444000.0,
+      "rrc_mac": 22464000,
+      "eq_mac": 15444000,
       "llr_mul": 3952500.0,
       "viterbi_acs": 16560000.0,
       "soft_mantissa_mul": 2784000.0
