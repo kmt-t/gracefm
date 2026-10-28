@@ -25,11 +25,11 @@ ONE_TWELFTH_Q15 = 2731                                  # 1/12 (量子化誤差�
 
 
 def log2_q8(x):
-    """正の整数の log2(x) × 2^8 (配列)。最上位bitの位置 + 続く8 bit の表引き"""
-    x = np.asarray(x, np.int64)
-    msb = bit_length(x) - 1
-    frac = (np.where(msb >= 8, x >> np.maximum(msb - 8, 0), x << np.maximum(8 - msb, 0)) & 255)
-    return (msb << 8) + np.array(LOG2_FRAC_Q8, np.int64)[frac]
+    """正の整数 x の log2(x) × 2^8。最上位bitの位置 + 続く8 bit の表引き"""
+    x = int(x)
+    msb = x.bit_length() - 1
+    frac = ((x >> (msb - 8)) if msb >= 8 else (x << (8 - msb))) & 255
+    return (msb << 8) + LOG2_FRAC_Q8[frac]
 
 
 class Transmitter:
@@ -135,10 +135,8 @@ class StreamDecoder:
         p, lay = self.p, self.layout
         hard = (p1_coef > 16384).astype(np.int64)
         w = np.int64(1) << lay.coef_pos
-        du = np.zeros(lay.n_coef, np.int64)
-        var = np.zeros(lay.n_coef, np.int64)
-        np.add.at(du, lay.coef_flat, (p1_coef - hard * 32768) * w)
-        np.add.at(var, lay.coef_flat, ((p1_coef * (32768 - p1_coef)) >> 15) * w * w)
+        du = lay.segment_sum((p1_coef - hard * 32768) * w)
+        var = lay.segment_sum(((p1_coef * (32768 - p1_coef)) >> 15) * w * w)
         coefs = {}
         rb = np.full((2, 2, p.nbands), INF_LOG, np.int64)
         for ci, (ch, bits) in enumerate((("M", p.bits_m), ("S", p.bits_s))):
@@ -167,7 +165,7 @@ class StreamDecoder:
                 else:
                     halves = (int(rv[0]), int(rv[0]))
                 for hh in (0, 1):
-                    rb[hh, ci, k] = int(log2_q8(np.array([max(halves[hh], 1)]))[0]) + (exp_two << 8)
+                    rb[hh, ci, k] = log2_q8(max(halves[hh], 1)) + (exp_two << 8)
         self.last_rb = rb
         return coefs
 

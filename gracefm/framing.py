@@ -28,8 +28,8 @@ def pack(lay: Layout, bd: BlockData, stream_id: int, counter: int, keystream=Non
     for ch, k, j in lay.attn_items:
         prot.append(int(bd.attn[ch][k][j]))
     prot = np.array(prot, np.int64)
-    coef = np.array([(int(bd.mant[ch][k][j] + offset_of(bits_of[ch][k], p, ch, k)) >> pos) & 1
-                     for ch, k, j, pos in lay.coef_items], np.int64)
+    flat_mant = np.concatenate([np.asarray(bd.mant[ch][k], np.int64) for ch, k in lay.coef_groups])
+    coef = ((flat_mant[lay.coef_flat] + lay.coef_offset_bits) >> lay.coef_pos) & 1
     if lay.encrypted:
         prot[lay.header_bits:] ^= keystream[: lay.n_body]
         coef = coef ^ keystream[lay.n_body:]
@@ -114,8 +114,6 @@ def unpack(lay: Layout, soft, bits, keystream_for=None, y_soft=None):
     eidx = {"M": [None] * p.nbands, "S": [None] * p.nbands}
     attn = {"M": [None] * p.nbands, "S": [None] * p.nbands}
     bits_of = {"M": p.bits_m, "S": p.bits_s}
-    u = {ch: [np.zeros(p.ncoef(k), np.int64) if bits_of[ch][k] > 0 else None
-              for k in range(p.nbands)] for ch in ("M", "S")}
     for ch, k in lay.exp_items:
         width = p.exp_bits
         eidx[ch][k] = val(body[i:i + width])
@@ -124,13 +122,13 @@ def unpack(lay: Layout, soft, bits, keystream_for=None, y_soft=None):
         count = p.attenuator_bits(ch, k)
         attn[ch][k] = body[i:i + count].copy()
         i += count
-    for (ch, k, j), bit in zip(lay.y_items, ymsb):
-        u[ch][k][j] |= int(bit) << (p.y_bits - 1)
-    for (ch, k, j, pos), bit in zip(lay.coef_items, coef_bits):
-        u[ch][k][j] |= int(bit) << pos
-    mant = {ch: [None if u[ch][k] is None else
-                 np.clip(u[ch][k] - offset_of(bits_of[ch][k], p, ch, k),
-                         qmin_of(bits_of[ch][k], p, ch, k), qmax_of(bits_of[ch][k]))
-                 for k in range(p.nbands)] for ch in ("M", "S")}
+    u_flat = lay.segment_sum(np.asarray(coef_bits, np.int64) << lay.coef_pos)
+    if lay.n_y:
+        u_flat[lay.y_flat] += np.asarray(ymsb, np.int64) << (p.y_bits - 1)
+    mant = {"M": [None] * p.nbands, "S": [None] * p.nbands}
+    for ch, k in lay.coef_groups:
+        o, n = lay.coef_offset[(ch, k)], p.ncoef(k)
+        mant[ch][k] = np.clip(u_flat[o:o + n] - offset_of(bits_of[ch][k], p, ch, k),
+                              qmin_of(bits_of[ch][k], p, ch, k), qmax_of(bits_of[ch][k]))
     bd = BlockData(mant, eidx, attn)
     return bd, header
