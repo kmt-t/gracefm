@@ -34,7 +34,7 @@ def write(path, x, fs):
 
 def write_int32(path, x, fs):
     """int32 PCM の WAV で書き出す (x は int32)"""
-    wavfile.write(path, fs, np.asarray(x, np.int32))
+    wavfile.write(path, fs, np.asarray(x, np.int64).astype(np.int32))
 
 
 def write_pcm24(path, x, fs):
@@ -55,6 +55,16 @@ def write_flac24(path, x, fs):
     import soundfile as sf
     x = np.atleast_2d(np.asarray(x, float).T).T
     sf.write(path, np.clip(x, -1.0, 1.0), fs, subtype="PCM_24", format="FLAC")
+
+
+def to_pcm24(x):
+    """実数の波形 (±1) → 符号つき24 bit整数 (gracefm の入力)"""
+    return np.clip(np.rint(np.asarray(x, float) * (1 << 23)), -(1 << 23) + 1, (1 << 23) - 1).astype(np.int64)
+
+
+def from_pcm24(y):
+    """符号つき24 bit整数 (gracefm の出力) → 実数の波形 (±1)"""
+    return np.asarray(y, np.int64) / float(1 << 23)
 
 
 def resample(x, fs_in, fs_out):

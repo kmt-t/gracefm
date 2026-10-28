@@ -22,7 +22,8 @@ sys.path.insert(0, ROOT)
 from gracefm import channel  # noqa: E402
 from tools.common import metrics, wavio  # noqa: E402
 from tools.common.analog_fm import AnalogFM  # noqa: E402
-from gracefm.equalizer import equalize_static, through_matched_channel  # noqa: E402
+from gracefm.equalizer import equalize_static  # noqa: E402
+from tools.sim.multipath import through_matched_channel  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 from gracefm.txrx import Transmitter, receive  # noqa: E402
 from tools.eval.codec_benchmark_io import prepare  # noqa: E402
@@ -41,7 +42,7 @@ SCENARIOS = (
 
 
 def score(api, x, y, stats, start, end):
-    ref, deg = x[start:end, 0], y[start:end].mean(axis=1)
+    ref, deg = x[start:end, 0], wavio.from_pcm24(y)[start:end].mean(axis=1)
     snr = float(metrics.snr_db(ref, deg))
     vr = wavio.resample(ref, 32000, 48000)
     vd = wavio.resample(deg, 32000, 48000)
@@ -65,8 +66,9 @@ def material_job(entry, seconds, strengths, scenarios, spacing_hz, training_fram
     end = start + round(seconds * pm.fs)
     off = 0
     fm = AnalogFM(x[:, 0], pm.fs)
-    frames_main = Transmitter(pm, 0, 0).run(x)
-    frames_sub = Transmitter(ps, 1, off).run(x)
+    xi = wavio.to_pcm24(x)
+    frames_main = Transmitter(pm, 0, 0).run(xi)
+    frames_sub = Transmitter(ps, 1, off).run(xi)
     api = VisqolApi()
     api.create(mode="audio")
     out = []
@@ -86,8 +88,8 @@ def material_job(entry, seconds, strengths, scenarios, spacing_hz, training_fram
                 if method == "GraceFM equalized":
                     row["main_lookahead_symbols"] = diag_a["lookahead_symbols"]
                     row["sub_lookahead_symbols"] = diag_b["lookahead_symbols"]
-                    row["main_residual_power"] = round(diag_a["residual_power"], 7)
-                    row["sub_residual_power"] = round(diag_b["residual_power"], 7)
+                    row["main_residual_power"] = round(diag_a["residual_power"] / (1 << 20), 7)
+                    row["sub_residual_power"] = round(diag_b["residual_power"] / (1 << 20), 7)
                 out.append(row)
             ghost = None if path is None else [path]
             mono = fm.receive(cn0, np.random.default_rng(1), ghost=ghost)

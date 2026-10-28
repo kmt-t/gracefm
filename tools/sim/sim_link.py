@@ -22,7 +22,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from gracefm import modem  # noqa: E402
+from gracefm import channel as chan, modem  # noqa: E402
 from tools.common import metrics, wavio  # noqa: E402
 from gracefm.postfilter import OUT_FS, postfilter  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
@@ -36,16 +36,18 @@ def channel(frames, snr_db, loss, rng):
         if rng.random() < loss:
             out.append(None)
         else:
-            out.append(modem.awgn(f, snr_db, rng))
+            out.append(chan.adc(chan.awgn(f / float(1 << modem.FRAC), snr_db, rng)))
     return out
 
 
 def run_once(x, p, snr_a, snr_b, loss, single, seed):
     rng = np.random.default_rng(seed)
     off = 0
-    fa = channel(Transmitter(p, 0, 0).run(x), snr_a, loss, rng)
-    fb = None if single else channel(Transmitter(p, 1, off).run(x), snr_b, loss, rng)
-    return receive(p, fa, fb, len(x), off)
+    xi = wavio.to_pcm24(x)
+    fa = channel(Transmitter(p, 0, 0).run(xi), snr_a, loss, rng)
+    fb = None if single else channel(Transmitter(p, 1, off).run(xi), snr_b, loss, rng)
+    y, st = receive(p, fa, fb, len(x), off)
+    return wavio.from_pcm24(y), st
 
 
 def main():
@@ -75,9 +77,9 @@ def main():
     rs = tx.symbol_rate()
     print(f"{p.name}: {p.fs}Hz / {p.audio_kbps():.0f}kbps / ブロック長 {p.frame_ms:.2f}ms "
           f"(伝送込みの最小遅延 {min_latency(p) * 1000:.2f}ms + 処理時間) / {p.modulation} / "
-          f"1系統 {rs / 1000:.1f}kシンボル/秒 (ロールオフ{p.pulse_beta:g}で理論支持幅 "
-          f"{rs * (1 + p.pulse_beta) / 1000:.0f}kHz。"
-          f"同じプロファイル2系統の合計 {rs * (1 + p.pulse_beta) * 2 / 1000:.0f}kHz)")
+          f"1系統 {rs / 1000:.1f}kシンボル/秒 (ロールオフ{p.pulse_beta_pct / 100:g}で理論支持幅 "
+          f"{rs * (100 + p.pulse_beta_pct) / 100 / 1000:.0f}kHz。"
+          f"同じプロファイル2系統の合計 {rs * (100 + p.pulse_beta_pct) / 100 * 2 / 1000:.0f}kHz)")
     print(f"  C/N0 = Es/N0 + {10 * np.log10(rs):.2f}dB, "
           f"C/N({args.bn / 1000:g}kHz) = Es/N0 + {10 * np.log10(rs / args.bn):+.2f}dB (各系統)")
     bm = metrics.BandMetric(x, p.fs)
@@ -115,7 +117,7 @@ def main():
         if args.no_postfilter:
             wavio.write(args.output, y, p.fs)
         else:
-            wavio.write_int32(args.output, postfilter(y, p.fs), OUT_FS)
+            wavio.write_int32(args.output, postfilter(wavio.to_pcm24(y), p.fs), OUT_FS)
 
 
 if __name__ == "__main__":

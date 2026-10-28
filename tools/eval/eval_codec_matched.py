@@ -52,12 +52,12 @@ def evaluate(task):
             encoded_input = x32 if p.fs == 32000 else reference
             if channels == 1:
                 encoded_input = np.repeat(encoded_input, 2, axis=1)
-            decoded = codec(encoded_input, p)
+            decoded = wavio.from_pcm24(codec(wavio.to_pcm24(encoded_input), p))
             if channels == 1:
                 decoded = decoded[:, :1]
             if p.fs == 32000:
                 decoded = wavio.resample(decoded, 32000, 48000)
-            bitrate, delay = p.audio_kbps(), 0
+            bitrate, delay = float(p.audio_kbps()), 0
         elif method in ("aptX", "aptX HD"):
             decoded, bitrate, delay = aptx_roundtrip(reference, "aptx" if method == "aptX" else "aptx_hd", ffmpeg)
         else:
