@@ -1,0 +1,167 @@
+[
+  {
+    "name": "B200M",
+    "fs": 32000,
+    "channels": 1,
+    "audio_kbps": 256.0,
+    "pcm16_kbps": 512.0,
+    "compression_ratio": 2.0,
+    "snr_db": 58.1,
+    "pcm_bits": 9.4,
+    "snr_by_material": {
+      "demo": 63.4,
+      "piano": 53.5,
+      "percussion": 57.4
+    }
+  },
+  {
+    "name": "B200",
+    "fs": 32000,
+    "channels": 2,
+    "audio_kbps": 504.0,
+    "pcm16_kbps": 1024.0,
+    "compression_ratio": 2.03,
+    "snr_db": 56.6,
+    "pcm_bits": 9.1,
+    "snr_by_material": {
+      "demo": 62.1,
+      "piano": 51.3,
+      "percussion": 56.6
+    }
+  },
+  {
+    "name": "B200MY",
+    "fs": 32000,
+    "channels": 1,
+    "audio_kbps": 256.0,
+    "pcm16_kbps": 512.0,
+    "compression_ratio": 2.0,
+    "snr_db": 58.5,
+    "pcm_bits": 9.4,
+    "snr_by_material": {
+      "demo": 63.4,
+      "piano": 54.1,
+      "percussion": 58.0
+    }
+  },
+  {
+    "name": "B200Y",
+    "fs": 32000,
+    "channels": 2,
+    "audio_kbps": 512.0,
+    "pcm16_kbps": 1024.0,
+    "compression_ratio": 2.0,
+    "snr_db": 57.9,
+    "pcm_bits": 9.3,
+    "snr_by_material": {
+      "demo": 62.0,
+      "piano": 53.8,
+      "percussion": 57.7
+    }
+  },
+  {
+    "name": "SUB50M",
+    "fs": 32000,
+    "channels": 1,
+    "audio_kbps": 43.0,
+    "pcm16_kbps": 512.0,
+    "compression_ratio": 11.91,
+    "snr_db": 23.6,
+    "pcm_bits": 3.6,
+    "snr_by_material": {
+      "demo": 28.3,
+      "piano": 19.2,
+      "percussion": 23.3
+    }
+  },
+  {
+    "name": "SUB100",
+    "fs": 32000,
+    "channels": 2,
+    "audio_kbps": 82.0,
+    "pcm16_kbps": 1024.0,
+    "compression_ratio": 12.49,
+    "snr_db": 22.4,
+    "pcm_bits": 3.4,
+    "snr_by_material": {
+      "demo": 25.7,
+      "piano": 18.6,
+      "percussion": 22.9
+    }
+  },
+  {
+    "name": "M700M",
+    "fs": 48000,
+    "channels": 1,
+    "audio_kbps": 384.0,
+    "pcm16_kbps": 768.0,
+    "compression_ratio": 2.0,
+    "snr_db": 59.3,
+    "pcm_bits": 9.6,
+    "snr_by_material": {
+      "demo": 61.5,
+      "piano": 56.6,
+      "percussion": 59.9
+    }
+  },
+  {
+    "name": "M700",
+    "fs": 48000,
+    "channels": 2,
+    "audio_kbps": 660.0,
+    "pcm16_kbps": 1536.0,
+    "compression_ratio": 2.33,
+    "snr_db": 48.1,
+    "pcm_bits": 7.7,
+    "snr_by_material": {
+      "demo": 40.4,
+      "piano": 49.6,
+      "percussion": 54.4
+    }
+  },
+  {
+    "name": "M700MY",
+    "fs": 48000,
+    "channels": 1,
+    "audio_kbps": 384.0,
+    "pcm16_kbps": 768.0,
+    "compression_ratio": 2.0,
+    "snr_db": 59.7,
+    "pcm_bits": 9.6,
+    "snr_by_material": {
+      "demo": 61.3,
+      "piano": 57.2,
+      "percussion": 60.5
+    }
+  },
+  {
+    "name": "M700Y",
+    "fs": 48000,
+    "channels": 2,
+    "audio_kbps": 768.0,
+    "pcm16_kbps": 1536.0,
+    "compression_ratio": 2.0,
+    "snr_db": 58.7,
+    "pcm_bits": 9.5,
+    "snr_by_material": {
+      "demo": 59.0,
+      "piano": 56.9,
+      "percussion": 60.2
+    }
+  },
+  {
+    "name": "SUB100-48K",
+    "fs": 48000,
+    "channels": 2,
+    "audio_kbps": 101.25,
+    "pcm16_kbps": 1536.0,
+    "compression_ratio": 15.17,
+    "snr_db": 22.0,
+    "pcm_bits": 3.4,
+    "snr_by_material": {
+      "demo": 21.4,
+      "piano": 19.6,
+      "percussion": 25.0
+    }
+  }
+]
