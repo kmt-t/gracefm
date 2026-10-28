@@ -7,7 +7,7 @@ import numpy as np
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from gracefm import fec  # noqa: E402
-from gracefm.fec_fixed import LLR_MAX, PM_MIN, rsc_decode_int, viterbi_decode_int  # noqa: E402
+from gracefm.fec import LLR_MAX, PM_MIN, rsc_decode as rsc_decode_int, viterbi_decode as viterbi_decode_int  # noqa: E402
 
 
 def quantize_llr(llr, scale):
@@ -60,4 +60,4 @@ def test_rsc_decode_int_recovers_information_bits():
 
 
 def test_path_metrics_stay_in_range():
-    assert PM_MIN == -(1 << 11)
+    assert PM_MIN == -(1 << 13)

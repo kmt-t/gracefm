@@ -6,6 +6,8 @@ FEC で保護する仮数の上位ビット数・変調方式を固定する。�
 プロファイル ID からこれらを決める。
 """
 from dataclasses import dataclass, replace
+from fractions import Fraction
+from math import gcd
 from typing import Optional, Tuple
 
 
@@ -22,15 +24,15 @@ class Profile:
     protect_k: int = 1          # ヘッダ部に入れてFECで保護する仮数の上位ビット数 (高域より低い帯域。protect_k_high が None なら全帯域)
     protect_k_high: Optional[int] = None   # 高域 H2/H1 (最後の2帯域) だけ別の保護bit数にするとき
     modulation: str = "qpsk"    # "qpsk" | "qam16h"
-    alpha: float = 1.0          # 階層 QAM の象限間距離パラメータ (1 = 通常の QAM)
-    pulse_beta: float = 0.25    # スペクトル評価用 RRC パルスのロールオフ
+    alpha: int = 1              # 階層 QAM の象限間距離パラメータ (1 = 通常の QAM)
+    pulse_beta_pct: int = 25    # RRC パルスのロールオフ [%]
     pulse_span: int = 16        # 同パルスの長さ [シンボル]
     base_m: Optional[Tuple[int, ...]] = None   # 階層化したときの基本層 (位相部に置くHaar係数の仮数bit。パリティを除く) のビット数 (None = 階層化なし)
     base_s: Optional[Tuple[int, ...]] = None   # 同 S。基本層を超えるbit (拡張層) は変調の弱い位置に入る
     attn_group_m: Optional[Tuple[int, ...]] = None  # 0=無効、正数=その係数数ごとに1bit
     attn_group_s: Optional[Tuple[int, ...]] = None
     y_start_k: Optional[int] = None  # Y: この帯域から 1係数/複素シンボル
-    y_amplitude: float = 0.08 * 7.5 / 31.5  # 7bit時 (半径の段が64) の隣接半径間隔 (正規化前)
+    y_step: Tuple[int, int] = (2, 105)   # 隣接する半径の段の間隔 (正規化前) の分子・分母。7bit時 (半径の段が64) は 0.08 × 7.5 / 31.5 = 2/105
     y_bits: int = 7                  # 最上位bitは位相 (パリティと対)、残りは連続値で推定する半径
     y_channels: Tuple[str, ...] = ("M", "S")
     format_id: int = 3             # 2bitの形式識別子。値3はビット列11を表し、世代番号ではない。
@@ -38,8 +40,8 @@ class Profile:
     def __post_init__(self):
         if not 0 <= self.pid < 16 or not 0 <= self.format_id < 4:
             raise ValueError("プロファイルIDは4bit、形式識別子は2bitにしてください")
-        if not 0 < self.pulse_beta <= 1 or self.pulse_span < 2 or self.pulse_span % 2:
-            raise ValueError("RRC パルスのロールオフは (0, 1]、長さは正の偶数にしてください")
+        if not 0 < self.pulse_beta_pct <= 100 or self.pulse_span < 2 or self.pulse_span % 2:
+            raise ValueError("RRC パルスのロールオフは (0, 100] %、長さは正の偶数にしてください")
         if len(self.bits_m) != self.nbands or len(self.bits_s) != self.nbands:
             raise ValueError("仮数ビット割当の長さが帯域数と一致しません")
         for field in ("attn_group_m", "attn_group_s"):
@@ -79,8 +81,8 @@ class Profile:
                 raise ValueError("Y境界は32/48kHz・64サンプルの、高域側3帯域から選んでください")
             if not 5 <= self.y_bits <= 16:
                 raise ValueError("Y仮数幅は6〜16bitにしてください")
-            half = (2 ** (self.y_bits - 1) - 1) / 2
-            if not 0 < self.y_amplitude < 1 / half:
+            num, den = self.y_step
+            if not 0 < num * (2 ** (self.y_bits - 1) - 1) < 2 * den:
                 raise ValueError("半径の最小値が正になる変調度にしてください")
             if not self.y_channels or any(ch not in ("M", "S") for ch in self.y_channels):
                 raise ValueError("Y対象はM/Sから選んでください")
@@ -129,14 +131,15 @@ class Profile:
         return self.levels + 1
 
     @property
-    def frame_ms(self) -> float:
+    def frame_ms(self) -> Fraction:
         """ブロック長 (= 1フレームが運ぶ音声の長さ、エンコーダの蓄積時間) [ms]。伝送込みの遅延ではない
         (伝送込みは gracefm.timing.min_latency。処理時間 0 で、この値の 2倍)"""
-        return self.block / self.fs * 1000.0
+        return Fraction(self.block * 1000, self.fs)
 
     @property
-    def frames_per_sec(self) -> float:
-        return self.fs / self.block
+    def frames_per_sec(self) -> int:
+        assert self.fs % self.block == 0
+        return self.fs // self.block
 
     def ncoef(self, k: int) -> int:
         """帯域 k の 1ブロックあたりの係数の数"""
@@ -151,14 +154,14 @@ class Profile:
                     tot += self.exp_bits + self.attenuator_bits(ch, k) + self.ncoef(k) * b
         return tot
 
-    def audio_kbps(self) -> float:
-        return self.payload_bits() * self.frames_per_sec / 1000.0
+    def audio_kbps(self) -> Fraction:
+        return Fraction(self.payload_bits() * self.frames_per_sec, 1000)
 
 
 def levels_for(fs: int, block: int) -> int:
     """最低域の帯域幅 (fs/2 / 2^段数) が 2 kHz を下回るまで Haar を分割した段数。32 kHz も 48 kHz も 4 段"""
     levels = 1
-    while fs / 2 / 2 ** levels >= 2000:
+    while fs >= (4000 << levels):
         levels += 1
     if block >> levels < 1:
         raise ValueError("ブロック長に対して段数が多すぎます")
@@ -183,14 +186,19 @@ def default_split(widths, protect_bits):
     return tuple(out)
 
 
+def _reduce(num, den):
+    g = gcd(num, den)
+    return (num // g, den // g)
+
+
 def make_y_profile(base: Profile, name: str, pid: int, start_k: Optional[int] = None,
-                amplitude: float = 0.08, mantissa_bits: int = 7,
+                amplitude: Tuple[int, int] = (2, 25), mantissa_bits: int = 7,
                 channels: Tuple[str, ...] = ("M",), format_id: int = 3,
                 bits_m: Optional[Tuple[int, ...]] = None,
                 bits_s: Optional[Tuple[int, ...]] = None) -> Profile:
     """対象成分の境界以上だけをY(位相・半径シンボル)にし、他の成分は既存主系のままにする。
 
-    amplitude は半径の段が64 (仮数7bit) のときの隣接半径間隔として指定し、幅変更時は最大変調度を保つ。
+    amplitude = (分子, 分母) は半径の段が64 (仮数7bit) のときの隣接半径間隔 (既定 2/25 = 0.08) で、幅変更時は最大変調度を保つ。
     bits_m / bits_s を指定すると、M / Sの仮数幅を主系と別の値にする (Y系だけ音質と帯域の釣り合いを変えるとき)。
     """
     if not 5 <= mantissa_bits <= 16:
@@ -232,7 +240,7 @@ def make_y_profile(base: Profile, name: str, pid: int, start_k: Optional[int] = 
                 base_s=default_split(new_s, base.protect_bits) if base.layered else None,
                 attn_group_m=attenuator_m, attn_group_s=attenuator_s,
                 y_start_k=start_k,
-                y_amplitude=amplitude * 7.5 / ((2 ** (mantissa_bits - 1) - 1) / 2),
+                y_step=_reduce(15 * amplitude[0], amplitude[1] * (2 ** (mantissa_bits - 1) - 1)),
                 y_bits=mantissa_bits, y_channels=channels,
                 format_id=format_id)
     if not y.layered:
@@ -253,17 +261,17 @@ PROFILE_MATRIX = (
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
-        alpha=5.0,
+        alpha=5,
         base_m=(5, 5, 3, 3, 3),
         base_s=(0, 0, 0, 0, 0),
         attn_group_m=(0, 0, 2, 0, 4),
         attn_group_s=(0, 0, 0, 0, 0),
-        pulse_beta=0.25,
+        pulse_beta_pct=25,
         pulse_span=16,
         y_start_k=None,
         y_channels=('M', 'S'),
         y_bits=7,
-        y_amplitude=0.019047619047619046,
+        y_step=(2, 105),
     ),
     dict(
         pid=2,
@@ -274,17 +282,17 @@ PROFILE_MATRIX = (
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
-        alpha=5.0,
+        alpha=5,
         base_m=(5, 5, 3, 3, 3),
         base_s=(5, 3, 3, 3, 3),
         attn_group_m=(0, 0, 2, 0, 4),
         attn_group_s=(0, 0, 2, 0, 4),
-        pulse_beta=0.1,
+        pulse_beta_pct=10,
         pulse_span=32,
         y_start_k=None,
         y_channels=('M', 'S'),
         y_bits=7,
-        y_amplitude=0.019047619047619046,
+        y_step=(2, 105),
     ),
     dict(
         pid=3,
@@ -295,17 +303,17 @@ PROFILE_MATRIX = (
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
-        alpha=5.0,
+        alpha=5,
         base_m=(5, 5, 1, 1, 1),
         base_s=(0, 0, 0, 0, 0),
         attn_group_m=(0, 0, 2, 4, 8),
         attn_group_s=(0, 0, 0, 0, 0),
-        pulse_beta=0.25,
+        pulse_beta_pct=25,
         pulse_span=16,
         y_start_k=2,
         y_channels=('M', 'S'),
         y_bits=7,
-        y_amplitude=0.019047619047619046,
+        y_step=(2, 105),
     ),
     dict(
         pid=4,
@@ -316,17 +324,17 @@ PROFILE_MATRIX = (
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
-        alpha=5.0,
+        alpha=5,
         base_m=(5, 5, 1, 1, 1),
         base_s=(5, 5, 1, 1, 1),
         attn_group_m=(0, 0, 2, 4, 8),
         attn_group_s=(0, 0, 2, 4, 8),
-        pulse_beta=0.1,
+        pulse_beta_pct=10,
         pulse_span=32,
         y_start_k=2,
         y_channels=('M', 'S'),
         y_bits=7,
-        y_amplitude=0.019047619047619046,
+        y_step=(2, 105),
     ),
     dict(
         pid=5,
@@ -337,17 +345,17 @@ PROFILE_MATRIX = (
         protect_k=1,
         protect_k_high=None,
         modulation='qpsk',
-        alpha=1.0,
+        alpha=1,
         base_m=None,
         base_s=None,
         attn_group_m=(0, 0, 4, 0, 0),
         attn_group_s=(0, 0, 0, 0, 0),
-        pulse_beta=0.25,
+        pulse_beta_pct=25,
         pulse_span=16,
         y_start_k=None,
         y_channels=('M', 'S'),
         y_bits=7,
-        y_amplitude=0.019047619047619046,
+        y_step=(2, 105),
     ),
     dict(
         pid=6,
@@ -358,17 +366,17 @@ PROFILE_MATRIX = (
         protect_k=1,
         protect_k_high=None,
         modulation='qpsk',
-        alpha=1.0,
+        alpha=1,
         base_m=None,
         base_s=None,
         attn_group_m=(0, 0, 4, 0, 0),
         attn_group_s=(0, 0, 4, 0, 0),
-        pulse_beta=0.25,
+        pulse_beta_pct=25,
         pulse_span=16,
         y_start_k=None,
         y_channels=('M', 'S'),
         y_bits=7,
-        y_amplitude=0.019047619047619046,
+        y_step=(2, 105),
     ),
     dict(
         pid=7,
@@ -379,17 +387,17 @@ PROFILE_MATRIX = (
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
-        alpha=5.0,
+        alpha=5,
         base_m=(5, 5, 3, 3, 3),
         base_s=(0, 0, 0, 0, 0),
         attn_group_m=(0, 0, 2, 0, 4),
         attn_group_s=(0, 0, 0, 0, 0),
-        pulse_beta=0.25,
+        pulse_beta_pct=25,
         pulse_span=16,
         y_start_k=None,
         y_channels=('M', 'S'),
         y_bits=7,
-        y_amplitude=0.019047619047619046,
+        y_step=(2, 105),
     ),
     dict(
         pid=8,
@@ -400,17 +408,17 @@ PROFILE_MATRIX = (
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
-        alpha=5.0,
+        alpha=5,
         base_m=(5, 5, 3, 3, 3),
         base_s=(5, 3, 3, 3, 1),
         attn_group_m=(0, 0, 2, 0, 4),
         attn_group_s=(0, 0, 2, 0, 4),
-        pulse_beta=0.25,
+        pulse_beta_pct=25,
         pulse_span=16,
         y_start_k=None,
         y_channels=('M', 'S'),
         y_bits=7,
-        y_amplitude=0.019047619047619046,
+        y_step=(2, 105),
     ),
     dict(
         pid=9,
@@ -421,17 +429,17 @@ PROFILE_MATRIX = (
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
-        alpha=5.0,
+        alpha=5,
         base_m=(5, 5, 1, 1, 1),
         base_s=(0, 0, 0, 0, 0),
         attn_group_m=(0, 0, 2, 4, 8),
         attn_group_s=(0, 0, 0, 0, 0),
-        pulse_beta=0.25,
+        pulse_beta_pct=25,
         pulse_span=16,
         y_start_k=2,
         y_channels=('M', 'S'),
         y_bits=7,
-        y_amplitude=0.019047619047619046,
+        y_step=(2, 105),
     ),
     dict(
         pid=10,
@@ -442,17 +450,17 @@ PROFILE_MATRIX = (
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
-        alpha=5.0,
+        alpha=5,
         base_m=(5, 5, 1, 1, 1),
         base_s=(5, 5, 1, 1, 1),
         attn_group_m=(0, 0, 2, 4, 8),
         attn_group_s=(0, 0, 2, 4, 8),
-        pulse_beta=0.25,
+        pulse_beta_pct=25,
         pulse_span=16,
         y_start_k=2,
         y_channels=('M', 'S'),
         y_bits=7,
-        y_amplitude=0.019047619047619046,
+        y_step=(2, 105),
     ),
     dict(
         pid=11,
@@ -463,17 +471,17 @@ PROFILE_MATRIX = (
         protect_k=1,
         protect_k_high=None,
         modulation='qpsk',
-        alpha=1.0,
+        alpha=1,
         base_m=None,
         base_s=None,
         attn_group_m=(0, 0, 4, 0, 0),
         attn_group_s=(0, 4, 0, 0, 0),
-        pulse_beta=0.25,
+        pulse_beta_pct=25,
         pulse_span=16,
         y_start_k=None,
         y_channels=('M', 'S'),
         y_bits=7,
-        y_amplitude=0.019047619047619046,
+        y_step=(2, 105),
     ),
 )
 

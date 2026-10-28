@@ -1,5 +1,6 @@
 """
-評価用の通信路モデル。link は同期済みシンボルに直接雑音を加える。
+評価用の通信路モデル (アナログの通信路を模擬するので、浮動小数点を使う。ハードウェアではない)。
+link は同期済みシンボルに直接雑音を加え、12 bit の ADC で量子化して、受信側が受け取る 24 bit 固定小数点の整数に直す。
 link_static_multipath は RRC 送受信フィルタと静的マルチパスの等価応答を使い、
 等化器も選択できる。どちらもシンボル時刻・搬送波位相の同期は理想とする。
 
@@ -24,7 +25,7 @@ DEFAULT_SUB = {
 
 def symbol_rate(p):
     """1系統のシンボルレート [シンボル/秒] (プリアンブル込み)"""
-    return (len(modem.PREAMBLE) + Transmitter(p).nsym) * p.frames_per_sec
+    return (modem.N_PREAMBLE + Transmitter(p).nsym) * p.frames_per_sec
 
 
 def fading_gains(nfr, kind, rng, tau_frames=50):
@@ -49,8 +50,25 @@ def fading_gains(nfr, kind, rng, tau_frames=50):
     raise ValueError(kind)
 
 
+ADC_BITS = 12
+ADC_ONE = 1 << (ADC_BITS - 2)                    # 信号点の大きさ 1.0 に対する ADC の符号 (±2 までを表す)
+
+
+def awgn(sym, snr_db, rng):
+    """Es/N0 = snr_db の複素白色雑音を加える。sym は実数の (n, 2)"""
+    n0 = 10 ** (-snr_db / 10)
+    return sym + rng.normal(0, np.sqrt(n0 / 2), sym.shape)
+
+
+def adc(sym):
+    """実数のシンボル (n, 2) を ADC の符号 (12 bit) にして、受信側の 24 bit 固定小数点 (±1 = 2^FRAC) の整数に直す"""
+    code = np.clip(np.rint(sym * ADC_ONE), -(1 << (ADC_BITS - 1)), (1 << (ADC_BITS - 1)) - 1).astype(np.int64)
+    return code << (modem.FRAC - ADC_BITS + 2)
+
+
 def through(frames, esn0, gains, rng):
-    return [modem.awgn(f, esn0 + 10 * np.log10(max(g, 1e-6)), rng) for f, g in zip(frames, gains)]
+    """整数のシンボル (n, 2) のリスト → 雑音を加え、ADC で量子化した整数のシンボルのリスト"""
+    return [adc(awgn(f / float(1 << modem.FRAC), esn0 + 10 * np.log10(max(g, 1e-6)), rng)) for f, g in zip(frames, gains)]
 
 
 def link(x, main, cn0, sub="auto", cn0_sub=None, kind_main="awgn", kind_sub="awgn", seed=1, cipher=None,
@@ -77,43 +95,3 @@ def link(x, main, cn0, sub="auto", cn0_sub=None, kind_main="awgn", kind_sub="awg
         fb = through(fb, ess, fading_gains(len(fb), kind_sub, np.random.default_rng(seed + 200)), rng)
     y, st = receive(pm, fa, fb, len(x), 0, profile_b=ps, cipher=cipher, **rx_kw)
     return y, st, {"esn0_main": esm, "esn0_sub": ess}
-
-
-def link_static_multipath(x, main, cn0, paths=(), sub="auto", cn0_sub=None,
-                          frequency_spacing_hz=0.0, equalize=True, training_frames=100,
-                          equalizer_taps=11, max_lookahead=4, decision_passes=2, seed=1,
-                          cipher=None, **rx_kw):
-    """Static RRC multipath link with ideal synchronization and optional MMSE FIR.
-
-    ``paths`` contains (delay_s, relative_path_dB, phase_at_main_rad). The
-    secondary carrier sees the same physical paths with their phase shifted
-    by -2*pi*frequency_spacing_hz*delay_s. Calibration uses only the first
-    ``training_frames`` of each stream; benchmark callers should exclude
-    those frames when scoring steady-state audio.
-    """
-    from .equalizer import through_matched_channel, equalize_static
-
-    pm = main if isinstance(main, Profile) else PROFILES[main]
-    if sub == "auto":
-        sub = DEFAULT_SUB.get(pm.name)
-    ps = (sub if isinstance(sub, Profile) else PROFILES[sub]) if sub else None
-    esm = cn0 - 10 * np.log10(symbol_rate(pm))
-    fa = Transmitter(pm, 0, 0, cipher=cipher).run(x)
-    fa, _ = through_matched_channel(fa, pm, esm, paths, seed=seed)
-    diagnostics = {}
-    if equalize:
-        fa, diagnostics["main"] = equalize_static(
-            fa, pm, 0, training_frames, equalizer_taps, max_lookahead,
-            decision_passes, encrypted=cipher is not None)
-    fb, ess = None, None
-    if ps:
-        ess = (cn0 if cn0_sub is None else cn0_sub) - 10 * np.log10(symbol_rate(ps))
-        fb = Transmitter(ps, 1, 0, cipher=cipher).run(x)
-        fb, _ = through_matched_channel(fb, ps, ess, paths, frequency_spacing_hz, seed + 1)
-        if equalize:
-            fb, diagnostics["sub"] = equalize_static(
-                fb, ps, 1, training_frames, equalizer_taps, max_lookahead,
-                decision_passes, encrypted=cipher is not None)
-    y, st = receive(pm, list(fa), None if fb is None else list(fb), len(x), 0,
-                    profile_b=ps, cipher=cipher, **rx_kw)
-    return y, st, {"esn0_main": esm, "esn0_sub": ess, "equalizer": diagnostics}

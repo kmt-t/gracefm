@@ -6,7 +6,7 @@
   → c0[t] = u[t] ^ u[t-2] ^ u[t-3] ^ u[t-5] ^ u[t-6]
      c1[t] = u[t] ^ u[t-1] ^ u[t-2] ^ u[t-3] ^ u[t-6]
   符号化ビットの順序: c0[0], c1[0], c0[1], c1[1], ...
-復号: 軟判定ビタビ (軟値が正なら 0 らしい)。
+復号: 軟判定ビタビ (軟値が正なら 0 らしい)。軟値は符号つき LLR_BITS bit の整数で、乗算を使わない (docs/FIXED.md)。
 CRC: ヘッダの基本CRCは12bit (多項式 0x80F)、高域CRCは10bit (多項式 0x233)、初期値は全ビット1、MSB から。crc16 は 16bit CCITT (0x1021)。
 """
 import numpy as np
@@ -44,30 +44,6 @@ _P0 = (_NS << 1) & (NSTATE - 1)                 # ns の前の状態 (2通り)
 _P1 = _P0 | 1
 _S0 = 1 - 2 * _OUT[_P0, _U]                     # (64, 2) 期待される符号 (+1 = bit0)
 _S1 = 1 - 2 * _OUT[_P1, _U]
-
-
-def viterbi_decode(soft, nbits):
-    """soft: 長さ 2*(nbits+6) の軟値 → 復号ビット (nbits,)"""
-    soft = np.asarray(soft, float)
-    L = nbits + K - 1
-    r = soft[: 2 * L].reshape(L, 2)
-    pm = np.full(NSTATE, -np.inf)
-    pm[0] = 0.0
-    choice = np.zeros((L, NSTATE), np.int8)
-    for t in range(L):
-        m0 = pm[_P0] + _S0 @ r[t]
-        m1 = pm[_P1] + _S1 @ r[t]
-        ch = m1 > m0
-        pm = np.where(ch, m1, m0)
-        choice[t] = ch
-        if t >= nbits:                          # 終端区間は入力 0 のみ
-            pm[_U == 1] = -np.inf
-    s = 0
-    bits = np.zeros(L, np.int64)
-    for t in range(L - 1, -1, -1):
-        bits[t] = s >> (K - 2)
-        s = ((s << 1) & (NSTATE - 1)) | int(choice[t, s])
-    return bits[:nbits]
 
 
 def crc(bits, width, poly):
@@ -125,11 +101,46 @@ def rsc_parity(x):
     return c[1::2], c[0::2][n:]
 
 
+# ---------------------------------------------------------------- 整数のビタビ復号
+# 軟値は符号つき LLR_BITS bit の整数 (正 = 0 らしい)。枝メトリックは期待される符号 ±1 との内積 (2 つの軟値の和・差) で、
+# 経路メトリックは毎ステップで最大値を引いて正規化し、PM_BITS bit の符号つきの範囲に飽和させる。到達できない状態は PM_MIN から始める。
+LLR_BITS = 8
+LLR_MAX = (1 << (LLR_BITS - 1)) - 1
+PM_BITS = 14
+PM_MIN = -(1 << (PM_BITS - 1))
+
+
+def viterbi_decode(soft, nbits):
+    """soft: 長さ 2*(nbits+6) の整数の軟値 → 復号ビット (nbits,)"""
+    soft = np.asarray(soft, np.int64)
+    assert np.abs(soft).max(initial=0) <= LLR_MAX
+    L = nbits + K - 1
+    r = soft[: 2 * L].reshape(L, 2)
+    pm = np.full(NSTATE, PM_MIN, np.int64)
+    pm[0] = 0
+    choice = np.zeros((L, NSTATE), np.int8)
+    for t in range(L):
+        m0 = pm[_P0] + _S0 @ r[t]
+        m1 = pm[_P1] + _S1 @ r[t]
+        ch = m1 > m0
+        pm = np.where(ch, m1, m0)
+        choice[t] = ch
+        if t >= nbits:                                  # 終端区間は入力 0 のみ
+            pm[_U == 1] = PM_MIN
+        pm = np.maximum(pm - pm.max(), PM_MIN)          # 正規化と飽和
+    s = 0
+    bits = np.zeros(L, np.int64)
+    for t in range(L - 1, -1, -1):
+        bits[t] = s >> (K - 2)
+        s = ((s << 1) & (NSTATE - 1)) | int(choice[t, s])
+    return bits[:nbits]
+
+
 def rsc_decode(x_soft, parity_soft, tail_soft):
-    """x_soft (n,), parity_soft (n+6,), tail_soft (6,): 軟値 (正 = 0 らしい) → 訂正後の情報ビット (n,)"""
+    """x_soft (n,), parity_soft (n+6,), tail_soft (6,): 整数の軟値 (正 = 0 らしい) → 訂正後の情報ビット (n,)"""
     n = len(x_soft)
-    r = np.empty(2 * (n + K - 1))
-    r[0::2] = np.concatenate([np.asarray(x_soft, float), np.asarray(tail_soft, float)])
-    r[1::2] = np.asarray(parity_soft, float)
+    r = np.empty(2 * (n + K - 1), np.int64)
+    r[0::2] = np.concatenate([np.asarray(x_soft, np.int64), np.asarray(tail_soft, np.int64)])
+    r[1::2] = np.asarray(parity_soft, np.int64)
     u = viterbi_decode(r, n)
     return conv_encode(u)[0::2][:n]

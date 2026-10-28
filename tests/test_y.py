@@ -17,39 +17,38 @@ def _audio(p, frames=8):
     t = np.arange(p.block * frames) / p.fs
     left = .25 * np.sin(2 * np.pi * 440 * t) + .08 * np.sin(2 * np.pi * 6100 * t)
     right = .22 * np.sin(2 * np.pi * 523 * t) + .07 * np.sin(2 * np.pi * 9200 * t)
-    return np.stack([left, right], axis=1)
+    return np.clip(np.rint(np.stack([left, right], axis=1) * 2 ** 23), -2 ** 23 + 1, 2 ** 23 - 1).astype(np.int64)
 
 
 def _y_soft(lay, bd):
     """Y専用シンボルの位相から得る軟値の代わりに、真の最上位bitとパリティを高信頼の軟値にする。"""
     u, parity, _ = lay.y_parts(bd)
     msb = u >> (lay.p.y_bits - 1)
-    return 8.0 * (1.0 - 2.0 * msb), 8.0 * (1.0 - 2.0 * parity)
+    return 100 * (1 - 2 * msb), 100 * (1 - 2 * parity)
 
 
 def test_all_y_points_and_continuous_radius():
     rng = np.random.default_rng(11)
     for lower_bits in (4, 6, 8, 10):
         levels = 1 << lower_bits
-        amplitude = .6 / ((levels - 1) / 2)
+        step = (6, 5 * (levels - 1))                          # 隣接する段の間隔 0.6 / ((levels - 1) / 2)
         u = np.arange(2 * levels)
         parity = rng.integers(0, 2, len(u))
         mask = modem.prbs(3 * len(u))
-        symbols = modem.y_modulate(u, parity, amplitude, mask, lower_bits)
-        recovered, variance, _ = modem.y_demodulate(
-            symbols, u >> lower_bits, parity, amplitude, mask, modem.PREAMBLE, lower_bits)
-        assert np.allclose(recovered, u, atol=1e-5)
+        symbols = modem.y_modulate(u, parity, step, mask, lower_bits)
+        recovered, variance = modem.y_demodulate(symbols, u >> lower_bits, parity, step, mask, 1, lower_bits)
+        assert np.array_equal(recovered, u << modem.MANT_FRAC)                  # 無雑音なら段に一致 (小数 MANT_FRAC bit の整数)
         assert np.all(variance >= 0)
         noisy = symbols.copy()
-        noisy[0] *= 1.15
-        fractional, _, _ = modem.y_demodulate(
-            noisy, u >> lower_bits, parity, amplitude, mask, modem.PREAMBLE, lower_bits)
-        assert fractional[0] != np.rint(fractional[0])
+        noisy[0] = noisy[0] * 115 // 100
+        fractional, _ = modem.y_demodulate(noisy, u >> lower_bits, parity, step, mask, 1, lower_bits)
+        assert fractional[0] != u[0] << modem.MANT_FRAC
         # 位相の軟値は最上位bitとパリティの値を示す (正 = 0)
-        llr_msb, llr_par, _ = modem.y_phase_llr(symbols, amplitude, mask, modem.PREAMBLE, lower_bits)
+        llr_msb, llr_par = modem.y_phase_llr(symbols, step, mask, 1, lower_bits)
         assert np.array_equal(llr_msb < 0, (u >> lower_bits) == 1)
         assert np.array_equal(llr_par < 0, parity == 1)
-        assert np.allclose(modem.y_slice(symbols, amplitude, lower_bits), symbols)
+        quadrant, level = modem.y_slice(symbols, step, lower_bits)
+        assert np.abs(modem.y_points(quadrant, level, step, lower_bits) - symbols).max() <= 64
 
 
 def test_y_quantizer_uses_both_extreme_codes():
@@ -63,7 +62,7 @@ def test_y_quantizer_uses_both_extreme_codes():
     u = lay.y_u(bd)
     assert u[0] == 0 and u[1] == (1 << p.y_bits) - 1
     frame = pack(lay, bd, 0, 0)
-    _, header = unpack(lay, 1.0 - 2.0 * frame, frame, y_soft=_y_soft(lay, bd))
+    _, header = unpack(lay, 8 * (1 - 2 * frame), frame, y_soft=_y_soft(lay, bd))
     assert header["y_msb"][0] == 0 and header["y_msb"][1] == 1      # 最上位bitだけがフレームを通る (残りは専用シンボル)
 
 
@@ -115,7 +114,7 @@ def test_y_bands_are_only_in_dedicated_symbols():
         decoded, valid = StreamDecoder(p).run(Transmitter(p).run(x), len(x))
         reference = np.concatenate([decode_block(encode_block(x[i:i + p.block], p), p)
                                     for i in range(0, len(x), p.block)])
-        assert valid.all() and np.allclose(decoded, reference, atol=1e-6)
+        assert valid.all() and np.abs(decoded - reference).max() <= 64
 
 
 def test_broadcast_y_bands_have_protected_attenuator_bytes():
@@ -129,7 +128,7 @@ def test_broadcast_y_bands_have_protected_attenuator_bytes():
         assert len([item for item in layout.attn_items if item[:2] == ("M", 3)]) == 4
         bd = encode_block(_audio(p, 1), p)
         packed = pack(layout, bd, 0, 1)
-        restored, _ = unpack(layout, 1.0 - 2.0 * packed, packed, y_soft=_y_soft(layout, bd))
+        restored, _ = unpack(layout, 8 * (1 - 2 * packed), packed, y_soft=_y_soft(layout, bd))
         assert np.array_equal(restored.attn["M"][3], bd.attn["M"][3])
         assert np.array_equal(restored.attn["M"][4], bd.attn["M"][4])
 
@@ -137,7 +136,7 @@ def test_broadcast_y_bands_have_protected_attenuator_bytes():
         first_attn = layout.header_bits + sum(p.exp_bits for ch, k in layout.exp_items)
         protected[layout.high_prot_indices[0]] ^= 1
         corrupted = layout.with_header(packed, protected)
-        recovered, header = unpack(layout, 1.0 - 2.0 * corrupted, corrupted, y_soft=_y_soft(layout, bd))
+        recovered, header = unpack(layout, 8 * (1 - 2 * corrupted), corrupted, y_soft=_y_soft(layout, bd))
         assert recovered is not None and header['high_ok'] is False
 
 
@@ -162,15 +161,15 @@ def test_y_noiseless_audio_and_phase_only_fallback():
         reference = np.concatenate([decode_block(encode_block(x[i:i + p.block], p), p)
                                     for i in range(0, len(x), p.block)])
         assert valid.all()
-        assert np.allclose(full, reference, atol=1e-6)
+        assert np.abs(full - reference).max() <= 64
         coarse, valid = StreamDecoder(p, y_phase_only=True).run(frames, len(x))
         assert valid.all()
-        assert np.mean((coarse - reference) ** 2) > 0
+        assert np.mean((coarse - reference).astype(float) ** 2) > 0
         # 高域だけを粗くしても、低域のHaar係数は保たれる。
         for ch in range(2):
-            low_full = haar_forward(full[:p.block, ch], p.levels)[:p.y_start_k]
-            low_coarse = haar_forward(coarse[:p.block, ch], p.levels)[:p.y_start_k]
-            assert all(np.allclose(a, b) for a, b in zip(low_full, low_coarse))
+            low_full = haar_forward((full[:p.block, ch] + 1) >> 2, p.levels)[:p.y_start_k]
+            low_coarse = haar_forward((coarse[:p.block, ch] + 1) >> 2, p.levels)[:p.y_start_k]
+            assert all(np.abs(a - b).max() <= 64 for a, b in zip(low_full, low_coarse))
 
 
 def test_amplitude_damage_does_not_damage_fec_or_low_bands():
@@ -178,9 +177,9 @@ def test_amplitude_damage_does_not_damage_fec_or_low_bands():
     x = _audio(p, 1)
     frame = Transmitter(p).frame(x)
     lay = Layout(p)
-    start = len(modem.PREAMBLE) + Transmitter(p).digital_nsym
+    start = modem.N_PREAMBLE + Transmitter(p).digital_nsym
     damaged = frame.copy()
-    damaged[start:] *= np.linspace(.65, 1.35, lay.n_y)
+    damaged[start:] = np.rint(damaged[start:] * np.linspace(.65, 1.35, lay.n_y)[:, None]).astype(np.int64)      # 試験用の損傷
     clean_decoder = StreamDecoder(p)
     damaged_decoder = StreamDecoder(p)
     clean, ok_clean = clean_decoder.decode(frame)
@@ -188,9 +187,9 @@ def test_amplitude_damage_does_not_damage_fec_or_low_bands():
     assert ok_clean and ok_damaged
     assert damaged_decoder.stats["crc_fail"] == 0
     for ch in range(2):
-        a = haar_forward(clean[:, ch], p.levels)[:p.y_start_k]
-        b = haar_forward(degraded[:, ch], p.levels)[:p.y_start_k]
-        assert all(np.allclose(u, v) for u, v in zip(a, b))
+        a = haar_forward((clean[:, ch] + 1) >> 2, p.levels)[:p.y_start_k]
+        b = haar_forward((degraded[:, ch] + 1) >> 2, p.levels)[:p.y_start_k]
+        assert all(np.abs(u - v).max() <= 64 for u, v in zip(a, b))
 
 
 def test_y_eight_bit_option_and_two_stream_fusion():
@@ -201,7 +200,7 @@ def test_y_eight_bit_option_and_two_stream_fusion():
     fs = Transmitter(PROFILES["SUB50M"], 1, 0).run(x)
     y, stats = receive(p, fa, fs, len(x), 0, profile_b=PROFILES["SUB50M"])
     assert stats["plc_samples"] == 0
-    assert np.isfinite(y).all()
+    assert np.abs(y).max() < 2 ** 23
 
 
 def test_m700y_radius_precision_does_not_use_extra_symbols_or_remove_fec():
@@ -220,7 +219,7 @@ def test_m700y_radius_precision_does_not_use_extra_symbols_or_remove_fec():
         x = _audio(p, 4)
         frames = Transmitter(p).run(x)
         decoded, valid = StreamDecoder(p).run(frames, len(x))
-        assert valid.all() and np.isfinite(decoded).all()
+        assert valid.all() and np.abs(decoded).max() < 2 ** 23
 
 
 def test_m700_y_profiles_preserve_channel_mode_and_format_id():
@@ -253,15 +252,14 @@ def test_m700_y_profiles_preserve_channel_mode_and_format_id():
         x = _audio(y)
         frames = Transmitter(y).run(x)
         pilot = header_training_symbols(y, 0, 0)
-        assert np.array_equal(np.sign(frames[0][:len(pilot)].real), np.sign(pilot.real))
-        assert np.array_equal(np.sign(frames[0][:len(pilot)].imag), np.sign(pilot.imag))
+        assert np.array_equal(np.sign(frames[0][:len(pilot)]), np.sign(pilot))
         _, accepted_by_old = StreamDecoder(old).decode(frames[0])
         assert not accepted_by_old
         decoded, valid = StreamDecoder(y).run(frames, 8 * y.block)
         reference = np.concatenate([
             decode_block(encode_block(x[i:i + y.block], y), y)
             for i in range(0, 8 * y.block, y.block)])
-        assert valid.all() and np.allclose(decoded, reference, atol=1e-6)
+        assert valid.all() and np.abs(decoded - reference).max() <= 64
 
 
 def test_y_phase_pairs_top_bit_with_its_parity():
@@ -271,8 +269,8 @@ def test_y_phase_pairs_top_bit_with_its_parity():
     assert all(bin(int(a) ^ int(b)).count("1") == 1 for a, b in zip(bits, np.roll(bits, -1)))
     u = np.array([0, 64, 0, 64])
     parity = np.array([0, 0, 1, 1])
-    symbols = modem.y_modulate(u, parity, .02, lower_bits=6)
-    assert len(set(np.round(np.angle(symbols), 6))) == 4
+    symbols = modem.y_modulate(u, parity, (2, 105), lower_bits=6)
+    assert len({tuple(s) for s in np.sign(symbols)}) == 4                     # 4つの象限
 
 
 def test_m700_hierarchy_keeps_base_bits_on_strong_qam_positions():
@@ -331,19 +329,19 @@ def test_m700_y_optional_secondary_fusion():
         p = PROFILES[name]
         x = _audio(p, 12)
         y, stats, _ = channel.link(x, name, 90, sub="auto", seed=1)
-        assert y.shape == x.shape and np.isfinite(y).all()
+        assert y.shape == x.shape and np.abs(y).max() < 2 ** 23
         assert "B" in stats and stats["plc_samples"] == 0
 
 
 def test_m700_y_equalizer_uses_extended_header():
-    from gracefm import channel
+    from tools.sim.multipath import link_static_multipath
 
     for name in ("M700MY", "M700Y"):
         p = PROFILES[name]
-        y, stats, diagnostics = channel.link_static_multipath(
+        y, stats, diagnostics = link_static_multipath(
             _audio(p, 100), p, 85, paths=((5e-6, -10, .5),), sub=None,
             training_frames=30, decision_passes=1)
-        assert np.isfinite(y).all() and stats["A"]["crc_fail"] == 0
+        assert np.abs(y).max() < 2 ** 23 and stats["A"]["crc_fail"] == 0
         assert diagnostics["equalizer"]["main"]["training_frames"] == 30
 
 
@@ -359,14 +357,14 @@ def test_y_cipher_is_explicitly_rejected():
 
 
 def test_y_equalizer_accepts_mixed_constellation():
-    from gracefm import channel
+    from tools.sim.multipath import link_static_multipath
 
     p = PROFILES["B200Y"]
     x = _audio(p, 100)
-    y, stats, diagnostics = channel.link_static_multipath(
+    y, stats, diagnostics = link_static_multipath(
         x, p, 80, paths=((5e-6, -10, .5),), sub=None,
         training_frames=30, decision_passes=1)
-    assert np.isfinite(y).all()
+    assert np.abs(y).max() < 2 ** 23
     assert stats["A"]["crc_fail"] == 0
     assert diagnostics["equalizer"]["main"]["training_frames"] == 30
 

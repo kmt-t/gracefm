@@ -59,13 +59,13 @@ def test_encoder_output_is_block_data_with_integer_fields():
 
 
 def test_hardware_modules_contain_no_floating_point():
-    """ハードウェア向けのモジュールでは float を使わない (リテラル、float 型、真の除算、浮動小数点の関数)"""
+    """ハードウェア向けのモジュール (gracefm/ のすべて。アナログの通信路を模擬する channel.py を除く) では float を使わない (リテラル、float 型、真の除算、浮動小数点の関数)"""
     import ast
     import pathlib
     forbidden_names = {"float", "float32", "float64", "sqrt", "log", "log2", "exp", "exp2", "sin", "cos", "rint",
                        "mean", "std", "power", "pi", "nan", "inf"}
     root = pathlib.Path(__file__).resolve().parents[1] / "gracefm"
-    for name in ("dsp.py", "codec.py", "fec_fixed.py", "modem_fixed.py", "link_fixed.py"):
+    for name in sorted(p.name for p in root.glob("*.py") if p.name not in ("channel.py", "__init__.py")):
         tree = ast.parse((root / name).read_text())
         for node in ast.walk(tree):
             if isinstance(node, ast.Constant) and isinstance(node.value, float):
