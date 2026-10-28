@@ -1,0 +1,146 @@
+[
+  {
+    "name": "B200M",
+    "sub": "SUB50M",
+    "front_end_per_s": {
+      "rrc_mac": 10208000.0,
+      "eq_mac": 7018000.0,
+      "llr_mul": 1691000.0,
+      "viterbi_acs": 7424000.0,
+      "soft_mantissa_mul": 1104000.0
+    },
+    "back_end_per_s": {
+      "haar_synthesis_mac": 120000.0,
+      "fusion_mac": 848000.0,
+      "plc_worst_case_mac": 2752000.0,
+      "postfilter_lanczos_mac": 8192000,
+      "postfilter_lpf_sequential_mac": 523776000,
+      "postfilter_resample_mac": 10272000,
+      "postfilter_lpf_at_output_points_mac": 49104000
+    },
+    "mac_per_s_restructured": 88557000.0,
+    "mac_per_s_sequential": 563229000.0,
+    "plc_worst_case_mac_per_s": 2752000.0,
+    "dsp_slices_min_restructured": 1,
+    "dsp_slices_min_restructured_with_plc": 1,
+    "memory_bits": {
+      "symbol_buffer": 9456,
+      "llr_buffer": 4344,
+      "viterbi_traceback": 4992,
+      "coefficients": 3072,
+      "output_double_buffer": 12288,
+      "plc_history": 6144,
+      "postfilter_delay_line": 25296,
+      "rom_coefficients": 17892
+    },
+    "memory_total_bits": 83484
+  },
+  {
+    "name": "B200",
+    "sub": "SUB100",
+    "front_end_per_s": {
+      "rrc_mac": 27712000.0,
+      "eq_mac": 11462000.0,
+      "llr_mul": 2943000.0,
+      "viterbi_acs": 11456000.0,
+      "soft_mantissa_mul": 2160000.0
+    },
+    "back_end_per_s": {
+      "haar_synthesis_mac": 120000.0,
+      "fusion_mac": 848000.0,
+      "plc_worst_case_mac": 2752000.0,
+      "postfilter_lanczos_mac": 8192000,
+      "postfilter_lpf_sequential_mac": 523776000,
+      "postfilter_resample_mac": 10272000,
+      "postfilter_lpf_at_output_points_mac": 49104000
+    },
+    "mac_per_s_restructured": 112813000.0,
+    "mac_per_s_sequential": 587485000.0,
+    "plc_worst_case_mac_per_s": 2752000.0,
+    "dsp_slices_min_restructured": 2,
+    "dsp_slices_min_restructured_with_plc": 2,
+    "memory_bits": {
+      "symbol_buffer": 16560,
+      "llr_buffer": 7896,
+      "viterbi_traceback": 8192,
+      "coefficients": 3072,
+      "output_double_buffer": 12288,
+      "plc_history": 6144,
+      "postfilter_delay_line": 25296,
+      "rom_coefficients": 18468
+    },
+    "memory_total_bits": 97916
+  },
+  {
+    "name": "M700M",
+    "sub": "SUB100-48K",
+    "front_end_per_s": {
+      "rrc_mac": 16896000.0,
+      "eq_mac": 11616000.0,
+      "llr_mul": 2734500.0,
+      "viterbi_acs": 11952000.0,
+      "soft_mantissa_mul": 1776000.0
+    },
+    "back_end_per_s": {
+      "haar_synthesis_mac": 180000.0,
+      "fusion_mac": 1272000.0,
+      "plc_worst_case_mac": 4128000.0,
+      "postfilter_lanczos_mac": 12288000,
+      "postfilter_lpf_sequential_mac": 785664000,
+      "postfilter_resample_mac": 10272000,
+      "postfilter_lpf_at_output_points_mac": 49104000
+    },
+    "mac_per_s_restructured": 106138500.0,
+    "mac_per_s_sequential": 842698500.0,
+    "plc_worst_case_mac_per_s": 4128000.0,
+    "dsp_slices_min_restructured": 2,
+    "dsp_slices_min_restructured_with_plc": 2,
+    "memory_bits": {
+      "symbol_buffer": 9456,
+      "llr_buffer": 4344,
+      "viterbi_traceback": 4992,
+      "coefficients": 3072,
+      "output_double_buffer": 12288,
+      "plc_history": 6144,
+      "postfilter_delay_line": 25296,
+      "rom_coefficients": 17892
+    },
+    "memory_total_bits": 83484
+  },
+  {
+    "name": "M700",
+    "sub": "SUB100-48K",
+    "front_end_per_s": {
+      "rrc_mac": 22464000.0,
+      "eq_mac": 15444000.0,
+      "llr_mul": 3952500.0,
+      "viterbi_acs": 16560000.0,
+      "soft_mantissa_mul": 2784000.0
+    },
+    "back_end_per_s": {
+      "haar_synthesis_mac": 180000.0,
+      "fusion_mac": 1272000.0,
+      "plc_worst_case_mac": 4128000.0,
+      "postfilter_lanczos_mac": 12288000,
+      "postfilter_lpf_sequential_mac": 785664000,
+      "postfilter_resample_mac": 10272000,
+      "postfilter_lpf_at_output_points_mac": 49104000
+    },
+    "mac_per_s_restructured": 117760500.0,
+    "mac_per_s_sequential": 854320500.0,
+    "plc_worst_case_mac_per_s": 4128000.0,
+    "dsp_slices_min_restructured": 2,
+    "dsp_slices_min_restructured_with_plc": 2,
+    "memory_bits": {
+      "symbol_buffer": 15024,
+      "llr_buffer": 7128,
+      "viterbi_traceback": 8192,
+      "coefficients": 3072,
+      "output_double_buffer": 12288,
+      "plc_history": 6144,
+      "postfilter_delay_line": 25296,
+      "rom_coefficients": 17892
+    },
+    "memory_total_bits": 95036
+  }
+]
