@@ -77,3 +77,47 @@ def sq_err_sum(err, shift):
     r = np.minimum(np.maximum(np.asarray(err, np.int64) >> np.asarray(shift, np.int64),
                               -(1 << (CONST_BITS - 1))), (1 << (CONST_BITS - 1)) - 1)
     return np.sum(r * r, axis=-1)
+
+
+# ---------------------------------------------------------------- log と exp (表を使わない)
+LN2_Q15 = 22713                      # ln 2 を Q15 で
+LOG2E_Q8_PER_LLR = 23637             # log2(e) × 2^8 / 4 を 2^8 倍した整数 (LLR は小数 2 bit): d_q8 = llr × 92.33
+ONE = 1 << 15
+
+
+def log2_q8(x):
+    """正の整数 x の log2(x) × 2^8。最上位 bit の位置 + 正規化した仮数を 8 回二乗して得る小数 8 bit (乗算と比較だけ)"""
+    x = int(x)
+    msb = x.bit_length() - 1
+    m = (x << 15) >> msb if msb <= 15 else x >> (msb - 15)           # 仮数 [1, 2) を Q15 で
+    frac = 0
+    for _ in range(8):
+        m = (m * m) >> 15
+        frac <<= 1
+        if m >= 2 * ONE:
+            m >>= 1
+            frac |= 1
+    return (msb << 8) + frac
+
+
+def pow2_neg_q15(d_q8):
+    """2^(-d) を Q15 で (d >= 0、Q8 の整数または配列)。小数部は e^(-t)、t = f·ln2 のマクローリン展開 (7 項)、整数部はシフト"""
+    d = np.asarray(d_q8, np.int64)
+    t = ((d & 255) * LN2_Q15) >> 8                                   # f · ln 2 (Q15)
+    r = np.full(d.shape, ONE, np.int64)
+    for k in range(7, 0, -1):
+        r = ONE - (((t * r) >> 15) // k)                             # 1 - (t/k)(...)
+    return r >> np.minimum(d >> 8, 31)
+
+
+def inv1p2pow_q15(d_q8):
+    """1 / (1 + 2^d) を Q15 で (d は符号つき、Q8 の整数または配列)。d < 0 は 1 - 1 / (1 + 2^|d|)"""
+    d = np.asarray(d_q8, np.int64)
+    x = pow2_neg_q15(np.minimum(np.abs(d), 16 << 8))                 # 2^(-|d|)
+    w = (x << 15) // (x + ONE)                                       # d >= 0 のときの 1 / (1 + 2^|d|)
+    return np.where(d >= 0, w, ONE - w)
+
+
+def sigmoid_q15(llr):
+    """整数 LLR (小数 2 bit、正 = 0 らしい) → ビットが 1 である確率 1 / (1 + e^LLR) を Q15 で"""
+    return inv1p2pow_q15((np.asarray(llr, np.int64) * LOG2E_Q8_PER_LLR + 128) >> 8)

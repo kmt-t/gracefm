@@ -15,21 +15,12 @@ import numpy as np
 from . import framing, fusion, modem, plc
 from .codec import (attenuator_expanded, exp_range, FRAC, haar_inverse, ms_to_lr, offset_of, qmax_of, qmin_of)
 from .crypto import unwrap_counter
-from .dsp import bit_length, saturate, shift_signed
+from .dsp import log2_q8, saturate, shift_signed, sigmoid_q15
 from .layout import Layout
 from .profiles import Profile
-from .tables import LOG2_FRAC_Q8, SIGMOID_Q15
 
 INF_LOG = 1 << 40                                       # 情報なし (誤差分散が無限大)
 ONE_TWELFTH_Q15 = 2731                                  # 1/12 (量子化誤差の分散。仮数の最下位bit単位) を Q15 で
-
-
-def log2_q8(x):
-    """正の整数 x の log2(x) × 2^8。最上位bitの位置 + 続く8 bit の表引き"""
-    x = int(x)
-    msb = x.bit_length() - 1
-    frac = ((x >> (msb - 8)) if msb >= 8 else (x << (8 - msb))) & 255
-    return (msb << 8) + LOG2_FRAC_Q8[frac]
 
 
 class Transmitter:
@@ -191,7 +182,7 @@ class StreamDecoder:
             self.stats["crc_fail"] += 1
             self.last_rb = None
             return np.zeros((p.block, 2), np.int64), False
-        p1_coef = np.array(SIGMOID_Q15, np.int64)[llr[lay.coef_stream_idx] + modem.LLR_MAX]
+        p1_coef = sigmoid_q15(llr[lay.coef_stream_idx])
         if self.cipher is not None:                              # 仮数bitの事後確率も暗号を戻す
             ku = hdr["ks"][lay.n_body:]
             p1_coef = np.where(ku == 1, 32768 - p1_coef, p1_coef)

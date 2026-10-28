@@ -8,7 +8,7 @@ M と S は別々に融合する。区間の出力は、その区間の 2系統�
 import numpy as np
 
 from .codec import FRAC, haar_forward, haar_inverse, ms_to_lr
-from .tables import POW2_NEG_Q15
+from .dsp import inv1p2pow_q15
 
 INF_LOG = 1 << 40
 HALF = 1 << 14
@@ -19,10 +19,7 @@ def weight_a(la, lb):
     """w_A = R_B / (R_A + R_B) = 1 / (1 + 2^(LA - LB)) (Q15)。LA、LB は log2 × 2^8。情報なし (INF_LOG) は重み 0 / 1 / 1/2"""
     la, lb = np.asarray(la, np.int64), np.asarray(lb, np.int64)
     d = np.clip(np.where((la >= INF_LOG) | (lb >= INF_LOG), 0, la - lb), -(16 << 8), 16 << 8)
-    mag = np.abs(d)
-    x = np.array(POW2_NEG_Q15, np.int64)[(mag >> 4) & 15] >> np.minimum(mag >> 8, 31)       # 2^(-|d|) (Q15)
-    w_pos = (x << 15) // (x + ONE)                                                          # d >= 0: 1 / (1 + 2^|d|)
-    w = np.where(d >= 0, w_pos, ONE - w_pos)
+    w = inv1p2pow_q15(d)
     w = np.where(la >= INF_LOG, np.where(lb >= INF_LOG, HALF, 0), np.where(lb >= INF_LOG, ONE, w))
     return w
 

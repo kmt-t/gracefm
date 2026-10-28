@@ -61,11 +61,7 @@ def resample_q16(up, down):
 def main():
     out = ['"""整数実装の定数表。tools/gen/gen_tables.py が作る (手で書き換えない)。ハードウェアでは ROM になる。"""', '']
     for name, tab, doc in (
-            ("SIGMOID_Q15", sigmoid_q15(), "整数 LLR -127..127 → ビットが 1 である確率 (Q15)。LLR の実数値 = 整数 / 4"),
-            ("LOG2_FRAC_Q8", log2_frac_q8(), "log2(1 + i/256) (Q8), i = 0..255"),
-            ("POW2_NEG_Q15", pow2_neg_q15(), "2^(-i/16) (Q15), i = 0..15"),
             ("HANN128_Q15", hann128_q15(), "ハン窓 128 点 (Q15)"),
-            ("LPC_BANDWIDTH_Q15", lpc_bandwidth_q15(), "LPC 係数の帯域拡張 0.998^i (Q15), i = 0..16"),
             ("LANCZOS_Q16", lanczos_q16(), "Lanczos 補間核 (8 倍、a = 8、長さ 129、Q16)"),
             ("LPF_32K_Q17", lpf_q17(), "32 kHz 系の 8 倍レートの LPF (Kaiser 9、1023 タップ、通過域端 0.98 × 16 kHz、Q17)"),
             ("LPF_48K_Q17", lpf_q17(cutoff_hz=0.98 * 48000 / 2, fs_hz=48000 * 8), "48 kHz 系の 8 倍レートの LPF (同、通過域端 0.98 × 24 kHz、Q17)"),
