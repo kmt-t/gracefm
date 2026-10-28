@@ -14,14 +14,14 @@
   "fdkaac_version": "fdkaac 1.0.0",
   "ffmpeg_version": "ffmpeg version 7.0.2-static https://johnvansickle.com/ffmpeg/  Copyright (c) 2000-2024 the FFmpeg developers",
   "profile_signatures": {
-    "B200M": "Profile(pid=1, name='B200M', fs=32000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 11, 7), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 5, 5, 3), base_s=(0, 0, 0, 0, 0, 0, 0), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 0, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
-    "B200": "Profile(pid=2, name='B200', fs=32000, block=64, levels=6, bits_m=(11, 11, 11, 11, 7, 7, 7), bits_s=(11, 11, 7, 7, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.1, pulse_span=32, base_m=(5, 5, 5, 5, 3, 3, 3), base_s=(5, 5, 3, 3, 3, 3, 3), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 0, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
-    "B200MY": "Profile(pid=3, name='B200MY', fs=32000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 7, 7), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 5, 1, 1), base_s=(0, 0, 0, 0, 0, 0, 0), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 4, 8), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
-    "B200Y": "Profile(pid=4, name='B200Y', fs=32000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 7, 7), bits_s=(11, 11, 11, 11, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.1, pulse_span=32, base_m=(5, 5, 5, 5, 5, 1, 1), base_s=(5, 5, 5, 5, 3, 1, 1), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 4, 8), attn_group_s=(0, 0, 0, 0, 0, 4, 8), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
-    "M700M": "Profile(pid=7, name='M700M', fs=48000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 7, 7), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 5, 3, 3), base_s=(0, 0, 0, 0, 0, 0, 0), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 0, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
-    "M700": "Profile(pid=8, name='M700', fs=48000, block=64, levels=6, bits_m=(11, 11, 11, 11, 7, 7, 7), bits_s=(7, 7, 7, 7, 7, 7, 3), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 3, 3, 3), base_s=(3, 3, 3, 3, 3, 3, 1), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 0, 4), attn_group_s=(0, 0, 0, 0, 0, 0, 4), hybrid_start_k=None, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
-    "M700MY": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 7, 7), bits_s=(0, 0, 0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 5, 1, 1), base_s=(0, 0, 0, 0, 0, 0, 0), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 4, 8), attn_group_s=(0, 0, 0, 0, 0, 0, 0), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)",
-    "M700Y": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=6, bits_m=(11, 11, 11, 11, 11, 7, 7), bits_s=(7, 7, 7, 7, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 5, 5, 5, 1, 1), base_s=(3, 3, 3, 3, 3, 1, 1), exp_bits_m=None, exp_bits_s=None, exp_offset_m=None, exp_offset_s=None, attn_group_m=(0, 0, 0, 0, 0, 4, 8), attn_group_s=(0, 0, 0, 0, 0, 4, 8), hybrid_start_k=5, hybrid_amplitude=0.019047619047619046, hybrid_bits=7, hybrid_channels=('M', 'S'), experimental_tag=3)"
+    "B200M": "Profile(pid=1, name='B200M', fs=32000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 3, 3, 3), base_s=(0, 0, 0, 0, 0), attn_group_m=(0, 0, 2, 0, 4), attn_group_s=(0, 0, 0, 0, 0), y_start_k=None, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "B200": "Profile(pid=2, name='B200', fs=32000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(11, 7, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.1, pulse_span=32, base_m=(5, 5, 3, 3, 3), base_s=(5, 3, 3, 3, 3), attn_group_m=(0, 0, 2, 0, 4), attn_group_s=(0, 0, 2, 0, 4), y_start_k=None, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "B200MY": "Profile(pid=3, name='B200MY', fs=32000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 1, 1, 1), base_s=(0, 0, 0, 0, 0), attn_group_m=(0, 0, 2, 4, 8), attn_group_s=(0, 0, 0, 0, 0), y_start_k=2, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "B200Y": "Profile(pid=4, name='B200Y', fs=32000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(11, 11, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.1, pulse_span=32, base_m=(5, 5, 1, 1, 1), base_s=(5, 5, 1, 1, 1), attn_group_m=(0, 0, 2, 4, 8), attn_group_s=(0, 0, 2, 4, 8), y_start_k=2, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "M700M": "Profile(pid=7, name='M700M', fs=48000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 3, 3, 3), base_s=(0, 0, 0, 0, 0), attn_group_m=(0, 0, 2, 0, 4), attn_group_s=(0, 0, 0, 0, 0), y_start_k=None, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "M700": "Profile(pid=8, name='M700', fs=48000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(11, 7, 7, 7, 3), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 3, 3, 3), base_s=(5, 3, 3, 3, 1), attn_group_m=(0, 0, 2, 0, 4), attn_group_s=(0, 0, 2, 0, 4), y_start_k=None, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "M700MY": "Profile(pid=9, name='M700MY', fs=48000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(0, 0, 0, 0, 0), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 1, 1, 1), base_s=(0, 0, 0, 0, 0), attn_group_m=(0, 0, 2, 4, 8), attn_group_s=(0, 0, 0, 0, 0), y_start_k=2, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)",
+    "M700Y": "Profile(pid=10, name='M700Y', fs=48000, block=64, levels=4, bits_m=(11, 11, 7, 7, 7), bits_s=(11, 11, 7, 7, 7), exp_bits=4, protect_k=1, protect_k_high=None, modulation='qam16h', alpha=5.0, pulse_beta=0.25, pulse_span=16, base_m=(5, 5, 1, 1, 1), base_s=(5, 5, 1, 1, 1), attn_group_m=(0, 0, 2, 4, 8), attn_group_s=(0, 0, 2, 4, 8), y_start_k=2, y_amplitude=0.019047619047619046, y_bits=7, y_channels=('M', 'S'), format_id=3)"
   },
   "sources": [
     {
@@ -382,10 +382,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 16,
       "method": "B200M",
-      "audio_kbps": 306.0,
+      "audio_kbps": 256.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 57.0,
-      "visqol_mean": 4.301
+      "snr_db": 52.32,
+      "visqol_mean": 3.954
     },
     {
       "material": "piano",
@@ -393,10 +393,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 16,
       "method": "B200MY",
-      "audio_kbps": 274.0,
+      "audio_kbps": 256.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 55.44,
-      "visqol_mean": 4.091
+      "snr_db": 52.76,
+      "visqol_mean": 3.996
     },
     {
       "material": "piano",
@@ -404,10 +404,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 16,
       "method": "M700M",
-      "audio_kbps": 411.0,
+      "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 59.27,
-      "visqol_mean": 4.247
+      "snr_db": 56.38,
+      "visqol_mean": 4.2
     },
     {
       "material": "piano",
@@ -415,10 +415,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 16,
       "method": "M700MY",
-      "audio_kbps": 411.0,
+      "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 60.19,
-      "visqol_mean": 4.36
+      "snr_db": 56.86,
+      "visqol_mean": 4.298
     },
     {
       "material": "piano",
@@ -426,10 +426,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 24,
       "method": "M700M",
-      "audio_kbps": 411.0,
+      "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 60.56,
-      "visqol_mean": 4.168
+      "snr_db": 56.77,
+      "visqol_mean": 4.023
     },
     {
       "material": "piano",
@@ -437,10 +437,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 24,
       "method": "M700MY",
-      "audio_kbps": 411.0,
+      "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 61.94,
-      "visqol_mean": 4.362
+      "snr_db": 57.33,
+      "visqol_mean": 4.203
     },
     {
       "material": "piano",
@@ -450,8 +450,8 @@
       "method": "B200",
       "audio_kbps": 504.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 48.56,
-      "visqol_mean": 3.934
+      "snr_db": 50.55,
+      "visqol_mean": 3.994
     },
     {
       "material": "piano",
@@ -459,10 +459,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 16,
       "method": "B200Y",
-      "audio_kbps": 532.0,
+      "audio_kbps": 512.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 53.68,
-      "visqol_mean": 4.188
+      "snr_db": 52.51,
+      "visqol_mean": 4.128
     },
     {
       "material": "piano",
@@ -470,10 +470,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 16,
       "method": "M700",
-      "audio_kbps": 654.0,
+      "audio_kbps": 660.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 47.61,
-      "visqol_mean": 3.219
+      "snr_db": 52.31,
+      "visqol_mean": 3.255
     },
     {
       "material": "piano",
@@ -481,10 +481,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 16,
       "method": "M700Y",
-      "audio_kbps": 774.0,
+      "audio_kbps": 768.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 48.63,
-      "visqol_mean": 4.062
+      "snr_db": 56.62,
+      "visqol_mean": 4.36
     },
     {
       "material": "piano",
@@ -492,10 +492,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 24,
       "method": "M700",
-      "audio_kbps": 654.0,
+      "audio_kbps": 660.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 46.56,
-      "visqol_mean": 2.407
+      "snr_db": 49.82,
+      "visqol_mean": 2.442
     },
     {
       "material": "piano",
@@ -503,10 +503,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 24,
       "method": "M700Y",
-      "audio_kbps": 774.0,
+      "audio_kbps": 768.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 48.68,
-      "visqol_mean": 3.806
+      "snr_db": 57.12,
+      "visqol_mean": 4.241
     },
     {
       "material": "percussion",
@@ -514,10 +514,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 16,
       "method": "B200M",
-      "audio_kbps": 306.0,
+      "audio_kbps": 256.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 56.55,
-      "visqol_mean": 4.578
+      "snr_db": 54.28,
+      "visqol_mean": 4.577
     },
     {
       "material": "percussion",
@@ -525,9 +525,9 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 16,
       "method": "B200MY",
-      "audio_kbps": 274.0,
+      "audio_kbps": 256.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 55.93,
+      "snr_db": 54.57,
       "visqol_mean": 4.578
     },
     {
@@ -536,10 +536,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 16,
       "method": "M700M",
-      "audio_kbps": 411.0,
+      "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 59.52,
-      "visqol_mean": 4.643
+      "snr_db": 58.01,
+      "visqol_mean": 4.642
     },
     {
       "material": "percussion",
@@ -547,10 +547,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 16,
       "method": "M700MY",
-      "audio_kbps": 411.0,
+      "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 59.95,
-      "visqol_mean": 4.643
+      "snr_db": 58.31,
+      "visqol_mean": 4.642
     },
     {
       "material": "percussion",
@@ -558,10 +558,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 24,
       "method": "M700M",
-      "audio_kbps": 411.0,
+      "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 62.82,
-      "visqol_mean": 4.731
+      "snr_db": 59.87,
+      "visqol_mean": 4.729
     },
     {
       "material": "percussion",
@@ -569,10 +569,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 24,
       "method": "M700MY",
-      "audio_kbps": 411.0,
+      "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 64.0,
-      "visqol_mean": 4.73
+      "snr_db": 60.44,
+      "visqol_mean": 4.728
     },
     {
       "material": "percussion",
@@ -582,8 +582,8 @@
       "method": "B200",
       "audio_kbps": 504.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 52.7,
-      "visqol_mean": 4.575
+      "snr_db": 53.63,
+      "visqol_mean": 4.576
     },
     {
       "material": "percussion",
@@ -591,9 +591,9 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 16,
       "method": "B200Y",
-      "audio_kbps": 532.0,
+      "audio_kbps": 512.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 55.27,
+      "snr_db": 54.16,
       "visqol_mean": 4.576
     },
     {
@@ -602,9 +602,9 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 16,
       "method": "M700",
-      "audio_kbps": 654.0,
+      "audio_kbps": 660.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 54.08,
+      "snr_db": 55.69,
       "visqol_mean": 4.641
     },
     {
@@ -613,9 +613,9 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 16,
       "method": "M700Y",
-      "audio_kbps": 774.0,
+      "audio_kbps": 768.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 56.34,
+      "snr_db": 57.93,
       "visqol_mean": 4.642
     },
     {
@@ -624,10 +624,10 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 24,
       "method": "M700",
-      "audio_kbps": 654.0,
+      "audio_kbps": 660.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 53.15,
-      "visqol_mean": 4.682
+      "snr_db": 54.42,
+      "visqol_mean": 4.685
     },
     {
       "material": "percussion",
@@ -635,9 +635,9 @@
       "evaluated_channels": 2,
       "bandwidth_khz": 24,
       "method": "M700Y",
-      "audio_kbps": 774.0,
+      "audio_kbps": 768.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 57.82,
+      "snr_db": 60.15,
       "visqol_mean": 4.73
     },
     {
@@ -646,10 +646,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 16,
       "method": "B200M",
-      "audio_kbps": 306.0,
+      "audio_kbps": 256.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 59.34,
-      "visqol_mean": 4.454
+      "snr_db": 55.94,
+      "visqol_mean": 4.447
     },
     {
       "material": "guitar",
@@ -657,10 +657,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 16,
       "method": "B200MY",
-      "audio_kbps": 274.0,
+      "audio_kbps": 256.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 58.46,
-      "visqol_mean": 4.45
+      "snr_db": 56.31,
+      "visqol_mean": 4.447
     },
     {
       "material": "guitar",
@@ -668,10 +668,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 16,
       "method": "M700M",
-      "audio_kbps": 411.0,
+      "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 61.83,
-      "visqol_mean": 4.564
+      "snr_db": 59.73,
+      "visqol_mean": 4.559
     },
     {
       "material": "guitar",
@@ -679,10 +679,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 16,
       "method": "M700MY",
-      "audio_kbps": 411.0,
+      "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 62.31,
-      "visqol_mean": 4.565
+      "snr_db": 60.03,
+      "visqol_mean": 4.556
     },
     {
       "material": "guitar",
@@ -690,10 +690,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 24,
       "method": "M700M",
-      "audio_kbps": 411.0,
+      "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 64.07,
-      "visqol_mean": 4.72
+      "snr_db": 60.76,
+      "visqol_mean": 4.698
     },
     {
       "material": "guitar",
@@ -701,10 +701,10 @@
       "evaluated_channels": 1,
       "bandwidth_khz": 24,
       "method": "M700MY",
-      "audio_kbps": 411.0,
+      "audio_kbps": 384.0,
       "decoder_delay_samples_48khz": 0,
-      "snr_db": 64.97,
-      "visqol_mean": 4.725
+      "snr_db": 61.18,
+      "visqol_mean": 4.703
     }
   ]
 }

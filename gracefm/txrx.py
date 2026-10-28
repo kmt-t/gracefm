@@ -112,7 +112,7 @@ class StreamDecoder:
                                                  self.y_phase_only)
         self.y_variance = {}
         for i, (ch, k, j) in enumerate(lay.y_items):
-            if k >= 5 and not high_ok:
+            if k >= p.high_k and not high_ok:
                 continue
             if (ch, k) not in self.y_variance:
                 self.y_variance[(ch, k)] = np.zeros(p.ncoef(k))
@@ -184,7 +184,7 @@ class StreamDecoder:
             coefs[ch] = []
             for k, b in enumerate(bits):
                 n = p.ncoef(k)
-                if k >= 5 and not high_ok:
+                if k >= p.high_k and not high_ok:
                     coefs[ch].append(np.zeros(n))
                     continue
                 if b == 0:
@@ -274,9 +274,9 @@ class StreamDecoder:
             if not high_ok:
                 self.last_rb = np.broadcast_to(np.asarray(self.last_r)[None, :, None],
                                                (2, 2, p.nbands)).copy()
-                self.last_rb[:, :, 5:] = np.inf
+                self.last_rb[:, :, p.high_k:] = np.inf
                 for ch in ("M", "S"):
-                    for k in (5, 6):
+                    for k in range(p.high_k, p.nbands):
                         coefs[ch][k] = np.zeros(p.ncoef(k))
         out = {ch: haar_inverse(coefs[ch]) for ch in ("M", "S")}
         return ms_to_lr(out["M"], out["S"]), True
@@ -331,10 +331,14 @@ def receive(profile: Profile, framesA, framesB, n, offset_b, plc_order=16,
                            y_phase_only=y_phase_only)
         yB, vB = dB.run(framesB, n, offset_b)
         stats["B"] = dB.stats
-        y, v, tr = fusion.fuse_band(yA, vA, yB, vB, profile.block, dA.rb_trace, dB.rb_trace)
+        y, v, tr = fusion.fuse_band(yA, vA, yB, vB, profile.block, profile.levels, dA.rb_trace, dB.rb_trace)
         if return_streams:
             stats.update(yA=yA, vA=vA, yB=yB, vB=vB, weight_trace=tr)
     else:
         y, v = yA, vA
     stats["plc_samples"] = int((~v).sum())
+    traces = [dA.rb_trace] + ([dB.rb_trace] if framesB is not None else [])
+    patterns = [tuple(np.concatenate([np.isfinite(rb[i * profile.block]).ravel() for rb in traces]))
+                for i in range(len(y) // profile.block)]
+    y = plc.crossfade_switch(y, patterns, profile.block, order=plc_order)
     return plc.conceal(y, v, profile.fs, order=plc_order), stats

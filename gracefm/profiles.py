@@ -19,8 +19,8 @@ class Profile:
     bits_m: Tuple[int, ...]     # M (= (L+R)/2) の帯域ごとの仮数ビット数 (低域→高域)。0 = 送らない
     bits_s: Tuple[int, ...]     # S (= (L-R)/2) の帯域ごとの仮数ビット数
     exp_bits: int = 4           # 帯域ごとの共有指数のビット数 (16段 × 約6dB)
-    protect_k: int = 1          # ヘッダ部に入れてFECで保護する仮数の上位ビット数 (帯域 k=0..4。protect_k_high が None なら全帯域)
-    protect_k_high: Optional[int] = None   # 高域 H2/H1 (k=5,6) だけ別の保護bit数にするとき
+    protect_k: int = 1          # ヘッダ部に入れてFECで保護する仮数の上位ビット数 (高域より低い帯域。protect_k_high が None なら全帯域)
+    protect_k_high: Optional[int] = None   # 高域 H2/H1 (最後の2帯域) だけ別の保護bit数にするとき
     modulation: str = "qpsk"    # "qpsk" | "qam16h"
     alpha: float = 1.0          # 階層 QAM の象限間距離パラメータ (1 = 通常の QAM)
     pulse_beta: float = 0.25    # スペクトル評価用 RRC パルスのロールオフ
@@ -75,8 +75,8 @@ class Profile:
         if self.y_start_k is not None:
             if any(self.protect_bits(k) != 1 for k in range(self.y_start_k, self.nbands)):
                 raise ValueError("Y帯域は最上位1bitをパリティで守る必要があります (protect_bits = 1)")
-            if self.y_start_k not in (4, 5, 6) or self.fs not in (32000, 48000) or self.block != 64:
-                raise ValueError("Y境界は32/48kHz・64サンプルの帯域4, 5, 6から選んでください")
+            if self.y_start_k not in range(self.nbands - 3, self.nbands) or self.fs not in (32000, 48000) or self.block != 64:
+                raise ValueError("Y境界は32/48kHz・64サンプルの、高域側3帯域から選んでください")
             if not 5 <= self.y_bits <= 16:
                 raise ValueError("Y仮数幅は6〜16bitにしてください")
             half = (2 ** (self.y_bits - 1) - 1) / 2
@@ -113,10 +113,15 @@ class Profile:
 
     def protect_bits(self, k: int) -> int:
         """帯域 k の仮数上位のうち、ヘッダ部に入れて FEC で保護するbit数"""
-        return self.protect_k if self.protect_k_high is None or k < 5 else self.protect_k_high
+        return self.protect_k if self.protect_k_high is None or k < self.high_k else self.protect_k_high
 
     def y_band(self, ch: str, k: int) -> bool:
         return self.has_y and ch in self.y_channels and k >= self.y_start_k
+
+    @property
+    def high_k(self) -> int:
+        """高域 H2/H1 (最後の2帯域) の先頭の帯域番号。高域CRCと高域の消去はここから"""
+        return self.nbands - 2
 
     @property
     def nbands(self) -> int:
@@ -150,6 +155,16 @@ class Profile:
         return self.payload_bits() * self.frames_per_sec / 1000.0
 
 
+def levels_for(fs: int, block: int) -> int:
+    """最低域の帯域幅 (fs/2 / 2^段数) が 2 kHz を下回るまで Haar を分割した段数。32 kHz も 48 kHz も 4 段"""
+    levels = 1
+    while fs / 2 / 2 ** levels >= 2000:
+        levels += 1
+    if block >> levels < 1:
+        raise ValueError("ブロック長に対して段数が多すぎます")
+    return levels
+
+
 def band_level(k: int, levels: int) -> int:
     """係数群 k の分解段数（k=0 は低域近似、k=1..levels は詳細帯域）。"""
     return levels if k == 0 else levels + 1 - k
@@ -168,7 +183,7 @@ def default_split(widths, protect_bits):
     return tuple(out)
 
 
-def make_y_profile(base: Profile, name: str, pid: int, start_k: int = 5,
+def make_y_profile(base: Profile, name: str, pid: int, start_k: Optional[int] = None,
                 amplitude: float = 0.08, mantissa_bits: int = 7,
                 channels: Tuple[str, ...] = ("M",), format_id: int = 3,
                 bits_m: Optional[Tuple[int, ...]] = None,
@@ -180,6 +195,8 @@ def make_y_profile(base: Profile, name: str, pid: int, start_k: int = 5,
     """
     if not 5 <= mantissa_bits <= 16:
         raise ValueError("Y仮数幅は5〜16bitにしてください")
+    if start_k is None:
+        start_k = base.nbands - 3
 
     def widths(ch, bits):
         return tuple(b if k < start_k or b == 0 or ch not in channels else mantissa_bits
@@ -204,6 +221,12 @@ def make_y_profile(base: Profile, name: str, pid: int, start_k: int = 5,
         attenuator_m = tuple(groups)
     new_m = widths("M", base.bits_m if bits_m is None else bits_m)
     new_s = widths("S", base.bits_s if bits_s is None else bits_s)
+
+    def keep_where_width_unchanged(groups, new, old):
+        """主系と仮数幅が変わった非Y帯域のアッテネータは引き継がない"""
+        return None if groups is None else tuple(0 if k < start_k and new[k] != old[k] else g for k, g in enumerate(groups))
+    attenuator_m = keep_where_width_unchanged(attenuator_m, new_m, base.bits_m)
+    attenuator_s = keep_where_width_unchanged(attenuator_s, new_s, base.bits_s)
     y = replace(base, pid=pid, name=name, bits_m=new_m, bits_s=new_s,
                 base_m=default_split(new_m, base.protect_bits) if base.layered else None,
                 base_s=default_split(new_s, base.protect_bits) if base.layered else None,
@@ -225,16 +248,16 @@ PROFILE_MATRIX = (
         pid=1,
         name='B200M',
         fs=32000,
-        bits_m=(11, 11, 11, 11, 11, 11, 7),
-        bits_s=(0, 0, 0, 0, 0, 0, 0),
+        bits_m=(11, 11, 7, 7, 7),
+        bits_s=(0, 0, 0, 0, 0),
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
         alpha=5.0,
-        base_m=(5, 5, 5, 5, 5, 5, 3),
-        base_s=(0, 0, 0, 0, 0, 0, 0),
-        attn_group_m=(0, 0, 0, 0, 0, 0, 4),
-        attn_group_s=(0, 0, 0, 0, 0, 0, 0),
+        base_m=(5, 5, 3, 3, 3),
+        base_s=(0, 0, 0, 0, 0),
+        attn_group_m=(0, 0, 2, 0, 4),
+        attn_group_s=(0, 0, 0, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
         y_start_k=None,
@@ -246,16 +269,16 @@ PROFILE_MATRIX = (
         pid=2,
         name='B200',
         fs=32000,
-        bits_m=(11, 11, 11, 11, 7, 7, 7),
-        bits_s=(11, 11, 7, 7, 7, 7, 7),
+        bits_m=(11, 11, 7, 7, 7),
+        bits_s=(11, 7, 7, 7, 7),
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
         alpha=5.0,
-        base_m=(5, 5, 5, 5, 3, 3, 3),
-        base_s=(5, 5, 3, 3, 3, 3, 3),
-        attn_group_m=(0, 0, 0, 0, 0, 0, 4),
-        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
+        base_m=(5, 5, 3, 3, 3),
+        base_s=(5, 3, 3, 3, 3),
+        attn_group_m=(0, 0, 2, 0, 4),
+        attn_group_s=(0, 0, 2, 0, 4),
         pulse_beta=0.1,
         pulse_span=32,
         y_start_k=None,
@@ -267,19 +290,19 @@ PROFILE_MATRIX = (
         pid=3,
         name='B200MY',
         fs=32000,
-        bits_m=(11, 11, 11, 11, 11, 7, 7),
-        bits_s=(0, 0, 0, 0, 0, 0, 0),
+        bits_m=(11, 11, 7, 7, 7),
+        bits_s=(0, 0, 0, 0, 0),
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
         alpha=5.0,
-        base_m=(5, 5, 5, 5, 5, 1, 1),
-        base_s=(0, 0, 0, 0, 0, 0, 0),
-        attn_group_m=(0, 0, 0, 0, 0, 4, 8),
-        attn_group_s=(0, 0, 0, 0, 0, 0, 0),
+        base_m=(5, 5, 1, 1, 1),
+        base_s=(0, 0, 0, 0, 0),
+        attn_group_m=(0, 0, 2, 4, 8),
+        attn_group_s=(0, 0, 0, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
-        y_start_k=5,
+        y_start_k=2,
         y_channels=('M', 'S'),
         y_bits=7,
         y_amplitude=0.019047619047619046,
@@ -288,19 +311,19 @@ PROFILE_MATRIX = (
         pid=4,
         name='B200Y',
         fs=32000,
-        bits_m=(11, 11, 11, 11, 11, 7, 7),
-        bits_s=(11, 11, 11, 11, 7, 7, 7),
+        bits_m=(11, 11, 7, 7, 7),
+        bits_s=(11, 11, 7, 7, 7),
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
         alpha=5.0,
-        base_m=(5, 5, 5, 5, 5, 1, 1),
-        base_s=(5, 5, 5, 5, 3, 1, 1),
-        attn_group_m=(0, 0, 0, 0, 0, 4, 8),
-        attn_group_s=(0, 0, 0, 0, 0, 4, 8),
+        base_m=(5, 5, 1, 1, 1),
+        base_s=(5, 5, 1, 1, 1),
+        attn_group_m=(0, 0, 2, 4, 8),
+        attn_group_s=(0, 0, 2, 4, 8),
         pulse_beta=0.1,
         pulse_span=32,
-        y_start_k=5,
+        y_start_k=2,
         y_channels=('M', 'S'),
         y_bits=7,
         y_amplitude=0.019047619047619046,
@@ -309,16 +332,16 @@ PROFILE_MATRIX = (
         pid=5,
         name='SUB50M',
         fs=32000,
-        bits_m=(9, 7, 5, 5, 3, 0, 0),
-        bits_s=(0, 0, 0, 0, 0, 0, 0),
+        bits_m=(7, 5, 3, 0, 0),
+        bits_s=(0, 0, 0, 0, 0),
         protect_k=1,
         protect_k_high=None,
         modulation='qpsk',
         alpha=1.0,
         base_m=None,
         base_s=None,
-        attn_group_m=(0, 0, 0, 0, 4, 0, 0),
-        attn_group_s=(0, 0, 0, 0, 0, 0, 0),
+        attn_group_m=(0, 0, 4, 0, 0),
+        attn_group_s=(0, 0, 0, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
         y_start_k=None,
@@ -330,16 +353,16 @@ PROFILE_MATRIX = (
         pid=6,
         name='SUB100',
         fs=32000,
-        bits_m=(9, 9, 9, 7, 3, 0, 0),
-        bits_s=(9, 7, 5, 3, 3, 0, 0),
+        bits_m=(7, 7, 3, 0, 0),
+        bits_s=(5, 3, 3, 0, 0),
         protect_k=1,
         protect_k_high=None,
         modulation='qpsk',
         alpha=1.0,
         base_m=None,
         base_s=None,
-        attn_group_m=(0, 0, 0, 0, 4, 0, 0),
-        attn_group_s=(0, 0, 0, 0, 4, 0, 0),
+        attn_group_m=(0, 0, 4, 0, 0),
+        attn_group_s=(0, 0, 4, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
         y_start_k=None,
@@ -351,16 +374,16 @@ PROFILE_MATRIX = (
         pid=7,
         name='M700M',
         fs=48000,
-        bits_m=(11, 11, 11, 11, 11, 7, 7),
-        bits_s=(0, 0, 0, 0, 0, 0, 0),
+        bits_m=(11, 11, 7, 7, 7),
+        bits_s=(0, 0, 0, 0, 0),
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
         alpha=5.0,
-        base_m=(5, 5, 5, 5, 5, 3, 3),
-        base_s=(0, 0, 0, 0, 0, 0, 0),
-        attn_group_m=(0, 0, 0, 0, 0, 0, 4),
-        attn_group_s=(0, 0, 0, 0, 0, 0, 0),
+        base_m=(5, 5, 3, 3, 3),
+        base_s=(0, 0, 0, 0, 0),
+        attn_group_m=(0, 0, 2, 0, 4),
+        attn_group_s=(0, 0, 0, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
         y_start_k=None,
@@ -372,16 +395,16 @@ PROFILE_MATRIX = (
         pid=8,
         name='M700',
         fs=48000,
-        bits_m=(11, 11, 11, 11, 7, 7, 7),
-        bits_s=(7, 7, 7, 7, 7, 7, 3),
+        bits_m=(11, 11, 7, 7, 7),
+        bits_s=(11, 7, 7, 7, 3),
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
         alpha=5.0,
-        base_m=(5, 5, 5, 5, 3, 3, 3),
-        base_s=(3, 3, 3, 3, 3, 3, 1),
-        attn_group_m=(0, 0, 0, 0, 0, 0, 4),
-        attn_group_s=(0, 0, 0, 0, 0, 0, 4),
+        base_m=(5, 5, 3, 3, 3),
+        base_s=(5, 3, 3, 3, 1),
+        attn_group_m=(0, 0, 2, 0, 4),
+        attn_group_s=(0, 0, 2, 0, 4),
         pulse_beta=0.25,
         pulse_span=16,
         y_start_k=None,
@@ -393,19 +416,19 @@ PROFILE_MATRIX = (
         pid=9,
         name='M700MY',
         fs=48000,
-        bits_m=(11, 11, 11, 11, 11, 7, 7),
-        bits_s=(0, 0, 0, 0, 0, 0, 0),
+        bits_m=(11, 11, 7, 7, 7),
+        bits_s=(0, 0, 0, 0, 0),
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
         alpha=5.0,
-        base_m=(5, 5, 5, 5, 5, 1, 1),
-        base_s=(0, 0, 0, 0, 0, 0, 0),
-        attn_group_m=(0, 0, 0, 0, 0, 4, 8),
-        attn_group_s=(0, 0, 0, 0, 0, 0, 0),
+        base_m=(5, 5, 1, 1, 1),
+        base_s=(0, 0, 0, 0, 0),
+        attn_group_m=(0, 0, 2, 4, 8),
+        attn_group_s=(0, 0, 0, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
-        y_start_k=5,
+        y_start_k=2,
         y_channels=('M', 'S'),
         y_bits=7,
         y_amplitude=0.019047619047619046,
@@ -414,19 +437,19 @@ PROFILE_MATRIX = (
         pid=10,
         name='M700Y',
         fs=48000,
-        bits_m=(11, 11, 11, 11, 11, 7, 7),
-        bits_s=(7, 7, 7, 7, 7, 7, 7),
+        bits_m=(11, 11, 7, 7, 7),
+        bits_s=(11, 11, 7, 7, 7),
         protect_k=1,
         protect_k_high=None,
         modulation='qam16h',
         alpha=5.0,
-        base_m=(5, 5, 5, 5, 5, 1, 1),
-        base_s=(3, 3, 3, 3, 3, 1, 1),
-        attn_group_m=(0, 0, 0, 0, 0, 4, 8),
-        attn_group_s=(0, 0, 0, 0, 0, 4, 8),
+        base_m=(5, 5, 1, 1, 1),
+        base_s=(5, 5, 1, 1, 1),
+        attn_group_m=(0, 0, 2, 4, 8),
+        attn_group_s=(0, 0, 2, 4, 8),
         pulse_beta=0.25,
         pulse_span=16,
-        y_start_k=5,
+        y_start_k=2,
         y_channels=('M', 'S'),
         y_bits=7,
         y_amplitude=0.019047619047619046,
@@ -435,16 +458,16 @@ PROFILE_MATRIX = (
         pid=11,
         name='SUB100-48K',
         fs=48000,
-        bits_m=(9, 7, 5, 5, 3, 0, 0),
-        bits_s=(7, 5, 3, 3, 0, 0, 0),
+        bits_m=(7, 7, 3, 0, 0),
+        bits_s=(5, 3, 0, 0, 0),
         protect_k=1,
         protect_k_high=None,
         modulation='qpsk',
         alpha=1.0,
         base_m=None,
         base_s=None,
-        attn_group_m=(0, 0, 0, 0, 4, 0, 0),
-        attn_group_s=(0, 0, 0, 4, 0, 0, 0),
+        attn_group_m=(0, 0, 4, 0, 0),
+        attn_group_s=(0, 4, 0, 0, 0),
         pulse_beta=0.25,
         pulse_span=16,
         y_start_k=None,
@@ -454,7 +477,7 @@ PROFILE_MATRIX = (
     ),
 )
 
-PROFILES = {row["name"]: Profile(block=64, levels=6, format_id=3, **row)
+PROFILES = {row["name"]: Profile(block=64, levels=levels_for(row["fs"], 64), format_id=3, **row)
             for row in PROFILE_MATRIX}
 BY_ID = {p.pid: p for p in PROFILES.values()}
 BY_HEADER = {(p.pid, p.format_id): p for p in PROFILES.values()}
