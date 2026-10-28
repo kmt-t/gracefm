@@ -40,15 +40,16 @@ def main():
     n = len(x)
     nfr = int(np.ceil(n / p.block))
     xp = np.pad(x, ((0, nfr * p.block - n), (0, 0)))
-    out = np.zeros_like(xp)
+    xi = wavio.to_pcm24(xp)
+    out = np.zeros_like(xi)
     for i in range(nfr):
-        coefs = decode_coeffs(encode_block(xp[i * p.block:(i + 1) * p.block], p), p)
+        coefs = decode_coeffs(encode_block(xi[i * p.block:(i + 1) * p.block], p), p)
         out[i * p.block:(i + 1) * p.block] = ms_to_lr(haar_inverse(coefs["M"]), haar_inverse(coefs["S"]))
-    y = out[:n]
+    y = wavio.from_pcm24(out[:n])
     if args.no_postfilter:
         wavio.write(args.output, y, p.fs)
     else:
-        wavio.write_int32(args.output, postfilter(y, p.fs), OUT_FS)
+        wavio.write_int32(args.output, postfilter(wavio.to_pcm24(y), p.fs), OUT_FS)
     bm = metrics.BandMetric(x, p.fs)
     print(f"{p.name}: {p.fs}Hz, {p.audio_kbps():.0f}kbps (音声データ), ブロック長 {p.frame_ms:.2f}ms "
           f"(伝送込みの最小遅延 {min_latency(p) * 1000:.2f}ms + 処理時間)")

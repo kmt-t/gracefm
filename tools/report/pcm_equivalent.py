@@ -39,12 +39,12 @@ def measure(name, p):
     for material in MATERIALS:
         x, _ = wavio.read(ROOT / "samples" / f"{material}-{'mono' if mono else 'stereo'}__{p.fs // 1000}k__reference.flac")
         x = np.repeat(x, 2, axis=1) if x.shape[1] == 1 else x
-        y = roundtrip(x, p)
+        y = wavio.from_pcm24(roundtrip(wavio.to_pcm24(x), p))
         snrs.append(float(metrics.snr_db(x[:, :channels], y[:, :channels])))
     snr = float(np.mean(snrs))
     pcm = p.fs * channels * 16 / 1000
-    return dict(name=name, fs=p.fs, channels=channels, audio_kbps=p.audio_kbps(), pcm16_kbps=pcm,
-                compression_ratio=round(pcm / p.audio_kbps(), 2), snr_db=round(snr, 1),
+    return dict(name=name, fs=p.fs, channels=channels, audio_kbps=float(p.audio_kbps()), pcm16_kbps=pcm,
+                compression_ratio=round(float(pcm / p.audio_kbps()), 2), snr_db=round(snr, 1),
                 pcm_bits=round((snr - 1.76) / 6.02, 1), snr_by_material=dict(zip(MATERIALS, (round(s, 1) for s in snrs))))
 
 
@@ -62,7 +62,7 @@ def level_curve(name):
         row = []
         for source in (x, sine):
             s = source * gain
-            row.append(round(float(metrics.snr_db(s[:, :channels], roundtrip(s, p)[:, :channels])), 1))
+            row.append(round(float(metrics.snr_db(s[:, :channels], wavio.from_pcm24(roundtrip(wavio.to_pcm24(s), p))[:, :channels])), 1))
         curve[level] = dict(piano=row[0], sine_1khz=row[1])
     return name, curve
 

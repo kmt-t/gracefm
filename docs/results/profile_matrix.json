@@ -25,8 +25,8 @@
         "protect_k": 1,
         "protect_k_high": null,
         "modulation": "qam16h",
-        "alpha": 5.0,
-        "pulse_beta": 0.25,
+        "alpha": 5,
+        "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": [
           5,
@@ -57,7 +57,10 @@
           0
         ],
         "y_start_k": null,
-        "y_amplitude": 0.019047619047619046,
+        "y_step": [
+          2,
+          105
+        ],
         "y_bits": 7,
         "y_channels": [
           "M",
@@ -77,7 +80,7 @@
       "strong_positions": 362,
       "weak_positions": 362,
       "symbols_per_frame": 197,
-      "symbol_rate": 98500.0,
+      "symbol_rate": 98500,
       "audio_kbps": 256.0,
       "theoretical_bandwidth_hz": 123125.0
     },
@@ -106,8 +109,8 @@
         "protect_k": 1,
         "protect_k_high": null,
         "modulation": "qam16h",
-        "alpha": 5.0,
-        "pulse_beta": 0.1,
+        "alpha": 5,
+        "pulse_beta_pct": 10,
         "pulse_span": 32,
         "base_m": [
           5,
@@ -138,7 +141,10 @@
           4
         ],
         "y_start_k": null,
-        "y_amplitude": 0.019047619047619046,
+        "y_step": [
+          2,
+          105
+        ],
         "y_bits": 7,
         "y_channels": [
           "M",
@@ -158,9 +164,9 @@
       "strong_positions": 658,
       "weak_positions": 658,
       "symbols_per_frame": 345,
-      "symbol_rate": 172500.0,
+      "symbol_rate": 172500,
       "audio_kbps": 504.0,
-      "theoretical_bandwidth_hz": 189750.00000000003
+      "theoretical_bandwidth_hz": 189750.0
     },
     {
       "profile": {
@@ -187,8 +193,8 @@
         "protect_k": 1,
         "protect_k_high": null,
         "modulation": "qam16h",
-        "alpha": 5.0,
-        "pulse_beta": 0.25,
+        "alpha": 5,
+        "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": [
           5,
@@ -219,7 +225,10 @@
           0
         ],
         "y_start_k": 2,
-        "y_amplitude": 0.019047619047619046,
+        "y_step": [
+          2,
+          105
+        ],
         "y_bits": 7,
         "y_channels": [
           "M",
@@ -239,7 +248,7 @@
       "strong_positions": 144,
       "weak_positions": 144,
       "symbols_per_frame": 144,
-      "symbol_rate": 72000.0,
+      "symbol_rate": 72000,
       "audio_kbps": 256.0,
       "theoretical_bandwidth_hz": 90000.0
     },
@@ -268,8 +277,8 @@
         "protect_k": 1,
         "protect_k_high": null,
         "modulation": "qam16h",
-        "alpha": 5.0,
-        "pulse_beta": 0.1,
+        "alpha": 5,
+        "pulse_beta_pct": 10,
         "pulse_span": 32,
         "base_m": [
           5,
@@ -300,7 +309,10 @@
           8
         ],
         "y_start_k": 2,
-        "y_amplitude": 0.019047619047619046,
+        "y_step": [
+          2,
+          105
+        ],
         "y_bits": 7,
         "y_channels": [
           "M",
@@ -320,7 +332,7 @@
       "strong_positions": 224,
       "weak_positions": 224,
       "symbols_per_frame": 240,
-      "symbol_rate": 120000.0,
+      "symbol_rate": 120000,
       "audio_kbps": 512.0,
       "theoretical_bandwidth_hz": 132000.0
     },
@@ -349,8 +361,8 @@
         "protect_k": 1,
         "protect_k_high": null,
         "modulation": "qpsk",
-        "alpha": 1.0,
-        "pulse_beta": 0.25,
+        "alpha": 1,
+        "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": null,
         "base_s": null,
@@ -369,7 +381,10 @@
           0
         ],
         "y_start_k": null,
-        "y_amplitude": 0.019047619047619046,
+        "y_step": [
+          2,
+          105
+        ],
         "y_bits": 7,
         "y_channels": [
           "M",
@@ -389,7 +404,7 @@
       "strong_positions": null,
       "weak_positions": null,
       "symbols_per_frame": 122,
-      "symbol_rate": 61000.0,
+      "symbol_rate": 61000,
       "audio_kbps": 43.0,
       "theoretical_bandwidth_hz": 76250.0
     },
@@ -418,8 +433,8 @@
         "protect_k": 1,
         "protect_k_high": null,
         "modulation": "qpsk",
-        "alpha": 1.0,
-        "pulse_beta": 0.25,
+        "alpha": 1,
+        "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": null,
         "base_s": null,
@@ -438,7 +453,10 @@
           0
         ],
         "y_start_k": null,
-        "y_amplitude": 0.019047619047619046,
+        "y_step": [
+          2,
+          105
+        ],
         "y_bits": 7,
         "y_channels": [
           "M",
@@ -458,7 +476,7 @@
       "strong_positions": null,
       "weak_positions": null,
       "symbols_per_frame": 176,
-      "symbol_rate": 88000.0,
+      "symbol_rate": 88000,
       "audio_kbps": 82.0,
       "theoretical_bandwidth_hz": 110000.0
     },
@@ -487,8 +505,8 @@
         "protect_k": 1,
         "protect_k_high": null,
         "modulation": "qam16h",
-        "alpha": 5.0,
-        "pulse_beta": 0.25,
+        "alpha": 5,
+        "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": [
           5,
@@ -519,7 +537,10 @@
           0
         ],
         "y_start_k": null,
-        "y_amplitude": 0.019047619047619046,
+        "y_step": [
+          2,
+          105
+        ],
         "y_bits": 7,
         "y_channels": [
           "M",
@@ -539,7 +560,7 @@
       "strong_positions": 362,
       "weak_positions": 362,
       "symbols_per_frame": 197,
-      "symbol_rate": 147750.0,
+      "symbol_rate": 147750,
       "audio_kbps": 384.0,
       "theoretical_bandwidth_hz": 184687.5
     },
@@ -568,8 +589,8 @@
         "protect_k": 1,
         "protect_k_high": null,
         "modulation": "qam16h",
-        "alpha": 5.0,
-        "pulse_beta": 0.25,
+        "alpha": 5,
+        "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": [
           5,
@@ -600,7 +621,10 @@
           4
         ],
         "y_start_k": null,
-        "y_amplitude": 0.019047619047619046,
+        "y_step": [
+          2,
+          105
+        ],
         "y_bits": 7,
         "y_channels": [
           "M",
@@ -620,7 +644,7 @@
       "strong_positions": 594,
       "weak_positions": 594,
       "symbols_per_frame": 313,
-      "symbol_rate": 234750.0,
+      "symbol_rate": 234750,
       "audio_kbps": 660.0,
       "theoretical_bandwidth_hz": 293437.5
     },
@@ -649,8 +673,8 @@
         "protect_k": 1,
         "protect_k_high": null,
         "modulation": "qam16h",
-        "alpha": 5.0,
-        "pulse_beta": 0.25,
+        "alpha": 5,
+        "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": [
           5,
@@ -681,7 +705,10 @@
           0
         ],
         "y_start_k": 2,
-        "y_amplitude": 0.019047619047619046,
+        "y_step": [
+          2,
+          105
+        ],
         "y_bits": 7,
         "y_channels": [
           "M",
@@ -701,7 +728,7 @@
       "strong_positions": 144,
       "weak_positions": 144,
       "symbols_per_frame": 144,
-      "symbol_rate": 108000.0,
+      "symbol_rate": 108000,
       "audio_kbps": 384.0,
       "theoretical_bandwidth_hz": 135000.0
     },
@@ -730,8 +757,8 @@
         "protect_k": 1,
         "protect_k_high": null,
         "modulation": "qam16h",
-        "alpha": 5.0,
-        "pulse_beta": 0.25,
+        "alpha": 5,
+        "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": [
           5,
@@ -762,7 +789,10 @@
           8
         ],
         "y_start_k": 2,
-        "y_amplitude": 0.019047619047619046,
+        "y_step": [
+          2,
+          105
+        ],
         "y_bits": 7,
         "y_channels": [
           "M",
@@ -782,7 +812,7 @@
       "strong_positions": 224,
       "weak_positions": 224,
       "symbols_per_frame": 240,
-      "symbol_rate": 180000.0,
+      "symbol_rate": 180000,
       "audio_kbps": 768.0,
       "theoretical_bandwidth_hz": 225000.0
     },
@@ -811,8 +841,8 @@
         "protect_k": 1,
         "protect_k_high": null,
         "modulation": "qpsk",
-        "alpha": 1.0,
-        "pulse_beta": 0.25,
+        "alpha": 1,
+        "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": null,
         "base_s": null,
@@ -831,7 +861,10 @@
           0
         ],
         "y_start_k": null,
-        "y_amplitude": 0.019047619047619046,
+        "y_step": [
+          2,
+          105
+        ],
         "y_bits": 7,
         "y_channels": [
           "M",
@@ -851,7 +884,7 @@
       "strong_positions": null,
       "weak_positions": null,
       "symbols_per_frame": 155,
-      "symbol_rate": 116250.0,
+      "symbol_rate": 116250,
       "audio_kbps": 101.25,
       "theoretical_bandwidth_hz": 145312.5
     }

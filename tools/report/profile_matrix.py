@@ -32,7 +32,7 @@ def render():
         tx=Transmitter(p); l=tx.layout; ns=tx.nsym+16; rs=tx.symbol_rate()
         strong=l.n_strong_raw if p.layered else '—'
         weak=l.n_weak_raw if p.layered else '—'
-        lines.append(f'| {p.pid} | {p.name} | {p.fs/1000:g} | {"M/S" if any(p.bits_s) else "M"} | {p.modulation} / {p.alpha:g} | {p.y_start_k if p.has_y else "—"} | {p.protect_bits(0)}/{p.protect_bits(p.high_k)} | {p.audio_kbps():g} | {2 if l.has_high_crc else 1} | {l.n_prot_crc} | {l.n_header} | {l.n_parity} | {l.n_coef_bits} | {strong} | {weak} | {ns} | {rs/1000:g} | {p.pulse_beta:g} / {p.pulse_span} | {rs*(1+p.pulse_beta)/1000:g} |')
+        lines.append(f'| {p.pid} | {p.name} | {p.fs/1000:g} | {"M/S" if any(p.bits_s) else "M"} | {p.modulation} / {p.alpha} | {p.y_start_k if p.has_y else "—"} | {p.protect_bits(0)}/{p.protect_bits(p.high_k)} | {p.audio_kbps():g} | {2 if l.has_high_crc else 1} | {l.n_prot_crc} | {l.n_header} | {l.n_parity} | {l.n_coef_bits} | {strong} | {weak} | {ns} | {rs/1000:g} | {p.pulse_beta_pct / 100:g} / {p.pulse_span} | {rs*(100+p.pulse_beta_pct)/100/1000:g} |')
         budgets.append(dict(profile=asdict(p), header_bits=l.header_bits, crc_count=2 if l.has_high_crc else 1,
                             header_crc_bits=l.n_prot_crc, header_fec_bits=l.n_header, parity_bits=l.n_parity,
                             protect_bits_low=p.protect_bits(0), protect_bits_high=p.protect_bits(p.high_k),
@@ -40,7 +40,7 @@ def render():
                             strong_positions=l.n_strong_raw if p.layered else None,
                             weak_positions=l.n_weak_raw if p.layered else None,
                             symbols_per_frame=ns, symbol_rate=rs,
-                            audio_kbps=p.audio_kbps(), theoretical_bandwidth_hz=rs*(1+p.pulse_beta)))
+                            audio_kbps=float(p.audio_kbps()), theoretical_bandwidth_hz=rs*(100+p.pulse_beta_pct)/100))
     lines += ['', '## 成分ごとの全設定', '',
               'ベクトルは `k=0…4`（k0〜k4 は 32 kHz で 0〜1、1〜2、2〜4、4〜8、8〜16 kHz）。M/Sの各行に同じ項目を表示する。アッテネータ区間長0はその帯域では不使用。各成分の最高送信帯域に配置し、4係数を基本とする（係数数が4未満ならその係数数）。Y帯域は各帯域4区間。', '',
               '階層16QAMでは、係数をシンボル単位で分け、位相部（強い2位置）に置く仮数bitが基本層、振幅部（弱い2位置）に置く仮数bitが拡張層。位相部には基本層の仮数のほかにパリティKbitが入るので、位相部（基本層 + K）と振幅部（拡張層）がどちらも2の倍数で、全幅 = 基本層 + 拡張層。K=1でNシンボルの係数は基本層 2N−1、拡張層 2N、全幅 4N−1。基本層幅は、係数ごとに位相部（基本層 + パリティ）と振幅部（拡張層）が同じ大きさになるように `gracefm/layers.py` が決める。Y高域Mは専用シンボルで、デジタル層分割の対象外。QPSKは全幅が2の倍数で、層分割なし。', '',

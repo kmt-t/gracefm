@@ -35,8 +35,9 @@ def job(a):
     tone = np.repeat((0.5 * np.sin(2 * np.pi * 1000 * t))[:, None], 2, axis=1)
     out = {}
     for name, pm, ps in CONFIGS:
-        y, st, es = channel.link(x, PROFILES[pm], cn0, sub=ps, seed=1)
-        yt, _, _ = channel.link(tone, PROFILES[pm], cn0, sub=ps, seed=1)
+        y, st, es = channel.link(wavio.to_pcm24(x), PROFILES[pm], cn0, sub=ps, seed=1)
+        yt, _, _ = channel.link(wavio.to_pcm24(tone), PROFILES[pm], cn0, sub=ps, seed=1)
+        y, yt = wavio.from_pcm24(y), wavio.from_pcm24(yt)
         thd, thdn = metrics.thd(yt[:, 0], 48000, 1000.0)
         out[name] = (metrics.snr_db(x, y), thd, thdn, es["esn0_main"], st["plc_samples"] / len(x) * 100)
     return a, out

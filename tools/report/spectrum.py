@@ -48,9 +48,10 @@ SPS = 8
 
 
 def rf_psd(p, x):
-    syms = np.concatenate(Transmitter(p).run(x))
+    iq = np.concatenate(Transmitter(p).run(wavio.to_pcm24(x))) / float(1 << 21)
+    syms = iq[:, 0] + 1j * iq[:, 1]
     rs = channel.symbol_rate(p)
-    w = shape(syms, beta=p.pulse_beta, span=p.pulse_span, sps=SPS)
+    w = shape(syms, beta=p.pulse_beta_pct / 100, span=p.pulse_span, sps=SPS)
     w = w / np.sqrt(np.mean(np.abs(w) ** 2))
     f, P = welch(w, fs=SPS * rs, nperseg=4096, return_onesided=False, scaling="density")
     i = np.argsort(f)
@@ -107,7 +108,7 @@ def main():
             if n != "FM":
                 res[n]["symbol_rate_ksps"] = round(channel.symbol_rate(PROFILES[n]) / 1e3, 1)
                 res[n]["modulation"] = PROFILES[n].modulation
-                res[n]["rrc_beta"] = PROFILES[n].pulse_beta
+                res[n]["rrc_beta"] = PROFILES[n].pulse_beta_pct / 100
                 res[n]["rrc_span_symbols"] = PROFILES[n].pulse_span
             ax.plot(f / 1e3, 10 * np.log10(P + 1e-30), color=COL[j], ls=LS[j], lw=1.6,
                     label=f"{label}  99%帯域 {obw / 1e3:.0f}kHz")
@@ -137,7 +138,8 @@ def main():
         f, P0 = welch(m, fs=fsa, nperseg=4096)
         ax.plot(f / 1e3, 10 * np.log10(P0 + 1e-30), color=INK2, lw=1.2, label="原音")
         for j, n in enumerate(names):
-            y = base_layer_audio(xx, PROFILES["M700"]) if n == "M700基本層" else codec(xx, PROFILES[n])
+            xi = wavio.to_pcm24(xx)
+            y = wavio.from_pcm24(base_layer_audio(xi, PROFILES["M700"]) if n == "M700基本層" else codec(xi, PROFILES[n]))
             e = (y[:, 0] + y[:, 1]) / 2 - m
             f, P = welch(e, fs=fsa, nperseg=4096)
             label = (f"誤差：{n}" if n == "M700基本層" else

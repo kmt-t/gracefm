@@ -85,15 +85,16 @@ def generate(task):
     print(src, flush=True)
     wavio.write_flac24(os.path.join(OUT, reference_name(src, fs)), x[:, :1] if mono else x, fs)
     fm = AnalogFM(x[:, 0], fs) if mono and fs == 32000 else None
+    xi = wavio.to_pcm24(x)
     for main in mains:
-        save(sample_name(src, fs, main), roundtrip(x, PROFILES[main]), mono, fs)
+        save(sample_name(src, fs, main), wavio.from_pcm24(roundtrip(xi, PROFILES[main])), mono, fs)
         for sub in subs:
             for case in CASES:
                 kind = {"rayleigh60": "rayleigh", "main_minus10db66": "fade10"}.get(case, "awgn")
                 cn0 = int(case[len(case.rstrip("0123456789")):])
-                y, _, _ = channel.link(x, main, cn0, sub=sub, kind_main=kind,
+                y, _, _ = channel.link(xi, main, cn0, sub=sub, kind_main=kind,
                                        kind_sub="awgn" if kind == "fade10" else kind, seed=1)
-                save(sample_name(src, fs, main, case, sub=sub), y, mono, fs)
+                save(sample_name(src, fs, main, case, sub=sub), wavio.from_pcm24(y), mono, fs)
         print(f"  {src} {main} done", flush=True)
     if fm is not None:
         for case in CASES:
