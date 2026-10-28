@@ -10,7 +10,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from gracefm import fec, modem  # noqa: E402
 from gracefm.codec import (decode_block, encode_block, haar_forward,  # noqa: E402
                         haar_inverse)
-from gracefm.framing import Layout  # noqa: E402
+from gracefm.framing import pack, unpack  # noqa: E402
+from gracefm.layout import Layout  # noqa: E402
 from gracefm.profiles import PROFILES  # noqa: E402
 from gracefm.txrx import StreamDecoder, Transmitter, receive  # noqa: E402
 
@@ -47,12 +48,14 @@ def test_crc_detects_error():
 
 def test_frame_roundtrip_bit_exact():
     for name, p in PROFILES.items():
+        if p.has_y:                      # Y帯域の仮数は専用シンボルで送る (test_y.py)
+            continue
         x = _signal(p.block, p.fs)
         bd = encode_block(x, p)
         lay = Layout(p)
-        bits = lay.pack(bd, 1, 5)
+        bits = pack(lay, bd, 1, 5)
         assert len(bits) == lay.n_tx
-        bd2, hdr = lay.unpack(1.0 - 2.0 * bits, bits)
+        bd2, hdr = unpack(lay, 1.0 - 2.0 * bits, bits)
         assert {k: v for k, v in hdr.items() if k not in ("top_bits", "y_msb")} == {
             "pid": p.pid, "stream": 1, "encrypted": False, "counter": 5, "high_ok": True}
         assert len(hdr["top_bits"]) == lay.n_top
@@ -69,18 +72,18 @@ def test_attenuator_roundtrip():
     assert len(bd.attn["M"][4]) == 8
     lay = Layout(p)
     assert lay.n_prot == Layout(base).n_prot + 8
-    frame = lay.pack(bd, 1, 5)
-    recovered, hdr = lay.unpack(1.0 - 2.0 * frame, frame)
+    frame = pack(lay, bd, 1, 5)
+    recovered, hdr = unpack(lay, 1.0 - 2.0 * frame, frame)
     assert hdr["pid"] == p.pid
     assert np.array_equal(recovered.attn["M"][4], bd.attn["M"][4])
     assert np.allclose(decode_block(recovered, p), decode_block(bd, p))
     wrong_layout = Layout(replace(p, pid=15))
-    wrong, _ = wrong_layout.unpack(1.0 - 2.0 * frame, frame)
+    wrong, _ = unpack(wrong_layout, 1.0 - 2.0 * frame, frame)
     assert wrong is None
     body = lay.header_info(frame)
     body[lay.header_bits + 5 * 4] ^= 1  # 最初のアッテネータbitを壊す
     damaged = lay.with_header(frame, body)
-    recovered, hdr = lay.unpack(1.0 - 2.0 * damaged, damaged)
+    recovered, hdr = unpack(lay, 1.0 - 2.0 * damaged, damaged)
     assert recovered is not None and hdr["high_ok"] is False
 
     rng = np.random.default_rng(123)
@@ -244,10 +247,10 @@ def test_layered_profile():
     full, damaged = [], []
     for i in range(0, len(x), p.block):
         bd = encode_block(x[i:i + p.block], p)
-        frame = lay.pack(bd, 0, 0)
+        frame = pack(lay, bd, 0, 0)
         bad = frame.copy()
         bad[lay.coef_stream_idx[weak_ext]] = rng.integers(0, 2, int(weak_ext.sum()))
-        recovered, _ = lay.unpack(1.0 - 2.0 * bad, bad)
+        recovered, _ = unpack(lay, 1.0 - 2.0 * bad, bad)
         assert recovered is not None
         full.append(decode_block(bd, p))
         damaged.append(decode_block(recovered, p))

@@ -13,7 +13,8 @@ import numpy as np
 from . import fec, fusion, modem, plc
 from .codec import (attenuator_expanded, decode_coeffs, encode_block, exp_range,
                     haar_inverse, ms_to_lr, offset_of, qmax_of, qmin_of)
-from .framing import YLayout, Layout
+from . import framing
+from .layout import Layout
 from .crypto import unwrap_counter
 from .profiles import Profile
 
@@ -28,11 +29,10 @@ class Transmitter:
         self.offset = offset
         self.clip_opt = clip_opt
         self.cipher = cipher
-        self.layout = YLayout(profile) if profile.has_y else Layout(profile, encrypted=cipher is not None)
+        self.layout = Layout(profile, encrypted=cipher is not None)
         self.frame_no = 0
         self.digital_nsym = modem.n_symbols(self.layout.n_tx, self.layout.n_strong, profile.modulation)
         self.nsym = self.digital_nsym + (self.layout.n_y if profile.has_y else 0)
-        self.counter = 0
 
     def frame(self, xblock):
         """xblock: (block, 2) → 1フレームぶんの複素シンボル"""
@@ -40,9 +40,8 @@ class Transmitter:
         ks = None
         if self.cipher is not None:
             ks = self.cipher.keystream(self.sid, self.frame_no, self.layout.n_keystream)
-        bits = self.layout.pack(bd, self.sid, self.frame_no, ks)
+        bits = framing.pack(self.layout, bd, self.sid, self.frame_no, ks)
         self.frame_no += 1
-        self.counter = self.frame_no & (0xFFFF if self.p.format_id else 0xFF)
         buf = np.zeros(self.digital_nsym * modem.bits_per_symbol(self.p.modulation), np.int64)
         buf[: len(bits)] = bits
         buf ^= modem.prbs(len(buf))                      # スクランブル (詰め物も含む)
@@ -81,7 +80,7 @@ class StreamDecoder:
         self.cipher = cipher
         self.last_frame_no = -1
         self.last_pre_err = None                        # 直前フレームの、既知プリアンブルとの差から求めた I/Q 軸あたりの誤差分散 (復調には使わない。記録用)
-        self.layout = YLayout(profile) if profile.has_y else Layout(profile, encrypted=cipher is not None)
+        self.layout = Layout(profile, encrypted=cipher is not None)
         self.digital_nsym = modem.n_symbols(self.layout.n_tx, self.layout.n_strong, profile.modulation)
         self.stats = {"frames": 0, "lost": 0, "crc_fail": 0, "high_crc_fail": 0}
         self.last_r = (np.nan, np.nan)          # 直前フレームの誤差分散の見積もり (M, S)
@@ -232,7 +231,7 @@ class StreamDecoder:
             p1, llr = modem.bit_probs(digital_sym, lay.n_tx, p.modulation, p.alpha)
             s = modem.prbs(lay.n_tx).astype(bool)        # スクランブルを戻す
             p1, llr = np.where(s, 1 - p1, p1), np.where(s, -llr, llr)
-            bd, hdr = lay.unpack(llr, (p1 > 0.5).astype(np.int64), self._ks_for, y_soft=y_soft)
+            bd, hdr = framing.unpack(lay, llr, (p1 > 0.5).astype(np.int64), self._ks_for, y_soft=y_soft)
             p1_coef = p1[lay.coef_stream_idx]
             if bd is not None and self.cipher is not None:  # 仮数bitの事後確率も暗号を戻す
                 ku = hdr["ks"][lay.n_body:].astype(bool)
@@ -248,7 +247,7 @@ class StreamDecoder:
             # 弱い位置 (振幅部) には軟値が無いので、硬判定に小さな信頼度をつけて渡す
             weak_conf = 0.3 * max(float(np.median(np.abs(soft))), 1e-6)
             soft = np.concatenate([soft, weak_conf * (1.0 - 2.0 * hard[len(soft):])])
-            bd, hdr = lay.unpack(soft, hard, self._ks_for, y_soft=y_soft)
+            bd, hdr = framing.unpack(lay, soft, hard, self._ks_for, y_soft=y_soft)
             p1_coef = hard.astype(float)[lay.coef_stream_idx]
             if bd is None:
                 self.stats["crc_fail"] += 1

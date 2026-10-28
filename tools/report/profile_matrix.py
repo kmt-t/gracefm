@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from gracefm.codec import exp_range
+from gracefm.layout import Layout
 from gracefm.profiles import PROFILES
 from gracefm.txrx import Transmitter
 
@@ -23,21 +24,21 @@ def render():
              '全登録プロファイルに区間アッテネータを標準装備する。名前の数字は系列名であり、現在の実ビットレートは下表を参照。', '',
              '共通設定：64サンプル、Haar 4段（最低域の帯域幅が2 kHz未満になるまで分割）、指数4bit/送信帯域、基本CRC-12とH1/H2用の高域CRC-10（該当帯域を送る場合のみ）、系統符号 K=7・r=1/2（位相部＝パリティ、振幅部＝データ）。**ヘッダ**（ヘッダ・指数・区間アッテネータ・CRC）と**Haar係数部**（係数ごとのパリティと仮数bit）に分けて送る。ヘッダはパリティを位相部、情報を振幅部に置く。係数のパリティは各係数の先頭シンボル（位相部）に置き、仮数bitはFEC・CRCなし。上位Kbit自体は仮数bitの先頭にある（Y帯域は仮数が仮数bitに無いので、最上位bitとそのパリティを専用シンボルの位相に載せる）。Kは高域（最後の2帯域 H2/H1）とそれより低い帯域で別に決められる。ヘッダは非暗号化24bit（カウンタ16bit）、暗号化32bit（カウンタ24bit）。ID 0・12～15は予約。副系SUBはQPSK、ステレオ差分Sは主系の階層QAMで送る。M接尾辞はモノラル、Y接尾辞はQASKを表す。', '',
              '## ID・方式・伝送予算', '',
-             '非暗号化の値。シンボル数にはプリアンブル16シンボルとY専用シンボルを含む。理論支持幅は `(1+β)Rs` で、99%占有帯域の実測値ではない。音声量には指数とアッテネータを含む。強い位置は、位相部の列（ヘッダのパリティ、終端、係数のパリティ、基本層の仮数）の長さ、弱い位置は振幅部の列（ヘッダの情報、終端、拡張層の仮数）の長さ（階層16QAMのみ。差は偶数そろえの詰め物）。', '',
+             '非暗号化の値。シンボル数にはプリアンブル16シンボルとY専用シンボルを含む。理論支持幅は `(1+β)Rs` で、99%占有帯域の実測値ではない。音声量には指数とアッテネータを含む。強い位置は、位相部の列（ヘッダのパリティ、終端、係数のパリティ、基本層の仮数）の長さ、弱い位置は振幅部の列（ヘッダの情報、終端、拡張層の仮数）の長さ（階層16QAMのみ。両者は一致し、`--check` で検査する）。', '',
              '| ID | 名前 | fs kHz | M/S | 変調 / α | Y開始k | パリティで守るK 低域/高域 | 音声 kbps | CRC本数 | ヘッダCRC込 bit | ヘッダFEC後 bit | パリティ bit | 仮数 bit | 強い位置 | 弱い位置 | シンボル/フレーム | Rs ksym/s | RRC β / span | 理論支持幅 kHz |',
              '|---|---|---:|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---:|']
     budgets=[]
     for p in PROFILES.values():
         tx=Transmitter(p); l=tx.layout; ns=tx.nsym+16; rs=tx.symbol_rate()
-        strong=l.n_coded+l.n_base_bits if p.layered else '—'
-        weak=l.n_coef_bits-l.n_base_bits if p.layered else '—'
+        strong=l.n_strong_raw if p.layered else '—'
+        weak=l.n_weak_raw if p.layered else '—'
         lines.append(f'| {p.pid} | {p.name} | {p.fs/1000:g} | {"M/S" if any(p.bits_s) else "M"} | {p.modulation} / {p.alpha:g} | {p.y_start_k if p.has_y else "—"} | {p.protect_bits(0)}/{p.protect_bits(p.high_k)} | {p.audio_kbps():g} | {2 if l.has_high_crc else 1} | {l.n_prot_crc} | {l.n_header} | {l.n_parity} | {l.n_coef_bits} | {strong} | {weak} | {ns} | {rs/1000:g} | {p.pulse_beta:g} / {p.pulse_span} | {rs*(1+p.pulse_beta)/1000:g} |')
         budgets.append(dict(profile=asdict(p), header_bits=l.header_bits, crc_count=2 if l.has_high_crc else 1,
                             header_crc_bits=l.n_prot_crc, header_fec_bits=l.n_header, parity_bits=l.n_parity,
                             protect_bits_low=p.protect_bits(0), protect_bits_high=p.protect_bits(p.high_k),
                             fec_bits=l.n_coded, coefficient_part_bits=l.n_coef_bits,
-                            strong_positions=None if not p.layered else l.n_coded+l.n_base_bits,
-                            weak_positions=None if not p.layered else l.n_coef_bits-l.n_base_bits,
+                            strong_positions=l.n_strong_raw if p.layered else None,
+                            weak_positions=l.n_weak_raw if p.layered else None,
                             symbols_per_frame=ns, symbol_rate=rs,
                             audio_kbps=p.audio_kbps(), theoretical_bandwidth_hz=rs*(1+p.pulse_beta)))
     lines += ['', '## 成分ごとの全設定', '',
@@ -68,6 +69,11 @@ def main():
     parser.add_argument('--check',action='store_true')
     args=parser.parse_args()
     md,data=render()
+    if args.check:
+        for p in PROFILES.values():
+            l=Layout(p)
+            if p.layered and l.n_strong_raw!=l.n_weak_raw:
+                raise SystemExit(f'strong != weak positions: {p.name} {l.n_strong_raw} {l.n_weak_raw}')
     for path,content in [(ROOT/'docs/PROFILES.md',md),(ROOT/'docs/results/profile_matrix.json',data)]:
         if args.check:
             if not path.exists() or path.read_text()!=content:

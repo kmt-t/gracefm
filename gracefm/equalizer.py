@@ -14,7 +14,7 @@ from scipy.interpolate import CubicSpline
 from scipy.signal import fftconvolve
 
 from . import fec, modem
-from .framing import YLayout, Layout, _bits
+from .layout import Layout, int_bits
 from .profiles import Profile
 from .pulse import rrc_taps
 
@@ -74,10 +74,10 @@ def header_training_symbols(profile: Profile, stream_id: int, frame_no: int, enc
     by its equally likely mean, and decision-directed training refines it.
     """
     width = Layout(profile, encrypted=encrypted).header_bits
-    tag = _bits(profile.format_id, 2)
-    header = (_bits(profile.pid, 4) + _bits(stream_id, 1) +
+    tag = int_bits(profile.format_id, 2)
+    header = (int_bits(profile.pid, 4) + int_bits(stream_id, 1) +
               [int(encrypted)] + tag +
-              _bits(frame_no & ((1 << (width - 8)) - 1), width - 8))
+              int_bits(frame_no & ((1 << (width - 8)) - 1), width - 8))
     # ヘッダのパリティは因果的 (t 番目のパリティは先頭 t+1 bit だけで決まる) なので、先頭のヘッダ bit 数ぶんの
     # パリティ = 先頭の width/2 シンボルの象限 (位相部) は、既知のヘッダだけから分かる。
     parity = fec.rsc_parity(np.asarray(header, np.int64))[0][:width]
@@ -159,7 +159,7 @@ def _slice_constellation(values, profile: Profile):
         nearest = points[np.abs(np.abs(v)[:, None] - points).argmin(axis=1)]
         out[:] = np.where(v < 0, -nearest, nearest)
     if profile.has_y:
-        lay = YLayout(profile)
+        lay = Layout(profile)
         digital = modem.n_symbols(lay.n_tx, lay.n_strong, profile.modulation)
         frame_len = len(modem.PREAMBLE) + digital + lay.n_y
         if len(result) % frame_len:

@@ -129,7 +129,7 @@ def quantize_attenuated(c, k, b, profile: Profile, clip_opt=True, ch="M"):
 
 
 def attenuator_expanded(attn, group, n):
-    """係数ごとの 0/1 減衰量。従来フレームは全係数 0。"""
+    """係数ごとの 0/1 減衰量。区間長0の帯域は全係数 0。"""
     if not group:
         return np.zeros(n, np.int64)
     return np.repeat(np.asarray(attn, np.int64), group, axis=-1)

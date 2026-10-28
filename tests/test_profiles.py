@@ -8,7 +8,8 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from gracefm import modem
 from gracefm.codec import encode_block, decode_block
-from gracefm.framing import Layout, YLayout
+from gracefm.framing import pack, unpack
+from gracefm.layout import Layout
 from gracefm.profiles import PROFILES, BY_ID, BY_HEADER, make_y_profile
 from gracefm.txrx import Transmitter, StreamDecoder
 
@@ -54,7 +55,7 @@ def test_all_profiles_roundtrip_and_attenuator_crc():
         assert valid.all() and np.allclose(decoded, expected), p.name
         lay = tx.layout
         bd = encode_block(x, p)
-        packed = lay.pack(bd, 0, 0)
+        packed = pack(lay, bd, 0, 0)
         body = lay.header_info(packed)
         first = lay.header_bits + sum(p.exp_bits for ch, k in lay.exp_items)
         assert lay.attn_items
@@ -66,7 +67,7 @@ def test_all_profiles_roundtrip_and_attenuator_crc():
             damaged = body.copy()
             damaged[index] ^= 1
             frame = lay.with_header(packed, damaged)
-            recovered, header = lay.unpack(1.0 - 2.0 * frame, frame, **kwargs)
+            recovered, header = unpack(lay, 1.0 - 2.0 * frame, frame, **kwargs)
             if index in lay.high_prot_indices:
                 assert recovered is not None and header['high_ok'] is False
             else:
@@ -78,7 +79,7 @@ def test_layer_assignment_matches_physical_positions():
         if not p.layered:
             continue
         for encrypted in ([False] if p.has_y else [False, True]):
-            lay = YLayout(p) if p.has_y else Layout(p, encrypted=encrypted)
+            lay = Layout(p) if p.has_y else Layout(p, encrypted=encrypted)
             n = modem.n_symbols(lay.n_tx, lay.n_strong, p.modulation)
             assert lay.n_strong == 2 * n, p.name
             for index, (ch, k, j, pos) in zip(lay.coef_stream_idx, lay.coef_items):
@@ -90,7 +91,7 @@ def test_b200y_stereo_side_uses_qam_strong_positions():
     p = PROFILES['B200Y']
     assert p.y_channels == ('M', 'S') and p.bits_s == (11, 11, 7, 7, 7)
     assert p.base_s[:2] == (5, 5)
-    lay = YLayout(p)
+    lay = Layout(p)
     assert any(ch == 'S' for ch, *_ in lay.coef_items)
     assert lay.n_strong == 2 * modem.n_symbols(lay.n_tx, lay.n_strong, p.modulation)
 
@@ -112,7 +113,7 @@ def test_layers_are_even_and_balanced():
         if not p.layered:
             continue
         assert (balanced(p).base_m, balanced(p).base_s) == (p.base_m, p.base_s), p.name
-        lay = YLayout(p) if p.has_y else Layout(p)
+        lay = Layout(p) if p.has_y else Layout(p)
         for ch, widths, base in (('M', p.bits_m, p.base_m), ('S', p.bits_s, p.base_s)):
             for k, width in enumerate(widths):
                 if width and not p.y_band(ch, k):
@@ -126,15 +127,14 @@ def test_layers_are_even_and_balanced():
 
 def test_other_format_identifiers_are_rejected_even_with_matching_id():
     for p in PROFILES.values():
-        cls = YLayout if p.has_y else Layout
-        current = cls(p)
+        current = Layout(p)
         x = np.zeros((p.block, 2))
         for tag in (0, 1, 2):
             old = replace(p, format_id=tag)
-            lay = cls(old)
-            packed = lay.pack(encode_block(x, old), 0, 1)
+            lay = Layout(old)
+            packed = pack(lay, encode_block(x, old), 0, 1)
             # The format identifier is fixed for this implementation.
-            assert current.unpack(1.0 - 2.0 * packed, packed) == (None, None)
+            assert unpack(current, 1.0 - 2.0 * packed, packed) == (None, None)
 
 
 def test_y_factory_matches_catalog():
@@ -149,7 +149,7 @@ def test_parity_next_to_coefficients_corrects_top_mantissa_bits():
         p = PROFILES[name]
         lay = Layout(p)
         bd = encode_block(np.random.default_rng(7).uniform(-0.5, 0.5, (p.block, 2)), p)
-        frame = lay.pack(bd, 0, 3)
+        frame = pack(lay, bd, 0, 3)
         assert lay.n_top == sum(p.protect_bits(k) * p.ncoef(k) for bits in (p.bits_m, p.bits_s)
                                 for k, w in enumerate(bits) if w)
         assert lay.n_parity == lay.n_top + 12
@@ -163,7 +163,7 @@ def test_parity_next_to_coefficients_corrects_top_mantissa_bits():
         bits[flipped] ^= 1
         soft = 1.0 - 2.0 * bits
         soft[flipped] *= 0.3                           # 誤ったbitは信頼度が低い
-        recovered, header = lay.unpack(soft, bits)
+        recovered, header = unpack(lay, soft, bits)
         assert recovered is not None and header['high_ok']
         assert np.allclose(decode_block(recovered, p), decode_block(bd, p)), name
         assert np.array_equal(header['top_bits'], frame[lay.top_stream_idx])
@@ -175,7 +175,7 @@ def test_high_crc_erases_only_h1_h2_in_receiver():
     x = np.random.default_rng(42).uniform(-0.5, 0.5, (p.block, 2))
     tx = Transmitter(p)
     lay = tx.layout
-    packed = lay.pack(encode_block(x, p), 0, 0)
+    packed = pack(lay, encode_block(x, p), 0, 0)
     protected = lay.header_info(packed)
 
     def symbols(changed):
@@ -215,7 +215,7 @@ def test_y_high_crc_keeps_lower_y_band():
     tx = Transmitter(p)
     original = tx.frame(x)
     lay = tx.layout
-    packed = lay.pack(encode_block(x, p), 0, 0)
+    packed = pack(lay, encode_block(x, p), 0, 0)
     protected = lay.header_info(packed)
     protected[lay.high_prot_indices[0]] ^= 1
     bits = lay.with_header(packed, protected)
