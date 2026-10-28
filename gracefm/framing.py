@@ -58,22 +58,23 @@ def pack(lay: Layout, bd: BlockData, stream_id: int, counter: int, keystream=Non
     return stream
 
 
-def unpack(lay: Layout, soft, bits, keystream_for=None, y_soft=None):
+def unpack(lay: Layout, soft, bits, keystream_for=None, y_soft=None, decoder=fec.rsc_decode):
     """
     soft: 送信ビット列全体の軟値 (正 = 0 らしい。足りない分は0とみなす。ヘッダのデータは振幅部にあるので、振幅部の軟値も必要)、
     bits: 送信ビット列全体の硬判定 (n_tx 個)
     y_soft: Y帯域があるとき、専用シンボルの位相から得た (最上位bitの軟値, パリティの軟値) (Y係数の数ずつ。省略時は消失扱い)
+    decoder: 系統符号の復号関数 (既定は浮動小数点のビタビ。整数の軟値には gracefm.fec_fixed.rsc_decode_int)
     keystream_for: 暗号化するとき、ヘッダ (dict) からキーストリームを返す関数。使ったキーストリームは header["ks"]
     返り値: (BlockData, header dict) / 基本CRCが合わなければ (None, None)。
     高域CRCだけが不一致なら header["high_ok"] が False。header["top_bits"] は訂正後の上位K bit (平文)。
     """
     p = lay.p
-    soft = np.pad(np.asarray(soft, float), (0, max(0, lay.n_tx - len(soft))))
+    soft = np.pad(np.asarray(soft), (0, max(0, lay.n_tx - len(soft))))
     bits = np.pad(np.asarray(bits, np.int64), (0, max(0, lay.n_tx - len(bits))))
-    prot = fec.rsc_decode(soft[lay.hdata_idx], soft[lay.hpar_idx], soft[lay.htail_idx])
+    prot = decoder(soft[lay.hdata_idx], soft[lay.hpar_idx], soft[lay.htail_idx])
     body = prot[: lay.n_prot]
     if lay.n_top:
-        top = fec.rsc_decode(soft[lay.top_stream_idx],
+        top = decoder(soft[lay.top_stream_idx],
                              np.concatenate([soft[lay.parity_idx], soft[lay.tail_idx[: fec.K - 1]]]),
                              soft[lay.tail_idx[fec.K - 1:]])
     else:
@@ -82,7 +83,7 @@ def unpack(lay: Layout, soft, bits, keystream_for=None, y_soft=None):
         if y_soft is None:                         # 位相の情報が無ければ消失扱い
             y_soft = (np.zeros(len(lay.y_items)), np.zeros(len(lay.y_items)))
         msb_soft, parity_soft = (np.asarray(v, float) for v in y_soft)
-        ymsb = fec.rsc_decode(msb_soft, np.concatenate([parity_soft, soft[lay.ytail_idx[: fec.K - 1]]]),
+        ymsb = decoder(msb_soft, np.concatenate([parity_soft, soft[lay.ytail_idx[: fec.K - 1]]]),
                               soft[lay.ytail_idx[fec.K - 1:]])
     else:
         ymsb = np.zeros(0, np.int64)
