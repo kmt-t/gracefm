@@ -50,7 +50,10 @@
         "piano": 8.6,
         "sine_1khz": 7.1
       }
-    }
+    },
+    "floor_level_sine_db": -101.1,
+    "floor_level_piano_db": -90.0,
+    "pcm_bits_at_floor_sine": 19.8
   },
   {
     "name": "B200",
@@ -103,7 +106,10 @@
         "piano": 7.3,
         "sine_1khz": 7.1
       }
-    }
+    },
+    "floor_level_sine_db": -101.1,
+    "floor_level_piano_db": -85.7,
+    "pcm_bits_at_floor_sine": 19.8
   },
   {
     "name": "B200MY",
@@ -156,7 +162,10 @@
         "piano": 8.6,
         "sine_1khz": 7.1
       }
-    }
+    },
+    "floor_level_sine_db": -103.9,
+    "floor_level_piano_db": -93.3,
+    "pcm_bits_at_floor_sine": 20.3
   },
   {
     "name": "B200Y",
@@ -209,7 +218,10 @@
         "piano": 7.4,
         "sine_1khz": 7.1
       }
-    }
+    },
+    "floor_level_sine_db": -103.9,
+    "floor_level_piano_db": -91.2,
+    "pcm_bits_at_floor_sine": 20.3
   },
   {
     "name": "SUB50M",
@@ -292,7 +304,10 @@
         "piano": 9.7,
         "sine_1khz": 10.2
       }
-    }
+    },
+    "floor_level_sine_db": -98.9,
+    "floor_level_piano_db": -94.8,
+    "pcm_bits_at_floor_sine": 19.5
   },
   {
     "name": "M700",
@@ -345,7 +360,10 @@
         "piano": 8.5,
         "sine_1khz": 10.2
       }
-    }
+    },
+    "floor_level_sine_db": -98.9,
+    "floor_level_piano_db": -87.0,
+    "pcm_bits_at_floor_sine": 19.5
   },
   {
     "name": "M700MY",
@@ -398,7 +416,10 @@
         "piano": 9.7,
         "sine_1khz": 10.2
       }
-    }
+    },
+    "floor_level_sine_db": -106.3,
+    "floor_level_piano_db": -95.8,
+    "pcm_bits_at_floor_sine": 20.7
   },
   {
     "name": "M700Y",
@@ -451,7 +472,10 @@
         "piano": 8.5,
         "sine_1khz": 10.2
       }
-    }
+    },
+    "floor_level_sine_db": -106.3,
+    "floor_level_piano_db": -94.0,
+    "pcm_bits_at_floor_sine": 20.7
   },
   {
     "name": "SUB100-48K",
