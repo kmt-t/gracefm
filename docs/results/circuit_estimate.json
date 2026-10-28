@@ -14,13 +14,13 @@
         "haar_synthesis_mac": 120000.0,
         "fusion_mac": 848000.0,
         "plc_worst_case_mac": 2752000.0,
-        "postfilter_lanczos_mac": 8192000,
-        "postfilter_lpf_sequential_mac": 523776000,
-        "postfilter_resample_mac": 10272000,
-        "postfilter_lpf_at_output_points_mac": 49104000
+        "postfilter_lanczos_mac": 4096000,
+        "postfilter_lpf_sequential_mac": 130816000,
+        "postfilter_resample_mac": 5184000,
+        "postfilter_lpf_at_output_points_mac": 24528000
       },
-      "mac_per_s_restructured": 88557000.0,
-      "mac_per_s_sequential": 563229000.0,
+      "mac_per_s_restructured": 54797000.0,
+      "mac_per_s_sequential": 161085000.0,
       "plc_worst_case_mac_per_s": 2752000.0,
       "dsp_slices_min_restructured": 1,
       "dsp_slices_min_restructured_with_plc": 1,
@@ -31,10 +31,10 @@
         "coefficients": 3072,
         "output_double_buffer": 12288,
         "plc_history": 6144,
-        "postfilter_delay_line": 25296,
-        "rom_coefficients": 17892
+        "postfilter_delay_line": 13008,
+        "rom_coefficients": 9252
       },
-      "memory_total_bits": 83484
+      "memory_total_bits": 62556
     },
     {
       "name": "B200",
@@ -50,16 +50,16 @@
         "haar_synthesis_mac": 120000.0,
         "fusion_mac": 848000.0,
         "plc_worst_case_mac": 2752000.0,
-        "postfilter_lanczos_mac": 8192000,
-        "postfilter_lpf_sequential_mac": 523776000,
-        "postfilter_resample_mac": 10272000,
-        "postfilter_lpf_at_output_points_mac": 49104000
+        "postfilter_lanczos_mac": 4096000,
+        "postfilter_lpf_sequential_mac": 130816000,
+        "postfilter_resample_mac": 5184000,
+        "postfilter_lpf_at_output_points_mac": 24528000
       },
-      "mac_per_s_restructured": 112813000.0,
-      "mac_per_s_sequential": 587485000.0,
+      "mac_per_s_restructured": 79053000.0,
+      "mac_per_s_sequential": 185341000.0,
       "plc_worst_case_mac_per_s": 2752000.0,
-      "dsp_slices_min_restructured": 2,
-      "dsp_slices_min_restructured_with_plc": 2,
+      "dsp_slices_min_restructured": 1,
+      "dsp_slices_min_restructured_with_plc": 1,
       "memory_bits": {
         "symbol_buffer": 16560,
         "llr_buffer": 7896,
@@ -67,10 +67,10 @@
         "coefficients": 3072,
         "output_double_buffer": 12288,
         "plc_history": 6144,
-        "postfilter_delay_line": 25296,
-        "rom_coefficients": 18468
+        "postfilter_delay_line": 13008,
+        "rom_coefficients": 9828
       },
-      "memory_total_bits": 97916
+      "memory_total_bits": 76988
     },
     {
       "name": "M700M",
@@ -86,16 +86,16 @@
         "haar_synthesis_mac": 180000.0,
         "fusion_mac": 1272000.0,
         "plc_worst_case_mac": 4128000.0,
-        "postfilter_lanczos_mac": 12288000,
-        "postfilter_lpf_sequential_mac": 785664000,
-        "postfilter_resample_mac": 10272000,
-        "postfilter_lpf_at_output_points_mac": 49104000
+        "postfilter_lanczos_mac": 6144000,
+        "postfilter_lpf_sequential_mac": 196224000,
+        "postfilter_resample_mac": 7776000,
+        "postfilter_lpf_at_output_points_mac": 24528000
       },
-      "mac_per_s_restructured": 106138500.0,
-      "mac_per_s_sequential": 842698500.0,
+      "mac_per_s_restructured": 72922500.0,
+      "mac_per_s_sequential": 244618500.0,
       "plc_worst_case_mac_per_s": 4128000.0,
-      "dsp_slices_min_restructured": 2,
-      "dsp_slices_min_restructured_with_plc": 2,
+      "dsp_slices_min_restructured": 1,
+      "dsp_slices_min_restructured_with_plc": 1,
       "memory_bits": {
         "symbol_buffer": 9456,
         "llr_buffer": 4344,
@@ -103,10 +103,10 @@
         "coefficients": 3072,
         "output_double_buffer": 12288,
         "plc_history": 6144,
-        "postfilter_delay_line": 25296,
-        "rom_coefficients": 17892
+        "postfilter_delay_line": 13008,
+        "rom_coefficients": 7812
       },
-      "memory_total_bits": 83484
+      "memory_total_bits": 61116
     },
     {
       "name": "M700",
@@ -122,16 +122,16 @@
         "haar_synthesis_mac": 180000.0,
         "fusion_mac": 1272000.0,
         "plc_worst_case_mac": 4128000.0,
-        "postfilter_lanczos_mac": 12288000,
-        "postfilter_lpf_sequential_mac": 785664000,
-        "postfilter_resample_mac": 10272000,
-        "postfilter_lpf_at_output_points_mac": 49104000
+        "postfilter_lanczos_mac": 6144000,
+        "postfilter_lpf_sequential_mac": 196224000,
+        "postfilter_resample_mac": 7776000,
+        "postfilter_lpf_at_output_points_mac": 24528000
       },
-      "mac_per_s_restructured": 117760500.0,
-      "mac_per_s_sequential": 854320500.0,
+      "mac_per_s_restructured": 84544500.0,
+      "mac_per_s_sequential": 256240500.0,
       "plc_worst_case_mac_per_s": 4128000.0,
-      "dsp_slices_min_restructured": 2,
-      "dsp_slices_min_restructured_with_plc": 2,
+      "dsp_slices_min_restructured": 1,
+      "dsp_slices_min_restructured_with_plc": 1,
       "memory_bits": {
         "symbol_buffer": 15024,
         "llr_buffer": 7128,
@@ -139,10 +139,10 @@
         "coefficients": 3072,
         "output_double_buffer": 12288,
         "plc_history": 6144,
-        "postfilter_delay_line": 25296,
-        "rom_coefficients": 17892
+        "postfilter_delay_line": 13008,
+        "rom_coefficients": 7812
       },
-      "memory_total_bits": 95036
+      "memory_total_bits": 72668
     }
   ],
   "logic": [
@@ -155,7 +155,7 @@
         "equalizer": 1,
         "demod_soft": 1,
         "haar_fusion": 1,
-        "postfilter": 2,
+        "postfilter": 1,
         "plc": 1
       },
       "parts": {
@@ -180,9 +180,9 @@
           "dsp": 1
         },
         "mac:postfilter": {
-          "lut": 218,
-          "ff": 196,
-          "dsp": 2
+          "lut": 109,
+          "ff": 98,
+          "dsp": 1
         },
         "mac:plc": {
           "lut": 109,
@@ -227,22 +227,22 @@
         "coefficients": 3072,
         "output_double_buffer": 12288,
         "plc_history": 6144,
-        "postfilter_delay_line": 25296,
-        "rom_coefficients": 17892,
+        "postfilter_delay_line": 13008,
+        "rom_coefficients": 9252,
         "index_rom_upper_bound": 32452,
         "solver_matrix": 15488
       },
       "total": {
-        "lut": 1864,
-        "ff": 1506,
-        "dsp": 9,
-        "bram18": 12
+        "lut": 1755,
+        "ff": 1408,
+        "dsp": 8,
+        "bram18": 11
       },
       "fraction_of_zynq_7010": {
-        "lut": 0.10590909090909091,
-        "ff": 0.04278409090909091,
-        "dsp": 0.1125,
-        "bram18": 0.1
+        "lut": 0.09971590909090909,
+        "ff": 0.04,
+        "dsp": 0.1,
+        "bram18": 0.09166666666666666
       }
     },
     {
@@ -254,7 +254,7 @@
         "equalizer": 1,
         "demod_soft": 1,
         "haar_fusion": 1,
-        "postfilter": 2,
+        "postfilter": 1,
         "plc": 1
       },
       "parts": {
@@ -279,9 +279,9 @@
           "dsp": 1
         },
         "mac:postfilter": {
-          "lut": 218,
-          "ff": 196,
-          "dsp": 2
+          "lut": 109,
+          "ff": 98,
+          "dsp": 1
         },
         "mac:plc": {
           "lut": 109,
@@ -326,22 +326,22 @@
         "coefficients": 3072,
         "output_double_buffer": 12288,
         "plc_history": 6144,
-        "postfilter_delay_line": 25296,
-        "rom_coefficients": 18468,
+        "postfilter_delay_line": 13008,
+        "rom_coefficients": 9828,
         "index_rom_upper_bound": 69952,
         "solver_matrix": 15488
       },
       "total": {
-        "lut": 1864,
-        "ff": 1506,
-        "dsp": 9,
-        "bram18": 15
+        "lut": 1755,
+        "ff": 1408,
+        "dsp": 8,
+        "bram18": 13
       },
       "fraction_of_zynq_7010": {
-        "lut": 0.10590909090909091,
-        "ff": 0.04278409090909091,
-        "dsp": 0.1125,
-        "bram18": 0.125
+        "lut": 0.09971590909090909,
+        "ff": 0.04,
+        "dsp": 0.1,
+        "bram18": 0.10833333333333334
       }
     },
     {
@@ -353,7 +353,7 @@
         "equalizer": 1,
         "demod_soft": 1,
         "haar_fusion": 1,
-        "postfilter": 2,
+        "postfilter": 1,
         "plc": 1
       },
       "parts": {
@@ -378,9 +378,9 @@
           "dsp": 1
         },
         "mac:postfilter": {
-          "lut": 218,
-          "ff": 196,
-          "dsp": 2
+          "lut": 109,
+          "ff": 98,
+          "dsp": 1
         },
         "mac:plc": {
           "lut": 109,
@@ -425,22 +425,22 @@
         "coefficients": 3072,
         "output_double_buffer": 12288,
         "plc_history": 6144,
-        "postfilter_delay_line": 25296,
-        "rom_coefficients": 17892,
+        "postfilter_delay_line": 13008,
+        "rom_coefficients": 7812,
         "index_rom_upper_bound": 35863,
         "solver_matrix": 15488
       },
       "total": {
-        "lut": 1864,
-        "ff": 1506,
-        "dsp": 9,
-        "bram18": 12
+        "lut": 1755,
+        "ff": 1408,
+        "dsp": 8,
+        "bram18": 11
       },
       "fraction_of_zynq_7010": {
-        "lut": 0.10590909090909091,
-        "ff": 0.04278409090909091,
-        "dsp": 0.1125,
-        "bram18": 0.1
+        "lut": 0.09971590909090909,
+        "ff": 0.04,
+        "dsp": 0.1,
+        "bram18": 0.09166666666666666
       }
     },
     {
@@ -452,7 +452,7 @@
         "equalizer": 1,
         "demod_soft": 1,
         "haar_fusion": 1,
-        "postfilter": 2,
+        "postfilter": 1,
         "plc": 1
       },
       "parts": {
@@ -477,9 +477,9 @@
           "dsp": 1
         },
         "mac:postfilter": {
-          "lut": 218,
-          "ff": 196,
-          "dsp": 2
+          "lut": 109,
+          "ff": 98,
+          "dsp": 1
         },
         "mac:plc": {
           "lut": 109,
@@ -524,22 +524,22 @@
         "coefficients": 3072,
         "output_double_buffer": 12288,
         "plc_history": 6144,
-        "postfilter_delay_line": 25296,
-        "rom_coefficients": 17892,
+        "postfilter_delay_line": 13008,
+        "rom_coefficients": 7812,
         "index_rom_upper_bound": 61409,
         "solver_matrix": 15488
       },
       "total": {
-        "lut": 1864,
-        "ff": 1506,
-        "dsp": 9,
-        "bram18": 14
+        "lut": 1755,
+        "ff": 1408,
+        "dsp": 8,
+        "bram18": 13
       },
       "fraction_of_zynq_7010": {
-        "lut": 0.10590909090909091,
-        "ff": 0.04278409090909091,
-        "dsp": 0.1125,
-        "bram18": 0.11666666666666667
+        "lut": 0.09971590909090909,
+        "ff": 0.04,
+        "dsp": 0.1,
+        "bram18": 0.10833333333333334
       }
     }
   ]
