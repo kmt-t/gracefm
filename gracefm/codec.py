@@ -105,11 +105,11 @@ def quantize(c, k, b, profile: Profile, clip_opt=True, ch="M"):
 
     def candidate(e):
         s = (e + FRAC)[..., None, None]
-        m0 = np.clip(round_shift(cg, s), qmin, qmax)
+        m0 = np.minimum(np.maximum(round_shift(cg, s), qmin), qmax)
         err0 = sq_err_sum(cg - (m0 << s), err_shift)
         if not group:
             return m0.reshape(c.shape), np.zeros(c.shape[:-1] + (0,), np.int64), err0.sum(axis=-1)
-        m1 = np.clip(round_shift(cg, s - 1), qmin, qmax)
+        m1 = np.minimum(np.maximum(round_shift(cg, s - 1), qmin), qmax)
         err1 = sq_err_sum(cg - (m1 << (s - 1)), err_shift)
         attn = (err1 < err0).astype(np.int64)
         chosen = np.where(attn[..., None], m1, m0)

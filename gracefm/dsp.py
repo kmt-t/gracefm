@@ -24,13 +24,13 @@ assert (MULT_MAX * SQ2_INV * 2) < (1 << (ACC_BITS - 1))
 
 def saturate(v):
     """乗算器の入力幅 (符号つき25 bit) に飽和させる。設計上は起きない (保険)"""
-    return np.clip(v, MULT_MIN, MULT_MAX)
+    return np.minimum(np.maximum(v, MULT_MIN), MULT_MAX)
 
 
 def saturate_bits(v, bits):
     """符号つき bits bit に飽和させる (対称: ±(2^(bits-1) - 1))"""
     lim = (1 << (bits - 1)) - 1
-    return np.clip(v, -lim, lim)
+    return np.minimum(np.maximum(v, -lim), lim)
 
 
 def mac_sq2_inv(p, q, sign=1):
@@ -58,9 +58,11 @@ def bit_length(n):
     """n >= 0 の整数配列のbit長 (0 のとき 0)"""
     n = np.asarray(n, np.int64)
     out = np.zeros(n.shape, np.int64)
-    for k in range(48):
-        out += (n >> k) > 0
-    return out
+    for s in (32, 16, 8, 4, 2, 1):                       # 二分探索 (6 回)
+        high = (n >> s) > 0
+        out += s * high
+        n = np.where(high, n >> s, n)
+    return out + (n > 0)
 
 
 ERR_FRAC_BITS = 8               # 誤差の二乗和を取るときの相対精度 (量子化刻みに対する bit 数)
@@ -72,6 +74,6 @@ def sq_err_sum(err, shift):
     切り詰めてから二乗する (二乗は 18 × 18 bit)。shift は量子化刻みの bit 数から ERR_FRAC_BITS を引いた値 (0 以上)。
     刻みの異なる候補を比べるときは、同じ shift を使う。
     """
-    r = np.clip(np.asarray(err, np.int64) >> np.asarray(shift, np.int64),
-                -(1 << (CONST_BITS - 1)), (1 << (CONST_BITS - 1)) - 1)
+    r = np.minimum(np.maximum(np.asarray(err, np.int64) >> np.asarray(shift, np.int64),
+                              -(1 << (CONST_BITS - 1))), (1 << (CONST_BITS - 1)) - 1)
     return np.sum(r * r, axis=-1)

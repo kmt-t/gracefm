@@ -1,79 +1,85 @@
 # 固定小数点実装（DSP 依存）
 
-ハードウェアに載せるための、整数だけで動く参照実装の仕様である。**この文書の幅と演算は、想定する DSP（Zynq-7010 の DSP48E1）に依存する**。ハードウェアが変わるときは、DSP に依存する演算を集めた [`gracefm/dsp.py`](../gracefm/dsp.py) の幅と関数だけを差し替える。
+`gracefm/` は整数だけで動く。ハードウェアに載せるための参照実装で、**この文書の幅と演算は、想定する DSP（Zynq-7010 の DSP48E1）に依存する**。ハードウェアが変わるときは、DSP に依存する演算を集めた [`gracefm/dsp.py`](../gracefm/dsp.py) の幅と関数を差し替える。
 
-**float は使わない。** ハードウェア向けのモジュール（`dsp.py`、`fixed.py`、`fec_fixed.py`、`modem_fixed.py`）には、float のリテラル、float 型、真の除算、浮動小数点の関数を書かない。`tests/test_fixed.py` が検査する。浮動小数点の参照実装（`codec.py` など）は、設計の評価用で、ハードウェアの仕様ではない。
+**float は使わない。** `gracefm/` のモジュールには、float のリテラル、float 型、真の除算、浮動小数点の関数を書かない。`tests/test_fixed.py` が検査する。例外は、アナログの通信路を模擬する [`gracefm/channel.py`](../gracefm/channel.py) と、評価の道具 `tools/` で、ハードウェアではない。定数表（フィルタ係数、確率のテーブルなど）は、設計時に [`tools/gen/gen_tables.py`](../tools/gen/gen_tables.py) が浮動小数点で計算して整数にし、[`gracefm/tables.py`](../gracefm/tables.py) に書き出す（ハードウェアでは ROM になる）。
 
 ## 1. 想定ハードウェアと制約
 
 | 項目 | 値 | 出典 |
 |---|---|---|
-| DSP スライス | DSP48E1。Zynq-7010 に 80 スライス | [UG953](https://docs.amd.com/r/2021.1-English/ug953-vivado-7series-libraries/DSP48E1)、[UG479](https://gitea.federationhq.de/csander/Dissertation/raw/branch/main/bibliography/documents/ug479_7Series_DSP48E1.pdf) の写し |
+| DSP スライス | DSP48E1。Zynq-7010 に 80 スライス | [UG953](https://docs.amd.com/r/2021.1-English/ug953-vivado-7series-libraries/DSP48E1)、[UG479 の写し](https://gitea.federationhq.de/csander/Dissertation/raw/branch/main/bibliography/documents/ug479_7Series_DSP48E1.pdf) |
 | 乗算器 | 25 bit × 18 bit の符号つき（A ポート下位 25 bit、B ポート 18 bit） | 同上 |
 | プリアダー | 25 bit | 同上 |
 | アキュムレータ | 48 bit | 同上 |
 | ADC/DAC | I・Q とも 12 bit（AD9363） | [AD9363 データシート](https://www.analog.com:443/media/en/technical-documentation/data-sheets/AD9363.pdf) |
 
-`gracefm/dsp.py` はこの値を `MULT_BITS = 25`、`CONST_BITS = 18`、`ACC_BITS = 48` として持ち、演算（`mac_sq2_inv`、`round_shift`、`shift_signed`、`saturate`、`bit_length`）はこの幅を前提にする。
+`gracefm/dsp.py` はこの値を `MULT_BITS = 25`、`CONST_BITS = 18`、`ACC_BITS = 48` として持ち、演算（`mac_sq2_inv`、`round_shift`、`shift_signed`、`saturate`、`sq_err_sum` など）はこの幅を前提にする。
 
 ## 2. 数値形式
 
-**方針。** 値は 0〜1 の範囲で、固定小数点のフルレンジは 20 bit 強（[SPEC](SPEC.md) 6.1）なので、中間精度を含めて **24 bit 固定小数点**で扱う。IQ は受け取った段階（12 bit の ADC 出力）で 24 bit に変換する。**DSP の都合で精度が下がることは容認する**。64 bit 整数が出るのは、乗算とアキュムレータ（`gracefm/dsp.py`）だけである。
+**方針。** 値は 0〜1 の範囲で、固定小数点のフルレンジは 20 bit 強（[SPEC](SPEC.md) 6.1）なので、中間精度を含めて **24 bit 固定小数点**で扱う。IQ は受け取った段階（12 bit の ADC 出力）で 24 bit に変換する。**DSP の都合で精度が下がることは容認する**。64 bit 整数が出るのは、乗算とアキュムレータ（`gracefm/dsp.py`）だけを想定する。
 
 | 量 | 形式 |
 |---|---|
 | PCM | 符号つき 24 bit 整数（±1 = 2^23） |
 | Haar の係数 | 小数 21 bit の整数（±1 = 2^21）。M = (L+R)/2、S = (L−R)/2 を、PCM から最後の 3 bit を四捨五入して作る |
 | 1/√2 | 46341 / 65536（17 bit の正の整数。18 bit 符号つきの乗数に収まる） |
-| 共有指数 | s = e + 21（係数の整数単位での 2 のべき乗の刻み） |
-| IQ | ADC の 12 bit を、受け取った段階で 24 bit 固定小数点に変換する |
+| 共有指数 | s = e + 21（係数の整数単位での 2 のべき乗の刻み）。指数範囲は整数の式 `(lev >> 1) + 3 - b` |
+| シンボル（IQ） | 小数 21 bit の整数（±1 = 2^21）、配列の形は (n, 2)。ADC の 12 bit は左へ 11 bit シフトして変換 |
+| LLR | 符号つき 8 bit の整数（小数 2 bit、±31.75）。正 = 0 らしい |
+| ビタビの経路メトリック | 符号つき 14 bit。毎ステップで最大値を引いて正規化し、範囲に飽和させる |
+| 確率 | Q15 の整数。LLR から 255 エントリのテーブルで引く |
+| 誤差分散 | 対数領域の整数（log2 × 2^8）。融合の重みは 2^(−d/16) の 16 エントリのテーブルで作る |
+| フィルタ係数 | 符号つき 18 bit（Q14〜Q17） |
 
-- **精度を落として幅に収める**: 係数の小数 bit 数を 21 に決め、Haar 4 段の最低域で最大 ±2^23 に収まるようにした。乗算器の入力（符号つき 25 bit、±2^24 まで）に余裕があり、飽和は起きない設計である。`saturate` は保険として置いている。
-- **Haar の演算**: (e ± o)/√2 を、e·C ± o·C をアキュムレータで足し合わせ、四捨五入して 16 bit 右シフトする形で書く。積は 25 + 17 = 42 bit、和は 43 bit で、アキュムレータ（48 bit）に収まる。
-- **刻みの下限**: アッテネータの半刻みを整数にするため、共有指数の刻みは s ≥ 1 に制限する。細かい刻み（e < −20）は使わない。デコーダは s ≤ 0 の値が来ても、右シフトで復号する。
-- **誤差の二乗和**: エンコーダは、指数とアッテネータの選択で量子化誤差の二乗和を比べる。誤差は 25 bit あるので、そのままでは 25 × 25 bit の乗算になる。乗算器の B 入力（18 bit）に合わせて、量子化刻みに対する相対精度を 8 bit に切り詰めて（`ERR_FRAC_BITS`）二乗する。DSP の都合で精度が下がる例である。
-- **定数の誤差**: 46341/65536 の相対誤差は約 10⁻⁶ で、Haar の往復（分解と合成）で、満点 2^21（乱数入力 500 ブロック）に対し最大 17 LSB（約 −102 dB）になる。
+- **精度を落として幅に収める**: Haar 4 段の最低域は最大 ±2^23 なので、乗算器の入力（符号つき 25 bit）に余裕があり、飽和は起きない。`saturate` は保険である。
+- **Haar の演算**: (e ± o)/√2 を、e·C ± o·C をアキュムレータで足し合わせ、四捨五入して 16 bit 右シフトする形で書く。
+- **刻みの下限**: アッテネータの半刻みを整数にするため、共有指数の刻みは s ≥ 1 に制限する。デコーダは s ≤ 0 の値が来ても、右シフトで復号する。
+- **誤差の二乗和**: エンコーダは、指数とアッテネータの選択で量子化誤差の二乗和を比べる。誤差は 25 bit あるので、量子化刻みに対する相対精度を 8 bit に切り詰めて（`ERR_FRAC_BITS`）18 bit に収めてから二乗する。
+- **距離の二乗**: 復調の距離は右シフトして 17 bit にしてから二乗する。
 
-## 3. 実装と検査
+## 3. モジュール
 
-| 項目 | ファイル |
+| モジュール | 内容 |
 |---|---|
-| DSP 依存の演算 | [`gracefm/dsp.py`](../gracefm/dsp.py) |
-| 固定小数点コーデック | [`gracefm/fixed.py`](../gracefm/fixed.py)（`encode_block_int`、`decode_block_int`、`roundtrip_int`） |
-| 整数ビタビ | [`gracefm/fec_fixed.py`](../gracefm/fec_fixed.py)（`viterbi_decode_int`、`rsc_decode_int`） |
-| 整数の変調・復調 | [`gracefm/modem_fixed.py`](../gracefm/modem_fixed.py)（`modulate`、`demodulate`） |
-| 検査 | [`tests/test_fixed.py`](../tests/test_fixed.py)（乗数の幅、Haar が 25 bit に収まること、全プロファイルの SNR）、[`tests/test_fec_fixed.py`](../tests/test_fec_fixed.py)（整数ビタビ）、[`tests/test_modem_fixed.py`](../tests/test_modem_fixed.py)（整数の変調・復調） |
-
-`BlockData` は浮動小数点の参照実装と同じ形で、フレーム化・変調以降はそのまま使える。
+| [`dsp.py`](../gracefm/dsp.py) | DSP に依存する演算（乗算、累積、シフト、飽和、誤差の二乗和） |
+| [`codec.py`](../gracefm/codec.py) | M/S、Haar、ブロック浮動小数点の量子化・逆量子化 |
+| [`fec.py`](../gracefm/fec.py) | 畳み込み符号、系統符号、CRC、整数ビタビ（乗算なし） |
+| [`modem.py`](../gracefm/modem.py) | 変調、軸ごとの max-log LLR、Y 方式の変調・復調、PRBS |
+| [`layout.py`](../gracefm/layout.py)、[`framing.py`](../gracefm/framing.py) | ビット配置、送信（pack）と受信（unpack） |
+| [`txrx.py`](../gracefm/txrx.py) | 送信機、受信機（確率による仮数の期待値、誤差分散）、2 系統の受信 |
+| [`fusion.py`](../gracefm/fusion.py) | 2 系統の帯域ごとの融合（逆分散重み、Q15） |
+| [`plc.py`](../gracefm/plc.py) | LPC による補間（整数のレビンソン・ダービン）とクロスフェード |
+| [`postfilter.py`](../gracefm/postfilter.py) | 出力段（Lanczos 補間、LPF、再標本化）。係数は整数の表 |
+| [`equalizer.py`](../gracefm/equalizer.py)、[`linalg.py`](../gracefm/linalg.py) | 訓練つき MMSE 等化器。通信路の推定と重みの設計を、整数のコレスキー分解で解く |
+| [`tables.py`](../gracefm/tables.py) | 定数表（`tools/gen/gen_tables.py` が作る） |
+| [`profiles.py`](../gracefm/profiles.py)、[`timing.py`](../gracefm/timing.py) | 設定値（整数と分数）、遅延モデル（分数） |
 
 ### 3.1 整数ビタビ
 
-- 軟値は符号つき 6 bit（±31）の整数 LLR（正 = 0 らしい）。経路メトリックは符号つき 12 bit で、毎ステップで最大値を引いて正規化し、範囲に飽和させる。到達できない状態は最小値から始める。
-- 枝メトリックは、期待される符号（±1）と 2 つの軟値の和・差だけで作る。**乗算を使わず**、加算・比較・選択だけなので、DSP48E1 の乗算器は要らない（加算はロジックまたは DSP のアキュムレータで書ける）。
-- LLR を 6 bit に量子化したときの復号を、雑音を加えた符号語で検査した（σ = 0.7、40 フレーム × 120 bit）。軟判定は誤りが 0 個、硬判定（±1）は誤り率 3.0% だった。他の C/N0 や LLR の幅（4〜8 bit）で、復号がどれだけ変わるかは測っていない。
+- 軟値は符号つき 8 bit の整数 LLR。枝メトリックは、期待される符号（±1）と 2 つの軟値の和・差だけで作る。**乗算を使わず**、加算・比較・選択だけなので、DSP48E1 の乗算器は要らない。
 
-### 3.2 整数の変調・復調
+### 3.2 変調・復調
 
-- 信号点は小数 21 bit の整数（±1 = 2^21、平均シンボルエネルギー 1）。平均エネルギーの正規化は整数の平方根（`isqrt`）で行い、定数は起動時に整数だけで作る。α は整数（5 または 1）。
-- LLR は軸ごとに独立な max-log で作る: LLR = (D1 − D0) / (2σ²)。D は、そのビットが 1 / 0 の信号点のうち最も近いものとの距離の二乗。距離は右シフトして 17 bit にしてから二乗する（二乗は 18 bit の乗算器の幅に収まる）。LLR は小数 2 bit の 6 bit 整数（±31）。
-- σ²（軸あたりの雑音分散）は、受信点と最寄りの信号点の差の二乗平均から、フレームごとに求める。I と Q の雑音の相関と大きさの違いは見ない（共分散行列の逆行列は使わない）。
-- 検査は、無雑音で完全に戻ること、雑音のもとで LLR の符号が硬判定と一致すること、誤りが少ないことである。**通信路を通した品質（ViSQOL）は、まだ測っていない。**
+- 信号点は小数 21 bit の整数。平均エネルギーの正規化は整数の平方根（`isqrt`）で行い、定数は起動時に整数だけで作る。α は整数（5 または 1）。
+- LLR は軸ごとに独立な max-log で作る: LLR = (D1 − D0) / (2σ²)。D は、そのビットが 1 / 0 の信号点のうち最も近いものとの距離の二乗。σ²（軸あたりの雑音分散）は、受信点と最寄りの信号点の差の二乗平均から、フレームごとに求める。I と Q の相関は見ない。
+- Y 方式の半径は、象限の軸への射影から段を 1/2 刻み（段 6 bit + 小数 1 bit = 7 bit）で推定する。最上位 bit の位相 1 bit と合わせて、Y の仮数は 8 bit である。
 
-## 4. 評価（通信路なし、元の音源との比較）
+### 3.3 等化器
 
-6 素材（piano、percussion、guitar、ambient、trailer、home）10 秒の平均。入力は 24 bit 整数に丸めた元の音源で、ViSQOL と波形 SNR は元の音源に対して測った。
+- 通信路は、フレーム先頭の既知のシンボルを使った最小二乗法で推定する。正規方程式（15 タップ）を整数のコレスキー分解で解く。MMSE の重みは、通信路のタップから 11 タップの連立方程式を同じソルバで解いて作り、先読み量（0〜4）は予測誤差が最小のものを選ぶ。FIR は重みを Q14 に縮めて畳み込む。
+- 通信路のモデル（RRC の応答、エコー）は評価の道具 [`tools/sim/multipath.py`](../tools/sim/multipath.py) にある。RRC の整合フィルタはまだ実装がなく、シンボル時刻の理想同期を前提にする。
 
-| プロファイル | ViSQOL | 波形 SNR dB |
-|---|---:|---:|
-| B200M | 4.362 | 53.9 |
-| B200MY | 4.367 | 54.5 |
-| B200 | 4.417 | 52.5 |
-| B200Y | 4.453 | 54.3 |
-| M700M | 4.356 | 56.6 |
-| M700MY | 4.423 | 57.2 |
-| M700 | 3.727 | 50.9 |
-| M700Y | 4.464 | 57.0 |
+## 4. 検査
+
+| ファイル | 内容 |
+|---|---|
+| [`tests/test_fixed.py`](../tests/test_fixed.py) | 乗数の幅、Haar が 25 bit に収まること、全プロファイルの SNR、**`gracefm/` に float が無いこと** |
+| [`tests/test_fec.py`](../tests/test_fec.py) | 整数ビタビ |
+| [`tests/test_gracefm.py`](../tests/test_gracefm.py)、`test_profiles.py`、`test_y.py`、`test_equalizer.py`、`test_baselayer.py` | フレーム、リンク、融合、補間、Y、等化器 |
 
 ## 5. 未実装
 
-- 12 bit IQ を入力とする受信側のうち、ビタビと変調・復調以外（ADC の 24 bit 化と AGC、RRC 整合フィルタ、等化器、仮数の期待値による復号と誤差分散、Y 帯域の復調、融合、LPC 補間、ポストフィルタ）。
+- 同期（シンボルタイミング、搬送波、AGC）、RRC 整合フィルタ、AD9363 とのインターフェース。
+- 暗号化（AES-128-CTR）は、ライブラリの AES が作るキーストリームとの排他的論理和で、`gracefm/crypto.py` にある。AES 自体の回路は設計していない。

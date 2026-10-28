@@ -176,6 +176,22 @@ class Layout:
         self.n_coef = off
         self.n_y = len(self.y_items)
         self.coef_flat = np.array([self.coef_offset[(t[0], t[1])] + t[2] for t in self.coef_items], np.int64)
+        # 係数ごとの集計 (同じ係数に属する仮数 bit の和) を、並べ替えた添字の区間和で行うための表
+        self.coef_groups = list(self.coef_offset)                           # (成分, 帯域) の並び = 係数番号の並び
+        self.coef_offset_bits = np.array([offset_of({"M": p.bits_m, "S": p.bits_s}[t[0]][t[1]], p, t[0], t[1])
+                                          for t in self.coef_items], np.int64)
+        self.y_flat = np.array([self.coef_offset[(ch, k)] + j for ch, k, j in self.y_items], np.int64)
+        order = np.argsort(self.coef_flat, kind="stable")
+        sorted_flat = self.coef_flat[order]
+        starts = np.flatnonzero(np.concatenate([[True], sorted_flat[1:] != sorted_flat[:-1]])) if len(order) else order
+        self._seg_order, self._seg_starts, self._seg_index = order, starts, sorted_flat[starts] if len(order) else order
+
+    def segment_sum(self, values):
+        """仮数 bit ごとの値 (coef_items の並び) を、係数ごとに足した長さ n_coef の配列にする"""
+        out = np.zeros(self.n_coef, np.int64)
+        if len(self._seg_order):
+            out[self._seg_index] = np.add.reduceat(np.asarray(values, np.int64)[self._seg_order], self._seg_starts)
+        return out
 
     def header_info(self, stream):
         """送信ビット列からヘッダの情報bit (CRC込み) を取り出す (振幅部にある)"""

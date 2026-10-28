@@ -44,6 +44,9 @@ _P0 = (_NS << 1) & (NSTATE - 1)                 # ns の前の状態 (2通り)
 _P1 = _P0 | 1
 _S0 = 1 - 2 * _OUT[_P0, _U]                     # (64, 2) 期待される符号 (+1 = bit0)
 _S1 = 1 - 2 * _OUT[_P1, _U]
+# 期待される符号の組 (s0, s1) → 表の位置: (+,+)=0 (+,-)=1 (-,+)=2 (-,-)=3
+_B0 = (1 - _S0[:, 0]) + (1 - _S0[:, 1]) // 2
+_B1 = (1 - _S1[:, 0]) + (1 - _S1[:, 1]) // 2
 
 
 def crc(bits, width, poly):
@@ -119,14 +122,18 @@ def viterbi_decode(soft, nbits):
     pm = np.full(NSTATE, PM_MIN, np.int64)
     pm[0] = 0
     choice = np.zeros((L, NSTATE), np.int8)
+    # 枝メトリックは 2 つの軟値の符号の組 (+,+) (+,-) (-,+) (-,-) の 4 通りしかないので、表にして引く
+    sums = np.stack([r[:, 0] + r[:, 1], r[:, 0] - r[:, 1], -r[:, 0] + r[:, 1], -r[:, 0] - r[:, 1]], axis=1)
+    forced = _U == 1
     for t in range(L):
-        m0 = pm[_P0] + _S0 @ r[t]
-        m1 = pm[_P1] + _S1 @ r[t]
+        bm = sums[t]
+        m0 = pm[_P0] + bm[_B0]
+        m1 = pm[_P1] + bm[_B1]
         ch = m1 > m0
-        pm = np.where(ch, m1, m0)
+        pm = np.maximum(m0, m1)
         choice[t] = ch
         if t >= nbits:                                  # 終端区間は入力 0 のみ
-            pm[_U == 1] = PM_MIN
+            pm[forced] = PM_MIN
         pm = np.maximum(pm - pm.max(), PM_MIN)          # 正規化と飽和
     s = 0
     bits = np.zeros(L, np.int64)
