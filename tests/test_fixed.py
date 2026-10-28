@@ -75,3 +75,17 @@ def test_hardware_modules_contain_no_floating_point():
             ident = node.attr if isinstance(node, ast.Attribute) else node.id if isinstance(node, ast.Name) else None
             if ident in forbidden_names:
                 raise AssertionError(f"{name}:{node.lineno} forbidden name {ident}")
+
+
+def test_log_and_exp_without_tables_are_accurate():
+    from gracefm.dsp import inv1p2pow_q15, log2_q8, pow2_neg_q15, sigmoid_q15
+    import math
+    for k in range(0, 40):
+        assert log2_q8(1 << k) == k * 256
+    for x in (3, 5, 7, 100, 1234, 987654321):
+        assert abs(log2_q8(x) - 256 * math.log2(x)) <= 2                          # 小数 8 bit の誤差
+    for d in range(0, 16 * 256, 7):
+        assert abs(int(pow2_neg_q15(d)) - 32768 * 2 ** (-d / 256)) <= 3
+    for llr in range(-127, 128):
+        assert abs(int(sigmoid_q15(llr)) - 32768 / (1 + math.exp(llr / 4))) <= 12
+    assert int(sigmoid_q15(0)) == 16384 and int(inv1p2pow_q15(0)) == 16384

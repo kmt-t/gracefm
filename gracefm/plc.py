@@ -8,7 +8,7 @@ LPC は、ハン窓をかけた履歴の自己相関 (窓かけ後の値を 15 b
 import numpy as np
 
 from .dsp import bit_length, saturate_bits
-from .tables import HANN128_Q15, LPC_BANDWIDTH_Q15
+from .tables import HANN128_Q15
 
 PCM_BITS = 24
 
@@ -38,8 +38,10 @@ def lpc(x, order):
         err = (err * ((1 << 15) - ((k * k) >> 15))) >> 15
         if err <= 0:
             break
-    bw = np.array(LPC_BANDWIDTH_Q15[: order + 1], np.int64)
-    a[1:] = (a[1:] * bw[1:]) >> 15
+    bw = 1 << 15                                                                   # 帯域拡張 0.998^i (反復乗算、Q15)
+    for i in range(1, order + 1):
+        bw = (bw * 32702) >> 15
+        a[i] = (a[i] * bw) >> 15
     return a
 
 
