@@ -27,10 +27,9 @@ def pow2_neg_q15():
     return [round(32768 * 2 ** (-i / 16)) for i in range(16)]
 
 
-def hann128_q15():
-    """np.hanning(128) (Q15)"""
-    n = 128
-    return [round(32768 * 0.5 * (1 - math.cos(2 * math.pi * i / (n - 1)))) for i in range(n)]
+def hann_2cos_q28(n=128):
+    """ハン窓 (n 点) の漸化式 cos((k+1)θ) = 2cosθ · cos(kθ) - cos((k-1)θ) の定数 2cosθ (Q28)、θ = 2π/(n-1)"""
+    return round(2 * math.cos(2 * math.pi / (n - 1)) * (1 << 28))
 
 
 def lpc_bandwidth_q15(order=16):
@@ -61,7 +60,6 @@ def resample_q16(up, down):
 def main():
     out = ['"""整数実装の定数表。tools/gen/gen_tables.py が作る (手で書き換えない)。ハードウェアでは ROM になる。"""', '']
     for name, tab, doc in (
-            ("HANN128_Q15", hann128_q15(), "ハン窓 128 点 (Q15)"),
             ("LANCZOS_Q16", lanczos_q16(), "Lanczos 補間核 (8 倍、a = 8、長さ 129、Q16)"),
             ("LPF_32K_Q17", lpf_q17(), "32 kHz 系の 8 倍レートの LPF (Kaiser 9、1023 タップ、通過域端 0.98 × 16 kHz、Q17)"),
             ("LPF_48K_Q17", lpf_q17(cutoff_hz=0.98 * 48000 / 2, fs_hz=48000 * 8), "48 kHz 系の 8 倍レートの LPF (同、通過域端 0.98 × 24 kHz、Q17)"),
@@ -73,6 +71,9 @@ def main():
             out.append("    " + ", ".join(str(v) for v in tab[i:i + 12]) + ",")
         out.append(")")
         out.append("")
+    out.append("# ハン窓 (128 点) の漸化式の定数 2cos(2π/127) (Q28)")
+    out.append(f"HANN_2COS_Q28 = {hann_2cos_q28()}")
+    out.append("")
     (ROOT / "gracefm" / "tables.py").write_text("\n".join(out))
 
 
