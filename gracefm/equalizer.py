@@ -15,7 +15,7 @@ from .layout import Layout, int_bits
 from .linalg import FRAC as W_FRAC, hermitian_solve
 from .profiles import Profile
 
-CORR_SHIFT = 11                     # 相関を取る前にシンボルを Q10 に縮める
+CORR_SHIFT = modem.SYM_FRAC - 10     # 相関を取る前にシンボルを Q10 に縮める
 FIR_FRAC = 14                       # FIR の重みの小数bit数 (18 bit符号つきに収まる)
 
 
