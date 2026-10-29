@@ -19,7 +19,7 @@ import numpy as np
 
 from .dsp import CONST_BITS
 
-SYM_FRAC = 21
+SYM_FRAC = 22
 DIST_BITS = CONST_BITS - 1                      # 二乗する距離の幅 (符号を除く)
 DIST_SHIFT = SYM_FRAC + 1 - DIST_BITS               # 距離 (Q SYM_FRAC、最大 約±2) を DIST_BITS bit に収める右シフト
 LLR_BITS = 8
