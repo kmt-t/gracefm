@@ -1,6 +1,6 @@
 """
 評価用の通信路モデル (アナログの通信路を模擬するので、浮動小数点を使う。ハードウェアではない)。
-link は同期済みシンボルに直接雑音を加え、12 bit の ADC で量子化して、受信側が受け取る 24 bit 固定小数点の整数に直す。
+link は同期済みシンボルに直接雑音を加え、12 bit の ADC で量子化して、受信側が受け取る小数 22 bit (24 bit) の固定小数点の整数に直す。
 link_static_multipath は RRC 送受信フィルタと静的マルチパスの等価応答を使い、
 等化器も選択できる。どちらもシンボル時刻・搬送波位相の同期は理想とする。
 
@@ -61,7 +61,7 @@ def awgn(sym, snr_db, rng):
 
 
 def adc(sym):
-    """実数のシンボル (n, 2) を ADC の符号 (12 bit) にして、受信側の 24 bit 固定小数点 (±1 = 2^FRAC) の整数に直す"""
+    """実数のシンボル (n, 2) を ADC の符号 (12 bit) にして、受信側の 24 bit 固定小数点 (±1 = 2^SYM_FRAC) の整数に直す"""
     code = np.clip(np.rint(sym * ADC_ONE), -(1 << (ADC_BITS - 1)), (1 << (ADC_BITS - 1)) - 1).astype(np.int64)
     return code << (modem.SYM_FRAC - ADC_BITS + 2)
 
