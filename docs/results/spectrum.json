@@ -29,7 +29,7 @@
  },
  "B200Y": {
   "occupied_99_kHz": 122.6,
-  "bw_minus30dB_kHz": 131.7,
+  "bw_minus30dB_kHz": 131.5,
   "symbol_rate_ksps": 120.0,
   "modulation": "qam16h",
   "rrc_beta": 0.1,
