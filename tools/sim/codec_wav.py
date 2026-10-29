@@ -28,7 +28,7 @@ def main():
     ap.add_argument("output")
     ap.add_argument("--profile", default="B200", choices=PROFILES)
     ap.add_argument("--no-postfilter", action="store_true",
-                    help=f"出力段のポストフィルタ (Lanczos x8 → LPF → {OUT_FS} Hz int32) を使わず、fs の 32bit float で書く")
+                    help=f"出力段のポストフィルタ (Lanczos x4 → LPF → {OUT_FS} Hz int32) を使わず、fs の 32bit float で書く")
     args = ap.parse_args()
 
     p = PROFILES[args.profile]
