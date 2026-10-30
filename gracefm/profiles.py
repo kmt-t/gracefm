@@ -20,7 +20,7 @@ class Profile:
     bits_m: Tuple[int, ...]     # M (= (L+R)/2) の帯域ごとの仮数ビット数 (低域→高域)。0 = 送らない
     bits_s: Tuple[int, ...]     # S (= (L-R)/2) の帯域ごとの仮数ビット数
     exp_bits: int = 4           # 帯域ごとの共有指数のビット数 (16段 × 約6dB)
-    protect: Tuple[int, ...] = (1, 1, 1, 1, 1)   # 帯域ごと (k=0…) に、ヘッダ部へ入れて FEC で保護する仮数の上位ビット数 K
+    protect: Tuple[int, ...] = (1, 1, 1, 1, 1)   # 帯域ごと (k=0…) に、係数の先頭シンボルの位相部にパリティを置いて保護する、仮数の上位ビット数 K
     modulation: str = "qpsk"    # "qpsk" | "qam16h"
     alpha: int = 1              # 階層 QAM の象限間距離パラメータ (1 = 通常の QAM)
     pulse_beta_pct: int = 25    # RRC パルスのロールオフ [%]
