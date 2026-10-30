@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+"""シンボルのレイアウトのパターン (docs/SYMBOLS.md) を、実装から数えて生成する。--check で一致を確認する。"""
+import argparse
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+from gracefm import modem  # noqa: E402
+from gracefm.layout import Layout  # noqa: E402
+from gracefm.profiles import PROFILES  # noqa: E402
+from gracefm.txrx import Transmitter  # noqa: E402
+
+
+def margins():
+    """階層16QAM (α=5) の強い位置・弱い位置の、1 bit が 0/1 を分ける境界までの距離 (平均エネルギー 1)"""
+    vals = modem.axis_points("qam16h", 5)[0] / float(1 << modem.SYM_FRAC)
+    strong = float(min(abs(vals)))
+    weak = float(abs(abs(vals[0]) - abs(vals[1])) / 2)
+    qpsk = float(abs(modem.axis_points("qpsk", 1)[0][0]) / (1 << modem.SYM_FRAC))
+    return strong, weak, qpsk
+
+
+def counts(p):
+    """(ヘッダ, 終端, 係数 (詰めを含む), Y 専用, 合計) のシンボル数。プリアンブルを除く"""
+    lay, tx = Layout(p), Transmitter(p)
+    per = 2 if p.modulation == "qpsk" else 4           # ヘッダ・終端が1シンボルに入れる位置の数
+    head = lay.n_header // per
+    tail = (lay.n_tail + lay.n_ytail) // per
+    return head, tail, tx.digital_nsym - head - tail, lay.n_y, tx.nsym
+
+
+def render():
+    strong, weak, qpsk = margins()
+    rows = []
+    for p in PROFILES.values():
+        head, tail, coef, y, total = counts(p)
+        kind = "副系（QPSK）" if p.modulation == "qpsk" else "主系（階層16QAM）"
+        rows.append(f"| {p.pid} | {p.name} | {kind} | {head} | {tail} | {coef} | {y} | {total} | {total + modem.N_PREAMBLE} |")
+    return f"""# シンボルのレイアウト
+
+1 フレームを構成するシンボルの形式と、各形式のビットの置き方を定める。形式と数は `gracefm/layout.py` から数えた値で、`python tools/report/symbol_layout.py` で生成し、`--check` で実装との一致を確認する。
+
+## 1. フレームの構成
+
+| 区間 | 内容 | 変調 |
+|---|---|---|
+| プリアンブル | 16 シンボル。既知の 2 軸 ±1/√2 | PSK（既知） |
+| ヘッダ部 | ヘッダ（プロファイルID、系統ID、フレーム番号）、指数、区間アッテネータ、CRC と、そのパリティ | 副系は QPSK、主系は階層16QAM |
+| 終端 | 符号の終端（パリティ 6 bit と情報 6 bit。ヘッダ・係数・Y 帯域のそれぞれ） | 同上 |
+| 係数部 | Haar 係数の仮数 bit と、その上位 bit のパリティ | 同上 |
+| Y 専用 | 高域M を 1 係数 1 複素シンボルで送る（Y 系のみ） | QASK |
+
+ストリーム全体は PRBS でスクランブルする。階層16QAMでは、強い列と弱い列の長さが違うとき、短い側の末尾を 0 で埋め、偶数長にそろえる。
+
+## 2. 強い位置と弱い位置
+
+| 変調 | 位置 | bit | 1 bit が 0/1 を分ける境界までの距離（平均エネルギー 1） |
+|---|---|---|---|
+| QPSK | I の符号、Q の符号（強弱なし） | 2 bit | {qpsk:.3f} |
+| 階層16QAM（α=5） | 強い位置（位相、PSK）: I の符号、Q の符号 | 2 bit | {strong:.3f} |
+| 階層16QAM（α=5） | 弱い位置（振幅）: I の大小、Q の大小 | 2 bit | {weak:.3f} |
+
+## 3. シンボルの形式
+
+| # | 名前 | 使うプロファイル | 1 シンボルの中身 |
+|---|---|---|---|
+| 1 | プリアンブル | 全プロファイル | 既知の 2 軸 ±1/√2（16 シンボル） |
+| 2 | QPSK | 副系（SUB50M、SUB100、SUB100-48K） | 2 bit。区間ごとにパリティまたは情報またはデータを 2 bit ずつ詰める |
+| 3 | 階層16QAM パリティ 0 | 主系 | 強い位置: データ 2（基本層の仮数）。弱い位置: データ 2（拡張層の仮数） |
+| 4 | 階層16QAM パリティ 1 | 主系 | 強い位置: パリティ 1 + データ 1。弱い位置: データ 2 |
+| 5 | 階層16QAM パリティ 2 | 主系 | 強い位置: パリティ 2。弱い位置: データ 2（ヘッダの情報、終端の情報、拡張層の仮数） |
+| 6 | 詰め | 主系 | 強い位置・弱い位置とも 0（強い列と弱い列の長さをそろえる末尾） |
+| 7 | Y 専用（QASK） | Y 系（B200MY、B200Y、M700MY、M700Y） | 1 複素シンボル = 1 係数。位相（象限）= 最上位 bit + そのパリティの 2 bit、半径 = 残りの仮数を連続値で推定 |
+
+## 4. QPSK（副系）のストリームの順
+
+2 bit ずつ 1 シンボルにする。区間は次の順に並ぶ。
+
+| 順 | 区間 | 内容 |
+|---|---|---|
+| 1 | ヘッダのパリティ | ヘッダの符号化のパリティ（情報 + 終端 6 bit ぶん） |
+| 2 | 終端のパリティ | 係数の上位 bit の符号の終端のパリティ（6 bit） |
+| 3 | 係数 | 係数ごとに、上位 K bit のパリティ（K=1）、続いて仮数 bit（上位 bit から） |
+| 4 | ヘッダの情報 | ヘッダ、指数、アッテネータ、CRC と、終端の情報 6 bit |
+| 5 | 終端の情報 | 係数の上位 bit の符号の終端の情報（6 bit） |
+
+## 5. 主系の係数
+
+各係数は、上位 K bit をパリティ K bit で守る（`protect_k`）。強い位置の列は、係数ごとに「パリティ、基本層の仮数」を 1 bit ずつ交互に並べ（どちらかが尽きたら残りを続ける）、弱い位置の列は拡張層の仮数を上位 bit から並べる。強い位置の 2 bit と弱い位置の 2 bit を同じ番号で組にして、1 シンボルにする。
+
+| 例 | シンボル1 強 / 弱 | シンボル2 強 / 弱 | シンボル3 強 / 弱 |
+|---|---|---|---|
+| 仮数 11 bit、K=1（B200 の最低域） | P0, M10 / M5, M4 | M9, M8 / M3, M2 | M7, M6 / M1, M0 |
+| 仮数 10 bit、K=2 | P0, M9 / M5, M4 | P1, M8 / M3, M2 | M7, M6 / M1, M0 |
+
+`Pn` は n 番目のパリティ、`Mn` は仮数の下から n 番目の bit。
+
+## 6. ヘッダの符号化（主系）
+
+ヘッダの情報 x（ヘッダ、指数、アッテネータ、CRC、終端）に、系統符号（K=7、(133,171)）のパリティ p を付け、強い位置にパリティ、弱い位置に情報を置く。
+
+## 7. プロファイルごとのシンボル数
+
+プリアンブルを除いた数と、プリアンブルを含む数。
+
+| ID | 名前 | 形式 | ヘッダ | 終端 | 係数（詰めを含む） | Y 専用 | 合計 | プリアンブル込み |
+|---|---|---|---|---|---|---|---|---|
+{chr(10).join(rows)}
+"""
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--check", action="store_true")
+    args = parser.parse_args()
+    text = render()
+    path = ROOT / "docs/SYMBOLS.md"
+    if args.check:
+        if not path.exists() or path.read_text() != text:
+            raise SystemExit(f"out of date: {path}")
+        print("symbol layout matches implementation")
+    else:
+        path.write_text(text)
+        print("symbol layout generated")
+
+
+if __name__ == "__main__":
+    main()
