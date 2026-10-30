@@ -57,6 +57,40 @@ def pack(lay: Layout, bd: BlockData, stream_id: int, counter: int, keystream=Non
     return stream
 
 
+# 救済の閾値は計算量で決める (効果は測定で後から確かめる)。見積もり: フレーム 2 ms、ヘッダ復号 1 回 = K=7 のビタビ
+# 84段 × 64状態 = 5376 ACS、1 ACS/クロック・100 MHz で約 54 µs。フレーム時間の 8 割 (1.6 ms) までに収めると、
+# 復号 約 30 回。通常の復号 1 回を含めて、救済の試行は 28 回以内にする: 候補 7 個から反転 1〜2 個 (7 + 21 = 28)。
+# CRC の誤採用は、試行 1 回あたり約 1/4096 なので、救済 1 フレームあたり 28/4096 ≈ 0.7%。
+RECOVER_CANDIDATES = 7      # 救済: ヘッダの信頼度の低い候補の数
+RECOVER_MAX_FLIPS = 2       # 救済: 同時に反転する最大数 (Chase 型)
+
+
+def unpack_recovering(lay: Layout, soft, bits, keystream_for=None, y_soft=None):
+    """unpack と同じ。基本CRCが合わないとき、ヘッダの信頼度の低い bit を 1〜RECOVER_MAX_FLIPS 個反転して
+    CRC が合う候補を探す (Chase 型)。候補は信頼度 (|軟値|) の小さい順に試し、最初に通ったものを採る。
+    返り値は unpack と同じ。救えた場合、header["recovered"] に反転した bit の数を入れる。"""
+    bd, hdr = unpack(lay, soft, bits, keystream_for, y_soft)
+    if bd is not None:
+        return bd, hdr
+    import itertools
+    soft = np.asarray(soft)
+    bits = np.asarray(bits)
+    hdr_idx = np.concatenate([lay.hdata_idx, lay.hpar_idx])
+    order = hdr_idx[np.argsort(np.abs(soft[hdr_idx]), kind="stable")][:RECOVER_CANDIDATES]
+    for t in range(1, RECOVER_MAX_FLIPS + 1):
+        for comb in itertools.combinations(order, t):
+            idx = list(comb)
+            s2 = soft.copy()
+            b2 = bits.copy()
+            s2[idx] = -s2[idx]
+            b2[idx] ^= 1
+            bd, hdr = unpack(lay, s2, b2, keystream_for, y_soft)
+            if bd is not None:
+                hdr["recovered"] = t
+                return bd, hdr
+    return None, None
+
+
 def unpack(lay: Layout, soft, bits, keystream_for=None, y_soft=None):
     """
     soft: 送信ビット列全体の軟値 (正 = 0 らしい。足りない分は0とみなす。ヘッダのデータは振幅部にあるので、振幅部の軟値も必要)、

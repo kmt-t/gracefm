@@ -351,3 +351,36 @@ if __name__ == "__main__":
         if k.startswith("test_"):
             f()
             print("ok", k)
+
+
+def test_header_recovery_flips_least_reliable_bits():
+    """基本CRCが合わないフレームは、ヘッダの信頼度の低い bit を反転して救える場合がある。救えた内容は正しく、試行回数は上限内。"""
+    from gracefm import channel
+    from gracefm.framing import unpack_recovering
+    from gracefm.txrx import Transmitter
+    p = PROFILES["B200M"]
+    lay = Layout(p)
+    rng = np.random.default_rng(4)
+    esn0 = 55 - 10 * np.log10(channel.symbol_rate(p))              # 失敗が多く出る条件 (救済の検査用)
+    recovered = 0
+    for i in range(120):
+        x = np.clip(rng.normal(size=(p.block, 2)) * 2**20, -2**22, 2**22).astype(np.int64)
+        tx = Transmitter(p, 0)
+        tx.frame_no = i
+        sym = tx.frame(x)
+        bits = pack(lay, encode_block(x, p), 0, i, None)
+        noisy = channel.adc(channel.awgn(sym[modem.N_PREAMBLE:] / float(1 << modem.SYM_FRAC), esn0, rng))
+        llr, hard, _ = modem.demodulate(noisy[:tx.digital_nsym], lay.n_tx, p.modulation, p.alpha)
+        s = modem.prbs(lay.n_tx)
+        soft, hard = np.where(s == 1, -llr, llr), hard ^ s
+        if unpack(lay, soft, hard)[0] is not None:
+            continue
+        got, hdr = unpack_recovering(lay, soft, hard)
+        if got is None:
+            continue
+        recovered += 1
+        assert hdr["counter"] == i and hdr["recovered"] >= 1
+    # 救済の試行回数は計算量の見積もりの上限 (通常の復号を含めて 29 回) に収まる
+    from math import comb
+    from gracefm import framing
+    assert 1 + sum(comb(framing.RECOVER_CANDIDATES, t) for t in range(1, framing.RECOVER_MAX_FLIPS + 1)) <= 29

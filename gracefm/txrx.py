@@ -176,7 +176,7 @@ class StreamDecoder:
         s = modem.prbs(lay.n_tx)                                  # スクランブルを戻す
         llr, hard = np.where(s == 1, -llr, llr), hard ^ s
         y_soft = self._y_phase(sym, var) if p.has_y else None
-        bd, hdr = framing.unpack(lay, llr, hard, self._ks_for, y_soft=y_soft)
+        bd, hdr = framing.unpack_recovering(lay, llr, hard, self._ks_for, y_soft=y_soft)
         if bd is None:
             self.stats["crc_fail"] += 1
             self.last_rb = None
