@@ -25,17 +25,17 @@ def render():
              '共通設定：64サンプル、Haar 4段（最低域の帯域幅が2 kHz未満になるまで分割）、指数4bit/送信帯域、基本CRC-12とH1/H2用の高域CRC-10（該当帯域を送る場合のみ）、系統符号 K=7・r=1/2（位相部＝パリティ、振幅部＝データ）。**ヘッダ**（ヘッダ・指数・区間アッテネータ・CRC）と**Haar係数部**（係数ごとのパリティと仮数bit）に分けて送る。ヘッダはパリティを位相部、情報を振幅部に置く。係数のパリティは各係数の先頭シンボル（位相部）に置き、仮数bitはFEC・CRCなし。上位Kbit自体は仮数bitの先頭にある（Y帯域は仮数が仮数bitに無いので、最上位bitとそのパリティを専用シンボルの位相に載せる）。Kは高域（最後の2帯域 H2/H1）とそれより低い帯域で別に決められる。ヘッダは非暗号化24bit（カウンタ16bit）、暗号化32bit（カウンタ24bit）。ID 0・12～15は予約。副系SUBはQPSK、ステレオ差分Sは主系の階層QAMで送る。M接尾辞はモノラル、Y接尾辞はQASKを表す。', '',
              '## ID・方式・伝送予算', '',
              '非暗号化の値。シンボル数にはプリアンブル16シンボルとY専用シンボルを含む。理論支持幅は `(1+β)Rs` で、99%占有帯域の実測値ではない。音声量には指数とアッテネータを含む。強い位置は、位相部の列（ヘッダのパリティ、終端、係数のパリティ、基本層の仮数）の長さ、弱い位置は振幅部の列（ヘッダの情報、終端、拡張層の仮数）の長さ（階層16QAMのみ。両者は一致し、`--check` で検査する）。', '',
-             '| ID | 名前 | fs kHz | M/S | 変調 / α | Y開始k | パリティで守るK 低域/高域 | 音声 kbps | CRC本数 | ヘッダCRC込 bit | ヘッダFEC後 bit | パリティ bit | 仮数 bit | 強い位置 | 弱い位置 | シンボル/フレーム | Rs ksym/s | RRC β / span | 理論支持幅 kHz |',
+             '| ID | 名前 | fs kHz | M/S | 変調 / α | Y開始k | パリティで守るK（k=0…） | 音声 kbps | CRC本数 | ヘッダCRC込 bit | ヘッダFEC後 bit | パリティ bit | 仮数 bit | 強い位置 | 弱い位置 | シンボル/フレーム | Rs ksym/s | RRC β / span | 理論支持幅 kHz |',
              '|---|---|---:|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---:|']
     budgets=[]
     for p in PROFILES.values():
         tx=Transmitter(p); l=tx.layout; ns=tx.nsym+16; rs=tx.symbol_rate()
         strong=l.n_strong_raw if p.layered else '—'
         weak=l.n_weak_raw if p.layered else '—'
-        lines.append(f'| {p.pid} | {p.name} | {p.fs/1000:g} | {"M/S" if any(p.bits_s) else "M"} | {p.modulation} / {p.alpha} | {p.y_start_k if p.has_y else "—"} | {p.protect_bits(0)}/{p.protect_bits(p.high_k)} | {p.audio_kbps():g} | {2 if l.has_high_crc else 1} | {l.n_prot_crc} | {l.n_header} | {l.n_parity} | {l.n_coef_bits} | {strong} | {weak} | {ns} | {rs/1000:g} | {p.pulse_beta_pct / 100:g} / {p.pulse_span} | {rs*(100+p.pulse_beta_pct)/100/1000:g} |')
+        lines.append(f'| {p.pid} | {p.name} | {p.fs/1000:g} | {"M/S" if any(p.bits_s) else "M"} | {p.modulation} / {p.alpha} | {p.y_start_k if p.has_y else "—"} | {vector(p.protect)} | {p.audio_kbps():g} | {2 if l.has_high_crc else 1} | {l.n_prot_crc} | {l.n_header} | {l.n_parity} | {l.n_coef_bits} | {strong} | {weak} | {ns} | {rs/1000:g} | {p.pulse_beta_pct / 100:g} / {p.pulse_span} | {rs*(100+p.pulse_beta_pct)/100/1000:g} |')
         budgets.append(dict(profile=asdict(p), header_bits=l.header_bits, crc_count=2 if l.has_high_crc else 1,
                             header_crc_bits=l.n_prot_crc, header_fec_bits=l.n_header, parity_bits=l.n_parity,
-                            protect_bits_low=p.protect_bits(0), protect_bits_high=p.protect_bits(p.high_k),
+                            protect_bits=list(p.protect),
                             fec_bits=l.n_coded, coefficient_part_bits=l.n_coef_bits,
                             strong_positions=l.n_strong_raw if p.layered else None,
                             weak_positions=l.n_weak_raw if p.layered else None,

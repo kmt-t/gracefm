@@ -133,7 +133,7 @@ def test_broadcast_joint_stereo_attenuators():
     assert p.attenuator_bits("M", 4) == 8 and p.attenuator_bits("S", 4) == 8
     assert p.attenuator_bits("M", 2) == 4 and p.attenuator_bits("S", 2) == 4
     assert Layout(p).n_prot_crc == 110
-    assert p.audio_kbps() == 504
+    assert p.audio_kbps() == 500
     x = _signal(p.block * 8, p.fs)
     bd = encode_block(x[:p.block], p)
     assert len(bd.attn["M"][4]) == 8 and len(bd.attn["S"][4]) == 8

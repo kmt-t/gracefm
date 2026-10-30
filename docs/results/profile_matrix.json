@@ -8,7 +8,7 @@
         "block": 64,
         "levels": 4,
         "bits_m": [
-          11,
+          10,
           11,
           7,
           7,
@@ -22,14 +22,19 @@
           0
         ],
         "exp_bits": 4,
-        "protect_k": 1,
-        "protect_k_high": null,
+        "protect": [
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
         "modulation": "qam16h",
         "alpha": 5,
         "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": [
-          5,
+          4,
           5,
           3,
           3,
@@ -72,16 +77,21 @@
       "crc_count": 2,
       "header_crc_bits": 78,
       "header_fec_bits": 168,
-      "parity_bits": 76,
-      "protect_bits_low": 1,
-      "protect_bits_high": 1,
-      "fec_bits": 244,
-      "coefficient_part_bits": 480,
+      "parity_bits": 80,
+      "protect_bits": [
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "fec_bits": 248,
+      "coefficient_part_bits": 476,
       "strong_positions": 362,
       "weak_positions": 362,
       "symbols_per_frame": 197,
       "symbol_rate": 98500,
-      "audio_kbps": 256.0,
+      "audio_kbps": 254.0,
       "theoretical_bandwidth_hz": 123125.0
     },
     {
@@ -92,35 +102,40 @@
         "block": 64,
         "levels": 4,
         "bits_m": [
-          11,
+          10,
           11,
           7,
           7,
           7
         ],
         "bits_s": [
-          11,
+          10,
           7,
           7,
           7,
           7
         ],
         "exp_bits": 4,
-        "protect_k": 1,
-        "protect_k_high": null,
+        "protect": [
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
         "modulation": "qam16h",
         "alpha": 5,
         "pulse_beta_pct": 10,
         "pulse_span": 32,
         "base_m": [
-          5,
+          4,
           5,
           3,
           3,
           3
         ],
         "base_s": [
-          5,
+          4,
           3,
           3,
           3,
@@ -156,16 +171,21 @@
       "crc_count": 2,
       "header_crc_bits": 110,
       "header_fec_bits": 232,
-      "parity_bits": 140,
-      "protect_bits_low": 1,
-      "protect_bits_high": 1,
-      "fec_bits": 372,
-      "coefficient_part_bits": 944,
+      "parity_bits": 148,
+      "protect_bits": [
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "fec_bits": 380,
+      "coefficient_part_bits": 936,
       "strong_positions": 658,
       "weak_positions": 658,
       "symbols_per_frame": 345,
       "symbol_rate": 172500,
-      "audio_kbps": 504.0,
+      "audio_kbps": 500.0,
       "theoretical_bandwidth_hz": 189750.0
     },
     {
@@ -176,7 +196,7 @@
         "block": 64,
         "levels": 4,
         "bits_m": [
-          11,
+          10,
           11,
           7,
           7,
@@ -190,14 +210,19 @@
           0
         ],
         "exp_bits": 4,
-        "protect_k": 1,
-        "protect_k_high": null,
+        "protect": [
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
         "modulation": "qam16h",
         "alpha": 5,
         "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": [
-          5,
+          4,
           5,
           1,
           1,
@@ -240,16 +265,21 @@
       "crc_count": 2,
       "header_crc_bits": 78,
       "header_fec_bits": 168,
-      "parity_bits": 32,
-      "protect_bits_low": 1,
-      "protect_bits_high": 1,
-      "fec_bits": 200,
-      "coefficient_part_bits": 88,
+      "parity_bits": 36,
+      "protect_bits": [
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "fec_bits": 204,
+      "coefficient_part_bits": 84,
       "strong_positions": 144,
       "weak_positions": 144,
       "symbols_per_frame": 144,
       "symbol_rate": 72000,
-      "audio_kbps": 256.0,
+      "audio_kbps": 254.0,
       "theoretical_bandwidth_hz": 90000.0
     },
     {
@@ -260,35 +290,40 @@
         "block": 64,
         "levels": 4,
         "bits_m": [
-          11,
+          10,
           11,
           7,
           7,
           7
         ],
         "bits_s": [
-          11,
+          10,
           11,
           7,
           7,
           7
         ],
         "exp_bits": 4,
-        "protect_k": 1,
-        "protect_k_high": null,
+        "protect": [
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
         "modulation": "qam16h",
         "alpha": 5,
         "pulse_beta_pct": 10,
         "pulse_span": 32,
         "base_m": [
-          5,
+          4,
           5,
           1,
           1,
           1
         ],
         "base_s": [
-          5,
+          4,
           5,
           1,
           1,
@@ -324,16 +359,21 @@
       "crc_count": 2,
       "header_crc_bits": 110,
       "header_fec_bits": 232,
-      "parity_bits": 40,
-      "protect_bits_low": 1,
-      "protect_bits_high": 1,
-      "fec_bits": 272,
-      "coefficient_part_bits": 176,
+      "parity_bits": 48,
+      "protect_bits": [
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "fec_bits": 280,
+      "coefficient_part_bits": 168,
       "strong_positions": 224,
       "weak_positions": 224,
       "symbols_per_frame": 240,
       "symbol_rate": 120000,
-      "audio_kbps": 512.0,
+      "audio_kbps": 508.0,
       "theoretical_bandwidth_hz": 132000.0
     },
     {
@@ -358,8 +398,13 @@
           0
         ],
         "exp_bits": 4,
-        "protect_k": 1,
-        "protect_k_high": null,
+        "protect": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
         "modulation": "qpsk",
         "alpha": 1,
         "pulse_beta_pct": 25,
@@ -397,8 +442,13 @@
       "header_crc_bits": 50,
       "header_fec_bits": 112,
       "parity_bits": 28,
-      "protect_bits_low": 1,
-      "protect_bits_high": 1,
+      "protect_bits": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
       "fec_bits": 140,
       "coefficient_part_bits": 72,
       "strong_positions": null,
@@ -430,8 +480,13 @@
           0
         ],
         "exp_bits": 4,
-        "protect_k": 1,
-        "protect_k_high": null,
+        "protect": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
         "modulation": "qpsk",
         "alpha": 1,
         "pulse_beta_pct": 25,
@@ -469,8 +524,13 @@
       "header_crc_bits": 64,
       "header_fec_bits": 140,
       "parity_bits": 44,
-      "protect_bits_low": 1,
-      "protect_bits_high": 1,
+      "protect_bits": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
       "fec_bits": 184,
       "coefficient_part_bits": 136,
       "strong_positions": null,
@@ -488,7 +548,7 @@
         "block": 64,
         "levels": 4,
         "bits_m": [
-          11,
+          10,
           11,
           7,
           7,
@@ -502,14 +562,19 @@
           0
         ],
         "exp_bits": 4,
-        "protect_k": 1,
-        "protect_k_high": null,
+        "protect": [
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
         "modulation": "qam16h",
         "alpha": 5,
         "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": [
-          5,
+          4,
           5,
           3,
           3,
@@ -552,16 +617,21 @@
       "crc_count": 2,
       "header_crc_bits": 78,
       "header_fec_bits": 168,
-      "parity_bits": 76,
-      "protect_bits_low": 1,
-      "protect_bits_high": 1,
-      "fec_bits": 244,
-      "coefficient_part_bits": 480,
+      "parity_bits": 80,
+      "protect_bits": [
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "fec_bits": 248,
+      "coefficient_part_bits": 476,
       "strong_positions": 362,
       "weak_positions": 362,
       "symbols_per_frame": 197,
       "symbol_rate": 147750,
-      "audio_kbps": 384.0,
+      "audio_kbps": 381.0,
       "theoretical_bandwidth_hz": 184687.5
     },
     {
@@ -572,35 +642,40 @@
         "block": 64,
         "levels": 4,
         "bits_m": [
-          11,
+          10,
           11,
           7,
           7,
           7
         ],
         "bits_s": [
-          11,
+          10,
           7,
           7,
           7,
           3
         ],
         "exp_bits": 4,
-        "protect_k": 1,
-        "protect_k_high": null,
+        "protect": [
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
         "modulation": "qam16h",
         "alpha": 5,
         "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": [
-          5,
+          4,
           5,
           3,
           3,
           3
         ],
         "base_s": [
-          5,
+          4,
           3,
           3,
           3,
@@ -636,16 +711,21 @@
       "crc_count": 2,
       "header_crc_bits": 110,
       "header_fec_bits": 232,
-      "parity_bits": 140,
-      "protect_bits_low": 1,
-      "protect_bits_high": 1,
-      "fec_bits": 372,
-      "coefficient_part_bits": 816,
+      "parity_bits": 148,
+      "protect_bits": [
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "fec_bits": 380,
+      "coefficient_part_bits": 808,
       "strong_positions": 594,
       "weak_positions": 594,
       "symbols_per_frame": 313,
       "symbol_rate": 234750,
-      "audio_kbps": 660.0,
+      "audio_kbps": 654.0,
       "theoretical_bandwidth_hz": 293437.5
     },
     {
@@ -656,7 +736,7 @@
         "block": 64,
         "levels": 4,
         "bits_m": [
-          11,
+          10,
           11,
           7,
           7,
@@ -670,14 +750,19 @@
           0
         ],
         "exp_bits": 4,
-        "protect_k": 1,
-        "protect_k_high": null,
+        "protect": [
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
         "modulation": "qam16h",
         "alpha": 5,
         "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": [
-          5,
+          4,
           5,
           1,
           1,
@@ -720,16 +805,21 @@
       "crc_count": 2,
       "header_crc_bits": 78,
       "header_fec_bits": 168,
-      "parity_bits": 32,
-      "protect_bits_low": 1,
-      "protect_bits_high": 1,
-      "fec_bits": 200,
-      "coefficient_part_bits": 88,
+      "parity_bits": 36,
+      "protect_bits": [
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "fec_bits": 204,
+      "coefficient_part_bits": 84,
       "strong_positions": 144,
       "weak_positions": 144,
       "symbols_per_frame": 144,
       "symbol_rate": 108000,
-      "audio_kbps": 384.0,
+      "audio_kbps": 381.0,
       "theoretical_bandwidth_hz": 135000.0
     },
     {
@@ -740,35 +830,40 @@
         "block": 64,
         "levels": 4,
         "bits_m": [
-          11,
+          10,
           11,
           7,
           7,
           7
         ],
         "bits_s": [
-          11,
+          10,
           11,
           7,
           7,
           7
         ],
         "exp_bits": 4,
-        "protect_k": 1,
-        "protect_k_high": null,
+        "protect": [
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
         "modulation": "qam16h",
         "alpha": 5,
         "pulse_beta_pct": 25,
         "pulse_span": 16,
         "base_m": [
-          5,
+          4,
           5,
           1,
           1,
           1
         ],
         "base_s": [
-          5,
+          4,
           5,
           1,
           1,
@@ -804,16 +899,21 @@
       "crc_count": 2,
       "header_crc_bits": 110,
       "header_fec_bits": 232,
-      "parity_bits": 40,
-      "protect_bits_low": 1,
-      "protect_bits_high": 1,
-      "fec_bits": 272,
-      "coefficient_part_bits": 176,
+      "parity_bits": 48,
+      "protect_bits": [
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "fec_bits": 280,
+      "coefficient_part_bits": 168,
       "strong_positions": 224,
       "weak_positions": 224,
       "symbols_per_frame": 240,
       "symbol_rate": 180000,
-      "audio_kbps": 768.0,
+      "audio_kbps": 762.0,
       "theoretical_bandwidth_hz": 225000.0
     },
     {
@@ -838,8 +938,13 @@
           0
         ],
         "exp_bits": 4,
-        "protect_k": 1,
-        "protect_k_high": null,
+        "protect": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
         "modulation": "qpsk",
         "alpha": 1,
         "pulse_beta_pct": 25,
@@ -877,8 +982,13 @@
       "header_crc_bits": 59,
       "header_fec_bits": 130,
       "parity_bits": 36,
-      "protect_bits_low": 1,
-      "protect_bits_high": 1,
+      "protect_bits": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
       "fec_bits": 166,
       "coefficient_part_bits": 112,
       "strong_positions": null,

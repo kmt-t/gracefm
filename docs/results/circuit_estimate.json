@@ -7,8 +7,8 @@
         "rrc_mac": 10208000,
         "eq_mac": 7018000,
         "llr_mul": 1691000.0,
-        "viterbi_acs": 7424000.0,
-        "soft_mantissa_mul": 1104000.0
+        "viterbi_acs": 7552000.0,
+        "soft_mantissa_mul": 1096000.0
       },
       "back_end_per_s": {
         "haar_synthesis_mac": 120000.0,
@@ -19,8 +19,8 @@
         "postfilter_resample_mac": 5184000,
         "postfilter_lpf_at_output_points_mac": 24528000
       },
-      "mac_per_s_restructured": 54797000.0,
-      "mac_per_s_sequential": 161085000.0,
+      "mac_per_s_restructured": 54789000.0,
+      "mac_per_s_sequential": 161077000.0,
       "plc_worst_case_mac_per_s": 2752000.0,
       "dsp_slices_min_restructured": 1,
       "dsp_slices_min_restructured_with_plc": 1,
@@ -43,8 +43,8 @@
         "rrc_mac": 27712000,
         "eq_mac": 11462000,
         "llr_mul": 2943000.0,
-        "viterbi_acs": 11456000.0,
-        "soft_mantissa_mul": 2160000.0
+        "viterbi_acs": 11712000.0,
+        "soft_mantissa_mul": 2144000.0
       },
       "back_end_per_s": {
         "haar_synthesis_mac": 120000.0,
@@ -55,22 +55,22 @@
         "postfilter_resample_mac": 5184000,
         "postfilter_lpf_at_output_points_mac": 24528000
       },
-      "mac_per_s_restructured": 79053000.0,
-      "mac_per_s_sequential": 185341000.0,
+      "mac_per_s_restructured": 79037000.0,
+      "mac_per_s_sequential": 185325000.0,
       "plc_worst_case_mac_per_s": 2752000.0,
       "dsp_slices_min_restructured": 1,
       "dsp_slices_min_restructured_with_plc": 1,
       "memory_bits": {
         "symbol_buffer": 16560,
         "llr_buffer": 7896,
-        "viterbi_traceback": 8192,
+        "viterbi_traceback": 8704,
         "coefficients": 3072,
         "output_double_buffer": 12288,
         "plc_history": 6144,
         "postfilter_delay_line": 13008,
         "rom_coefficients": 9828
       },
-      "memory_total_bits": 76988
+      "memory_total_bits": 77500
     },
     {
       "name": "M700M",
@@ -79,8 +79,8 @@
         "rrc_mac": 16896000,
         "eq_mac": 11616000,
         "llr_mul": 2734500.0,
-        "viterbi_acs": 11952000.0,
-        "soft_mantissa_mul": 1776000.0
+        "viterbi_acs": 12144000.0,
+        "soft_mantissa_mul": 1764000.0
       },
       "back_end_per_s": {
         "haar_synthesis_mac": 180000.0,
@@ -91,8 +91,8 @@
         "postfilter_resample_mac": 7776000,
         "postfilter_lpf_at_output_points_mac": 24528000
       },
-      "mac_per_s_restructured": 72922500.0,
-      "mac_per_s_sequential": 244618500.0,
+      "mac_per_s_restructured": 72910500.0,
+      "mac_per_s_sequential": 244606500.0,
       "plc_worst_case_mac_per_s": 4128000.0,
       "dsp_slices_min_restructured": 1,
       "dsp_slices_min_restructured_with_plc": 1,
@@ -115,8 +115,8 @@
         "rrc_mac": 22464000,
         "eq_mac": 15444000,
         "llr_mul": 3952500.0,
-        "viterbi_acs": 16560000.0,
-        "soft_mantissa_mul": 2784000.0
+        "viterbi_acs": 16944000.0,
+        "soft_mantissa_mul": 2760000.0
       },
       "back_end_per_s": {
         "haar_synthesis_mac": 180000.0,
@@ -127,22 +127,22 @@
         "postfilter_resample_mac": 7776000,
         "postfilter_lpf_at_output_points_mac": 24528000
       },
-      "mac_per_s_restructured": 84544500.0,
-      "mac_per_s_sequential": 256240500.0,
+      "mac_per_s_restructured": 84520500.0,
+      "mac_per_s_sequential": 256216500.0,
       "plc_worst_case_mac_per_s": 4128000.0,
       "dsp_slices_min_restructured": 1,
       "dsp_slices_min_restructured_with_plc": 1,
       "memory_bits": {
         "symbol_buffer": 15024,
         "llr_buffer": 7128,
-        "viterbi_traceback": 8192,
+        "viterbi_traceback": 8704,
         "coefficients": 3072,
         "output_double_buffer": 12288,
         "plc_history": 6144,
         "postfilter_delay_line": 13008,
         "rom_coefficients": 7812
       },
-      "memory_total_bits": 72668
+      "memory_total_bits": 73180
     }
   ],
   "logic": [
@@ -229,7 +229,7 @@
         "plc_history": 6144,
         "postfilter_delay_line": 13008,
         "rom_coefficients": 9252,
-        "index_rom_upper_bound": 32452,
+        "index_rom_upper_bound": 32372,
         "solver_matrix": 15488
       },
       "total": {
@@ -322,13 +322,13 @@
       "memory_bits": {
         "symbol_buffer": 16560,
         "llr_buffer": 7896,
-        "viterbi_traceback": 8192,
+        "viterbi_traceback": 8704,
         "coefficients": 3072,
         "output_double_buffer": 12288,
         "plc_history": 6144,
         "postfilter_delay_line": 13008,
         "rom_coefficients": 9828,
-        "index_rom_upper_bound": 69952,
+        "index_rom_upper_bound": 69864,
         "solver_matrix": 15488
       },
       "total": {
@@ -427,7 +427,7 @@
         "plc_history": 6144,
         "postfilter_delay_line": 13008,
         "rom_coefficients": 7812,
-        "index_rom_upper_bound": 35863,
+        "index_rom_upper_bound": 35783,
         "solver_matrix": 15488
       },
       "total": {
@@ -520,13 +520,13 @@
       "memory_bits": {
         "symbol_buffer": 15024,
         "llr_buffer": 7128,
-        "viterbi_traceback": 8192,
+        "viterbi_traceback": 8704,
         "coefficients": 3072,
         "output_double_buffer": 12288,
         "plc_history": 6144,
         "postfilter_delay_line": 13008,
         "rom_coefficients": 7812,
-        "index_rom_upper_bound": 61409,
+        "index_rom_upper_bound": 61321,
         "solver_matrix": 15488
       },
       "total": {
