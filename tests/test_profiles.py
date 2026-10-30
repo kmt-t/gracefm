@@ -94,8 +94,8 @@ def test_layer_assignment_matches_physical_positions():
 
 def test_b200y_stereo_side_uses_qam_strong_positions():
     p = PROFILES['B200Y']
-    assert p.y_channels == ('M', 'S') and p.bits_s == (11, 11, 7, 7, 7)
-    assert p.base_s[:2] == (5, 5)
+    assert p.y_channels == ('M', 'S') and p.bits_s == (10, 11, 7, 7, 7)
+    assert p.base_s[:2] == (4, 5)
     lay = Layout(p)
     assert any(ch == 'S' for ch, *_ in lay.coef_items)
     assert lay.n_strong == 2 * modem.n_symbols(lay.n_tx, lay.n_strong, p.modulation)

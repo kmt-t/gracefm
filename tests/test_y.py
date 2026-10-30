@@ -69,8 +69,8 @@ def test_y_quantizer_uses_both_extreme_codes():
 
 def test_stereo_y_uses_registered_s_coefficients():
     y = PROFILES["B200Y"]
-    assert y.bits_s == (11, 11, 7, 7, 7)               # Y帯域の分の余裕で、Sの最低域2帯域を11bitにする
-    assert y.base_s[:2] == (5, 5)                      # 位相部に置く仮数bit (パリティを除く)。拡張層はその+1 bit
+    assert y.bits_s == (10, 11, 7, 7, 7)               # Y帯域の分の余裕で、Sの最低域2帯域を10bit (K=2)・11bit (K=1) にする
+    assert y.base_s[:2] == (4, 5)                      # 位相部に置く仮数bit (パリティを除く)。拡張層はその+1 bit
     assert y.y_channels == ("M", "S")             # Sの k=2〜4 もY方式の専用シンボルで送る
     assert y.modulation == "qam16h"
     x = _audio(y, 4)
@@ -232,7 +232,7 @@ def test_m700_y_profiles_preserve_channel_mode_and_format_id():
         assert y.y_bits == 7
         assert y.fs == 48000 and y.block == 64 and y.y_start_k == 2
         # M700 は S の H1 (k=4) を 3bit で送り、Y 版 (M700Y) は S の k=2〜4 も Y 帯域 (7bit) で送る
-        assert y.bits_s[:2] == ((11, 11) if old_name == "M700" else (0, 0))      # M700YのSは最低域2帯域を11bitにする (B200Yと同じ)
+        assert y.bits_s[:2] == ((10, 11) if old_name == "M700" else (0, 0))      # M700YのSは最低域2帯域を10・11bitにする (B200Yと同じ)
         assert any(y.bits_s) == (old_name == "M700")
         assert y.pid != old.pid and y.format_id == old.format_id == 3
         assert BY_ID[y.pid] is y and BY_HEADER[(y.pid, 3)] is y
@@ -297,9 +297,9 @@ def test_m700_y_bit_positions_preserve_s_codes():
 
     old = PROFILES["M700"]
     y_profile = PROFILES["M700Y"]
-    assert y_profile.bits_s == (11, 11, 7, 7, 7) and old.bits_s[4] == 3
-    assert y_profile.base_s[:2] == (5, 5)
-    assert y_profile.base_m == (5, 5, 1, 1, 1)
+    assert y_profile.bits_s == (10, 11, 7, 7, 7) and old.bits_s[4] == 3
+    assert y_profile.base_s[:2] == (4, 5)
+    assert y_profile.base_m == (4, 5, 1, 1, 1)
     assert BY_HEADER[(y_profile.pid, y_profile.format_id)] is y_profile
     old_lay, y_layout = Layout(old), Layout(y_profile)
     attn_bits = lambda q: sum(q.attenuator_bits(ch, k) for ch in "MS" for k in range(q.nbands))
