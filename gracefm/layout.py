@@ -17,7 +17,7 @@
                    高域CRC (10bit。最後の2帯域 (H2/H1) の指数/アッテネータ・仮数上位K bit・Y帯域の最上位bit)。高域を送らないプロファイルは基本CRCのみ。
 Haar係数部 (ヘッダの直後。係数順 = 成分M→S、帯域 低→高、係数 先頭→末尾):
   終端: 仮数上位bit用の系統符号の終端 (パリティ6bit | 情報6bit)。Y帯域があればその分もう一組
-  位相部の列: 係数ごとに [その係数の上位K bit のパリティ K bit | 基本層の仮数bit (rank の小さい順)]
+  位相部の列: 係数ごとに、その係数の上位K bit のパリティと基本層の仮数bit (rank の小さい順) を1bitずつ交互に並べる (P0, 最上位bit, P1, 次のbit, …。どちらかが尽きたら残りを続ける)
   振幅部の列: 係数ごとに [拡張層の仮数bit (rank の小さい順)]
   上位K bit は基本層の先頭にあり、パリティと別の場所にある。係数の先頭のシンボルだけがパリティ付きで、続くシンボルにはない。
   K=1 で係数が N シンボルなら、位相部は 2N bit = パリティ1 + 基本層 2N-1、振幅部は拡張層 2N bit、仮数幅は 4N-1 bit。
@@ -70,11 +70,17 @@ class Layout:
                     if in_y:
                         self.y_items.append((ch, k, j))
                         continue
+                    par = []
                     for rank in range(K):
-                        strong.append(("P", len(top_item)))
+                        par.append(("P", len(top_item)))
                         top_k.append(k)
                         top_item.append((ch, k, j, b - 1 - rank))
-                    strong.extend(("C", ch, k, j, b - 1 - rank) for rank in range(base))
+                    dat = [("C", ch, k, j, b - 1 - rank) for rank in range(base)]
+                    for i in range(max(len(par), len(dat))):       # パリティとデータを1組ずつ並べる (最上位bitがパリティの隣)
+                        if i < len(par):
+                            strong.append(par[i])
+                        if i < len(dat):
+                            strong.append(dat[i])
                     weak.extend(("C", ch, k, j, b - 1 - rank) for rank in range(base, b))
         self.n_top = len(top_item)
         self.n_prot = (self.header_bits + sum(p.exp_bits for ch, k in self.exp_items)

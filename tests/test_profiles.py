@@ -274,3 +274,12 @@ def test_base_layer_widths_match_layer_solver():
             continue
         base_m, base_s = solve(p)
         assert (tuple(base_m), tuple(base_s)) == (tuple(p.base_m), tuple(p.base_s)), p.name
+
+
+def test_symbol_layout_document_matches_implementation():
+    import importlib.util
+    root = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location("symbol_layout", root / "tools/report/symbol_layout.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    assert (root / "docs/SYMBOLS.md").read_text() == mod.render()
