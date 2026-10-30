@@ -324,11 +324,7 @@ def test_encryption():
     assert unwrap_counter(m - 1, m + 1) == m - 1                      # 少し前のフレーム
 
 
-if __name__ == "__main__":
-    for k, f in list(globals().items()):
-        if k.startswith("test_"):
-            f()
-            print("ok", k)
+
 
 
 def test_crossfade_switch_removes_step_only_where_pattern_changes():
@@ -349,3 +345,9 @@ def test_crossfade_switch_removes_step_only_where_pattern_changes():
     lost = same[:4] + [(False, False)] * 2 + same[:2]
     assert np.array_equal(plc.crossfade_switch(y, lost, block), y)         # 全て届かないブロックは PLC に任せる
 
+
+if __name__ == "__main__":
+    for k, f in list(globals().items()):
+        if k.startswith("test_"):
+            f()
+            print("ok", k)

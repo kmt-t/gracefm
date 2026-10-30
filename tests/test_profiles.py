@@ -259,11 +259,7 @@ def test_broadcast_main_occupied_bandwidth():
         assert abs(occupied - reference) <= 4_000 and occupied <= 180_000, (name, occupied)
 
 
-if __name__ == '__main__':
-    for name, function in list(globals().items()):
-        if name.startswith('test_'):
-            function()
-            print('ok', name, flush=True)
+
 
 
 def test_base_layer_widths_match_layer_solver():
@@ -283,3 +279,10 @@ def test_symbol_layout_document_matches_implementation():
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     assert (root / "docs/SYMBOLS.md").read_text() == mod.render()
+
+
+if __name__ == '__main__':
+    for name, function in list(globals().items()):
+        if name.startswith('test_'):
+            function()
+            print('ok', name, flush=True)
