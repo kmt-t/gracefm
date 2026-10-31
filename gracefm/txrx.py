@@ -81,6 +81,7 @@ class StreamDecoder:
         self.digital_nsym = modem.n_symbols(self.layout.n_tx, self.layout.n_strong, profile.modulation)
         self.stats = {"frames": 0, "lost": 0, "crc_fail": 0, "high_crc_fail": 0}
         self.last_quality = 2                                    # 直近フレームの品質: 0 正常, 1 高域欠落, 2 欠落
+        self.high_absent = not any(profile.bits_m[profile.high_k:]) and not any(profile.bits_s[profile.high_k:])   # 高域を送らない (SUB 系)
         self.last_rb = None
 
     def _y_mask(self):
@@ -191,7 +192,7 @@ class StreamDecoder:
         if lay.n_top:                                            # パリティで訂正した上位K bitを確定値にする
             p1_coef[lay.top_coef_idx] = hdr["top_bits"] * 32768
         high_ok = hdr["high_ok"]
-        self.last_quality = 0 if high_ok else 1
+        self.last_quality = 0 if (high_ok and not self.high_absent) else 1      # 高域を送らないプロファイルは常に 1
         if not high_ok:
             self.stats["high_crc_fail"] += 1
         y_mant, y_var = ({}, {})

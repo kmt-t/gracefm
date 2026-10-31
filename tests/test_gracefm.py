@@ -407,3 +407,15 @@ def test_block_quality_marks_lost_frames_and_switch_is_identity_when_clean():
     sel = select_by_quality(yy, yy * 0 + 7, np.full(len(q), 2), p.block)
     assert np.all(sel[p.block:] == 7)                            # 1 ブロック目以降は alt に切り替わっている
     assert sel[0, 0] == yy[0, 0]                                  # 先頭のサンプルは切り替え前の y
+
+
+def test_quality_marks_profiles_without_high_bands():
+    """高域を送らないプロファイル (SUB) は、届いたフレームでも品質 1 (高域欠落) になる。"""
+    from gracefm.txrx import Transmitter, receive
+    p = PROFILES["SUB50M"]
+    rng = np.random.default_rng(9)
+    x = np.clip(np.cumsum(rng.normal(size=(p.block * 8, 1)), axis=0) * 2**10, -2**22, 2**22).astype(np.int64)
+    x = np.repeat(x, 2, axis=1)
+    frames = Transmitter(p, 0).run(x)
+    _, stats = receive(p, frames, None, len(x), 0)
+    assert np.all(stats["quality"] == 1)
