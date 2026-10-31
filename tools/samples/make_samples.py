@@ -6,11 +6,8 @@ samples/ の試聴音声を、素材 × 形（モノラル・ステレオ）× �
   python tools/samples/make_samples.py --source demo   # 素材を一つだけ
 
 素材: demo（合成試験信号）、piano、percussion（どちらもステレオの CC0 音源）。各10秒。
-モノラル形は (L+R)/2、ステレオ形は原音のまま。同じ素材・同じ条件で両形が揃う。
-32 kHz: 主系はモノラル形が B200M・B200MY、ステレオ形が B200・B200Y、副系は なし または SUB50M。
-48 kHz: 主系はモノラル形が M700M・M700MY、ステレオ形が M700・M700Y、副系は なし または SUB100-48K。
-条件: コーデックだけ（副系なしのみ）、AWGN の C/N0 54・57・60・66・80、レイリーフェージング（C/N0 60）、
-主系の周波数だけ10dB低下（C/N0 66）。同じ受信条件のアナログFMはモノラル形だけ。
+COMPARISON.md の数値に使う試料だけを作る: モノラル形、32 kHz、主系 B200M + 副系 SUB50M、
+AWGN の C/N0 54・57・60・66・80、および同じ条件のアナログFM。
 通信路は主系・副系とも独立のチャンネルで、C/N0は同じ値。
 """
 import argparse
@@ -30,8 +27,6 @@ from gracefm import channel  # noqa: E402
 from gracefm.iir import ALT_DELAY  # noqa: E402
 from tools.common import wavio  # noqa: E402
 from tools.common.analog_fm import AnalogFM  # noqa: E402
-from gracefm.codec import roundtrip  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
 
 OUT = os.path.join(ROOT, "samples")
 SEC = 10.0
@@ -41,12 +36,9 @@ MATERIALS = (("demo", None, 0.0),
              ("piano", "lossless/Emotional_piano.wav", 1.0),
              ("percussion", "lossless/Ceramic_Djembe.wav", 0.5))
 # (サンプリング周波数, 形, 主系, 副系)
-SETS = ((32000, "mono", ("B200M", "B200MY"), (None, "SUB50M")),
-        (32000, "stereo", ("B200", "B200Y"), (None, "SUB50M")),
-        (48000, "mono", ("M700M", "M700MY"), (None, "SUB100-48K")),
-        (48000, "stereo", ("M700", "M700Y"), (None, "SUB100-48K")))
+SETS = ((32000, "mono", ("B200M",), ("SUB50M",)),)
 CN0_LIST = (54, 57, 60, 66, 80)      # C/N0 [dB-Hz]。66 は 5m・室内の保守的な見積もり (SPEC 付録D)
-CASES = tuple(f"awgn{c}" for c in CN0_LIST) + ("rayleigh60", "main_minus10db66")
+CASES = tuple(f"awgn{c}" for c in CN0_LIST)
 BN = 180e3                           # C/N を表示する雑音帯域 [Hz] (FM放送 1波ぶん)
 
 
@@ -95,21 +87,16 @@ def generate(task):
     fm = AnalogFM(x[:, 0], fs) if mono and fs == 32000 else None
     xi = wavio.to_pcm24(x)
     for main in mains:
-        save(sample_name(src, fs, main), wavio.from_pcm24(roundtrip(xi, PROFILES[main])), mono, fs)
         for sub in subs:
             for case in CASES:
-                kind = {"rayleigh60": "rayleigh", "main_minus10db66": "fade10"}.get(case, "awgn")
-                cn0 = int(case[len(case.rstrip("0123456789")):])
-                y, _, _ = channel.link(xi, main, cn0, sub=sub, kind_main=kind,
-                                       kind_sub="awgn" if kind == "fade10" else kind, seed=1)
+                cn0 = int(case[len("awgn"):])
+                y, _, _ = channel.link(xi, main, cn0, sub=sub, seed=1)
                 save(sample_name(src, fs, main, case, sub=sub), wavio.from_pcm24(aligned(y, fs)), mono, fs)
         print(f"  {src} {main} done", flush=True)
     if fm is not None:
         for case in CASES:
-            kind = {"rayleigh60": "rayleigh", "main_minus10db66": "fade10"}.get(case, "awgn")
-            cn0 = int(case[len(case.rstrip("0123456789")):])
-            g = None if kind == "awgn" else channel.fading_gains(int(np.ceil(len(x) / 64)), kind, np.random.default_rng(101))
-            y1 = fm.receive(cn0, np.random.default_rng(1), g) if g is not None else fm.receive(cn0, np.random.default_rng(1))
+            cn0 = int(case[len("awgn"):])
+            y1 = fm.receive(cn0, np.random.default_rng(1))
             save(sample_name(src, fs, "FM", case), np.stack([y1, y1], 1), True, fs)
     return src
 

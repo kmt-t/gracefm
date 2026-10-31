@@ -20,6 +20,6 @@
 
 - `piano-mono__32k__reference.flac`：pianoのモノラル形の原音。
 - `piano-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac`：モノラル主系＋副系、白色雑音条件。
-- `demo-stereo__32k__B200Y__codec.flac`：ステレオ主系B200Yのコーデック単体音声。
+- `demo-mono__32k__FM__awgn-cn0-54dBHz.flac`：同じ条件のアナログFM。
 
 生成ツールは `tools/samples/sample_names.py` の共通関数で命名する。全設定・保存後の波形SNR・SHA-256は [音源一覧JSON](index.json) に記録する。

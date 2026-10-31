@@ -277,14 +277,13 @@ def test_layered_profile():
 def test_b200_link_preserves_high_side_signal():
     """帯域圧縮後も高域Sのレベルを保ち、基本層を減らしたY系の差を検出する。"""
     from gracefm import channel
-    from tools.common import wavio
     from gracefm.codec import haar_forward
 
+    from tools.samples.make_samples import load_material
+
     p = PROFILES["B200"]
-    path = os.path.join(os.path.dirname(__file__), "..", "samples", "demo-stereo__32k__reference.flac")
-    x, fs = wavio.read(path)
-    assert fs == p.fs
-    x = pcm(x[:fs] * (0.89 / np.max(np.abs(x[:fs]))))
+    x = load_material("demo", None, 0.0, None, p.fs)                  # 試料の原音と同じ合成信号 (samples/ は使わない)
+    x = pcm(x[:p.fs] * (0.89 / np.max(np.abs(x[:p.fs]))))
     from gracefm.iir import ALT_DELAY
     d = ALT_DELAY[p.fs]
     x_ref = np.concatenate([np.zeros((d, 2), np.int64), x[:-d]])      # 出力は切り替え先の遅延の分だけ遅れる

@@ -34,7 +34,6 @@ def expected():
         for fs, form, mains, subs in SETS:
             src = source_name(material, form)
             for main in mains:
-                rows.append((material, form, main, 'codec', sample_name(src, fs, main), fs))
                 for sub in subs:
                     for case in CASES:
                         rows.append((material, form, main + (f'+{sub}' if sub else ''), case,
@@ -47,8 +46,8 @@ def expected():
 
 def snr_db(reference, audio, case, config, fs):
     """波形SNR。通信路を通した試料は末尾 ALT_DELAY サンプルが遅れ分の無音 (make_samples.aligned) なので、それを除いて測る。
-    除かないと、高い C/N0 では末尾の数サンプルの誤差だけで値が 2 dB 下がる。コーデックだけと FM は除かない。"""
-    if case == 'codec' or config == 'FM':
+    除かないと、高い C/N0 では末尾の数サンプルの誤差だけで値が 2 dB 下がる。FM は除かない。"""
+    if config == 'FM':
         return metrics.snr_db(reference, audio)
     n = len(audio) - ALT_DELAY[fs]
     return metrics.snr_db(reference[:n], audio[:n])
@@ -88,34 +87,29 @@ def build():
 def write_readme(entries):
     by = {(e['material'], e['form'], e['configuration'], e['condition']): e for e in entries}
     lines = ['# サンプル音声（GraceFM）', '',
-             'ファイル名の読み方は[命名規則](NAMING.md)。各10秒・32 kHzと48 kHz、劣化音は24bit FLAC。`tools/samples/make_samples.py` で生成し、'
+             'ファイル名の読み方は[命名規則](NAMING.md)。各10秒・32 kHz、劣化音は24bit FLAC。`tools/samples/make_samples.py` で生成し、'
              '`tools/samples/sample_catalog.py` で検証してこのファイルを書く。設定・測定値・SHA-256は[音源一覧JSON](index.json)。', '',
              '## マトリクス', '',
-             '素材 3（demo・piano・percussion）× 形 2（モノラル・ステレオ）。モノラル形は (L+R)/2、ステレオ形は原音のまま。'
-             '2系統は主系・副系とも独立のチャンネルで、電力を分け合わない（C/N0は同じ値）。', '',
+             '素材 3（demo・piano・percussion）のモノラル形（(L+R)/2）。2系統は主系・副系とも独立のチャンネルで、電力を分け合わない（C/N0は同じ値）。', '',
              '| 軸 | 内容 |', '|---|---|',
-             '| 32 kHz主系 | モノラル形: B200M・B200MY / ステレオ形: B200・B200Y |',
-             '| 32 kHz副系 | なし / SUB50M |',
-             '| 48 kHz主系 | モノラル形: M700M・M700MY / ステレオ形: M700・M700Y |',
-             '| 48 kHz副系 | なし / SUB100-48K |',
-             '| 条件 | コーデックだけ（副系なしのみ）、白色雑音 C/N0 ' + '・'.join(map(str, CN0_LIST)) +
-             '、レイリーフェージング（C/N0 60）、主系の周波数だけ10dB低下（C/N0 66） |',
+             '| 主系 | B200M（32 kHz） |',
+             '| 副系 | SUB50M |',
+             '| 条件 | 白色雑音 C/N0 ' + '・'.join(map(str, CN0_LIST)) + ' |',
              '| アナログFM | 32 kHzのモノラル形だけ、上の通信路条件 |', '',
              '## 電波の強さ', '', '| C/N0 | C/N（180kHz） |', '|---|---|']
     for c in sorted(CN0_LIST, reverse=True):
         lines.append(f'| {c} dB-Hz | {cn(c):.1f} dB |')
-    lines += ['', '66 dB-Hz は5m・室内の保守的な見積もり（SPEC 付録D）。通信路は白色雑音のみ、または系統ごとに独立なレイリーフェージング'
-              '（時定数100ms、FMも同じ変動）、主系の周波数だけ10dB低下。同期・等化は理想で、FMのゴーストは含まない。', '']
+    lines += ['', '66 dB-Hz は5m・室内の保守的な見積もり（SPEC 付録D）。通信路は白色雑音のみ。同期・等化は理想で、FMのゴーストは含まない。', '']
     for fs, form, mains, subs in SETS:
         label = ('モノラル形' if form == 'mono' else 'ステレオ形') + f'・{fs // 1000} kHz'
         configs = [m + (f'+{s}' if s else '') for m in mains for s in subs] + (['FM'] if form == 'mono' and fs == 32000 else [])
         lines += [f'## {label}（波形SNR dB、保存したFLACと原音の差）', '']
         for material, _, _ in MATERIALS:
-            lines += [f'### {material}', '', '| 構成 | ' + ' | '.join(['codec'] + list(CASES)) + ' |',
-                      '|---|' + '---:|' * (1 + len(CASES))]
+            lines += [f'### {material}', '', '| 構成 | ' + ' | '.join(CASES) + ' |',
+                      '|---|' + '---:|' * len(CASES)]
             for config in configs:
                 cells = []
-                for case in ['codec'] + list(CASES):
+                for case in CASES:
                     e = by.get((material, form, config, case))
                     cells.append('—' if e is None else f'[{e["snr_db"]:.1f}]({Path(e["file"]).name})')
                 lines.append(f'| {config} | ' + ' | '.join(cells) + ' |')
