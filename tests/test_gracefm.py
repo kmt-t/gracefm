@@ -182,12 +182,14 @@ def test_postfilter_resamples_to_48k_int32():
 def test_latency_model():
     """遅延モデル: 1系統・2系統とも 2ブロック。処理時間は加算"""
     from gracefm.timing import Timing, min_latency
+    from gracefm.iir import ALT_DELAY
     for p in PROFILES.values():
         B = Fraction(p.block, p.fs)
-        assert min_latency(p, False) == 2 * B
-        assert min_latency(p, True) == 2 * B
+        alt = Fraction(ALT_DELAY[p.fs], p.fs)                 # 切り替え先の IIR に揃える遅延
+        assert min_latency(p, False) == 2 * B + alt
+        assert min_latency(p, True) == 2 * B + alt
         tm = Timing(t_enc=Fraction(1, 10000), t_filt=Fraction(2, 10000), t_dec=Fraction(3, 10000), t_out=Fraction(4, 10000))
-        assert min_latency(p, True, tm) == 2 * B + Fraction(1, 1000)
+        assert min_latency(p, True, tm) == 2 * B + Fraction(1, 1000) + alt
 
 
 def test_receiver_is_causal():
@@ -283,7 +285,10 @@ def test_b200_link_preserves_high_side_signal():
     x, fs = wavio.read(path)
     assert fs == p.fs
     x = pcm(x[:fs] * (0.89 / np.max(np.abs(x[:fs]))))
-    s_ref = (x[:, 0] - x[:, 1] + 4) >> 3
+    from gracefm.iir import ALT_DELAY
+    d = ALT_DELAY[p.fs]
+    x_ref = np.concatenate([np.zeros((d, 2), np.int64), x[:-d]])      # 出力は切り替え先の遅延の分だけ遅れる
+    s_ref = (x_ref[:, 0] - x_ref[:, 1] + 4) >> 3
     ref = haar_forward(s_ref.reshape(-1, p.block), p.levels)
     power_ref = float(sum(np.sum(a.astype(float) ** 2) for a in ref[p.high_k:]))
     for name in ("B200",):
@@ -419,3 +424,24 @@ def test_quality_marks_profiles_without_high_bands():
     frames = Transmitter(p, 0).run(x)
     _, stats = receive(p, frames, None, len(x), 0)
     assert np.all(stats["quality"] == 1)
+
+
+def test_alt_iir_matches_float_design_and_switches_only_marked_blocks():
+    """切り替え先の整数 IIR は、浮動小数点の設計 (Butterworth 4 次、4 kHz) とほぼ一致する。
+    切り替えは、コードが 1 か 2 のブロックだけ。それ以外は遅延させた入力そのもの。"""
+    from scipy.signal import butter, sosfilt
+    from gracefm.iir import ALT_DELAY, alt_sections, apply_alt, iir_filter
+    rng = np.random.default_rng(12)
+    for fs in (32000, 48000):
+        x = np.clip(np.cumsum(rng.normal(size=(4000, 2)), axis=0) * 2**12, -2**22, 2**22).astype(np.int64)
+        ref = sosfilt(butter(4, 4000, fs=fs, output="sos"), x.astype(float), axis=0)
+        assert np.abs(iir_filter(x, alt_sections(fs)) - ref).max() < 64
+        block = 64
+        q = np.array([0, 2, 0] + [0] * (len(x) // block - 3))
+        out = apply_alt(x, q, fs, block)
+        d = ALT_DELAY[fs]
+        delayed = np.concatenate([np.zeros((d, 2), np.int64), x[:-d]])
+        assert np.array_equal(out[:block], delayed[:block])                       # 切り替えなしのブロック
+        back = 2 * block + fs // 1000                                             # 戻りのフェード (1 ms) のあと
+        assert np.array_equal(out[back:], delayed[back:])
+        assert not np.array_equal(out[block + fs // 1000:2 * block], delayed[block + fs // 1000:2 * block])

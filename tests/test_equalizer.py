@@ -107,10 +107,10 @@ def test_trained_equalizer_removes_static_echo_without_future_training():
 def test_filter_and_equalizer_delay_is_accounted_per_stream():
     mono, sub = PROFILES["B200M"], PROFILES["SUB50M"]
     tm = waveform_timing(mono, sub, lookahead_symbols=4)
-    assert np.isclose(float(min_latency(mono, True, tm) * 1000), 4.3278689, atol=1e-5)
+    assert np.isclose(float(min_latency(mono, True, tm) * 1000), 4.4216189, atol=1e-5)
     stereo, sub_st = PROFILES["B200"], PROFILES["SUB100"]
     ts = waveform_timing(stereo, sub_st, lookahead_symbols=4)
-    assert np.isclose(float(min_latency(stereo, True, ts) * 1000), 4.2272727, atol=1e-5)
+    assert np.isclose(float(min_latency(stereo, True, ts) * 1000), 4.3210227, atol=1e-5)
 
 
 if __name__ == "__main__":

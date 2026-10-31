@@ -23,6 +23,7 @@ from dataclasses import dataclass
 from fractions import Fraction
 from typing import Optional
 
+from .iir import ALT_DELAY
 from .profiles import Profile
 
 
@@ -66,4 +67,4 @@ def min_latency(profile: Profile, two_streams=True, tm: Timing = Timing(), nunit
     for t0, fa, fb in units(profile, two_streams, nunits):
         ready = max([tA[i] for i in fa] + [tB[i] for i in fb]) + tm.t_out
         need = max(need, ready - t0)
-    return need
+    return need + Fraction(ALT_DELAY[profile.fs], profile.fs)    # 切り替え先の IIR に揃える遅延 (gracefm.iir.ALT_DELAY)

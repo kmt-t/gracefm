@@ -63,7 +63,7 @@ def select_by_quality(y, alt, quality, block, use_alt=(1, 2), fade=16):
     y = np.asarray(y, np.int64)
     alt = np.asarray(alt, np.int64)
     n = len(y)
-    out = np.empty_like(y)
+    out = y.copy()                                             # コードのない末尾の端数サンプルは y のまま
     w = 0                                                      # Q15 の重み (0 = y, 32768 = alt)
     for i, q in enumerate(quality):
         s0 = i * block

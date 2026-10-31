@@ -58,6 +58,13 @@ def resample_q16(up, down):
     return [int(round(v * up * 65536)) for v in firwin(2 * half + 1, 1.0 / max(up, down), window=("kaiser", 9.0))]
 
 
+def iir_sos_q28(fs_hz, cutoff_hz=4000, order=4):
+    """因果の Butterworth (低域通過) を 2 次の区間 (biquad) に分けた係数。(b0, b1, b2, a1, a2) を Q28 の整数にする (a0 = 1)。"""
+    from scipy.signal import butter
+    sos = butter(order, cutoff_hz, fs=fs_hz, output="sos")
+    return tuple(tuple(round(float(c) * (1 << 28)) for c in (s[0], s[1], s[2], s[4], s[5])) for s in sos)
+
+
 def main():
     out = ['"""整数実装の定数表。tools/gen/gen_tables.py が作る (手で書き換えない)。ハードウェアでは ROM になる。"""', '']
     for name, tab, doc in (
@@ -71,6 +78,13 @@ def main():
         out.append(f"{name} = (")
         for i in range(0, len(tab), 12):
             out.append("    " + ", ".join(str(v) for v in tab[i:i + 12]) + ",")
+        out.append(")")
+        out.append("")
+    for name, fs_hz in (("ALT_IIR_32K_Q28", 32000), ("ALT_IIR_48K_Q28", 48000)):
+        out.append("# 欠落・高域欠落のブロックで出力を切り替える先の IIR (因果の Butterworth 4 次、4 kHz)。区間ごとの (b0, b1, b2, a1, a2)、Q28、a0 = 1")
+        out.append(f"{name} = (")
+        for sec in iir_sos_q28(fs_hz):
+            out.append("    (" + ", ".join(str(v) for v in sec) + "),")
         out.append(")")
         out.append("")
     (ROOT / "gracefm" / "tables.py").write_text("\n".join(out))

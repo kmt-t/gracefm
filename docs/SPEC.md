@@ -181,7 +181,7 @@ Y系は、Y帯域（2 kHz以上の3帯域）の仮数をHaar係数部から外�
 
 ## 7. 遅延、評価範囲、再現方法
 
-理想的に処理時間・フィルタ遅延を0とした場合、1フレームを蓄積してから1フレーム時間で送るので、最小の一定再生遅延は $`2T_f`$、32 kHzで4 ms、48 kHzで約2.667 msとなる。二系統融合でも、格子が同じなのでこの基準は同じ。実際にはRRC、等化器の先読み、符号化・復号、ADC/DAC、同期取得、出力バッファを加える。[timing.py](../gracefm/timing.py)はこれらを別々に与える計算モデルであり、実機遅延の実測ではない。
+理想的に処理時間・フィルタ遅延を0とした場合、1フレームを蓄積してから1フレーム時間で送るので、最小の一定再生遅延は $`2T_f`$、32 kHzで4 ms、48 kHzで約2.667 msとなる。二系統融合でも、格子が同じなのでこの基準は同じ。実際にはRRC、等化器の先読み、符号化・復号、ADC/DAC、同期取得、出力バッファを加える。出力は、欠落・高域欠落フレームで切り替える先の因果IIR（Butterworth 4次、4 kHz）の群遅延に揃えて、32 kHzで3サンプル、48 kHzで5サンプル遅らせる（[iir.py](../gracefm/iir.py)の `ALT_DELAY`、約0.09〜0.10 ms）。[timing.py](../gracefm/timing.py)はこれらを別々に与える計算モデルであり、実機遅延の実測ではない。
 
 設定の正本は[profiles.py](../gracefm/profiles.py)の `PROFILE_MATRIX` で、[設定マトリクス](PROFILES.md)は `python tools/report/profile_matrix.py` で生成する。表の一貫性は `python tools/report/profile_matrix.py --check`、スペクトルは `python tools/report/spectrum.py`、試聴音声のファイルと設定の対応は `python tools/samples/sample_catalog.py` で検証できる。受信・CRC・帯域配置の動作は `tests/test_profiles.py`、`tests/test_gracefm.py`、`tests/test_y.py` を参照。FM・aptX・DAB+との比較条件と数値は[方式間比較](COMPARISON.md)に分けて記載する。
 

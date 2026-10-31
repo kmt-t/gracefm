@@ -13,6 +13,7 @@
 import numpy as np
 
 from . import fec, framing, fusion, modem, plc
+from .iir import apply_alt
 from .codec import (attenuator_expanded, encode_block, exp_range, FRAC, haar_inverse, ms_to_lr, offset_of, qmax_of, qmin_of)
 from .crypto import unwrap_counter
 from .dsp import log2_q8, saturate, shift_signed, sigmoid_q15
@@ -273,9 +274,10 @@ def receive(profile: Profile, framesA, framesB, n, offset_b, plc_order=16,
     else:
         y, v = yA, vA
     stats["plc_samples"] = int((~v).sum())
-    stats["quality"] = block_quality(profile, dA, dB if framesB is not None else None, offset_b, len(y) // profile.block)
+    stats["quality"] = block_quality(profile, dA, dB if framesB is not None else None, offset_b, -(-len(y) // profile.block))
     traces = [dA.rb_trace] + ([dB.rb_trace] if framesB is not None else [])
     patterns = [tuple(np.concatenate([(rb[i * profile.block] != INF_LOG).ravel() for rb in traces]))
                 for i in range(len(y) // profile.block)]
     y = plc.crossfade_switch(y, patterns, profile.block, order=plc_order)
-    return plc.conceal(y, v, profile.fs, order=plc_order), stats
+    y = plc.conceal(y, v, profile.fs, order=plc_order)
+    return apply_alt(y, stats["quality"], profile.fs, profile.block), stats
