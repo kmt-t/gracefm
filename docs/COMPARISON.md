@@ -164,6 +164,10 @@ GraceFMは実装も合成もしていない。参照実装はPythonの配列処�
 
 HE-AACデコーダ単体とDAB+のOFDM受信部のゲート数は、見つからなかった。
 
+### CPUとDSPの役割分担
+
+CPUとDSPの分担、精度の方針は[固定小数点の仕様](FIXED.md)の 3.4 節にある。
+
 ### DSP演算量とメモリ（数え上げ）
 
 GraceFMの受信側を、処理ごとに数えた。式は[`tools/report/circuit_estimate.py`](../tools/report/circuit_estimate.py)にあり、プロファイルのレイアウトとパラメータから出す（[数値 JSON](results/circuit_estimate.json)）。幅は[固定小数点の仕様](FIXED.md)（データ24 bit、係数18 bit）である。論理（LUT/FF）、DSP、ブロックRAMの数は、この数え上げから下の節で積み上げる。
