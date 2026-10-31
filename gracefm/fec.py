@@ -33,7 +33,7 @@ def _branch_table():
         for u in range(2):
             reg = (u << (K - 1)) | s
             for j, g in enumerate(G):
-                out[s, u, j] = bin(reg & g).count("1") & 1
+                out[s, u, j] = (reg & g).bit_count() & 1
     return out
 
 

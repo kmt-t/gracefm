@@ -8,15 +8,16 @@ from scipy.signal import lfilter
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from gracefm import modem  # noqa: E402
-from gracefm.crypto import StreamCipher  # noqa: E402
-from gracefm.equalizer import equalize_static, estimate_channel, header_training_symbols  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
-from gracefm.timing import min_latency  # noqa: E402
-from helpers import waveform_timing  # noqa: E402
-from gracefm.txrx import Transmitter  # noqa: E402
-from tools.common.pulse import rrc_taps  # noqa: E402
-from tools.sim.multipath import matched_channel_taps, through_matched_channel  # noqa: E402
+from helpers import waveform_timing
+
+from gracefm import modem
+from gracefm.crypto import StreamCipher
+from gracefm.encoder import Encoder
+from gracefm.equalizer import equalize_static, estimate_channel, header_training_symbols
+from gracefm.profiles import PROFILES
+from gracefm.timing import min_latency
+from tools.common.pulse import rrc_taps
+from tools.sim.multipath import matched_channel_taps, through_matched_channel
 
 ONE = float(1 << modem.SYM_FRAC)
 
@@ -31,7 +32,7 @@ def test_header_training_matches_transmitted_quadrants():
     for name in ("B200M", "SUB50M", "B200", "SUB100"):
         p = PROFILES[name]
         sid = int(name in ("SUB50M", "SUB100"))
-        transmitter = Transmitter(p, sid)
+        transmitter = Encoder(p, sid)
         pilot = header_training_symbols(p, sid, 7)
         transmitter.frame_no = 7
         transmitted = transmitter.frame(np.zeros((p.block, 2), np.int64))
@@ -44,7 +45,7 @@ def test_header_training_matches_transmitted_quadrants():
 
     p = PROFILES["B200M"]
     cipher = StreamCipher(bytes(range(16)), bytes(8))
-    transmitter = Transmitter(p, 0, cipher=cipher)
+    transmitter = Encoder(p, 0, cipher=cipher)
     transmitter.frame_no = 7
     pilot = header_training_symbols(p, 0, 7, encrypted=True)
     transmitted = transmitter.frame(np.zeros((p.block, 2), np.int64))
@@ -67,7 +68,7 @@ def test_symbol_channel_matches_shaped_fractional_delay_waveform():
     from gracefm.channel import symbol_rate
 
     p = PROFILES["B200M"]
-    symbols = _complex(np.concatenate(Transmitter(p).run(np.zeros((p.block * 30, 2), np.int64))))
+    symbols = _complex(np.concatenate(Encoder(p).run(np.zeros((p.block * 30, 2), np.int64))))
     sps = 8
     pulse = rrc_taps(p.pulse_beta_pct / 100, sps, p.pulse_span)
     up = np.zeros((len(symbols) + p.pulse_span + 2) * sps, complex)
@@ -86,7 +87,7 @@ def test_symbol_channel_matches_shaped_fractional_delay_waveform():
 
 def test_trained_equalizer_removes_static_echo_without_future_training():
     p = PROFILES["B200M"]
-    frames = Transmitter(p).run(np.zeros((p.block * 150, 2), np.int64))
+    frames = Encoder(p).run(np.zeros((p.block * 150, 2), np.int64))
     y, _ = through_matched_channel(frames, p, 24.0, ((5e-6, -10, np.pi / 3),))
     direct, _ = through_matched_channel(frames, p, 24.0)
     s = _complex(np.asarray(frames))

@@ -13,7 +13,15 @@ DSP に依存する演算は gracefm.dsp にある (docs/FIXED.md)。
 """
 import numpy as np
 
-from .dsp import bit_length, mac_sq2_inv, round_shift, saturate, saturate_bits, shift_signed, sq_err_sum, ERR_FRAC_BITS
+from .dsp import (
+    ERR_FRAC_BITS,
+    bit_length,
+    mac_sq2_inv,
+    round_shift,
+    saturate,
+    saturate_bits,
+    sq_err_sum,
+)
 from .profiles import Profile, band_level
 
 
@@ -90,9 +98,10 @@ def _shared_exponent(peak, qmax, emin, emax):
     return np.clip(s - FRAC, emin, emax)
 
 
-def quantize(c, k, b, profile: Profile, clip_opt=True, ch="M"):
+def quantize_band(c, ch, k, profile: Profile, clip_opt=True):
     """整数係数 c (..., ncoef) → (仮数 m, 指数インデックス, アッテネータ)。アッテネータの定義は gracefm.profiles の attenuator_group で決まる"""
     c = np.asarray(c, np.int64)
+    b = (profile.bits_m if ch == "M" else profile.bits_s)[k]
     group = profile.attenuator_group(ch, k)
     qmax, qmin = qmax_of(b), qmin_of(b, profile, ch, k)
     emin, emax = exp_range(k, b, profile)
@@ -126,65 +135,39 @@ def quantize(c, k, b, profile: Profile, clip_opt=True, ch="M"):
     return m.astype(np.int64), (e0 - emin).astype(np.int64), a
 
 
-def dequantize(m, eidx, k, b, profile: Profile, ch="M", attn=None):
-    emin, _ = exp_range(k, b, profile)
-    s = int(eidx) + emin + FRAC
-    if attn is None or not len(attn):
-        return saturate(shift_signed(m, s))
-    group = profile.attenuator_group(ch, k)
-    shift = s - np.repeat(np.asarray(attn, np.int64), group, axis=-1)
-    return saturate(shift_signed(m, shift))
-
-
-def encode_block(x, profile: Profile, clip_opt=True) -> BlockData:
-    """x: (block, 2) の L/R、符号つき24 bit整数 (|x| < 2^23)"""
+def analyze(x, profile: Profile):
+    """x: (block, 2) の L/R、符号つき24 bit整数 (|x| < 2^23) → {ch: [帯域の係数 (整数、小数22 bit)]}。M/S 分離と Haar 多段分解"""
     x = np.asarray(x, np.int64)
     ms = {"M": (x[:, 0] + x[:, 1] + 2) >> 2, "S": (x[:, 0] - x[:, 1] + 2) >> 2}      # 24 bit PCM → 22 bit小数 (M=(L+R)/2)
+    return {ch: haar_forward(ms[ch], profile.levels) for ch in ("M", "S")}
+
+
+def quantize(bands, profile: Profile, clip_opt=True) -> BlockData:
+    """analyze の出力 → BlockData (帯域ごとの仮数・指数・アッテネータ)。b = 0 の帯域は None"""
     mant, eidx, attn = {}, {}, {}
     for ch, bits in (("M", profile.bits_m), ("S", profile.bits_s)):
-        bands = haar_forward(ms[ch], profile.levels)
         mant[ch], eidx[ch], attn[ch] = [], [], []
-        for k, (c, b) in enumerate(zip(bands, bits)):
+        for k, (c, b) in enumerate(zip(bands[ch], bits)):
             if b == 0:
                 mant[ch].append(None)
                 eidx[ch].append(None)
                 attn[ch].append(None)
                 continue
-            m, e, a = quantize(c, k, b, profile, clip_opt, ch)
+            m, e, a = quantize_band(c, ch, k, profile, clip_opt)
             mant[ch].append(m)
             eidx[ch].append(int(e))
             attn[ch].append(a)
     return BlockData(mant, eidx, attn)
 
 
-def decode_block(bd: BlockData, profile: Profile):
-    """BlockData → (block, 2) の L/R、符号つき24 bit整数"""
-    coefs = decode_coeffs(bd, profile)
+def encode_block(x, profile: Profile, clip_opt=True) -> BlockData:
+    """x: (block, 2) の L/R、符号つき24 bit整数 (|x| < 2^23)。analyze → quantize"""
+    return quantize(analyze(x, profile), profile, clip_opt)
+
+
+def synthesize(coefs):
+    """{ch: [帯域係数]} → (block, 2) の L/R、符号つき24 bit整数。Haar の逆変換と M/S の逆変換 (analyze の逆)"""
     return ms_to_lr(haar_inverse(coefs["M"]), haar_inverse(coefs["S"]))
-
-
-def roundtrip(x, profile: Profile):
-    """通信路なしの符号化と復号 (ブロックごと)。x は (n, 2) の符号つき24 bit整数"""
-    n = profile.block
-    nfr = -(-len(x) // n)
-    xp = np.pad(np.asarray(x, np.int64), ((0, nfr * n - len(x)), (0, 0)))
-    out = np.zeros_like(xp)
-    for i in range(nfr):
-        out[i * n:(i + 1) * n] = decode_block(encode_block(xp[i * n:(i + 1) * n], profile), profile)
-    return out[:len(x)]
-
-
-def decode_coeffs(bd: BlockData, profile: Profile):
-    """BlockData → {ch: [帯域係数 (整数、小数22 bit)]}"""
-    coefs = {}
-    for ch, bits in (("M", profile.bits_m), ("S", profile.bits_s)):
-        coefs[ch] = []
-        for k, b in enumerate(bits):
-            if b == 0:
-                coefs[ch].append(np.zeros(profile.ncoef(k), np.int64))
-            else:
-                coefs[ch].append(dequantize(bd.mant[ch][k], bd.eidx[ch][k], k, b, profile, ch, bd.attn[ch][k]))
-    return coefs
 
 
 def ms_to_lr(M, S):

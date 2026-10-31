@@ -6,10 +6,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from gracefm import modem  # noqa: E402
-from gracefm.layout import Layout  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
-from gracefm.txrx import Transmitter  # noqa: E402
+from gracefm import modem
+from gracefm.encoder import Encoder
+from gracefm.layout import Layout
+from gracefm.profiles import PROFILES
 
 
 def margins():
@@ -23,7 +23,7 @@ def margins():
 
 def counts(p):
     """(ヘッダ, 終端, 係数 (詰めを含む), Y 専用, 合計) のシンボル数。プリアンブルを除く"""
-    lay, tx = Layout(p), Transmitter(p)
+    lay, tx = Layout(p), Encoder(p)
     per = 2 if p.modulation == "qpsk" else 4           # ヘッダ・終端が1シンボルに入れる位置の数
     head = lay.n_header // per
     tail = (lay.n_tail + lay.n_ytail) // per

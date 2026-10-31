@@ -131,7 +131,6 @@ class Layout:
         if not p.layered:
             self.n_strong = len(stream_list)
         self.n_tx = len(stream_list)
-        T6 = np.arange(T)
         self.hpar_idx = np.zeros(self.n_hdata + T, np.int64)
         self.hdata_idx = np.zeros(self.n_hdata, np.int64)
         self.htail_idx = np.zeros(T, np.int64)

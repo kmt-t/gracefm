@@ -42,20 +42,20 @@ def lanczos_q16(oversample=4, a=8):
     """Lanczos 補間核 (長さ 2·a·oversample + 1、Q16)"""
     import numpy as np
     n = np.arange(-a * oversample, a * oversample + 1) / oversample
-    return [int(round(v * 65536)) for v in np.sinc(n) * np.sinc(n / a)]
+    return [round(v * 65536) for v in np.sinc(n) * np.sinc(n / a)]
 
 
 def lpf_q17(taps=511, cutoff_hz=0.98 * 32000 / 2, fs_hz=32000 * 4):
     """Kaiser(9) 窓の線形位相 LPF (Q17)。fs=32 kHz の 4 倍レート。48 kHz の 4 倍レートは cutoff が異なる"""
     from scipy.signal import firwin
-    return [int(round(v * 131072)) for v in firwin(taps, cutoff_hz, window=("kaiser", 9.0), fs=fs_hz)]
+    return [round(v * 131072) for v in firwin(taps, cutoff_hz, window=("kaiser", 9.0), fs=fs_hz)]
 
 
 def resample_q16(up, down):
     """resample_poly の既定フィルタ (Kaiser 9、長さ 2·10·max(up, down) + 1、利得 up) (Q16)"""
     from scipy.signal import firwin
     half = 10 * max(up, down)
-    return [int(round(v * up * 65536)) for v in firwin(2 * half + 1, 1.0 / max(up, down), window=("kaiser", 9.0))]
+    return [round(v * up * 65536) for v in firwin(2 * half + 1, 1.0 / max(up, down), window=("kaiser", 9.0))]
 
 
 def iir_sos_q28(fs_hz, cutoff_hz=4000, order=4):

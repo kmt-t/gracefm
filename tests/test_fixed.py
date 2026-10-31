@@ -6,10 +6,15 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from gracefm.codec import BlockData  # noqa: E402
-from gracefm.dsp import CONST_BITS, MULT_MAX, MULT_MIN, SQ2_INV  # noqa: E402
-from gracefm.codec import decode_block, encode_block, haar_forward, haar_inverse, roundtrip  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
+from gracefm.codec import (
+    BlockData,
+    encode_block,
+    haar_forward,
+    haar_inverse,
+)
+from gracefm.decoder import reconstruct, roundtrip
+from gracefm.dsp import CONST_BITS, MULT_MAX, MULT_MIN, SQ2_INV
+from gracefm.profiles import PROFILES
 
 
 def _music_like(n, fs, seed=3):
@@ -55,7 +60,7 @@ def test_encoder_output_is_block_data_with_integer_fields():
     bd = encode_block(np.zeros((p.block, 2), np.int64) + 1000, p)
     assert isinstance(bd, BlockData)
     assert all(isinstance(e, int) for e in bd.eidx["M"] if e is not None)
-    assert decode_block(bd, p).dtype == np.int64
+    assert reconstruct(bd, p).dtype == np.int64
 
 
 def test_hardware_modules_contain_no_floating_point():
@@ -65,22 +70,25 @@ def test_hardware_modules_contain_no_floating_point():
     forbidden_names = {"float", "float32", "float64", "sqrt", "log", "log2", "exp", "exp2", "sin", "cos", "rint",
                        "mean", "std", "power", "pi", "nan", "inf"}
     root = pathlib.Path(__file__).resolve().parents[1] / "gracefm"
+    found = []
     for name in sorted(p.name for p in root.glob("*.py") if p.name not in ("channel.py", "__init__.py")):
         tree = ast.parse((root / name).read_text())
         for node in ast.walk(tree):
             if isinstance(node, ast.Constant) and isinstance(node.value, float):
-                raise AssertionError(f"{name}:{node.lineno} float literal {node.value}")
+                found.append(f"{name}:{node.lineno} float literal {node.value}")
             if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
-                raise AssertionError(f"{name}:{node.lineno} true division")
+                found.append(f"{name}:{node.lineno} true division")
             ident = node.attr if isinstance(node, ast.Attribute) else node.id if isinstance(node, ast.Name) else None
             if ident in forbidden_names:
-                raise AssertionError(f"{name}:{node.lineno} forbidden name {ident}")
+                found.append(f"{name}:{node.lineno} forbidden name {ident}")
+    assert not found, found
 
 
 def test_log_and_exp_without_tables_are_accurate():
-    from gracefm.dsp import inv1p2pow_q15, log2_q8, pow2_neg_q15, sigmoid_q15
     import math
-    for k in range(0, 40):
+
+    from gracefm.dsp import inv1p2pow_q15, log2_q8, pow2_neg_q15, sigmoid_q15
+    for k in range(40):
         assert log2_q8(1 << k) == k * 256
     for x in (3, 5, 7, 100, 1234, 987654321):
         assert abs(log2_q8(x) - 256 * math.log2(x)) <= 2                          # 小数 8 bit の誤差

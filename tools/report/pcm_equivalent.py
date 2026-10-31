@@ -14,19 +14,21 @@ PCM換算bit = (コーデックだけを通した波形SNR [dB] − 1.76) / 6.02
 
 出力: docs/results/pcm_equivalent.json
 """
-from concurrent.futures import ProcessPoolExecutor
 import json
-from pathlib import Path
 import sys
+from concurrent.futures import ProcessPoolExecutor
+from pathlib import Path
 
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from gracefm.codec import roundtrip  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
-from tools.common import metrics, wavio  # noqa: E402
+import itertools
+
+from gracefm.decoder import roundtrip
+from gracefm.profiles import PROFILES
+from tools.common import metrics, wavio
 
 MATERIALS = ("demo", "piano", "percussion")
 LEVELS = (0, -20, -40, -60, -80, -90, -100, -110, -120)      # 入力ピーク [dB]
@@ -43,9 +45,9 @@ def measure(name, p):
         snrs.append(float(metrics.snr_db(x[:, :channels], y[:, :channels])))
     snr = float(np.mean(snrs))
     pcm = p.fs * channels * 16 / 1000
-    return dict(name=name, fs=p.fs, channels=channels, audio_kbps=float(p.audio_kbps()), pcm16_kbps=pcm,
-                compression_ratio=round(float(pcm / p.audio_kbps()), 2), snr_db=round(snr, 1),
-                pcm_bits=round((snr - 1.76) / 6.02, 1), snr_by_material=dict(zip(MATERIALS, (round(s, 1) for s in snrs))))
+    return {"name": name, "fs": p.fs, "channels": channels, "audio_kbps": float(p.audio_kbps()), "pcm16_kbps": pcm,
+                "compression_ratio": round(float(pcm / p.audio_kbps()), 2), "snr_db": round(snr, 1),
+                "pcm_bits": round((snr - 1.76) / 6.02, 1), "snr_by_material": dict(zip(MATERIALS, (round(s, 1) for s in snrs)))}
 
 
 def level_curve(name):
@@ -63,14 +65,14 @@ def level_curve(name):
         for source in (x, sine):
             s = source * gain
             row.append(round(float(metrics.snr_db(s[:, :channels], wavio.from_pcm24(roundtrip(wavio.to_pcm24(s), p))[:, :channels])), 1))
-        curve[level] = dict(piano=row[0], sine_1khz=row[1])
+        curve[level] = {"piano": row[0], "sine_1khz": row[1]}
     return name, curve
 
 
 def floor_level(curve, source, target=20.0):
     """波形SNRが target dB を下回り始める入力レベル [dB]。測定点の間は直線補間"""
     points = sorted(((level, row[source]) for level, row in curve.items()), reverse=True)
-    for (l0, s0), (l1, s1) in zip(points, points[1:]):
+    for (l0, s0), (l1, s1) in itertools.pairwise(points):
         if s0 >= target > s1:
             return round(l0 + (l1 - l0) * (s0 - target) / (s0 - s1), 1)
     return None

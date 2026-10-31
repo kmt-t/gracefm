@@ -12,21 +12,21 @@ IP/UDP/RTP のヘッダは IPv4 で 40 byte、IPv6 で 60 byte。
 出力: docs/results/rtp_budget.json
 """
 import json
-from pathlib import Path
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from gracefm.profiles import PROFILES  # noqa: E402
-from gracefm.txrx import Transmitter  # noqa: E402
+from gracefm.encoder import Encoder
+from gracefm.profiles import PROFILES
 
 MAX_PAYLOAD = 1400
 HEADER_BYTES = 2
 
 
 def budget(name, p, deviation):
-    tx = Transmitter(p)
+    tx = Encoder(p)
     body = 1 + -(-tx.layout.n_tx // 8) + -(-9 * tx.layout.n_y // 8)
     if deviation:
         body += -(-tx.digital_nsym // 2)
@@ -34,10 +34,10 @@ def budget(name, p, deviation):
     fps = p.fs / p.block
     payload = HEADER_BYTES + frames * body
     pps = fps / frames
-    return dict(name=name, deviation=deviation, fs=p.fs, frame_bytes=body, frames_per_packet=frames, payload_bytes=payload,
-                packets_per_s=pps, packet_ms=frames * p.block / p.fs * 1000,
-                payload_kbps=payload * 8 * pps / 1000, ipv4_kbps=(payload + 40) * 8 * pps / 1000,
-                ipv6_kbps=(payload + 60) * 8 * pps / 1000)
+    return {"name": name, "deviation": deviation, "fs": p.fs, "frame_bytes": body, "frames_per_packet": frames, "payload_bytes": payload,
+                "packets_per_s": pps, "packet_ms": frames * p.block / p.fs * 1000,
+                "payload_kbps": payload * 8 * pps / 1000, "ipv4_kbps": (payload + 40) * 8 * pps / 1000,
+                "ipv6_kbps": (payload + 60) * 8 * pps / 1000}
 
 
 def main():

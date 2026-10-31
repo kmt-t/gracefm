@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """試聴音声を作り直し、検証して索引を書く (make_samples.py → sample_catalog.py)。"""
 import os
-from pathlib import Path
 import subprocess
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 

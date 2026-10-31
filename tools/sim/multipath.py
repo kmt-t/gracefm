@@ -11,9 +11,10 @@ from scipy.signal import fftconvolve
 
 from gracefm import modem
 from gracefm.channel import DEFAULT_SUB, adc, symbol_rate
+from gracefm.encoder import Encoder
 from gracefm.equalizer import equalize_static
 from gracefm.profiles import PROFILES, Profile
-from gracefm.txrx import Transmitter, receive
+from gracefm.receiver import receive
 from tools.common.pulse import rrc_taps
 
 
@@ -68,7 +69,7 @@ def link_static_multipath(x, main, cn0, paths=(), sub="auto", cn0_sub=None,
         sub = DEFAULT_SUB.get(pm.name)
     ps = (sub if isinstance(sub, Profile) else PROFILES[sub]) if sub else None
     esm = cn0 - 10 * np.log10(symbol_rate(pm))
-    fa = Transmitter(pm, 0, 0, cipher=cipher).run(x)
+    fa = Encoder(pm, 0, 0, cipher=cipher).run(x)
     fa, _ = through_matched_channel(fa, pm, esm, paths, seed=seed)
     diagnostics = {}
     if equalize:
@@ -77,7 +78,7 @@ def link_static_multipath(x, main, cn0, paths=(), sub="auto", cn0_sub=None,
     fb, ess = None, None
     if ps:
         ess = (cn0 if cn0_sub is None else cn0_sub) - 10 * np.log10(symbol_rate(ps))
-        fb = Transmitter(ps, 1, 0, cipher=cipher).run(x)
+        fb = Encoder(ps, 1, 0, cipher=cipher).run(x)
         fb, _ = through_matched_channel(fb, ps, ess, paths, frequency_spacing_hz, seed + 1)
         if equalize:
             fb, diagnostics["sub"] = equalize_static(fb, ps, 1, training_frames, equalizer_taps, max_lookahead,

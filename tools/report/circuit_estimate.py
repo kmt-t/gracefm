@@ -17,19 +17,19 @@ DSP スライス数は、MAC/s ÷ (クロック × 稼働率) の下限で、ク
 """
 import json
 import math
-from pathlib import Path
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from gracefm import fec  # noqa: E402
-from gracefm.channel import DEFAULT_SUB, symbol_rate  # noqa: E402
-from gracefm.layout import Layout  # noqa: E402
-from gracefm.modem import bits_per_symbol, n_symbols  # noqa: E402
-from gracefm.postfilter import LANCZOS_A, LPF_TAPS, OUT_FS, OVERSAMPLE  # noqa: E402
-from gracefm.tables import LANCZOS_Q16, RESAMPLE_1_4_Q16, RESAMPLE_3_8_Q16  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
+from gracefm import fec
+from gracefm.channel import DEFAULT_SUB, symbol_rate
+from gracefm.layout import Layout
+from gracefm.modem import bits_per_symbol, n_symbols
+from gracefm.postfilter import LANCZOS_A, LPF_TAPS, OUT_FS, OVERSAMPLE
+from gracefm.profiles import PROFILES
+from gracefm.tables import LANCZOS_Q16, RESAMPLE_1_4_Q16, RESAMPLE_3_8_Q16
 
 CLOCK_HZ = 100e6
 UTILIZATION = 1.0
@@ -214,10 +214,10 @@ def logic_estimate(name):
     parts["lutram"] = {"lut": lutram_lut, "ff": 0, "dsp": 0}                       # 1 kbit 以下の小さな記憶
     total = {m: sum(v[m] for v in parts.values()) for m in ("lut", "ff", "dsp")}
     total["bram18"] = bram18
-    return dict(name=name, sub=sub, utilization=PRACTICAL_UTILIZATION, mac_engines=mac_engines, parts=parts,
-                memory_bits=mem, total=total,
-                fraction_of_zynq_7010=dict(lut=total["lut"] / ZYNQ_LUT, ff=total["ff"] / ZYNQ_FF,
-                                           dsp=total["dsp"] / ZYNQ_DSP, bram18=total["bram18"] / ZYNQ_BRAM18))
+    return {"name": name, "sub": sub, "utilization": PRACTICAL_UTILIZATION, "mac_engines": mac_engines, "parts": parts,
+                "memory_bits": mem, "total": total,
+                "fraction_of_zynq_7010": {"lut": total["lut"] / ZYNQ_LUT, "ff": total["ff"] / ZYNQ_FF,
+                                           "dsp": total["dsp"] / ZYNQ_DSP, "bram18": total["bram18"] / ZYNQ_BRAM18}}
 
 
 def estimate(name):
@@ -230,16 +230,16 @@ def estimate(name):
         for k, v in s.items():
             totals[k] = totals.get(k, 0) + v
     be = back_end(p, bool(sub))
-    mac = sum(v for k, v in {**totals, **be}.items() if k.endswith("_mac") or k.endswith("_mul")) \
+    mac = sum(v for k, v in {**totals, **be}.items() if k.endswith(("_mac", "_mul"))) \
         - be["postfilter_lpf_sequential_mac"] - be["plc_worst_case_mac"]
     macs_min = mac                                                                 # 出力点だけで LPF を評価、補間なし
     mem = memory_bits(p, lay, bool(sub))
-    return dict(name=name, sub=sub, front_end_per_s=totals, back_end_per_s=be, mac_per_s_restructured=macs_min,
-                mac_per_s_sequential=macs_min - be["postfilter_lpf_at_output_points_mac"] + be["postfilter_lpf_sequential_mac"],
-                plc_worst_case_mac_per_s=be["plc_worst_case_mac"],
-                dsp_slices_min_restructured=math.ceil(macs_min / (CLOCK_HZ * UTILIZATION)),
-                dsp_slices_min_restructured_with_plc=math.ceil((macs_min + be["plc_worst_case_mac"]) / (CLOCK_HZ * UTILIZATION)),
-                memory_bits=mem, memory_total_bits=sum(mem.values()))
+    return {"name": name, "sub": sub, "front_end_per_s": totals, "back_end_per_s": be, "mac_per_s_restructured": macs_min,
+                "mac_per_s_sequential": macs_min - be["postfilter_lpf_at_output_points_mac"] + be["postfilter_lpf_sequential_mac"],
+                "plc_worst_case_mac_per_s": be["plc_worst_case_mac"],
+                "dsp_slices_min_restructured": math.ceil(macs_min / (CLOCK_HZ * UTILIZATION)),
+                "dsp_slices_min_restructured_with_plc": math.ceil((macs_min + be["plc_worst_case_mac"]) / (CLOCK_HZ * UTILIZATION)),
+                "memory_bits": mem, "memory_total_bits": sum(mem.values())}
 
 
 def main():
@@ -249,14 +249,14 @@ def main():
         {"operations": rows, "logic": logic}, ensure_ascii=False, indent=2) + "\n")
     for r in logic:
         t = r["total"]
-        print(r["name"], r["sub"], "LUT %d (%.0f%%) FF %d (%.0f%%) DSP %d BRAM18 %d (%.0f%%)" % (
-            t["lut"], 100 * r["fraction_of_zynq_7010"]["lut"], t["ff"], 100 * r["fraction_of_zynq_7010"]["ff"],
-            t["dsp"], t["bram18"], 100 * r["fraction_of_zynq_7010"]["bram18"]))
+        f = r["fraction_of_zynq_7010"]
+        print(r["name"], r["sub"], "LUT {} ({:.0f}%) FF {} ({:.0f}%) DSP {} BRAM18 {} ({:.0f}%)".format(
+            t["lut"], 100 * f["lut"], t["ff"], 100 * f["ff"], t["dsp"], t["bram18"], 100 * f["bram18"]))
     for r in rows:
-        print(r["name"], r["sub"], "MMAC/s restructured %.1f sequential %.1f plc %.1f" % (
+        print(r["name"], r["sub"], "MMAC/s restructured {:.1f} sequential {:.1f} plc {:.1f}".format(
             r["mac_per_s_restructured"] / 1e6, r["mac_per_s_sequential"] / 1e6, r["plc_worst_case_mac_per_s"] / 1e6),
-            "ACS/s %.1fM" % (r["front_end_per_s"]["viterbi_acs"] / 1e6), "DSP>=", r["dsp_slices_min_restructured"],
-            "mem %.0f kbit" % (r["memory_total_bits"] / 1e3))
+            "ACS/s {:.1f}M".format(r["front_end_per_s"]["viterbi_acs"] / 1e6), "DSP>=", r["dsp_slices_min_restructured"],
+            "mem {:.0f} kbit".format(r["memory_total_bits"] / 1e3))
 
 
 if __name__ == "__main__":

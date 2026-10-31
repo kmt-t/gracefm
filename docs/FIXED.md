@@ -48,7 +48,9 @@
 | [`fec.py`](../gracefm/fec.py) | 畳み込み符号、系統符号、CRC、整数ビタビ（乗算なし） |
 | [`modem.py`](../gracefm/modem.py) | 変調、軸ごとの max-log LLR、Y 方式の変調・復調、PRBS |
 | [`layout.py`](../gracefm/layout.py)、[`framing.py`](../gracefm/framing.py) | ビット配置、送信（pack）と受信（unpack） |
-| [`txrx.py`](../gracefm/txrx.py) | 送信機、受信機（確率による仮数の期待値、誤差分散）、2 系統の受信 |
+| [`encoder.py`](../gracefm/encoder.py) | 送信機（符号化、フレーム化、スクランブル、変調） |
+| [`decoder.py`](../gracefm/decoder.py) | 1系統の受信機（確率による仮数の期待値、誤差分散、Chase 救済、硬判定の再構成） |
+| [`receiver.py`](../gracefm/receiver.py) | 2 系統の合成と出力段（PLC、クロスフェード、IIR 切替） |
 | [`fusion.py`](../gracefm/fusion.py) | 2 系統の帯域ごとの融合（逆分散重み、Q15） |
 | [`plc.py`](../gracefm/plc.py) | LPC による補間（整数のレビンソン・ダービン）とクロスフェード |
 | [`postfilter.py`](../gracefm/postfilter.py) | 出力段（Lanczos 補間、LPF、再標本化）。係数は整数の表 |

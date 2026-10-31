@@ -6,13 +6,16 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from gracefm import modem
-from gracefm.codec import encode_block, decode_block
-from gracefm.framing import pack, unpack
-from gracefm.layout import Layout
-from gracefm.profiles import PROFILES, BY_ID, BY_HEADER
 from helpers import header_info, make_y_profile, with_header
-from gracefm.txrx import INF_LOG, Transmitter, StreamDecoder
+
+from gracefm import modem
+from gracefm.codec import encode_block
+from gracefm.decoder import Decoder, reconstruct
+from gracefm.encoder import Encoder
+from gracefm.framing import pack, unpack
+from gracefm.fusion import INF_LOG
+from gracefm.layout import Layout
+from gracefm.profiles import BY_HEADER, BY_ID, PROFILES
 
 
 def pcm(x):
@@ -54,9 +57,10 @@ def test_all_profiles_roundtrip_and_attenuator_crc():
     rng = np.random.default_rng(24)
     for p in PROFILES.values():
         x = pcm(rng.uniform(-0.6, 0.6, (p.block, 2)))
-        tx = Transmitter(p)
-        decoded, valid = StreamDecoder(p).run([tx.frame(x)], p.block)
-        expected = decode_block(encode_block(x, p), p)
+        tx = Encoder(p)
+        result = Decoder(p).run([tx.frame(x)], p.block)
+        decoded, valid = result.pcm, result.valid
+        expected = reconstruct(encode_block(x, p), p)
         assert valid.all() and np.abs(decoded - expected).max() <= 64, p.name
         lay = tx.layout
         bd = encode_block(x, p)
@@ -72,11 +76,11 @@ def test_all_profiles_roundtrip_and_attenuator_crc():
             damaged = body.copy()
             damaged[index] ^= 1
             frame = with_header(lay, packed, damaged)
-            recovered, header = unpack(lay, 8 * (1 - 2 * frame), frame, **kwargs)
+            res = unpack(lay, 8 * (1 - 2 * frame), frame, **kwargs)
             if index in lay.high_prot_indices:
-                assert recovered is not None and header['high_ok'] is False
+                assert res is not None and res.high_ok is False
             else:
-                assert (recovered, header) == (None, None)
+                assert res is None
 
 
 def test_layer_assignment_matches_physical_positions():
@@ -118,7 +122,7 @@ def test_layers_are_even_and_balanced():
         if not p.layered:
             continue
         assert (balanced(p).base_m, balanced(p).base_s) == (p.base_m, p.base_s), p.name
-        lay = Layout(p) if p.has_y else Layout(p)
+        lay = Layout(p)
         for ch, widths, base in (('M', p.bits_m, p.base_m), ('S', p.bits_s, p.base_s)):
             for k, width in enumerate(widths):
                 if width and not p.y_band(ch, k):
@@ -139,7 +143,7 @@ def test_other_format_identifiers_are_rejected_even_with_matching_id():
             lay = Layout(old)
             packed = pack(lay, encode_block(x, old), 0, 1)
             # The format identifier is fixed for this implementation.
-            assert unpack(current, 8 * (1 - 2 * packed), packed) == (None, None)
+            assert unpack(current, 8 * (1 - 2 * packed), packed) is None
 
 
 def test_y_factory_matches_catalog():
@@ -168,17 +172,17 @@ def test_parity_next_to_coefficients_corrects_top_mantissa_bits():
         bits[flipped] ^= 1
         soft = 8 * (1 - 2 * bits)
         soft[flipped] //= 3                            # 誤ったbitは信頼度が低い
-        recovered, header = unpack(lay, soft, bits)
-        assert recovered is not None and header['high_ok']
-        assert np.array_equal(decode_block(recovered, p), decode_block(bd, p)), name
-        assert np.array_equal(header['top_bits'], frame[lay.top_stream_idx])
+        res = unpack(lay, soft, bits)
+        assert res is not None and res.high_ok
+        assert np.array_equal(reconstruct(res.bd, p), reconstruct(bd, p)), name
+        assert np.array_equal(res.top_bits, frame[lay.top_stream_idx])
 
 
 def test_high_crc_erases_only_h1_h2_in_receiver():
     from gracefm.codec import haar_forward
     p = PROFILES['B200']
     x = pcm(np.random.default_rng(42).uniform(-0.5, 0.5, (p.block, 2)))
-    tx = Transmitter(p)
+    tx = Encoder(p)
     lay = tx.layout
     packed = pack(lay, encode_block(x, p), 0, 0)
     protected = header_info(lay, packed)
@@ -189,13 +193,15 @@ def test_high_crc_erases_only_h1_h2_in_receiver():
         buf[:len(bits)] = bits
         return modem.modulate(buf ^ modem.prbs(len(buf)), tx.digital_nsym, p.modulation, p.alpha)
 
-    decoder = StreamDecoder(p)
-    good, ok = decoder.decode(symbols(protected))
+    decoder = Decoder(p)
+    frame = decoder.decode_frame(symbols(protected))
+    good, ok = frame.pcm, frame.valid
     assert ok
     high_damaged = protected.copy()
     high_damaged[lay.high_prot_indices[0]] ^= 1
-    damaged, ok = decoder.decode(symbols(high_damaged))
-    assert ok and decoder.stats['high_crc_fail'] == 1 and decoder.stats['crc_fail'] == 0
+    frame = decoder.decode_frame(symbols(high_damaged))
+    damaged, ok = frame.pcm, frame.valid
+    assert ok and frame.status == 'high_fail'
     for channel in (0, 1):
         good_bands = haar_forward((good[:, channel] + 1) >> 2, p.levels)
         damaged_bands = haar_forward((damaged[:, channel] + 1) >> 2, p.levels)
@@ -203,19 +209,20 @@ def test_high_crc_erases_only_h1_h2_in_receiver():
             assert np.abs(damaged_bands[k] - good_bands[k]).max() <= 64
         for k in range(p.high_k, p.nbands):
             assert np.abs(damaged_bands[k]).max() <= 64
-    assert (decoder.last_rb[:, :, p.high_k:] == INF_LOG).all()
-    assert (decoder.last_rb[:, :, :p.high_k] != INF_LOG).all()
+    assert (frame.rb[:, :, p.high_k:] == INF_LOG).all()
+    assert (frame.rb[:, :, :p.high_k] != INF_LOG).all()
     core_damaged = protected.copy()
     core_damaged[lay.core_prot_indices[-1]] ^= 1
-    _, ok = decoder.decode(symbols(core_damaged))
-    assert not ok and decoder.stats['crc_fail'] == 1
+    frame = decoder.decode_frame(symbols(core_damaged))
+    _, ok = frame.pcm, frame.valid
+    assert not ok and frame.status == 'crc_fail'
 
 
 def test_y_high_crc_keeps_lower_y_band():
     from gracefm.codec import haar_forward
     p = PROFILES['B200Y']
     x = pcm(np.random.default_rng(43).uniform(-0.4, 0.4, (p.block, 2)))
-    tx = Transmitter(p)
+    tx = Encoder(p)
     original = tx.frame(x)
     lay = tx.layout
     packed = pack(lay, encode_block(x, p), 0, 0)
@@ -226,11 +233,13 @@ def test_y_high_crc_keeps_lower_y_band():
     buf[:len(bits)] = bits
     digital = modem.modulate(buf ^ modem.prbs(len(buf)), tx.digital_nsym, p.modulation, p.alpha)
     damaged = np.concatenate([digital, original[modem.N_PREAMBLE + tx.digital_nsym:]])
-    decoder = StreamDecoder(p)
-    good, ok = decoder.decode(original)
+    decoder = Decoder(p)
+    frame = decoder.decode_frame(original)
+    good, ok = frame.pcm, frame.valid
     assert ok
-    recovered, ok = decoder.decode(damaged)
-    assert ok and decoder.stats['high_crc_fail'] == 1
+    frame = decoder.decode_frame(damaged)
+    recovered, ok = frame.pcm, frame.valid
+    assert ok and frame.status == 'high_fail'
     for channel in (0, 1):
         g = haar_forward((good[:, channel] + 1) >> 2, p.levels)
         r = haar_forward((recovered[:, channel] + 1) >> 2, p.levels)
@@ -241,12 +250,13 @@ def test_y_high_crc_keeps_lower_y_band():
 
 def test_broadcast_main_occupied_bandwidth():
     from scipy.signal import welch
+
     from tools.common.pulse import shape
     audio = pcm(np.random.default_rng(2026).uniform(-0.4, 0.4, (64 * 200, 2)))
     expected = {'B200M': 109_000, 'B200': 176_500}     # 99%占有帯域 (ランダム音声での実測)
     for name, reference in expected.items():
         p = PROFILES[name]
-        tx = Transmitter(p)
+        tx = Encoder(p)
         iq = np.concatenate(tx.run(audio)) / float(1 << modem.SYM_FRAC)
         samples = shape(iq[:, 0] + 1j * iq[:, 1], beta=p.pulse_beta_pct / 100,
                         span=p.pulse_span, sps=8)

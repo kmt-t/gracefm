@@ -7,6 +7,8 @@ BandMetric          : 聴感帯域 (0-100-200-400-750-1.5k-3k-6k-12k-20kHz) ご�
                       [-10, cap] dB にクリップして平均したもの。床 = -90dB, cap = 40dB。
                       誤差の「量」を見る目安で、高域のざらつきなど「質」は捉えきれない。
 """
+import itertools
+
 import numpy as np
 
 EDGES = [0, 100, 200, 400, 750, 1500, 3000, 6000, 12000, 20000]
@@ -35,7 +37,7 @@ class BandMetric:
         self.hop = nfft // 2
         self.win = np.hanning(nfft)
         f = np.fft.rfftfreq(nfft, 1 / fs)
-        self.groups = [(f >= lo) & (f < hi) for lo, hi in zip(EDGES[:-1], EDGES[1:]) if lo < fs / 2]
+        self.groups = [(f >= lo) & (f < hi) for lo, hi in itertools.pairwise(EDGES) if lo < fs / 2]
         self.cap = cap_db
         ref = self._bandpow(np.sin(2 * np.pi * 1000 * np.arange(nfft * 4) / fs)).max()
         self.S = sum(self._bandpow(x[:, c]) for c in range(x.shape[1])) + ref * 10 ** (floor_db / 10)
@@ -68,7 +70,7 @@ def thd(y, fs, f0, fmax=15000.0, skip=0.1):
     df = f[1]
 
     def band(fc):
-        i = int(round(fc / df))
+        i = round(fc / df)
         return slice(max(i - 3, 0), i + 4)
     fund = P[band(f0)].sum()
     harm = sum(P[band(h * f0)].sum() for h in range(2, int(fmax // f0) + 1))

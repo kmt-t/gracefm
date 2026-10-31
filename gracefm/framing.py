@@ -2,13 +2,22 @@
 フレームの送信 (pack) と受信 (unpack)。ビット配置は gracefm.layout.Layout が決める。
 
 pack  : BlockData → 送信ビット列 (ヘッダ、CRC、系統符号のパリティ、仮数を Layout の位置へ置く。暗号化はここで行う)
-unpack: 軟値・硬判定 → (BlockData, ヘッダ)。ヘッダとYの最上位bit、係数の上位K bit は軟判定ビタビで訂正し、CRCを検査する。
+unpack: 軟値・硬判定 → Unpacked (純粋な関数。救済や暗号の番号管理は持たない。受信側は gracefm.decoder)。
+        ヘッダとYの最上位bit、係数の上位K bit は軟判定ビタビで訂正し、CRCを検査する。
 """
+from dataclasses import dataclass
+
 import numpy as np
 
 from . import fec
 from .codec import BlockData, offset_of, qmax_of, qmin_of
 from .layout import Layout, int_bits
+
+
+def coefficient_bits(lay: Layout, bd: BlockData):
+    """係数の仮数 bit を係数の並びで返す (Y 帯域を除く)。オフセットを足した値の、各係数の位置 (coef_pos) の bit。pack と硬判定の再構成が使う"""
+    flat_mant = np.concatenate([np.asarray(bd.mant[ch][k], np.int64) for ch, k in lay.coef_groups])
+    return ((flat_mant[lay.coef_flat] + lay.coef_offset_bits) >> lay.coef_pos) & 1
 
 
 def pack(lay: Layout, bd: BlockData, stream_id: int, counter: int, keystream=None):
@@ -27,8 +36,7 @@ def pack(lay: Layout, bd: BlockData, stream_id: int, counter: int, keystream=Non
     for ch, k, j in lay.attn_items:
         prot.append(int(bd.attn[ch][k][j]))
     prot = np.array(prot, np.int64)
-    flat_mant = np.concatenate([np.asarray(bd.mant[ch][k], np.int64) for ch, k in lay.coef_groups])
-    coef = ((flat_mant[lay.coef_flat] + lay.coef_offset_bits) >> lay.coef_pos) & 1
+    coef = coefficient_bits(lay, bd)
     if lay.encrypted:
         prot[lay.header_bits:] ^= keystream[: lay.n_body]
         coef = coef ^ keystream[lay.n_body:]
@@ -57,38 +65,22 @@ def pack(lay: Layout, bd: BlockData, stream_id: int, counter: int, keystream=Non
     return stream
 
 
-# 救済の閾値は計算量で決める (効果は測定で後から確かめる)。見積もり: フレーム 2 ms、ヘッダ復号 1 回 = K=7 のビタビ
-# 84段 × 64状態 = 5376 ACS、1 ACS/クロック・100 MHz で約 54 µs。フレーム時間の 8 割 (1.6 ms) までに収めると、
-# 復号 約 30 回。通常の復号 1 回を含めて、救済の試行は 28 回以内にする: 候補 7 個から反転 1〜2 個 (7 + 21 = 28)。
-# CRC の誤採用は、試行 1 回あたり約 1/4096 なので、救済 1 フレームあたり 28/4096 ≈ 0.7%。
-RECOVER_CANDIDATES = 7      # 救済: ヘッダの信頼度の低い候補の数
-RECOVER_MAX_FLIPS = 2       # 救済: 同時に反転する最大数 (Chase 型)
+@dataclass
+class Unpacked:
+    bd: BlockData                       # 復号した量子化結果
+    pid: int                            # プロファイルの識別子
+    stream: int                         # 系統番号
+    counter: int                        # ヘッダの 24 bit のフレーム番号
+    high_ok: bool                       # 高域CRCが通ったか (基本CRCは通っている)
+    top_bits: np.ndarray                # 訂正後の上位K bit (平文)
+    y_msb: np.ndarray                   # Y帯域の最上位bit (訂正後)
+    ks: np.ndarray | None = None     # 暗号化時に使ったキーストリーム (本体部と係数部を続けたもの)
+    frame_no: int | None = None      # 暗号化時の 40 bit のフレーム番号 (keystream_for が返す)
 
 
-def unpack_recovering(lay: Layout, soft, bits, keystream_for=None, y_soft=None):
-    """unpack と同じ。基本CRCが合わないとき、ヘッダの信頼度の低い bit を 1〜RECOVER_MAX_FLIPS 個反転して
-    CRC が合う候補を探す (Chase 型)。候補は信頼度 (|軟値|) の小さい順に試し、最初に通ったものを採る。
-    返り値は unpack と同じ。救えた場合、header["recovered"] に反転した bit の数を入れる。"""
-    bd, hdr = unpack(lay, soft, bits, keystream_for, y_soft)
-    if bd is not None:
-        return bd, hdr
-    import itertools
-    soft = np.asarray(soft)
-    bits = np.asarray(bits)
-    hdr_idx = np.concatenate([lay.hdata_idx, lay.hpar_idx])
-    order = hdr_idx[np.argsort(np.abs(soft[hdr_idx]), kind="stable")][:RECOVER_CANDIDATES]
-    for t in range(1, RECOVER_MAX_FLIPS + 1):
-        for comb in itertools.combinations(order, t):
-            idx = list(comb)
-            s2 = soft.copy()
-            b2 = bits.copy()
-            s2[idx] = -s2[idx]
-            b2[idx] ^= 1
-            bd, hdr = unpack(lay, s2, b2, keystream_for, y_soft)
-            if bd is not None:
-                hdr["recovered"] = t
-                return bd, hdr
-    return None, None
+def _uint(bb):
+    """0/1 の並び (先頭が上位) を整数にする"""
+    return int("".join(str(int(v)) for v in bb), 2)
 
 
 def unpack(lay: Layout, soft, bits, keystream_for=None, y_soft=None):
@@ -96,9 +88,9 @@ def unpack(lay: Layout, soft, bits, keystream_for=None, y_soft=None):
     soft: 送信ビット列全体の軟値 (正 = 0 らしい。足りない分は0とみなす。ヘッダのデータは振幅部にあるので、振幅部の軟値も必要)、
     bits: 送信ビット列全体の硬判定 (n_tx 個)
     y_soft: Y帯域があるとき、専用シンボルの位相から得た (最上位bitの軟値, パリティの軟値) (Y係数の数ずつ。省略時は消失扱い)
-    keystream_for: 暗号化するとき、ヘッダ (dict) からキーストリームを返す関数。使ったキーストリームは header["ks"]
-    返り値: (BlockData, header dict) / 基本CRCが合わなければ (None, None)。
-    高域CRCだけが不一致なら header["high_ok"] が False。header["top_bits"] は訂正後の上位K bit (平文)。
+    keystream_for: 暗号化するとき、(stream, counter24) → (キーストリーム, 40 bit のフレーム番号) を返す関数
+    返り値: Unpacked / 基本CRCが合わない・プロファイルが違うときは None。
+    高域CRCだけが不一致なら high_ok が False。
     """
     p = lay.p
     soft = np.pad(np.asarray(soft), (0, max(0, lay.n_tx - len(soft))))
@@ -122,34 +114,29 @@ def unpack(lay: Layout, soft, bits, keystream_for=None, y_soft=None):
     core, high = lay._crc_inputs(body, top, ymsb)
     n_core = fec.CRC_CORE[0]
     if not np.array_equal(fec.crc_core(core), prot[lay.n_prot:lay.n_prot + n_core]):
-        return None, None
+        return None
     high_ok = (not lay.has_high_crc or
                np.array_equal(fec.crc_high(high), prot[lay.n_prot + n_core:]))
     hdr = body[: lay.header_bits]
-    val = lambda bb: int("".join(str(int(v)) for v in bb), 2)
-    header = {"pid": val(hdr[0:4]), "stream": int(hdr[4]), "encrypted": bool(hdr[5]),
-              "counter": val(hdr[8: lay.header_bits]), "high_ok": high_ok}
-    if (header["pid"] != p.pid or header["encrypted"] != lay.encrypted
-            or val(hdr[6:8]) != p.format_id):
-        return None, None
+    pid, stream, encrypted, counter = _uint(hdr[0:4]), int(hdr[4]), bool(hdr[5]), _uint(hdr[8: lay.header_bits])
+    if pid != p.pid or encrypted != lay.encrypted or _uint(hdr[6:8]) != p.format_id:
+        return None
     coef_bits = bits[lay.coef_stream_idx].copy()
     coef_bits[lay.top_coef_idx] = top                 # 訂正後の上位K bit (暗号化時は暗号文)
+    ks, frame_no = None, None
     if lay.encrypted:
-        ks = keystream_for(header)
+        ks, frame_no = keystream_for(stream, counter)
         body = body.copy()
         body[lay.header_bits:] ^= ks[: lay.n_body]
         coef_bits ^= ks[lay.n_body:]
         top = coef_bits[lay.top_coef_idx]
-        header["ks"] = ks
-    header["top_bits"] = top
-    header["y_msb"] = ymsb
     i = lay.header_bits
     eidx = {"M": [None] * p.nbands, "S": [None] * p.nbands}
     attn = {"M": [None] * p.nbands, "S": [None] * p.nbands}
     bits_of = {"M": p.bits_m, "S": p.bits_s}
     for ch, k in lay.exp_items:
         width = p.exp_bits
-        eidx[ch][k] = val(body[i:i + width])
+        eidx[ch][k] = _uint(body[i:i + width])
         i += width
     for ch, k in lay.exp_items:
         count = p.attenuator_bits(ch, k)
@@ -163,5 +150,4 @@ def unpack(lay: Layout, soft, bits, keystream_for=None, y_soft=None):
         o, n = lay.coef_offset[(ch, k)], p.ncoef(k)
         mant[ch][k] = np.clip(u_flat[o:o + n] - offset_of(bits_of[ch][k], p, ch, k),
                               qmin_of(bits_of[ch][k], p, ch, k), qmax_of(bits_of[ch][k]))
-    bd = BlockData(mant, eidx, attn)
-    return bd, header
+    return Unpacked(BlockData(mant, eidx, attn), pid, stream, counter, high_ok, top, ymsb, ks, frame_no)

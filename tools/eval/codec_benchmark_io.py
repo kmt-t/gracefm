@@ -1,7 +1,7 @@
 """Source preparation and codec round trips for matched codec benchmarks."""
-from pathlib import Path
 import subprocess
 import tempfile
+from pathlib import Path
 
 import numpy as np
 from scipy.signal import correlate

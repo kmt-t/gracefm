@@ -9,9 +9,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from gracefm.codec import exp_range
+from gracefm.encoder import Encoder
 from gracefm.layout import Layout
 from gracefm.profiles import PROFILES
-from gracefm.txrx import Transmitter
 
 
 def vector(values):
@@ -29,18 +29,18 @@ def render():
              '|---|---|---:|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---:|']
     budgets=[]
     for p in PROFILES.values():
-        tx=Transmitter(p); l=tx.layout; ns=tx.nsym+16; rs=tx.symbol_rate()
+        tx=Encoder(p); l=tx.layout; ns=tx.nsym+16; rs=tx.symbol_rate()
         strong=l.n_strong_raw if p.layered else '—'
         weak=l.n_weak_raw if p.layered else '—'
         lines.append(f'| {p.pid} | {p.name} | {p.fs/1000:g} | {"M/S" if any(p.bits_s) else "M"} | {p.modulation} / {p.alpha} | {p.y_start_k if p.has_y else "—"} | {vector(p.protect)} | {p.audio_kbps():g} | {2 if l.has_high_crc else 1} | {l.n_prot_crc} | {l.n_header} | {l.n_parity} | {l.n_coef_bits} | {strong} | {weak} | {ns} | {rs/1000:g} | {p.pulse_beta_pct / 100:g} / {p.pulse_span} | {rs*(100+p.pulse_beta_pct)/100/1000:g} |')
-        budgets.append(dict(profile=asdict(p), header_bits=l.header_bits, crc_count=2 if l.has_high_crc else 1,
-                            header_crc_bits=l.n_prot_crc, header_fec_bits=l.n_header, parity_bits=l.n_parity,
-                            protect_bits=list(p.protect),
-                            fec_bits=l.n_coded, coefficient_part_bits=l.n_coef_bits,
-                            strong_positions=l.n_strong_raw if p.layered else None,
-                            weak_positions=l.n_weak_raw if p.layered else None,
-                            symbols_per_frame=ns, symbol_rate=rs,
-                            audio_kbps=float(p.audio_kbps()), theoretical_bandwidth_hz=rs*(100+p.pulse_beta_pct)/100))
+        budgets.append({'profile': asdict(p), 'header_bits': l.header_bits, 'crc_count': 2 if l.has_high_crc else 1,
+                            'header_crc_bits': l.n_prot_crc, 'header_fec_bits': l.n_header, 'parity_bits': l.n_parity,
+                            'protect_bits': list(p.protect),
+                            'fec_bits': l.n_coded, 'coefficient_part_bits': l.n_coef_bits,
+                            'strong_positions': l.n_strong_raw if p.layered else None,
+                            'weak_positions': l.n_weak_raw if p.layered else None,
+                            'symbols_per_frame': ns, 'symbol_rate': rs,
+                            'audio_kbps': float(p.audio_kbps()), 'theoretical_bandwidth_hz': rs*(100+p.pulse_beta_pct)/100})
     lines += ['', '## 成分ごとの全設定', '',
               'ベクトルは `k=0…4`（k0〜k4 は 32 kHz で 0〜1、1〜2、2〜4、4〜8、8〜16 kHz）。M/Sの各行に同じ項目を表示する。アッテネータ区間長0はその帯域では不使用。各成分の最高送信帯域に配置し、4係数を基本とする（係数数が4未満ならその係数数）。Y帯域は各帯域4区間。', '',
               '階層16QAMでは、係数をシンボル単位で分け、位相部（強い2位置）に置く仮数bitが基本層、振幅部（弱い2位置）に置く仮数bitが拡張層。位相部には基本層の仮数のほかにパリティKbitが入るので、位相部（基本層 + K）と振幅部（拡張層）がどちらも2の倍数で、全幅 = 基本層 + 拡張層。K=1でNシンボルの係数は基本層 2N−1、拡張層 2N、全幅 4N−1。K=2なら基本層 2N−2、拡張層 2N、全幅 4N−2。基本層幅は、係数ごとに位相部（基本層 + パリティ）と振幅部（拡張層）が同じ大きさになるように `tools/common/layers.py` が決める。Y高域Mは専用シンボルで、デジタル層分割の対象外。QPSKは全幅が2の倍数で、層分割なし。', '',
@@ -61,7 +61,7 @@ def render():
             lines.append(f'| {p.pid} | {p.name} | {ch} | {vector(bits)} | {vector(base)} | {vector(ext)} | {vector(p.attenuator_group(ch,k) for k in range(p.nbands))} | {vector(exps)} | {vector(offsets)} |')
     lines += ['', 'Y帯域は標準7bit（位相＝最上位bit＋パリティ、半径6bit）、半径間隔は `0.08 * 7.5 / 31.5`。Y帯域の仮数は仮数bitに入らず専用シンボルで送り、位相に最上位bitとそのパリティを載せてFEC保護する（終端bitだけヘッダ側）。Yの暗号化は未対応。', '',
               'フレーム予算は現行設定から計算した値。', '']
-    return '\n'.join(lines), json.dumps(dict(profiles=budgets), ensure_ascii=False, indent=2)+'\n'
+    return '\n'.join(lines), json.dumps({'profiles': budgets}, ensure_ascii=False, indent=2)+'\n'
 
 
 def main():

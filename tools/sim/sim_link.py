@@ -22,12 +22,14 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from gracefm import channel as chan, modem  # noqa: E402
-from tools.common import metrics, wavio  # noqa: E402
-from gracefm.postfilter import OUT_FS, postfilter  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
-from gracefm.timing import min_latency  # noqa: E402
-from gracefm.txrx import Transmitter, receive  # noqa: E402
+from gracefm import channel as chan
+from gracefm import modem
+from gracefm.encoder import Encoder
+from gracefm.postfilter import OUT_FS, postfilter
+from gracefm.profiles import PROFILES
+from gracefm.receiver import receive
+from gracefm.timing import min_latency
+from tools.common import metrics, wavio
 
 
 def channel(frames, snr_db, loss, rng):
@@ -44,8 +46,8 @@ def run_once(x, p, snr_a, snr_b, loss, single, seed):
     rng = np.random.default_rng(seed)
     off = 0
     xi = wavio.to_pcm24(x)
-    fa = channel(Transmitter(p, 0, 0).run(xi), snr_a, loss, rng)
-    fb = None if single else channel(Transmitter(p, 1, off).run(xi), snr_b, loss, rng)
+    fa = channel(Encoder(p, 0, 0).run(xi), snr_a, loss, rng)
+    fb = None if single else channel(Encoder(p, 1, off).run(xi), snr_b, loss, rng)
     y, st = receive(p, fa, fb, len(x), off)
     return wavio.from_pcm24(y), st
 
@@ -73,7 +75,7 @@ def main():
     if args.seconds:
         x = x[: int(args.seconds * p.fs)]
     x = x * (0.99 / max(np.abs(x).max(), 0.99))
-    tx = Transmitter(p)
+    tx = Encoder(p)
     rs = tx.symbol_rate()
     print(f"{p.name}: {p.fs}Hz / {p.audio_kbps():.0f}kbps / ブロック長 {p.frame_ms:.2f}ms "
           f"(伝送込みの最小遅延 {min_latency(p) * 1000:.2f}ms + 処理時間) / {p.modulation} / "

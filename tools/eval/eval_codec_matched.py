@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
 """Measure mono and stereo codecs separately at matched analysis bandwidth."""
 import argparse
-from concurrent.futures import ProcessPoolExecutor
 import json
-from pathlib import Path
 import subprocess
 import sys
+from concurrent.futures import ProcessPoolExecutor
+from pathlib import Path
 
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from tools.eval.codec_benchmark_io import aptx_roundtrip, heaac_roundtrip, source  # noqa: E402
-from tools.common import metrics, wavio  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
-from gracefm.codec import roundtrip as codec  # noqa: E402
+from gracefm.decoder import roundtrip as codec
+from gracefm.profiles import PROFILES
+from tools.common import metrics, wavio
+from tools.eval.codec_benchmark_io import aptx_roundtrip, heaac_roundtrip, source
 
 
 def bandlimit(x):
@@ -72,10 +72,10 @@ def evaluate(task):
         snr = float(metrics.snr_db(reference, scored))
         if not np.isfinite(snr) or not all(np.isfinite(m) for m in mos):
             raise ValueError(f"Nonfinite score: {entry['name']} {method}")
-        row = dict(material=entry["name"], source_channels=entry["channels"],
-                   evaluated_channels=channels, bandwidth_khz=bandwidth, method=method,
-                   audio_kbps=round(bitrate, 3), decoder_delay_samples_48khz=delay,
-                   snr_db=round(snr, 2), visqol_mean=round(float(np.mean(mos)), 3))
+        row = {"material": entry["name"], "source_channels": entry["channels"],
+                   "evaluated_channels": channels, "bandwidth_khz": bandwidth, "method": method,
+                   "audio_kbps": round(bitrate, 3), "decoder_delay_samples_48khz": delay,
+                   "snr_db": round(snr, 2), "visqol_mean": round(float(np.mean(mos)), 3)}
         rows.append(row)
         print(entry["name"], channels, bandwidth, method, row["visqol_mean"], flush=True)
     return rows
@@ -107,20 +107,20 @@ def main():
         args.json.write_text(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False) + "\n")
         return
     from imageio_ffmpeg import get_ffmpeg_exe
-    result = dict(method="Codec-only channel-count and bandwidth matched comparison",
-                  source_seconds=args.seconds, source_offset_seconds=1, source_peak=0.89,
-                  mono_source_policy="Original mono retained; stereo sources downmixed to (L+R)/2",
-                  stereo_source_policy="Original stereo sources only",
-                  matched_bandwidth="16 kHz view: common 48->32->48 kHz analysis filter on input, reference and every decoded output",
-                  full_bandwidth="24 kHz view: original 48 kHz input; 32 kHz GraceFM excluded",
-                  metric="ViSQOL Audio MOS-LQO per channel then mean; waveform SNR per source",
-                  aptx_encoder="FFmpeg aptX/aptX HD, stereo only",
-                  heaac_encoder="fdkaac AOT 5 mono, AOT 29 stereo; FFmpeg decoded output is forced to the evaluated channel count; ordinary framing, not DAB+ 960-sample framing",
-                  fdk_source_revision=args.fdk_source_revision,
-                  fdkaac_version=subprocess.run([args.fdkaac, "--help"], capture_output=True, text=True).stdout.splitlines()[0],
-                  ffmpeg_version=subprocess.run([get_ffmpeg_exe(), "-version"], capture_output=True, text=True).stdout.splitlines()[0],
-                  profile_signatures={name: repr(p) for name, p in PROFILES.items() if name.startswith(("B200", "M700"))},
-                  sources=entries, rows=rows)
+    result = {"method": "Codec-only channel-count and bandwidth matched comparison",
+                  "source_seconds": args.seconds, "source_offset_seconds": 1, "source_peak": 0.89,
+                  "mono_source_policy": "Original mono retained; stereo sources downmixed to (L+R)/2",
+                  "stereo_source_policy": "Original stereo sources only",
+                  "matched_bandwidth": "16 kHz view: common 48->32->48 kHz analysis filter on input, reference and every decoded output",
+                  "full_bandwidth": "24 kHz view: original 48 kHz input; 32 kHz GraceFM excluded",
+                  "metric": "ViSQOL Audio MOS-LQO per channel then mean; waveform SNR per source",
+                  "aptx_encoder": "FFmpeg aptX/aptX HD, stereo only",
+                  "heaac_encoder": "fdkaac AOT 5 mono, AOT 29 stereo; FFmpeg decoded output is forced to the evaluated channel count; ordinary framing, not DAB+ 960-sample framing",
+                  "fdk_source_revision": args.fdk_source_revision,
+                  "fdkaac_version": subprocess.run([args.fdkaac, "--help"], capture_output=True, text=True, check=False).stdout.splitlines()[0],
+                  "ffmpeg_version": subprocess.run([get_ffmpeg_exe(), "-version"], capture_output=True, text=True, check=False).stdout.splitlines()[0],
+                  "profile_signatures": {name: repr(p) for name, p in PROFILES.items() if name.startswith(("B200", "M700"))},
+                  "sources": entries, "rows": rows}
     args.json.parent.mkdir(parents=True, exist_ok=True)
     args.json.write_text(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False) + "\n")
 

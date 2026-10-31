@@ -10,7 +10,13 @@
 """
 import numpy as np
 
-from .tables import (LANCZOS_Q16, LPF_32K_Q17, LPF_48K_Q17, RESAMPLE_1_4_Q16, RESAMPLE_3_8_Q16)
+from .tables import (
+    LANCZOS_Q16,
+    LPF_32K_Q17,
+    LPF_48K_Q17,
+    RESAMPLE_1_4_Q16,
+    RESAMPLE_3_8_Q16,
+)
 
 OVERSAMPLE = 4
 OUT_FS = 48000

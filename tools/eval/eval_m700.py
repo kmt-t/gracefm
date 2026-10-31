@@ -18,9 +18,9 @@ import numpy as np
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 sys.path.insert(0, ROOT)
 
-from gracefm import channel  # noqa: E402
-from tools.common import metrics, wavio  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
+from gracefm import channel
+from gracefm.profiles import PROFILES
+from tools.common import metrics, wavio
 
 CONFIGS = [("M700M (階層16QAM)", "M700M", None),
            ("M700 (階層)", "M700", None),

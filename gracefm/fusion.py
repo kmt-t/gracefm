@@ -7,7 +7,7 @@ M と S は別々に融合する。区間の出力は、その区間の 2系統�
 """
 import numpy as np
 
-from .codec import FRAC, haar_forward, haar_inverse, ms_to_lr
+from .codec import haar_forward, haar_inverse, ms_to_lr
 from .dsp import inv1p2pow_q15
 
 INF_LOG = 1 << 40
@@ -40,7 +40,7 @@ def fuse_band(yA, vA, yB, vB, seg, levels, rbA, rbB):
     R は帯域ごと・半ブロックごとに見積もられる。係数が 2つ以上ある帯域は、前半の係数に前半の R、後半の係数に
     後半の R を使う (Haar の詳細係数の添字は時間位置に対応する)。係数 1つの最低域は両半分の重みの平均。
     送っていない帯域は R = ∞ (情報なし) で、その帯域は送っている方の系統だけで決まる。
-    seg: ブロック長、levels: Haar の段数。rbA, rbB: (n, 2, 帯域数) StreamDecoder.rb_trace。返り値: (y (n, 2)、valid、区間ごとの M 最低域の w_A (Q15))
+    seg: ブロック長、levels: Haar の段数。rbA, rbB: (n, 2, 帯域数) StreamResult.rb。返り値: (y (n, 2)、valid、区間ごとの M 最低域の w_A (Q15))
     """
     n = len(yA)
     nb = rbA.shape[2]

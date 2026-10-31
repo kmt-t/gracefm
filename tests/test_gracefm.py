@@ -8,14 +8,28 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from gracefm import fec, modem  # noqa: E402
-from gracefm.codec import (decode_block, encode_block, haar_forward,  # noqa: E402
-                        haar_inverse)
-from gracefm.framing import pack, unpack  # noqa: E402
-from gracefm.layout import Layout  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
-from gracefm.txrx import StreamDecoder, Transmitter, receive  # noqa: E402
-from helpers import header_info, with_header  # noqa: E402
+from helpers import header_info, with_header
+
+from gracefm import fec, modem
+from gracefm.codec import (
+    FRAC,
+    attenuator_expanded,
+    encode_block,
+    exp_range,
+    haar_forward,
+    haar_inverse,
+    quantize_band,
+)
+from gracefm.decoder import (
+    Decoder,
+    reconstruct,
+)
+from gracefm.dsp import saturate, shift_signed
+from gracefm.encoder import Encoder
+from gracefm.framing import pack, unpack
+from gracefm.layout import Layout
+from gracefm.profiles import PROFILES
+from gracefm.receiver import receive
 
 
 def _signal(n, fs, seed=0):
@@ -68,15 +82,13 @@ def test_frame_roundtrip_bit_exact():
         lay = Layout(p)
         bits = pack(lay, bd, 1, 5)
         assert len(bits) == lay.n_tx
-        bd2, hdr = unpack(lay, 8 * (1 - 2 * bits), bits)
-        assert {k: v for k, v in hdr.items() if k not in ("top_bits", "y_msb")} == {
-            "pid": p.pid, "stream": 1, "encrypted": False, "counter": 5, "high_ok": True}
-        assert len(hdr["top_bits"]) == lay.n_top
-        assert np.array_equal(decode_block(bd2, p), decode_block(bd, p)), name
+        res = unpack(lay, 8 * (1 - 2 * bits), bits)
+        assert (res.pid, res.stream, res.counter, res.high_ok, res.frame_no) == (p.pid, 1, 5, True, None)
+        assert len(res.top_bits) == lay.n_top
+        assert np.array_equal(reconstruct(res.bd, p), reconstruct(bd, p)), name
 
 
 def test_attenuator_roundtrip():
-    from gracefm.codec import dequantize, quantize
     base = replace(PROFILES["B200M"], attn_group_m=(0,) * 5)
     groups = (0, 0, 0, 0, 4)
     p = replace(base, attn_group_m=groups)
@@ -86,27 +98,32 @@ def test_attenuator_roundtrip():
     lay = Layout(p)
     assert lay.n_prot == Layout(base).n_prot + 8
     frame = pack(lay, bd, 1, 5)
-    recovered, hdr = unpack(lay, 8 * (1 - 2 * frame), frame)
-    assert hdr["pid"] == p.pid
-    assert np.array_equal(recovered.attn["M"][4], bd.attn["M"][4])
-    assert np.array_equal(decode_block(recovered, p), decode_block(bd, p))
+    res = unpack(lay, 8 * (1 - 2 * frame), frame)
+    assert res.pid == p.pid
+    assert np.array_equal(res.bd.attn["M"][4], bd.attn["M"][4])
+    assert np.array_equal(reconstruct(res.bd, p), reconstruct(bd, p))
     wrong_layout = Layout(replace(p, pid=15))
-    wrong, _ = unpack(wrong_layout, 8 * (1 - 2 * frame), frame)
-    assert wrong is None
+    res = unpack(wrong_layout, 8 * (1 - 2 * frame), frame)
+    assert res is None
     body = header_info(lay, frame)
     body[lay.header_bits + 5 * 4] ^= 1  # 最初のアッテネータbitを壊す
     damaged = with_header(lay, frame, body)
-    recovered, hdr = unpack(lay, 8 * (1 - 2 * damaged), damaged)
-    assert recovered is not None and hdr["high_ok"] is False
+    res = unpack(lay, 8 * (1 - 2 * damaged), damaged)
+    assert res is not None and res.high_ok is False
+
+    def dequantize_band(m, e, a, profile):                 # 1 帯域の復元 (軟判定の式と同じ: 指数と減衰の分だけ右シフト)
+        s = int(e) + exp_range(4, p.bits_m[4], profile)[0] + FRAC
+        shift = s - (attenuator_expanded(a, profile.attenuator_group("M", 4), len(m)) if a is not None else 0)
+        return saturate(shift_signed(m, shift))
 
     rng = np.random.default_rng(123)
     for _ in range(50):
         x = pcm(rng.uniform(-1, 1, (p.block, 2)))
         c = haar_forward((x[:, 0] + x[:, 1] + 4) >> 3, p.levels)[4]
-        m0, e0, _ = quantize(c, 4, p.bits_m[4], base)
-        m1, e1, a1 = quantize(c, 4, p.bits_m[4], p)
-        err0 = np.sum((c - dequantize(m0, e0, 4, p.bits_m[4], base)).astype(float) ** 2)
-        err1 = np.sum((c - dequantize(m1, e1, 4, p.bits_m[4], p, attn=a1)).astype(float) ** 2)
+        m0, e0, _ = quantize_band(c, "M", 4, base)
+        m1, e1, a1 = quantize_band(c, "M", 4, p)
+        err0 = np.sum((c - dequantize_band(m0, e0, None, base)).astype(float) ** 2)
+        err1 = np.sum((c - dequantize_band(m1, e1, a1, p)).astype(float) ** 2)
         assert err1 <= err0 * 1.05 + 1.0               # 選択は誤差を 8 bit に切り詰めて比べる (docs/FIXED.md)
 
 
@@ -116,9 +133,10 @@ def test_adopted_attenuator_profile_end_to_end():
     assert p.pid == 1 and p.exp_bits == 4 and p.attn_group_m[-1] == 4
     assert Layout(p).n_prot_crc == 78
     x = _signal(p.block * 12, p.fs)
-    frames = Transmitter(p).run(x)
-    y, valid = StreamDecoder(p).run(frames, len(x))
-    expected = np.concatenate([decode_block(encode_block(x[i:i + p.block], p), p)
+    frames = Encoder(p).run(x)
+    result = Decoder(p).run(frames, len(x))
+    y, valid = result.pcm, result.valid
+    expected = np.concatenate([reconstruct(encode_block(x[i:i + p.block], p), p)
                                for i in range(0, len(x), p.block)])
     assert valid.all() and np.abs(y - expected).max() <= 64      # 確率 1 − 2^-11 の軟判定が硬判定とわずかに違う分
 
@@ -137,9 +155,10 @@ def test_broadcast_joint_stereo_attenuators():
     x = _signal(p.block * 8, p.fs)
     bd = encode_block(x[:p.block], p)
     assert len(bd.attn["M"][4]) == 8 and len(bd.attn["S"][4]) == 8
-    frames = Transmitter(p).run(x)
-    y, valid = StreamDecoder(p).run(frames, len(x))
-    expected = np.concatenate([decode_block(encode_block(x[i:i + p.block], p), p)
+    frames = Encoder(p).run(x)
+    result = Decoder(p).run(frames, len(x))
+    y, valid = result.pcm, result.valid
+    expected = np.concatenate([reconstruct(encode_block(x[i:i + p.block], p), p)
                                for i in range(0, len(x), p.block)])
     assert valid.all() and np.abs(y - expected).max() <= 64
 
@@ -157,11 +176,12 @@ def test_modem_noiseless():
 def test_end_to_end_without_noise():
     p = PROFILES["M700M"]
     x = _signal(p.block * 20, p.fs)
-    tx = Transmitter(p)
+    tx = Encoder(p)
     frames = tx.run(x)
-    dec = StreamDecoder(p)
-    y, v = dec.run(frames, len(x))
-    ref = np.concatenate([decode_block(encode_block(x[i:i + 64], p), p) for i in range(0, len(x), 64)])
+    dec = Decoder(p)
+    result = dec.run(frames, len(x))
+    y, v = result.pcm, result.valid
+    ref = np.concatenate([reconstruct(encode_block(x[i:i + 64], p), p) for i in range(0, len(x), 64)])
     assert v.all() and np.abs(y - ref).max() <= 64
 
 
@@ -181,8 +201,8 @@ def test_postfilter_resamples_to_48k_int32():
 
 def test_latency_model():
     """遅延モデル: 1系統・2系統とも 2ブロック。処理時間は加算"""
-    from gracefm.timing import Timing, min_latency
     from gracefm.iir import ALT_DELAY
+    from gracefm.timing import Timing, min_latency
     for p in PROFILES.values():
         B = Fraction(p.block, p.fs)
         alt = Fraction(ALT_DELAY[p.fs], p.fs)                 # 切り替え先の IIR に揃える遅延
@@ -195,13 +215,13 @@ def test_latency_model():
 def test_receiver_is_causal():
     """受信処理 (復号・ポストフィルタ・融合・PLC) は未来のフレームを使わない:
     あるフレームを欠落させても、そのフレームが運ぶ区間より前の出力は変わらない"""
-    from gracefm.txrx import receive
+    from gracefm.receiver import receive
     p = PROFILES["B200"]
     x = _signal(p.block * 24, p.fs)
     off = 0
     rng = np.random.default_rng(3)
-    fa = noisy(Transmitter(p, 0, 0).run(x), 9.0, rng)
-    fb = noisy(Transmitter(p, 1, off).run(x), 9.0, rng)
+    fa = noisy(Encoder(p, 0, 0).run(x), 9.0, rng)
+    fb = noisy(Encoder(p, 1, off).run(x), 9.0, rng)
     for mode in ("band",):
         y0, _ = receive(p, fa, fb, len(x), off)
         for j in (6, 13):
@@ -221,10 +241,10 @@ def test_receiver_is_causal():
 def test_two_streams_survive_single_stream_loss():
     p = PROFILES["B200"]
     x = _signal(p.block * 40, p.fs)
-    fa = Transmitter(p, 0, 0).run(x)
-    fb = Transmitter(p, 1, 0).run(x)
+    fa = Encoder(p, 0, 0).run(x)
+    fb = Encoder(p, 1, 0).run(x)
     fa = [None if i % 3 == 0 else f for i, f in enumerate(fa)]       # A だけ 1/3 欠落
-    y, st = receive(p, fa, fb, len(x), 0)
+    _y, st = receive(p, fa, fb, len(x), 0)
     assert st["plc_samples"] < p.block                               # B で埋まり PLC はほぼ不要
 
 
@@ -234,22 +254,21 @@ def test_low_rate_sub_stream():
     p, ps = PROFILES["B200M"], PROFILES["SUB50M"]
     x = _signal(p.block * 40, p.fs)
     x[:, 1] = x[:, 0]
-    fa = Transmitter(p, 0, 0).run(x)
-    fb = Transmitter(ps, 1, 0).run(x)
+    fa = Encoder(p, 0, 0).run(x)
+    fb = Encoder(ps, 1, 0).run(x)
     y1, _ = receive(p, fa, None, len(x), 0)
     y2, _ = receive(p, fa, fb, len(x), 0, profile_b=ps)
     assert metrics.snr_db(x.astype(float), y2.astype(float)) > metrics.snr_db(x.astype(float), y1.astype(float)) - 0.5
     fa = [None if i % 3 == 0 else f for i, f in enumerate(fa)]
-    y3, st = receive(p, fa, fb, len(x), 0, profile_b=ps)
+    _y3, st = receive(p, fa, fb, len(x), 0, profile_b=ps)
     assert st["plc_samples"] < p.block                               # 主系の欠落を副系が埋める
 
 
 def test_layered_profile():
     """階層化: 基本層は元のプロファイルと同じビットで強い位置に収まり、雑音なしなら全ビットで復号できる"""
     from tools.common import metrics
-    from dataclasses import replace
     p = PROFILES["B200M"]
-    lay, t = Layout(p), Transmitter(p)
+    lay, t = Layout(p), Encoder(p)
     base_bits = sum(p.ncoef(k) * p.base_bits("M", k) for k in range(p.nbands))
     assert lay.n_base_bits == base_bits
     assert lay.n_tx == 2 * lay.n_strong == 4 * t.digital_nsym   # 位相部 (強い位置) と振幅部が同数で、隙間なく並ぶ
@@ -265,10 +284,10 @@ def test_layered_profile():
         frame = pack(lay, bd, 0, 0)
         bad = frame.copy()
         bad[lay.coef_stream_idx[weak_ext]] = rng.integers(0, 2, int(weak_ext.sum()))
-        recovered, _ = unpack(lay, 8 * (1 - 2 * bad), bad)
-        assert recovered is not None
-        full.append(decode_block(bd, p))
-        damaged.append(decode_block(recovered, p))
+        res = unpack(lay, 8 * (1 - 2 * bad), bad)
+        assert res is not None
+        full.append(reconstruct(bd, p))
+        damaged.append(reconstruct(res.bd, p))
     full, damaged = np.concatenate(full), np.concatenate(damaged)
     assert metrics.snr_db(x.astype(float), damaged.astype(float)) > 4.0
     assert metrics.snr_db(x.astype(float), full.astype(float)) > metrics.snr_db(x.astype(float), damaged.astype(float)) + 20
@@ -278,7 +297,6 @@ def test_b200_link_preserves_high_side_signal():
     """帯域圧縮後も高域Sのレベルを保ち、基本層を減らしたY系の差を検出する。"""
     from gracefm import channel
     from gracefm.codec import haar_forward
-
     from tools.samples.make_samples import load_material
 
     p = PROFILES["B200"]
@@ -305,16 +323,16 @@ def test_b200_link_preserves_high_side_signal():
 
 def test_encryption():
     """暗号化: 正しい鍵なら暗号化なしと同じ音、違う鍵なら復号できない。24bit のフレーム番号の周回も復元できる"""
-    from tools.common import metrics
     from gracefm.crypto import StreamCipher, unwrap_counter
+    from tools.common import metrics
     p = PROFILES["B200M"]
     x = _signal(p.block * 30, p.fs)
     x[:, 1] = x[:, 0]
     key, nonce = bytes(range(16)), bytes(8)
     ca, cb = StreamCipher(key, nonce), StreamCipher(bytes(16), nonce)
-    f_plain = Transmitter(p).run(x)
-    f_enc = Transmitter(p, cipher=ca).run(x)
-    f_enc_b = Transmitter(p, cipher=cb).run(x)
+    f_plain = Encoder(p).run(x)
+    f_enc = Encoder(p, cipher=ca).run(x)
+    f_enc_b = Encoder(p, cipher=cb).run(x)
     assert not np.array_equal(f_enc_b[5], f_enc[5])                      # 鍵が違えば送信シンボルも違う
     y0, _ = receive(p, f_plain, None, len(x), 0)
     y1, st = receive(p, f_enc, None, len(x), 0, cipher=ca)
@@ -360,8 +378,8 @@ if __name__ == "__main__":
 def test_header_recovery_flips_least_reliable_bits():
     """基本CRCが合わないフレームは、ヘッダの信頼度の低い bit を反転して救える場合がある。救えた内容は正しく、試行回数は上限内。"""
     from gracefm import channel
-    from gracefm.framing import unpack_recovering
-    from gracefm.txrx import Transmitter
+    from gracefm.decoder import unpack_recovering
+    from gracefm.encoder import Encoder
     p = PROFILES["B200M"]
     lay = Layout(p)
     rng = np.random.default_rng(4)
@@ -369,39 +387,40 @@ def test_header_recovery_flips_least_reliable_bits():
     recovered = 0
     for i in range(120):
         x = np.clip(rng.normal(size=(p.block, 2)) * 2**20, -2**22, 2**22).astype(np.int64)
-        tx = Transmitter(p, 0)
+        tx = Encoder(p, 0)
         tx.frame_no = i
         sym = tx.frame(x)
-        bits = pack(lay, encode_block(x, p), 0, i, None)
         noisy = channel.adc(channel.awgn(sym[modem.N_PREAMBLE:] / float(1 << modem.SYM_FRAC), esn0, rng))
         llr, hard, _ = modem.demodulate(noisy[:tx.digital_nsym], lay.n_tx, p.modulation, p.alpha)
         s = modem.prbs(lay.n_tx)
         soft, hard = np.where(s == 1, -llr, llr), hard ^ s
-        if unpack(lay, soft, hard)[0] is not None:
+        if unpack(lay, soft, hard) is not None:
             continue
-        got, hdr = unpack_recovering(lay, soft, hard)
-        if got is None:
+        found = unpack_recovering(lay, soft, hard)
+        if found is None:
             continue
+        u, flips = found
         recovered += 1
-        assert hdr["counter"] == i and hdr["recovered"] >= 1
+        assert u.counter == i and flips >= 1
     # 救済の試行回数は計算量の見積もりの上限 (通常の復号を含めて 29 回) に収まる
     from math import comb
-    from gracefm import framing
-    assert 1 + sum(comb(framing.RECOVER_CANDIDATES, t) for t in range(1, framing.RECOVER_MAX_FLIPS + 1)) <= 29
+
+    from gracefm import decoder
+    assert 1 + sum(comb(decoder.RECOVER_CANDIDATES, t) for t in range(1, decoder.RECOVER_MAX_FLIPS + 1)) <= 29
 
 
 def test_block_quality_marks_lost_frames_and_switch_is_identity_when_clean():
     """受信の品質コードは、欠落フレームを 2 として出す。切り替えは、コードが 0 のときは y をそのまま返す。"""
-    from gracefm import channel
+    from gracefm.encoder import Encoder
     from gracefm.postfilter import select_by_quality
-    from gracefm.txrx import Transmitter, receive
+    from gracefm.receiver import receive
     p = PROFILES["B200M"]
     rng = np.random.default_rng(8)
     x = np.clip(np.cumsum(rng.normal(size=(p.block * 20, 2)), axis=0) * 2**10, -2**22, 2**22).astype(np.int64)
-    frames = Transmitter(p, 0).run(x)
+    frames = Encoder(p, 0).run(x)
     lost = {5, 6}
     rx = [None if i in lost else f for i, f in enumerate(frames)]
-    y, stats = receive(p, rx, None, len(x), 0, return_streams=False)
+    _y, stats = receive(p, rx, None, len(x), 0, return_streams=False)
     q = stats["quality"]
     assert len(q) == len(x) // p.block
     assert all(q[i] == 2 for i in lost) and all(q[i] == 0 for i in range(len(q)) if i not in lost)
@@ -415,12 +434,13 @@ def test_block_quality_marks_lost_frames_and_switch_is_identity_when_clean():
 
 def test_quality_marks_profiles_without_high_bands():
     """高域を送らないプロファイル (SUB) は、届いたフレームでも品質 1 (高域欠落) になる。"""
-    from gracefm.txrx import Transmitter, receive
+    from gracefm.encoder import Encoder
+    from gracefm.receiver import receive
     p = PROFILES["SUB50M"]
     rng = np.random.default_rng(9)
     x = np.clip(np.cumsum(rng.normal(size=(p.block * 8, 1)), axis=0) * 2**10, -2**22, 2**22).astype(np.int64)
     x = np.repeat(x, 2, axis=1)
-    frames = Transmitter(p, 0).run(x)
+    frames = Encoder(p, 0).run(x)
     _, stats = receive(p, frames, None, len(x), 0)
     assert np.all(stats["quality"] == 1)
 
@@ -429,6 +449,7 @@ def test_alt_iir_matches_float_design_and_switches_only_marked_blocks():
     """切り替え先の整数 IIR は、浮動小数点の設計 (Butterworth 4 次、4 kHz) とほぼ一致する。
     切り替えは、コードが 1 か 2 のブロックだけ。それ以外は遅延させた入力そのもの。"""
     from scipy.signal import butter, sosfilt
+
     from gracefm.iir import ALT_DELAY, alt_sections, apply_alt, iir_filter
     rng = np.random.default_rng(12)
     for fs in (32000, 48000):

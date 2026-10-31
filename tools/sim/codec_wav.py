@@ -15,11 +15,12 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from tools.common import metrics, wavio  # noqa: E402
-from gracefm.codec import decode_coeffs, encode_block, haar_inverse, ms_to_lr  # noqa: E402
-from gracefm.postfilter import OUT_FS, postfilter  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
-from gracefm.timing import min_latency  # noqa: E402
+from gracefm.codec import encode_block, haar_inverse, ms_to_lr
+from gracefm.decoder import reconstruct_coeffs
+from gracefm.postfilter import OUT_FS, postfilter
+from gracefm.profiles import PROFILES
+from gracefm.timing import min_latency
+from tools.common import metrics, wavio
 
 
 def main():
@@ -43,7 +44,7 @@ def main():
     xi = wavio.to_pcm24(xp)
     out = np.zeros_like(xi)
     for i in range(nfr):
-        coefs = decode_coeffs(encode_block(xi[i * p.block:(i + 1) * p.block], p), p)
+        coefs = reconstruct_coeffs(encode_block(xi[i * p.block:(i + 1) * p.block], p), p)
         out[i * p.block:(i + 1) * p.block] = ms_to_lr(haar_inverse(coefs["M"]), haar_inverse(coefs["S"]))
     y = wavio.from_pcm24(out[:n])
     if args.no_postfilter:

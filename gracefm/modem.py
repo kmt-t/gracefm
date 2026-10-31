@@ -137,7 +137,7 @@ def y_radii(step, lower_bits=6):
     """半径の段 L = 0 … 2^lower_bits - 1 の半径 (Q SYM_FRAC)。step = (分子, 分母)"""
     num, den = step
     levels = 1 << lower_bits
-    scale = isqrt((((12 * den * den + num * num * (levels * levels - 1)) << (2 * SYM_FRAC)) // (12 * den * den)))
+    scale = isqrt(((12 * den * den + num * num * (levels * levels - 1)) << (2 * SYM_FRAC)) // (12 * den * den))
     ls = np.arange(levels, dtype=np.int64)
     top = 2 * den + num * (2 * ls - (levels - 1))
     return (top << (2 * SYM_FRAC)) // (2 * den * scale), scale

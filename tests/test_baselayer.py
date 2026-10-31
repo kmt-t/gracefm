@@ -1,13 +1,15 @@
 """The listening comparison must preserve exactly the configured basic layer."""
 import copy
-from pathlib import Path
 import sys
+from pathlib import Path
+
 import numpy as np
+
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
+from gracefm.baselayer import BaseLayerDecoder, base_layer_audio
 from gracefm.codec import encode_block, offset_of
 from gracefm.profiles import PROFILES
-from gracefm.baselayer import BaseLayerDecoder,base_layer_audio
 
 
 def _pcm(x):
@@ -26,8 +28,8 @@ def test_erasing_extension_retains_basic_layer():
     for ch,k,j,pos in layout.coef_items[layout.n_base_bits:]:
         offset=offset_of((p.bits_m if ch=='M' else p.bits_s)[k],p,ch,k)
         changed.mant[ch][k][j]=((int(changed.mant[ch][k][j])+offset)^(1<<pos))-offset
-    a=decoder.soft_coeffs(bd,probs(bd),{},{})
-    b=decoder.soft_coeffs(changed,probs(changed),{},{})
+    a, _ = decoder.soft_coeffs(bd, probs(bd), {}, {})
+    b, _ = decoder.soft_coeffs(changed, probs(changed), {}, {})
     for ch in ('M','S'):
         for x,y in zip(a[ch],b[ch]):np.testing.assert_array_equal(x,y)
 

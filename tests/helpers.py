@@ -4,17 +4,16 @@ import sys
 from dataclasses import replace
 from fractions import Fraction
 from math import gcd
-from typing import Optional, Tuple
 
 import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from gracefm import fec  # noqa: E402
-from gracefm.channel import symbol_rate  # noqa: E402
-from gracefm.profiles import Profile  # noqa: E402
-from tools.common.layers import balanced, default_split  # noqa: E402
-from gracefm.timing import Timing  # noqa: E402
+from gracefm import fec
+from gracefm.channel import symbol_rate
+from gracefm.profiles import Profile
+from gracefm.timing import Timing
+from tools.common.layers import balanced, default_split
 
 
 def header_info(lay, stream):
@@ -37,11 +36,11 @@ def _reduce(num, den):
     return (num // g, den // g)
 
 
-def make_y_profile(base: Profile, name: str, pid: int, start_k: Optional[int] = None,
-                amplitude: Tuple[int, int] = (2, 25), mantissa_bits: int = 7,
-                channels: Tuple[str, ...] = ("M",), format_id: int = 3,
-                bits_m: Optional[Tuple[int, ...]] = None,
-                bits_s: Optional[Tuple[int, ...]] = None) -> Profile:
+def make_y_profile(base: Profile, name: str, pid: int, start_k: int | None = None,
+                amplitude: tuple[int, int] = (2, 25), mantissa_bits: int = 7,
+                channels: tuple[str, ...] = ("M",), format_id: int = 3,
+                bits_m: tuple[int, ...] | None = None,
+                bits_s: tuple[int, ...] | None = None) -> Profile:
     """対象成分の境界以上だけをY(位相・半径シンボル)にし、他の成分は既存主系のままにする。
 
     amplitude = (分子, 分母) は半径の段が64 (仮数7bit) のときの隣接半径間隔 (既定 2/25 = 0.08) で、幅変更時は最大変調度を保つ。

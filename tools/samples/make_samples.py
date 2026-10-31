@@ -20,15 +20,14 @@ import numpy as np
 ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
 sys.path.insert(0, ROOT)
 
+from gracefm import channel
+from gracefm.decoder import roundtrip
+from gracefm.iir import ALT_DELAY
+from gracefm.profiles import PROFILES
+from tools.common import wavio
+from tools.common.analog_fm import AnalogFM
 from tools.common.demo_signal import make_demo
-from tools.samples.sample_names import sample_name, reference_name
-
-from gracefm import channel  # noqa: E402
-from gracefm.codec import roundtrip  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
-from gracefm.iir import ALT_DELAY  # noqa: E402
-from tools.common import wavio  # noqa: E402
-from tools.common.analog_fm import AnalogFM  # noqa: E402
+from tools.samples.sample_names import reference_name, sample_name
 
 OUT = os.path.join(ROOT, "samples")
 SEC = 10.0

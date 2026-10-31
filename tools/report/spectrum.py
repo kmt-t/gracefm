@@ -23,19 +23,20 @@ from scipy.signal import welch
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 sys.path.insert(0, ROOT)
 
-import matplotlib  # noqa: E402
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib import font_manager  # noqa: E402
+import matplotlib
 
-from gracefm import channel  # noqa: E402
-from tools.common import wavio  # noqa: E402
-from tools.common.analog_fm import AnalogFM  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
-from tools.common.pulse import shape  # noqa: E402
-from gracefm.txrx import Transmitter  # noqa: E402
-from gracefm.codec import roundtrip as codec  # noqa: E402
-from tools.common.demo_signal import make_demo  # noqa: E402
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib import font_manager
+
+from gracefm import channel
+from gracefm.decoder import roundtrip as codec
+from gracefm.encoder import Encoder
+from gracefm.profiles import PROFILES
+from tools.common import wavio
+from tools.common.analog_fm import AnalogFM
+from tools.common.demo_signal import make_demo
+from tools.common.pulse import shape
 
 for f in font_manager.findSystemFonts():
     if "NotoSansCJK" in f:
@@ -48,7 +49,7 @@ SPS = 8
 
 
 def rf_psd(p, x):
-    iq = np.concatenate(Transmitter(p).run(wavio.to_pcm24(x))) / float(1 << 21)
+    iq = np.concatenate(Encoder(p).run(wavio.to_pcm24(x))) / float(1 << 21)
     syms = iq[:, 0] + 1j * iq[:, 1]
     rs = channel.symbol_rate(p)
     w = shape(syms, beta=p.pulse_beta_pct / 100, span=p.pulse_span, sps=SPS)

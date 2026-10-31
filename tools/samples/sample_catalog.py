@@ -2,19 +2,27 @@
 """試聴音声の一式を検証し、索引 (samples/index.json) と samples/README.md を作る。"""
 import hashlib
 import json
+import sys
 from dataclasses import asdict
 from pathlib import Path
-import sys
 
 import numpy as np
 import soundfile as sf
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from tools.common import metrics, wavio
-from gracefm.profiles import PROFILES
 from gracefm.iir import ALT_DELAY
-from tools.samples.make_samples import ALL_SETS, CASES, CN0_LIST, MATERIALS, SEC, cn, source_name
+from gracefm.profiles import PROFILES
+from tools.common import metrics, wavio
+from tools.samples.make_samples import (
+    ALL_SETS,
+    CASES,
+    CN0_LIST,
+    MATERIALS,
+    SEC,
+    cn,
+    source_name,
+)
 from tools.samples.sample_names import reference_name, sample_name
 
 SOURCES = [
@@ -72,14 +80,14 @@ def build():
         assert fs == ref_fs == row_fs and audio.shape == reference.shape and len(audio) == fs * SEC
         assert np.all(np.isfinite(audio))
         profiles = [asdict(PROFILES[n]) for n in config.split('+') if n in PROFILES]
-        entries.append(dict(file=f'samples/{name}', sha256=digest(path), material=material, form=form,
-                            reference_file=f'samples/{refpath.name}', reference_sha256=digest(refpath),
-                            sample_rate_hz=fs, seconds=len(audio) / fs, channels=sf.info(path).channels,
-                            configuration=config, condition=case, profiles=profiles,
-                            snr_db=float(snr_db(reference, audio, case, config, fs))))
+        entries.append({'file': f'samples/{name}', 'sha256': digest(path), 'material': material, 'form': form,
+                            'reference_file': f'samples/{refpath.name}', 'reference_sha256': digest(refpath),
+                            'sample_rate_hz': fs, 'seconds': len(audio) / fs, 'channels': sf.info(path).channels,
+                            'configuration': config, 'condition': case, 'profiles': profiles,
+                            'snr_db': float(snr_db(reference, audio, case, config, fs))})
     code = {str(p.relative_to(ROOT)): digest(p) for d in ('gracefm', 'tools') for p in sorted((ROOT / d).rglob('*.py'))}
-    report = dict(description='10-second listening samples; decoded FLAC measurements, not RF capture',
-                  expected_sample_count=len(rows), seed=1, code_sha256=code, samples=entries)
+    report = {'description': '10-second listening samples; decoded FLAC measurements, not RF capture',
+                  'expected_sample_count': len(rows), 'seed': 1, 'code_sha256': code, 'samples': entries}
     destination = ROOT / 'samples' / 'index.json'
     destination.write_text(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False) + '\n')
     write_readme(entries)
@@ -89,11 +97,11 @@ def build():
 def write_readme(entries):
     by = {(e['material'], e['form'], e['configuration'], e['condition']): e for e in entries}
     lines = ['# サンプル音声（GraceFM）', '',
-             'ファイル名の読み方は[命名規則](NAMING.md)。各10秒・32 kHzと48 kHz、劣化音は24bit FLAC。`tools/samples/make_samples.py` で生成し、'
-             '`tools/samples/sample_catalog.py` で検証してこのファイルを書く。設定・測定値・SHA-256は[音源一覧JSON](index.json)。', '',
+             ('ファイル名の読み方は[命名規則](NAMING.md)。各10秒・32 kHzと48 kHz、劣化音は24bit FLAC。`tools/samples/make_samples.py` で生成し、'
+             '`tools/samples/sample_catalog.py` で検証してこのファイルを書く。設定・測定値・SHA-256は[音源一覧JSON](index.json)。'), '',
              '## マトリクス', '',
-             '素材 3（demo・piano・percussion）。モノラル形は (L+R)/2 で、通信路を通す（主系＋副系）。ステレオ形は、コーデックだけ（通信路なし）と C/N0 57 の通信路（主系＋副系）。'
-             '2系統は主系・副系とも独立のチャンネルで、電力を分け合わない（C/N0は同じ値）。', '',
+             ('素材 3（demo・piano・percussion）。モノラル形は (L+R)/2 で、通信路を通す（主系＋副系）。ステレオ形は、コーデックだけ（通信路なし）と C/N0 57 の通信路（主系＋副系）。'
+             '2系統は主系・副系とも独立のチャンネルで、電力を分け合わない（C/N0は同じ値）。'), '',
              '| 軸 | 内容 |', '|---|---|',
              '| 主系 | B200M（32 kHz） |',
              '| 副系 | SUB50M |',

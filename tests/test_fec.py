@@ -6,8 +6,10 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from gracefm import fec  # noqa: E402
-from gracefm.fec import LLR_MAX, PM_MIN, rsc_decode as rsc_decode_int, viterbi_decode as viterbi_decode_int  # noqa: E402
+from gracefm import fec
+from gracefm.fec import LLR_MAX, PM_MIN
+from gracefm.fec import rsc_decode as rsc_decode_int
+from gracefm.fec import viterbi_decode as viterbi_decode_int
 
 
 def quantize_llr(llr, scale):

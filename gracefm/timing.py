@@ -5,7 +5,7 @@
   A, B とも [j·B, (j+1)·B)   (B はブロック長 [s])
 とする。送信は連続 (フレームを隙間なく並べる) で、1フレームの直列化時間は
   T_ser = (プリアンブル込みのシンボル数) / (シンボルレート) = B
-(シンボルレートを「1フレームのシンボル数 × 毎秒のフレーム数」で決めているため。txrx.Transmitter.symbol_rate)。
+(シンボルレートを「1フレームのシンボル数 × 毎秒のフレーム数」で決めているため。gracefm.encoder.Encoder.symbol_rate)。
 
 各フレームの時刻:
   取得完了   = 区間の終わり
@@ -21,7 +21,6 @@
 """
 from dataclasses import dataclass
 from fractions import Fraction
-from typing import Optional
 
 from .iir import ALT_DELAY
 from .profiles import Profile
@@ -33,11 +32,12 @@ class Timing:
     t_filt: Fraction = Fraction(0)      # 送受信フィルタと等化器の先読みの遅延 [s]
     t_dec: Fraction = Fraction(0)       # 復調・復号 [s]
     t_out: Fraction = Fraction(0)       # 融合・PLC・出力バッファ [s]
-    t_filt_b: Optional[Fraction] = None  # 副系が異なるシンボルレート・フィルタを使うとき [s]
+    t_filt_b: Fraction | None = None  # 副系が異なるシンボルレート・フィルタを使うとき [s]
 
 
-def frame_times(profile: Profile, stream: str, nframes: int, tm: Timing = Timing()):
+def frame_times(profile: Profile, stream: str, nframes: int, tm: Timing | None = None):
     """系統 'A' / 'B' のフレームごとの時刻 [s] (dict of arrays)"""
+    tm = Timing() if tm is None else tm
     B = Fraction(profile.block, profile.fs)
     filter_delay = tm.t_filt_b if stream == "B" and tm.t_filt_b is not None else tm.t_filt
     out = {k: [] for k in ("start", "capture_end", "tx_start", "tx_end", "rx_end", "decoded")}
@@ -58,8 +58,9 @@ def units(profile: Profile, two_streams: bool, nunits: int):
     return [(j * B, [j], [j] if two_streams else []) for j in range(nunits)]
 
 
-def min_latency(profile: Profile, two_streams=True, tm: Timing = Timing(), nunits=64):
+def min_latency(profile: Profile, two_streams=True, tm: Timing | None = None, nunits=64):
     """すべての出力単位が締切に間に合う最小の一定遅延 D [s]"""
+    tm = Timing() if tm is None else tm
     n = nunits + 4
     tA = frame_times(profile, "A", n, tm)["decoded"]
     tB = frame_times(profile, "B", n, tm)["decoded"]

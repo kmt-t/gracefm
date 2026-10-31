@@ -12,7 +12,8 @@ import numpy as np
 from . import fec, modem
 from .dsp import saturate
 from .layout import Layout, int_bits
-from .linalg import FRAC as W_FRAC, hermitian_solve
+from .linalg import FRAC as W_FRAC
+from .linalg import hermitian_solve
 from .profiles import Profile
 
 CORR_SHIFT = modem.SYM_FRAC - 10     # 相関を取る前にシンボルを Q10 に縮める
@@ -198,6 +199,6 @@ def equalize_static(received, profile: Profile, stream_id=0, training_frames=100
                                                training_frames, ntaps, max_lookahead, decision_passes)
     lead, weights, predicted_mse = design_mmse_equalizer(lags, taps, noise, ntaps, max_lookahead)
     output = apply_equalizer(received, lead, weights)
-    return output, dict(training_frames=min(training_frames, len(received)), lookahead_symbols=lead,
-                        residual_power=noise, predicted_mse=predicted_mse,
-                        channel_lags=lags.tolist(), channel_taps=taps.tolist())
+    return output, {"training_frames": min(training_frames, len(received)), "lookahead_symbols": lead,
+                        "residual_power": noise, "predicted_mse": predicted_mse,
+                        "channel_lags": lags.tolist(), "channel_taps": taps.tolist()}

@@ -1,11 +1,14 @@
 """基本層だけを復号する (拡張層の事後確率を 0.5 に置き、係数ごとの昇格を保つ)。"""
 import copy
+
 import numpy as np
+
 from gracefm.codec import offset_of
-from gracefm.txrx import StreamDecoder, Transmitter
+from gracefm.decoder import Decoder
+from gracefm.encoder import Encoder
 
 
-class BaseLayerDecoder(StreamDecoder):
+class BaseLayerDecoder(Decoder):
     def soft_coeffs(self, bd, probabilities, y_mant, y_var, high_ok=True):
         bd = copy.deepcopy(bd)
         probabilities = np.array(probabilities, np.int64, copy=True)
@@ -25,7 +28,7 @@ def base_layer_audio(audio, profile):
     if not profile.layered or profile.has_y:
         raise ValueError('a conventional layered profile is required')
     decoder = BaseLayerDecoder(profile)
-    output, valid = decoder.run(Transmitter(profile).run(audio), len(audio))
-    if not np.all(valid):
+    result = decoder.run(Encoder(profile).run(audio), len(audio))
+    if not np.all(result.valid):
         raise AssertionError('noiseless basic-layer decode failed')
-    return output
+    return result.pcm

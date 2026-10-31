@@ -11,8 +11,9 @@ link_static_multipath は RRC 送受信フィルタと静的マルチパスの�
 import numpy as np
 
 from . import modem
+from .encoder import Encoder
 from .profiles import PROFILES, Profile
-from .txrx import Transmitter, receive
+from .receiver import receive
 
 # 主系に組み合わせる副系 (主系より低いビットレートで、別の周波数で送る受け皿)
 DEFAULT_SUB = {
@@ -25,7 +26,7 @@ DEFAULT_SUB = {
 
 def symbol_rate(p):
     """1系統のシンボルレート [シンボル/秒] (プリアンブル込み)"""
-    return (modem.N_PREAMBLE + Transmitter(p).nsym) * p.frames_per_sec
+    return (modem.N_PREAMBLE + Encoder(p).nsym) * p.frames_per_sec
 
 
 def fading_gains(nfr, kind, rng, tau_frames=50):
@@ -41,7 +42,7 @@ def fading_gains(nfr, kind, rng, tau_frames=50):
         return np.full(nfr, 0.1)
     if kind == "rayleigh":
         rho = np.exp(-1.0 / tau_frames)
-        cn = lambda: (rng.normal() + 1j * rng.normal()) / np.sqrt(2)  # noqa: E731
+        cn = lambda: (rng.normal() + 1j * rng.normal()) / np.sqrt(2)
         h = np.empty(nfr, complex)
         h[0] = cn()
         for i in range(1, nfr):
@@ -86,12 +87,12 @@ def link(x, main, cn0, sub="auto", cn0_sub=None, kind_main="awgn", kind_sub="awg
     ps = (sub if isinstance(sub, Profile) else PROFILES[sub]) if sub else None
     rng = np.random.default_rng(seed)
     esm = cn0 - 10 * np.log10(symbol_rate(pm))
-    fa = Transmitter(pm, 0, 0, cipher=cipher).run(x)
+    fa = Encoder(pm, 0, 0, cipher=cipher).run(x)
     fa = through(fa, esm, fading_gains(len(fa), kind_main, np.random.default_rng(seed + 100)), rng)
     fb, ess = None, None
     if ps:
         ess = (cn0 if cn0_sub is None else cn0_sub) - 10 * np.log10(symbol_rate(ps))
-        fb = Transmitter(ps, 1, 0, cipher=cipher).run(x)
+        fb = Encoder(ps, 1, 0, cipher=cipher).run(x)
         fb = through(fb, ess, fading_gains(len(fb), kind_sub, np.random.default_rng(seed + 200)), rng)
     y, st = receive(pm, fa, fb, len(x), 0, profile_b=ps, cipher=cipher, **rx_kw)
     return y, st, {"esn0_main": esm, "esn0_sub": ess}

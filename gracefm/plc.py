@@ -50,7 +50,7 @@ def extrapolate(hist, n, order):
     if len(hist) <= order:
         return np.zeros(n, np.int64)
     a = lpc(hist, order)
-    buf = list(int(v) for v in hist[-order:])
+    buf = [int(v) for v in hist[-order:]]
     out = np.empty(n, np.int64)
     coef = [int(v) for v in a[1:]]
     for i in range(n):

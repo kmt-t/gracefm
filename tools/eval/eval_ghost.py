@@ -19,14 +19,15 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, ROOT)
 
-from gracefm import channel  # noqa: E402
-from tools.common import metrics, wavio  # noqa: E402
-from tools.common.analog_fm import AnalogFM  # noqa: E402
-from gracefm.equalizer import equalize_static  # noqa: E402
-from tools.sim.multipath import through_matched_channel  # noqa: E402
-from gracefm.profiles import PROFILES  # noqa: E402
-from gracefm.txrx import Transmitter, receive  # noqa: E402
-from tools.eval.codec_benchmark_io import prepare  # noqa: E402
+from gracefm import channel
+from gracefm.encoder import Encoder
+from gracefm.equalizer import equalize_static
+from gracefm.profiles import PROFILES
+from gracefm.receiver import receive
+from tools.common import metrics, wavio
+from tools.common.analog_fm import AnalogFM
+from tools.eval.codec_benchmark_io import prepare
+from tools.sim.multipath import through_matched_channel
 
 MAIN, SUB = "B200M", "SUB50M"
 SCENARIOS = (
@@ -51,8 +52,8 @@ def score(api, x, y, stats, start, end):
         plc = 100 * float(np.mean(~(stats["vA"][start:end] | stats["vB"][start:end])))
     else:
         plc = None
-    return dict(snr_db=round(snr, 2), visqol_moslqo=round(mos, 3),
-                plc_percent=None if plc is None else round(plc, 3))
+    return {"snr_db": round(snr, 2), "visqol_moslqo": round(mos, 3),
+                "plc_percent": None if plc is None else round(plc, 3)}
 
 
 def material_job(entry, seconds, strengths, scenarios, spacing_hz, training_frames,
@@ -67,8 +68,8 @@ def material_job(entry, seconds, strengths, scenarios, spacing_hz, training_fram
     off = 0
     fm = AnalogFM(x[:, 0], pm.fs)
     xi = wavio.to_pcm24(x)
-    frames_main = Transmitter(pm, 0, 0).run(xi)
-    frames_sub = Transmitter(ps, 1, off).run(xi)
+    frames_main = Encoder(pm, 0, 0).run(xi)
+    frames_sub = Encoder(ps, 1, off).run(xi)
     api = VisqolApi()
     api.create(mode="audio")
     out = []
@@ -133,21 +134,21 @@ def main():
         for future in as_completed(futures):
             rows.extend(future.result())
     rows.sort(key=lambda r: (r["material"], r["cn0_db_hz"], r["scenario"], r["method"]))
-    result = dict(main_profile=MAIN, sub_profile=SUB, source_type="local untracked lossless PCM WAV",
-                  sources=entries, sample_rate_hz=32000, seconds_scored=args.seconds,
-                  training_frames=args.training_frames,
-                  calibration_seconds=args.training_frames * PROFILES[MAIN].block / PROFILES[MAIN].fs,
-                  frequency_spacing_hz=args.frequency_spacing_hz,
-                  equalizer_taps=args.equalizer_taps, max_lookahead=args.lookahead,
-                  decision_passes=args.decision_passes,
-                  cn0_db_hz=strengths,
-                  scenarios=[dict(name=name, path=None if path is None else
-                                  dict(delay_us=path[0] * 1e6, relative_db=path[1], phase_rad=path[2]))
+    result = {"main_profile": MAIN, "sub_profile": SUB, "source_type": "local untracked lossless PCM WAV",
+                  "sources": entries, "sample_rate_hz": 32000, "seconds_scored": args.seconds,
+                  "training_frames": args.training_frames,
+                  "calibration_seconds": args.training_frames * PROFILES[MAIN].block / PROFILES[MAIN].fs,
+                  "frequency_spacing_hz": args.frequency_spacing_hz,
+                  "equalizer_taps": args.equalizer_taps, "max_lookahead": args.lookahead,
+                  "decision_passes": args.decision_passes,
+                  "cn0_db_hz": strengths,
+                  "scenarios": [{"name": name, "path": None if path is None else
+                                  {"delay_us": path[0] * 1e6, "relative_db": path[1], "phase_rad": path[2]}}
                              for name, path in scenarios],
-                  assumptions="Ideal symbol timing/carrier recovery; static one-echo channel; "
+                  "assumptions": "Ideal symbol timing/carrier recovery; static one-echo channel; "
                               "calibration from preceding frames; same direct-path C/N0 and total RF power; "
                               "secondary phase = main phase - 2*pi*frequency_spacing*delay.",
-                  rows=rows)
+                  "rows": rows}
     with open(args.json, "w", encoding="utf-8") as dest:
         json.dump(result, dest, ensure_ascii=False, indent=2, allow_nan=False)
         dest.write("\n")
