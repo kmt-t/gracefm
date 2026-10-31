@@ -24,6 +24,8 @@ from tools.common.demo_signal import make_demo
 from tools.samples.sample_names import sample_name, reference_name
 
 from gracefm import channel  # noqa: E402
+from gracefm.codec import roundtrip  # noqa: E402
+from gracefm.profiles import PROFILES  # noqa: E402
 from gracefm.iir import ALT_DELAY  # noqa: E402
 from tools.common import wavio  # noqa: E402
 from tools.common.analog_fm import AnalogFM  # noqa: E402
@@ -35,10 +37,15 @@ SEC = 10.0
 MATERIALS = (("demo", None, 0.0),
              ("piano", "lossless/Emotional_piano.wav", 1.0),
              ("percussion", "lossless/Ceramic_Djembe.wav", 0.5))
-# (サンプリング周波数, 形, 主系, 副系)
-SETS = ((32000, "mono", ("B200M",), ("SUB50M",)),)
 CN0_LIST = (54, 57, 60, 66, 80)      # C/N0 [dB-Hz]。66 は 5m・室内の保守的な見積もり (SPEC 付録D)
 CASES = tuple(f"awgn{c}" for c in CN0_LIST)
+# (サンプリング周波数, 形, 主系, 副系, 条件)。ステレオ形は C/N0 57 だけ、主系＋副系で作る
+SETS = ((32000, "mono", ("B200M",), ("SUB50M",), CASES),
+        (32000, "stereo", ("B200", "B200Y"), ("SUB50M",), ("awgn57",)),
+        (48000, "stereo", ("M700", "M700Y"), ("SUB100-48K",), ("awgn57",)))
+# コーデックだけの試料 (通信路なし): (サンプリング周波数, 形, 主系, 副系は空, 条件は空)
+CODEC_SETS = ((32000, "stereo", ("B200", "B200Y"), (), ()), (48000, "stereo", ("M700", "M700Y"), (), ()))
+ALL_SETS = SETS + CODEC_SETS
 BN = 180e3                           # C/N を表示する雑音帯域 [Hz] (FM放送 1波ぶん)
 
 
@@ -79,7 +86,7 @@ def save(name, y, mono, fs):
 
 
 def generate(task):
-    material, form, fs, mains, subs, x = task
+    material, form, fs, mains, subs, cases, x = task
     mono = form == "mono"
     src = source_name(material, form)
     print(src, flush=True)
@@ -87,8 +94,10 @@ def generate(task):
     fm = AnalogFM(x[:, 0], fs) if mono and fs == 32000 else None
     xi = wavio.to_pcm24(x)
     for main in mains:
+        if not subs:
+            save(sample_name(src, fs, main), wavio.from_pcm24(roundtrip(xi, PROFILES[main])), mono, fs)
         for sub in subs:
-            for case in CASES:
+            for case in cases:
                 cn0 = int(case[len("awgn"):])
                 y, _, _ = channel.link(xi, main, cn0, sub=sub, seed=1)
                 save(sample_name(src, fs, main, case, sub=sub), wavio.from_pcm24(aligned(y, fs)), mono, fs)
@@ -113,10 +122,10 @@ def main():
         if args.source and material != args.source:
             continue
         loaded = {}
-        for fs, form, mains, subs in SETS:
+        for fs, form, mains, subs, cases in ALL_SETS:
             if fs not in loaded:
                 loaded[fs] = load_material(material, path, start, args.eval_audio, fs)
-            tasks.append((material, form, fs, mains, subs, to_form(loaded[fs], form)))
+            tasks.append((material, form, fs, mains, subs, cases, to_form(loaded[fs], form)))
     with ProcessPoolExecutor(max_workers=min(args.workers, len(tasks))) as ex:
         list(ex.map(generate, tasks))
     print("generated; run tools/samples/sample_catalog.py to validate and write the index")
