@@ -27,6 +27,7 @@ from tools.common.demo_signal import make_demo
 from tools.samples.sample_names import sample_name, reference_name
 
 from gracefm import channel  # noqa: E402
+from gracefm.iir import ALT_DELAY  # noqa: E402
 from tools.common import wavio  # noqa: E402
 from tools.common.analog_fm import AnalogFM  # noqa: E402
 from gracefm.codec import roundtrip  # noqa: E402
@@ -73,6 +74,13 @@ def to_form(x, form):
     return np.repeat(((x[:, 0] + x[:, 1]) / 2)[:, None], 2, axis=1) if form == "mono" else x
 
 
+def aligned(y, fs):
+    """通信路を通した受信出力は、出力段の切り替え用 IIR に揃えるため ALT_DELAY サンプル遅れる。
+    試料は原音と時刻を揃えて保存する (末尾に同じ数の無音を足す)。コーデックだけと FM は遅れないので使わない。"""
+    d = ALT_DELAY[fs]
+    return np.concatenate([y[d:], np.zeros((d,) + y.shape[1:], y.dtype)])
+
+
 def save(name, y, mono, fs):
     path = os.path.join(OUT, name)
     wavio.write_flac24(path, y[:, :1] if mono else y, fs)
@@ -94,7 +102,7 @@ def generate(task):
                 cn0 = int(case[len(case.rstrip("0123456789")):])
                 y, _, _ = channel.link(xi, main, cn0, sub=sub, kind_main=kind,
                                        kind_sub="awgn" if kind == "fade10" else kind, seed=1)
-                save(sample_name(src, fs, main, case, sub=sub), wavio.from_pcm24(y), mono, fs)
+                save(sample_name(src, fs, main, case, sub=sub), wavio.from_pcm24(aligned(y, fs)), mono, fs)
         print(f"  {src} {main} done", flush=True)
     if fm is not None:
         for case in CASES:

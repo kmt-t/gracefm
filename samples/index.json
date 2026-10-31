@@ -47,9 +47,9 @@
     "tools/report/spectrum.py": "623ec0c8a9ef228eb3b656ee9c1a7f261de4ec9bda4b2a538c8d02a35b22a859",
     "tools/report/symbol_layout.py": "fe9b8a49f457856d41ae8ba4a0a681d4f23879161ac6a45fe03cffeea87ab468",
     "tools/samples/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "tools/samples/make_samples.py": "4cdd02477712edf5bf6021e70c4c93e1760fb034cb7beb275560b8d42b40ed2e",
+    "tools/samples/make_samples.py": "29ef2a89046147bab5ab70706adbd7c9c1c3178990c74d0a686af34dc9d267b5",
     "tools/samples/regenerate_samples.py": "98051d2011652d696b9fe232e76128b84bb8e8d89f749fab7f239083f530c7f3",
-    "tools/samples/sample_catalog.py": "ce13814ac00f809b6014fce212819a869c70e863d9c0c57ba7df04f9c80391e9",
+    "tools/samples/sample_catalog.py": "ad8e8c91e31354e044d3c331ecefc144fae262da4684602573584758cd94cd3a",
     "tools/samples/sample_names.py": "17a092c6b41854eab30d5a8f1ba1ddd8c241a5646ed9921ecb8386ce4ae28a89",
     "tools/sim/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/sim/codec_wav.py": "90991548b46e4b30a134ee00bfc6a34ad95d323a9556d2fab4473e21ebe0f062",
@@ -147,7 +147,7 @@
     },
     {
       "file": "samples/demo-mono__32k__B200M__awgn-cn0-54dBHz.flac",
-      "sha256": "197ea83352e3b01167c5cd035aad9eca4034c2fade096145d1ad673ecf1ae031",
+      "sha256": "ec9e45a7abb95a40f6c7f276846047c0f2fe6bd03ccd8b1f890737d23ec03143",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -231,11 +231,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.7472705252751475
+      "snr_db": 0.7506192004381934
     },
     {
       "file": "samples/demo-mono__32k__B200M__awgn-cn0-57dBHz.flac",
-      "sha256": "c519eee329fb0a7030d417af2a00226fe4e28551d33888176045458062b669d8",
+      "sha256": "9101588e997d9a4bcaa4462b661af8a9466fbc7f21a0e1e8dfd1d8342991b0be",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -319,11 +319,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.211366572098173
+      "snr_db": 11.394821231501462
     },
     {
       "file": "samples/demo-mono__32k__B200M__awgn-cn0-60dBHz.flac",
-      "sha256": "1187c172d030f47becfdf4e0d0a197dee507c60a8c706acbae8c281c0d20a0c1",
+      "sha256": "2c98e9476636e8869f3ec1e685e6132414b8783f4acbeea072f35d878411498c",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -407,11 +407,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 21.105859013870507
+      "snr_db": 24.509341981936146
     },
     {
       "file": "samples/demo-mono__32k__B200M__awgn-cn0-66dBHz.flac",
-      "sha256": "fcbaac3e981578a4fd2a22c0421b10e4364e4f77cf180e85ca816fb4e66135ba",
+      "sha256": "e06575135522503045cf59281ec77d12deb392015a7671b41107b7ccb1ecfd77",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -495,11 +495,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 22.330834471678024
+      "snr_db": 27.85675646689802
     },
     {
       "file": "samples/demo-mono__32k__B200M__awgn-cn0-80dBHz.flac",
-      "sha256": "344e1ef1e65f433406aca7958ff0dd01c808eeaed71698a12c5b746a81982684",
+      "sha256": "5b2ff6c8a95e0c836d59bcb87f234575b70e8bac04308faa26855795558bfdf1",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -583,11 +583,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 23.756106714057577
+      "snr_db": 59.40639025839782
     },
     {
       "file": "samples/demo-mono__32k__B200M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "7e2ddd0eb0f510e52e18c725f9044567debffc72694b9cab9a9e02e2b1033cd9",
+      "sha256": "74c2f35d3b750fe463ec456b018cc945dfbfb970e935ee46dda0dafd1ef1589c",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -671,11 +671,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 4.599165629830298
+      "snr_db": 4.631218766188761
     },
     {
       "file": "samples/demo-mono__32k__B200M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "c7bfb9cfa93376198cff291324ee80cfd448189c482375be9591e70e55515074",
+      "sha256": "1912e664cc7788468168261369c6b5ba99e458dac5d6dafe9cc0f198439e0aee",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -759,11 +759,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 5.924942955054511
+      "snr_db": 5.932500715263631
     },
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "837f83d27780248a0c811c5a64a5c51930c06ed9291a3ffdbcc668d39d2c811b",
+      "sha256": "073708b07bec53f6f85f2d974d3918d7ba577ad821068c7003f41ad520e5e499",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -907,11 +907,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.93853409160437
+      "snr_db": 18.59462041539884
     },
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "4a93b72e6fc9ece0a50a2b576cf4c836bc3856fd5b8cda6338d39c7418e38dd1",
+      "sha256": "7958c7a0ed1c925efbe633b896f86adb97317fca1bcff49c79ec5b54ba73e67a",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -1055,11 +1055,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 23.134978145769438
+      "snr_db": 30.24618740964883
     },
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "a40a64993aa72abeaeca2897c12eebf82784ab2d7cb6d0caec1547646140c531",
+      "sha256": "1fc204382000a830a517c2a8346cc6879e48d3687bb2c92a896507622add144f",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -1203,11 +1203,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 23.62747696076778
+      "snr_db": 39.31439090624341
     },
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "74458421530db52e75dcd9421e23efef4ae7f6f78273fb752b5c25288380c113",
+      "sha256": "f3be7011fd4cd7ef6e58ed4c02ec2938b6a0d3231296384b712699310c231fa4",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -1351,11 +1351,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 23.661340665923518
+      "snr_db": 40.77410825076565
     },
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "a0c8f4ff9ffe52b2754ef25b53b51430671e16b60514dd7ae03bf8ebdd267229",
+      "sha256": "0358e81f5e46f9f1ea6c96d1d50b7605be117f5037b67952997b57736e6fb6e4",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -1499,11 +1499,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 23.756086536483153
+      "snr_db": 59.5350444963634
     },
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "9f845808fdd0843f16b03572de208b85c7ab5cd79721ac5d01b9329602bcd635",
+      "sha256": "366a672d8ba8fc8608bc3b321454e8c17e731a600f44ad462f33a1304b68f8dc",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -1647,11 +1647,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.073312211561184
+      "snr_db": 14.513977025861955
     },
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "6f0f9cc824e37e1365e61bd22de10e718355d90b9e88534ca62f1a1e6998b91b",
+      "sha256": "533f8803bce9b880d75595a656f60058eac6b7d6cce81fbf9c2159ef0a751276",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -1795,7 +1795,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 23.34018713707688
+      "snr_db": 29.38303606847338
     },
     {
       "file": "samples/demo-mono__32k__B200MY__codec.flac",
@@ -1887,7 +1887,7 @@
     },
     {
       "file": "samples/demo-mono__32k__B200MY__awgn-cn0-54dBHz.flac",
-      "sha256": "1015a4bf28b77bb854d273e4b6147f6ac1e62ce43e33c029471b79da2449e797",
+      "sha256": "10aeac6147dccc7b8fc13093e02d93cb9da2d1cb6e6fb996f69419e9b161c500",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -1971,11 +1971,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 3.510673509881733
+      "snr_db": 3.517061298710209
     },
     {
       "file": "samples/demo-mono__32k__B200MY__awgn-cn0-57dBHz.flac",
-      "sha256": "c0544ac22e8ec4963cb7fa6df245519c140a104692a192b95fe7263488b1cab2",
+      "sha256": "7a91678f1a6b28886c5c5d5cd5c85dae5286d0dfb24aefee1c96b37b5f43c859",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -2059,11 +2059,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.263008838529654
+      "snr_db": 18.399992035329827
     },
     {
       "file": "samples/demo-mono__32k__B200MY__awgn-cn0-60dBHz.flac",
-      "sha256": "530605924ffdd7f1004c80ef0c3b76d0a3b11f4949b960da35e6333888f41f7f",
+      "sha256": "ad28a2a28f325bf493c9bcd7600c486498736ba40702b0394d8760b2d789091d",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -2147,11 +2147,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 21.23741564221726
+      "snr_db": 24.829964714704765
     },
     {
       "file": "samples/demo-mono__32k__B200MY__awgn-cn0-66dBHz.flac",
-      "sha256": "004539b31463687724bbb92410dc20936487f03a2688b80edc0dc1ba6ea86a21",
+      "sha256": "07d0d1c68a91c5ccfcf20473b972eccca47f8d9447d7923f0ea236d015bae8be",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -2235,11 +2235,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 22.547746914914335
+      "snr_db": 28.721345775088757
     },
     {
       "file": "samples/demo-mono__32k__B200MY__awgn-cn0-80dBHz.flac",
-      "sha256": "0467d63d203a2f1145d90f54111228b348dc338cca0f3602e8783531a7ffd997",
+      "sha256": "2608b3cf877c899b3bf80099c432e7659cb78aff0435907678ddd6a7ee63f609",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -2323,11 +2323,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 23.751238903236956
+      "snr_db": 53.42385085709958
     },
     {
       "file": "samples/demo-mono__32k__B200MY__rayleigh-cn0-60dBHz.flac",
-      "sha256": "9a745e104e1ce38a1607f0426807223fca40e4165ce90abb2efae991f2426ac1",
+      "sha256": "32db168b366a121d1c73dd7b4010ac9189b714d545bccefa2024bb5afba6eb13",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -2411,11 +2411,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 5.385991970460317
+      "snr_db": 5.4224580784495116
     },
     {
       "file": "samples/demo-mono__32k__B200MY__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "99e85fcd33c9a862c0fb4a4bff933cf09e42d3ff65a348896f3123de87b1fff9",
+      "sha256": "39fc5d0708fec048ee1b8657afe30c81b7c2c1d8f1f74d47309ba9125177f670",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -2499,11 +2499,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.784073366827407
+      "snr_db": 14.202426895113549
     },
     {
       "file": "samples/demo-mono__32k__B200MY+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "ddd126ee2fc5e83402890004d1fd5dc666ec8fdf0eb366e7e22a7c4196698326",
+      "sha256": "d68b9f010b1e751f2a982217f2810e92188f2f2ed1f8edbf03669c92db415636",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -2647,11 +2647,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 18.52417316573038
+      "snr_db": 19.529740089748906
     },
     {
       "file": "samples/demo-mono__32k__B200MY+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "a11016043368939c6a45463de899cf6ba446ba205ea6fc1702f1a07de2dc7567",
+      "sha256": "c8a1531783f8086ace51431b0cc7d9eb69d93027aa601b92efde131b30107fa9",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -2795,11 +2795,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 22.897734713669383
+      "snr_db": 30.670186429728773
     },
     {
       "file": "samples/demo-mono__32k__B200MY+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "c61441b666bb46fe5c461d2c544453ce5b682db4020f0284d820eb28365ecd94",
+      "sha256": "7abb9afd10c85336c8bc6a7698c1d10ea7fbbe3c667b1794d3bcfc9e23992316",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -2943,11 +2943,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 23.467871470153714
+      "snr_db": 35.842065150630475
     },
     {
       "file": "samples/demo-mono__32k__B200MY+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "f72dd7af61524ffef3fb08d7700bb16fd0df76d922eff0bfff48c7049a88319f",
+      "sha256": "028d9e0d9d9ace2a6df1fa1d3312424d10f75f20c73c817013ae992d5a2885b4",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -3091,11 +3091,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 23.62536844252481
+      "snr_db": 39.18722438044125
     },
     {
       "file": "samples/demo-mono__32k__B200MY+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "53b20d4b7e28e1ad2a24bbd9f91a6c388543c837652f39132e45cc860c4810b4",
+      "sha256": "8b9ddabf68cc2bc0cd233190efb8fc6d9bdd78f50cd0323fd2c515add13c261a",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -3239,11 +3239,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 23.751561977604222
+      "snr_db": 53.51071908744337
     },
     {
       "file": "samples/demo-mono__32k__B200MY+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "a4c13e0f8d39989bf3feb68116682e56fa8526e9c8ea7165b50df92cce5da384",
+      "sha256": "e7bc054954257ba058963bea4ae01f491b5d792f867ecc63a4134a2a4ded258b",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -3387,11 +3387,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.877067119164657
+      "snr_db": 15.443211730381742
     },
     {
       "file": "samples/demo-mono__32k__B200MY+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "70838866982260c39424b371078b77f2b525da15b50b91c20bd579763aab4006",
+      "sha256": "bf440784337837d9a6ffe8cfe6ba6af397b46d86aed89f938f47562ff983dcfd",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -3535,7 +3535,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 23.323958602220728
+      "snr_db": 32.58544883748614
     },
     {
       "file": "samples/demo-mono__32k__FM__awgn-cn0-54dBHz.flac",
@@ -3732,7 +3732,7 @@
     },
     {
       "file": "samples/demo-stereo__32k__B200__awgn-cn0-54dBHz.flac",
-      "sha256": "61cf18d8346bff59f53e100a3b14c15a3bfbbc0fba965680338fe1f18bb9ca80",
+      "sha256": "80dcebe4a170810b066979ea11c915f41afa0de9d69fb415471c1bb147a0a3f1",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -3816,11 +3816,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.0004042516035308728
+      "snr_db": 0.00044950310336418177
     },
     {
       "file": "samples/demo-stereo__32k__B200__awgn-cn0-57dBHz.flac",
-      "sha256": "e3d352cbe97fdb9d8c04ccedf65db3a8ecad0516c9018c15bed4537bfc55db04",
+      "sha256": "7694d2e6b62d0d908116b826f79d734f34f704b40c3a3af373ee4f91240a5e47",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -3904,11 +3904,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.6088811032628193
+      "snr_db": 0.6088329772520975
     },
     {
       "file": "samples/demo-stereo__32k__B200__awgn-cn0-60dBHz.flac",
-      "sha256": "3e17c9312a788a7401a19dc6f5af935847db6e2d98adf1166776cab9404d4817",
+      "sha256": "612ba4431b59ab9f9799992b5ecd51bd102d8892f2f387698e70b5be3b7e71a7",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -3992,11 +3992,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.237150108388832
+      "snr_db": 13.785198184051135
     },
     {
       "file": "samples/demo-stereo__32k__B200__awgn-cn0-66dBHz.flac",
-      "sha256": "6b7d4d037273064df0ffdc00580f010a123033a583ab3d470706841ce8e692b4",
+      "sha256": "9125cf0c9f5138541d30127105044dd1f65c9000e7a11f924190a7f0f7410625",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -4080,11 +4080,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 20.36369316289833
+      "snr_db": 25.88168549370645
     },
     {
       "file": "samples/demo-stereo__32k__B200__awgn-cn0-80dBHz.flac",
-      "sha256": "57030ec428d18007531353ffb5e20104c5d69eb2c304eaaf8c4b4c386ccd4577",
+      "sha256": "9b4966cff0f9643db76470e03efca5c75dd67866059aa328e0c2128d4555d24f",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -4168,11 +4168,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 21.777869974358044
+      "snr_db": 58.451415876117764
     },
     {
       "file": "samples/demo-stereo__32k__B200__rayleigh-cn0-60dBHz.flac",
-      "sha256": "e4d0fb4a4d6b0d40abf1b05d19ad7686db9a7e9434b1dc7bc1b4e0011e27f4fe",
+      "sha256": "e22d50ef4165a934d607c1425e32b21946ca0a4340ac30ba0794b7a2ec060e55",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -4256,11 +4256,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 2.5139013751427686
+      "snr_db": 2.5372148504405208
     },
     {
       "file": "samples/demo-stereo__32k__B200__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "8cf02be13608fd05823c3e234edb439599d96cb80615054ee75f1cf7583d2439",
+      "sha256": "c8b1518a9d66f585e74992c6e03b3fbffb38092754e2e73f82f1c9356a71b742",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -4344,11 +4344,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.13742237500480042
+      "snr_db": 0.1394169175752265
     },
     {
       "file": "samples/demo-stereo__32k__B200+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "4f453d2f04ad6febde6a85ecc2e39084e7da21998569f968bf5ea99385883fbe",
+      "sha256": "fdc3bf7ab401a305e64b97f68784f14a03bfa6a5067fba6274982894061a143a",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -4492,11 +4492,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 16.985414876517844
+      "snr_db": 17.4380388239432
     },
     {
       "file": "samples/demo-stereo__32k__B200+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "f8d824b93675e78084bcbfa11503f58962cccceca1d438083d87c0bd02fada52",
+      "sha256": "7c7eea6436c28e08c027fb48d3d2fdee9e2dee9eeafa0c9f32674968e375643c",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -4640,11 +4640,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 22.18358373051073
+      "snr_db": 24.351158035380873
     },
     {
       "file": "samples/demo-stereo__32k__B200+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "613ce5b62347195cedeff234c21c80a965c4b01344dd4ee28bdc886cff75fc7a",
+      "sha256": "1ec7bf8f2e156eef0c237a0f2a99eb6bef4ee96675fb568a99e7d9f3057e767d",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -4788,11 +4788,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 21.656186767675525
+      "snr_db": 33.23349349265231
     },
     {
       "file": "samples/demo-stereo__32k__B200+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "b610b2213f03f37723d5c1a594cf8cb42495421a476686ddce5b973d41cfcd60",
+      "sha256": "a0fa99ca3e15eea97bfe65e5ca0267f841c7eefd0dd11a861fbd89b97bb6b033",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -4936,11 +4936,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 21.682311807343577
+      "snr_db": 38.98704531657691
     },
     {
       "file": "samples/demo-stereo__32k__B200+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "809799889f1b04d946950b0a27a7845a721c70cb525591b4601c502b6b85bf61",
+      "sha256": "a206c03f7353dc3427409bb3a3999c7c5e7e10b8962864c363d7aece4391a922",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -5084,11 +5084,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 21.777885515754896
+      "snr_db": 58.74398039995479
     },
     {
       "file": "samples/demo-stereo__32k__B200+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "8a227f1adc1fa840e04a1a3c4d9ee3db5029546cdd07c4c7baf046c3347e44f7",
+      "sha256": "dd65ba67d6c8b1b3f1df56e0b8634aa16d4ddb2ccede3c34d9c93ba53d579bb5",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -5232,11 +5232,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.155484307593321
+      "snr_db": 13.615216893563371
     },
     {
       "file": "samples/demo-stereo__32k__B200+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "b62a5e33e8e6ce78fd807fac98d53c4c4d6694724db0797574b10513be0d97a9",
+      "sha256": "11920a9b59c82848bd98535322ec3cb6350f135344922f7caeeb1ef3ddf55620",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -5380,7 +5380,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 23.15738213753368
+      "snr_db": 25.65738397406875
     },
     {
       "file": "samples/demo-stereo__32k__B200Y__codec.flac",
@@ -5472,7 +5472,7 @@
     },
     {
       "file": "samples/demo-stereo__32k__B200Y__awgn-cn0-54dBHz.flac",
-      "sha256": "f2534bf80d3be9ae7238cd0fb4ffb250938994cf0cd866f5ecf7d08388609a80",
+      "sha256": "0fb413207e40d144f70a3482d48bed399bf1c48708d6866c36e47811437bf1a4",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -5556,11 +5556,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.051916380716627956
+      "snr_db": 0.052283644456553674
     },
     {
       "file": "samples/demo-stereo__32k__B200Y__awgn-cn0-57dBHz.flac",
-      "sha256": "940bb2873ae81c2979ffba5e2c60dad0a0ee0277fa0b87ba3ce3a506024d8833",
+      "sha256": "824688ef919741df2ecec25dbbeef037dfa9dbf80b3ef1f2b35598472850847e",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -5644,11 +5644,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 4.4839250254897465
+      "snr_db": 4.500563867164013
     },
     {
       "file": "samples/demo-stereo__32k__B200Y__awgn-cn0-60dBHz.flac",
-      "sha256": "554cb1f2bd807070c158bdc106095682fe2a042732322112330f16b6b73250f1",
+      "sha256": "c6c6b643cb5c921b3438388bfa87ebca68637d438a4f35001336cad8c5f0a8ca",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -5732,11 +5732,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 19.028697751061664
+      "snr_db": 22.29216230307857
     },
     {
       "file": "samples/demo-stereo__32k__B200Y__awgn-cn0-66dBHz.flac",
-      "sha256": "cd2393f128d9764dc2097d03e9833fa359b1e8a8a04ff086ae4a89db2d680ffd",
+      "sha256": "c432e696cebc1e87f203d4b3e930f6a6c045bcbc9904a1221cc5833ea18b5a04",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -5820,11 +5820,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 20.509244424215662
+      "snr_db": 26.47907175112744
     },
     {
       "file": "samples/demo-stereo__32k__B200Y__awgn-cn0-80dBHz.flac",
-      "sha256": "3f7e29924eb96ba5fa4a05e9af25e13e1fb152e1f1fd102bb27103baf35ba732",
+      "sha256": "ed5a46d978f44bcdbcfdb45e71774a9606672a383d2e94876454eac94400e020",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -5908,11 +5908,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 21.77023838309706
+      "snr_db": 49.7965267786697
     },
     {
       "file": "samples/demo-stereo__32k__B200Y__rayleigh-cn0-60dBHz.flac",
-      "sha256": "3ec78acaba014e57ad0c27c65a30c9eddf4fbe14e2fe0244aaca11f63d832d57",
+      "sha256": "e39535062aaacc6235c27d2f4de9848757ed365bc98f35448a67e4c546b7cc8e",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -5996,11 +5996,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 3.4563575749832336
+      "snr_db": 3.4926358867759277
     },
     {
       "file": "samples/demo-stereo__32k__B200Y__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "02e894b188730da976b5800c97ac78ed33d0b7146b70911381b08a3535054788",
+      "sha256": "cfe602f09c27895f291811dd3d7c692d645f2e1036502813e2cf33f6f77becdf",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -6084,11 +6084,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 1.3438470400475881
+      "snr_db": 1.344322423709763
     },
     {
       "file": "samples/demo-stereo__32k__B200Y+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "3f1bce874b7d639d0e487b61bbbcdfedf047ff0f7839a083d9d60ee67291e0a5",
+      "sha256": "93d29a3c0925d478e0ab634fbd580a462ec1f736431c61a060f99294a8fe7045",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -6232,11 +6232,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.162436965638875
+      "snr_db": 17.64835109131497
     },
     {
       "file": "samples/demo-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "012b8073ca5ec23c47655b003f7f8d63c1e690b0012d250c631ed0c1d77962e4",
+      "sha256": "aa8cb916a6c2bc25e988832fb2a6251cadaa84c145f2b0e74532280cbea3f276",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -6380,11 +6380,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 21.241157490234283
+      "snr_db": 25.04100779740996
     },
     {
       "file": "samples/demo-stereo__32k__B200Y+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "090582898c6a540749254ae8d5074310d95c7228cd61f8ffb157ae4084dd297f",
+      "sha256": "f0597fcb07fceef1090108bf10b30a917aa3fa39c0e065a83dcb50578350a5ee",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -6528,11 +6528,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 21.38428684411981
+      "snr_db": 32.18364072847197
     },
     {
       "file": "samples/demo-stereo__32k__B200Y+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "4d6067897cfe04e51a42142d9ac5a514469de38c6e9591bf666d288a74fd316f",
+      "sha256": "5f85d6ad54773c490e3f29310c60cd4dd9800d419d511f638834553d562b7102",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -6676,11 +6676,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 21.610562170184068
+      "snr_db": 36.26321661190948
     },
     {
       "file": "samples/demo-stereo__32k__B200Y+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "5183dc1361699d7259d274760981d6d7ad44de99f3b62ca1a88bc2f71adc113f",
+      "sha256": "c22bdaa8b45c4999fe015c4a1756a94345cc9d2392a593a7e93ff1f30aea2669",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -6824,11 +6824,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 21.77063664398274
+      "snr_db": 49.855699885026574
     },
     {
       "file": "samples/demo-stereo__32k__B200Y+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "b3c49e620fd9cda6a1a44e134ed8148e10c99e4843182620c16dc09f289fd754",
+      "sha256": "1f07b3dfc31ee4af7c93c21ff2c39d8e81849326438ab18e4e94419099ecb1e0",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -6972,11 +6972,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.240037191710414
+      "snr_db": 13.757305737134597
     },
     {
       "file": "samples/demo-stereo__32k__B200Y+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "c79966750a1f27d410b8a8e0faa16b0539284fcb40af11e1ac7162ece9b30d5b",
+      "sha256": "2b1006fc62c2b88950c5a723e93f9466dbb8abd6c327232fe682347e43018b7b",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -7120,7 +7120,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 22.27518473280586
+      "snr_db": 25.06622913876668
     },
     {
       "file": "samples/demo-mono__48k__M700M__codec.flac",
@@ -7212,7 +7212,7 @@
     },
     {
       "file": "samples/demo-mono__48k__M700M__awgn-cn0-54dBHz.flac",
-      "sha256": "65674f9d0e65dabebb21260e8199e5cb81a6f51528b2bdeefbd974b15b20a462",
+      "sha256": "4468ef3d3b8fc1ae42fad8f2e107271f13c2db3188d3f1d719bc2729fb7cc7fd",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -7296,11 +7296,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.03297290328681431
+      "snr_db": 0.0334528541931614
     },
     {
       "file": "samples/demo-mono__48k__M700M__awgn-cn0-57dBHz.flac",
-      "sha256": "e05b80a5d1ffcaf705a27744806b32ff5a91308f03a243eb3ef8f7d000878b4a",
+      "sha256": "8b508b28a47c8c3b08561367ec1bfc17f635d23614bd12f6038b0f88a3d1abb1",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -7384,11 +7384,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 2.8521093662898296
+      "snr_db": 2.8741523294264635
     },
     {
       "file": "samples/demo-mono__48k__M700M__awgn-cn0-60dBHz.flac",
-      "sha256": "6e21cdd2fdc41e44b592634a7880b5fe9ece8023dcdfa74eb5d77edf29dc32a3",
+      "sha256": "dba3b83cdd4b6546810c6bdccd36258d145cc88cfb0dcdc1a60df7b485afe5c1",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -7472,11 +7472,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 16.783953355057843
+      "snr_db": 19.404267496706243
     },
     {
       "file": "samples/demo-mono__48k__M700M__awgn-cn0-66dBHz.flac",
-      "sha256": "0bc205abf85a7eec9f11044660b1376f9b2dbc912641319de4420eedb35d2785",
+      "sha256": "285efbf4be518e46c7cc7e929518fa639c3d41a21cd9c0cdc7f1006c68c0b6fb",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -7560,11 +7560,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 19.33493325388624
+      "snr_db": 26.78667925260104
     },
     {
       "file": "samples/demo-mono__48k__M700M__awgn-cn0-80dBHz.flac",
-      "sha256": "b047437a638a585576bb66c23eeec5470d214ece7b40d75150b7bb58af47bfa1",
+      "sha256": "2c0f37530812cd3e41cc53009050c2e20c0b51238f11f4f1c7307f0925f9e75d",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -7648,11 +7648,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 20.221852533568097
+      "snr_db": 58.80452055483043
     },
     {
       "file": "samples/demo-mono__48k__M700M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "84a1b2052c81692fa0bfbd882c67eb8885f6e4ec5bc8071a81ccfd9cfeb64ffc",
+      "sha256": "6d9c969733a4796a6e11a1a831c9f4339f22ea1b0d52375f31c7057d2a55b85e",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -7736,11 +7736,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 3.5466808454996523
+      "snr_db": 3.6006954767374424
     },
     {
       "file": "samples/demo-mono__48k__M700M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "7edb732d6d17c37e546b9ab3c343945fc4cb0e060c3d682ac47c33da5af88a63",
+      "sha256": "6c8f9011a6d5d44586b27c8eb6d472f9541d378ada5e06a2c78c8f3ec75a0bcb",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -7824,11 +7824,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 1.0571500882357585
+      "snr_db": 1.065695609930293
     },
     {
       "file": "samples/demo-mono__48k__M700M+SUB100-48K__awgn-cn0-54dBHz.flac",
-      "sha256": "fea1e20b6ddd9c02de523b7492c7b8269c213fcf6b1b161a7362e37b4931d91a",
+      "sha256": "bae9e2dc1409cbf5a1c0d70761a18725b7772dd05d5b4b1cc0716ea6c73e9e22",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -7972,11 +7972,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.039816809600893
+      "snr_db": 13.243770473852619
     },
     {
       "file": "samples/demo-mono__48k__M700M+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "21dff917e7f38e882e91e971bab9b6f6ceb2feb1560680080f4450627edbf7a9",
+      "sha256": "b532ce6edd277308cd68f6af25bda46a4a97431cf8a4c1c792e7928406fdd50f",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -8120,11 +8120,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.682597582860453
+      "snr_db": 19.324343056689404
     },
     {
       "file": "samples/demo-mono__48k__M700M+SUB100-48K__awgn-cn0-60dBHz.flac",
-      "sha256": "a9ac8e28b4f7358affa2fa80a2c91af3220058fafce9e3431c1340c0d22ac3e5",
+      "sha256": "8013dfaf812847eb206631b6a26f6337358267a55ce4d3cdf2d82c7e83954c98",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -8268,11 +8268,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 19.949986841618003
+      "snr_db": 32.046189485481406
     },
     {
       "file": "samples/demo-mono__48k__M700M+SUB100-48K__awgn-cn0-66dBHz.flac",
-      "sha256": "d612bc299165efeb7faf4d12aae95f5543bf59a860d091c844fe194f2cb85363",
+      "sha256": "e5d854769878f9b29b00c2e79fa8039455b9d20a415c44fc14cd38533cc8cc68",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -8416,11 +8416,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 20.152913469185876
+      "snr_db": 38.693600363490155
     },
     {
       "file": "samples/demo-mono__48k__M700M+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "8ba4c05796b1e42e6fab2254a9cfa81c622d4351aa5599f47e0812db86ff5e9a",
+      "sha256": "17e270b24140f3bf7e3c2a8251707cb7285291eff9efe37f5867cae5a09f56dc",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -8564,11 +8564,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 20.221839875972965
+      "snr_db": 58.89494857711783
     },
     {
       "file": "samples/demo-mono__48k__M700M+SUB100-48K__rayleigh-cn0-60dBHz.flac",
-      "sha256": "f71d505e2bd2179482fb3a98553d2b8eb8a74bdda1ce6df34069ca80ea080822",
+      "sha256": "2ab637e54847ba77bbd351cff6e46eff89dae996f7d3405b026ec2e6f4935f3a",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -8712,11 +8712,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.278530104321637
+      "snr_db": 13.916887672770457
     },
     {
       "file": "samples/demo-mono__48k__M700M+SUB100-48K__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "f589698cf670a65eb95482f37bab4fb782ab12012d67dc0eacbf6f88af2b51f4",
+      "sha256": "afc17943c2268e556ce6c8008ef58e6f98b86d6ca49656295257935e158f7aba",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -8860,7 +8860,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 21.60830051301702
+      "snr_db": 24.498511074166778
     },
     {
       "file": "samples/demo-mono__48k__M700MY__codec.flac",
@@ -8952,7 +8952,7 @@
     },
     {
       "file": "samples/demo-mono__48k__M700MY__awgn-cn0-54dBHz.flac",
-      "sha256": "82c8f1561b8213a06c0101a4794d56840f2ad6f591349b5f5e0f707d65b7a9df",
+      "sha256": "d553dc88f370793cfa404370fb2821b1d1beb8101c6ffec8f245bc37f81d3b4e",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -9036,11 +9036,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.5327785011971737
+      "snr_db": 0.5384802957085945
     },
     {
       "file": "samples/demo-mono__48k__M700MY__awgn-cn0-57dBHz.flac",
-      "sha256": "7a07ef5e73000e74b07b04783b7fedba78a219bb9c2c9a27d1b67bd126f5a12b",
+      "sha256": "8b80d9cc6dc6fd7c1f049d47777cdae5ff0e2bd78be3870e9ff0d99468cf18cd",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -9124,11 +9124,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 8.990740165173701
+      "snr_db": 9.259463386652858
     },
     {
       "file": "samples/demo-mono__48k__M700MY__awgn-cn0-60dBHz.flac",
-      "sha256": "965f33d3df1fcbba50447830f506c7b102fb3e699cadf18220892fcc11211656",
+      "sha256": "0dab59d4e3bb649374846070a9e114d2d108aad49f799ba1dd86be79f0d2cdc7",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -9212,11 +9212,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 18.37921445496679
+      "snr_db": 23.186533102385614
     },
     {
       "file": "samples/demo-mono__48k__M700MY__awgn-cn0-66dBHz.flac",
-      "sha256": "752b8e58c21f15e2c4b0e97da95ea3af4ac0aa79e5e6755418b0d3ff73026ab9",
+      "sha256": "260954be6d9a342c7725e7693c837158182940a4f24219ac5b3aefe79a07cf74",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -9300,11 +9300,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 19.384491983542308
+      "snr_db": 27.230626901195052
     },
     {
       "file": "samples/demo-mono__48k__M700MY__awgn-cn0-80dBHz.flac",
-      "sha256": "d33f5ef3eb79250c7660742b0c30a60444f73c88b38ed3e6525d5a2fac0f8d96",
+      "sha256": "6e9bb8e0bdb9cafbf9f6e8d53f4ae382b5398145e45c1553d728e5a57ae23827",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -9388,11 +9388,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 20.213653673751118
+      "snr_db": 49.179428812772855
     },
     {
       "file": "samples/demo-mono__48k__M700MY__rayleigh-cn0-60dBHz.flac",
-      "sha256": "697d962e13244fa9335e7ef14dafd07e36576d3c1bd3fed37135f5bf34a4a7c2",
+      "sha256": "8b2ff6676f5e2ea79adba76e42b02fbb06be896fbf0265f8ea47bd588df2e47b",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -9476,11 +9476,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 4.329572628589525
+      "snr_db": 4.3975426243486995
     },
     {
       "file": "samples/demo-mono__48k__M700MY__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "d2b2a5221df201f552296126fd2c4fc0585df44035b6a965a40601b9d50513c1",
+      "sha256": "78ca97c8d777106c5bb9ba2199fe5733290748e571192d84dec1638bb3ef9db4",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -9564,11 +9564,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 4.282022473786592
+      "snr_db": 4.32464255133206
     },
     {
       "file": "samples/demo-mono__48k__M700MY+SUB100-48K__awgn-cn0-54dBHz.flac",
-      "sha256": "288c53d65173c49416df9a2e053276325c58440cdbd3645c99c7ef7bd8406e8d",
+      "sha256": "4ab58cbe01fd7b40fb10412c852318ba7b85396970ec905e9208eec961501bdd",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -9712,11 +9712,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.477794424689124
+      "snr_db": 13.743358715703256
     },
     {
       "file": "samples/demo-mono__48k__M700MY+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "c0330b4a14ef56eb44efb03582b8757e53ffefb7e0e4cc81afe30da53532a157",
+      "sha256": "009ef5e23e075c29ca1ce0faccd6825ae341e030a2dbc11cec94cb1df6c93fb3",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -9860,11 +9860,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 18.587852784931847
+      "snr_db": 22.58931623950348
     },
     {
       "file": "samples/demo-mono__48k__M700MY+SUB100-48K__awgn-cn0-60dBHz.flac",
-      "sha256": "cdedbe02ac9484abc964552b41b3c9605b72f5c7d84468b59fbf247a15f325b0",
+      "sha256": "87d35e9718ff8486d1c09b2f794b6b10040faa6f8d8d4fb5db2ddb38f89144d3",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -10008,11 +10008,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 19.700708791852776
+      "snr_db": 29.895152803054813
     },
     {
       "file": "samples/demo-mono__48k__M700MY+SUB100-48K__awgn-cn0-66dBHz.flac",
-      "sha256": "d80612d0e354bd5684f3831af4f77b523e10cf085f6e6b5fd014c1c8e3b23720",
+      "sha256": "99c8fd9e005d918cd6d504ad7ed6918148b6acf5a3164e48b8dd2979d69e4c05",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -10156,11 +10156,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 20.06306292005902
+      "snr_db": 35.52043408594503
     },
     {
       "file": "samples/demo-mono__48k__M700MY+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "7da81f1a073e601bbe920b83ffed80312bdf0738819b8cb1c14d66e8bbbe8cdf",
+      "sha256": "76647eaed71aae759bf6f96cf1ee77208056a30d293123edbdd27e1e6e9cd05c",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -10304,11 +10304,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 20.214077623879856
+      "snr_db": 49.2087194951376
     },
     {
       "file": "samples/demo-mono__48k__M700MY+SUB100-48K__rayleigh-cn0-60dBHz.flac",
-      "sha256": "7134637f00a9bbcfb7056112c9fd79300fc165518cef31a4da1b456488a3b687",
+      "sha256": "bcfb066c165539e43a3d5eb2114c2847568418cd3c513384ac41c1e71af5482a",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -10452,11 +10452,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.458054299806495
+      "snr_db": 14.141512652371162
     },
     {
       "file": "samples/demo-mono__48k__M700MY+SUB100-48K__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "aa809c0e821e456190c21385f33a7d7409fc8f674f9f792cd7cdb42169e34a5d",
+      "sha256": "258c119643a0e70b8234cb66f2dc965ff816822c3a2b61b15d422b2477540c2e",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__48k__reference.flac",
@@ -10600,7 +10600,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 20.469030641924544
+      "snr_db": 25.134078146438203
     },
     {
       "file": "samples/demo-stereo__48k__M700__codec.flac",
@@ -10692,7 +10692,7 @@
     },
     {
       "file": "samples/demo-stereo__48k__M700__awgn-cn0-54dBHz.flac",
-      "sha256": "313289165ab60195732493132b023216c692a88509f8842fc19888cacc7dc14b",
+      "sha256": "de122dc771e556c3c579d1efef68d048762a684fcd63c456aa65fb6ceb93fe49",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -10776,11 +10776,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": -0.007312546366553393
+      "snr_db": -0.007297681375904714
     },
     {
       "file": "samples/demo-stereo__48k__M700__awgn-cn0-57dBHz.flac",
-      "sha256": "8b3ae5ac258981b7ef83db805cfdcfe8e7f0457cb4e6f6912957ef5f41fb780b",
+      "sha256": "8833ce6e19afc48034d8a7c710043431e2e5e62a9b1f3affdc790ef9a11cfd00",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -10864,11 +10864,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.05808090516849273
+      "snr_db": 0.0590350730253158
     },
     {
       "file": "samples/demo-stereo__48k__M700__awgn-cn0-60dBHz.flac",
-      "sha256": "9d834c4b6b791532fb8bceec82820474033be64d4dc7143fc5dec6012bd7c07f",
+      "sha256": "e84b9e0430c280c36c3a8e34d94b5e22f5dbd6dd594cdf8070234b57be570189",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -10952,11 +10952,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 4.782594485282577
+      "snr_db": 4.885725606652724
     },
     {
       "file": "samples/demo-stereo__48k__M700__awgn-cn0-66dBHz.flac",
-      "sha256": "f818a0526af744267accc32450a7449c3383a893aef35651b6a6cb3ab2fd8c35",
+      "sha256": "1ddc9d584d362e47630221dde4f7583eae4481c62bcffc8a19242286eea9fdab",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -11040,11 +11040,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 16.969917844646865
+      "snr_db": 24.24086437155886
     },
     {
       "file": "samples/demo-stereo__48k__M700__awgn-cn0-80dBHz.flac",
-      "sha256": "dfa55854a87866219cd709f44c1a57f213aa72656f29433737dc49054aaaf88f",
+      "sha256": "b976b74f2d9a581f1568da092ab25e57e408b456fb46da0909a37fa8a32b84b0",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -11128,11 +11128,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.764310998725087
+      "snr_db": 40.1496687728755
     },
     {
       "file": "samples/demo-stereo__48k__M700__rayleigh-cn0-60dBHz.flac",
-      "sha256": "4fa2003f0f25544b7d06d158ee52acfebc9cc5d19570aac239c6932935c9e0e5",
+      "sha256": "ee9702dbd0332f528c8bb4a372f569a037a6bb926bfcccf7d1f9aca3e22b3267",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -11216,11 +11216,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 1.9261758275579455
+      "snr_db": 1.966703379419898
     },
     {
       "file": "samples/demo-stereo__48k__M700__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "f2236c9a3dcf774a238a492373cab12932670b41fd5b8a469c00501e92d2678e",
+      "sha256": "ae4b9a36f57bbaa66919134a8c9c7f55f57c905aa39525fdb3cc7370f7392fc4",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -11304,11 +11304,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.010963876153084244
+      "snr_db": 0.011412089545252977
     },
     {
       "file": "samples/demo-stereo__48k__M700+SUB100-48K__awgn-cn0-54dBHz.flac",
-      "sha256": "263e79101b31b677c192c4af2883c25317bf9ff514eebbeb7e7a1fdb8f89edac",
+      "sha256": "03f060ddb127dd9feff7f287d35bd3febf043b517db486ed7fbdff0d93c52998",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -11452,11 +11452,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 12.779102851944286
+      "snr_db": 12.950737970576133
     },
     {
       "file": "samples/demo-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "fef4877eef50d762c658d011be33784c0986ea01bdadb29421c22c57314d0e72",
+      "sha256": "acecf6d432393263e5f7104b1728a5bc65188a2351197c788aaebddcd2243212",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -11600,11 +11600,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 16.611457050786047
+      "snr_db": 17.083753437706264
     },
     {
       "file": "samples/demo-stereo__48k__M700+SUB100-48K__awgn-cn0-60dBHz.flac",
-      "sha256": "6bd05cfca0f8f46c37a4e959c38fc04c1c8483f143363a6cee613de641029dbb",
+      "sha256": "7a6e903d0dc40ed12bdef4a3dbfffd2f40f5c904264e5fe2c04119611c6821c7",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -11748,11 +11748,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.974191032926782
+      "snr_db": 22.944897017226022
     },
     {
       "file": "samples/demo-stereo__48k__M700+SUB100-48K__awgn-cn0-66dBHz.flac",
-      "sha256": "0c797f08a5b3485cf4cfb04136e1359b923cdf870b8b996f20af69ba43561932",
+      "sha256": "99a8a55ef2243e56806d92063d81ee259e9749781e3b2a818ecba286ff0103f3",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -11896,11 +11896,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.561141089156354
+      "snr_db": 28.957636741651296
     },
     {
       "file": "samples/demo-stereo__48k__M700+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "e6aa192b1dcad468b5d3805491f173e1a871d6ff0b2f1095c173f69d8c79168a",
+      "sha256": "dc6288d1835f1c69c156b49c56c77f7807de04fcb9c08d0eba5edd0469741387",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -12044,11 +12044,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.764872999551123
+      "snr_db": 40.307517176009846
     },
     {
       "file": "samples/demo-stereo__48k__M700+SUB100-48K__rayleigh-cn0-60dBHz.flac",
-      "sha256": "c367f90d170b43add6eca619afc9c33ea594221329fb92c3a94dd0123d280d2b",
+      "sha256": "b8b56d840c68ca82ce5f95ab7e8ac14319747a5051a0f861a94e451f70347700",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -12192,11 +12192,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.643945869949427
+      "snr_db": 12.148031523554163
     },
     {
       "file": "samples/demo-stereo__48k__M700+SUB100-48K__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "6d313d3e462cdecbddfc1a22021dbf0481a67bc5044812d347fdd486d3256b0a",
+      "sha256": "848400d0d813098ad1e4dc380f5b40e821979b0abba838e5d12418f818854cbf",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -12340,7 +12340,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 20.143211586229597
+      "snr_db": 21.29498946572651
     },
     {
       "file": "samples/demo-stereo__48k__M700Y__codec.flac",
@@ -12432,7 +12432,7 @@
     },
     {
       "file": "samples/demo-stereo__48k__M700Y__awgn-cn0-54dBHz.flac",
-      "sha256": "9b14dde01b4119e95ef5ff8e325de9c912d9821934e037dc60e5eca6af3e02c4",
+      "sha256": "5764cf7a0110429a193361409db2adf462952841630e08f4394825b2cf5d7639",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -12516,11 +12516,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": -0.0038151688922037044
+      "snr_db": -0.0037637549523151298
     },
     {
       "file": "samples/demo-stereo__48k__M700Y__awgn-cn0-57dBHz.flac",
-      "sha256": "9849aee4316988c299ed13e6d79efd3cefc57a6dd8585ea278e6ad0128d8a526",
+      "sha256": "af7ab36536f9b951137add954f906b03ca1d0892175b12f18ccfdeec0598b68a",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -12604,11 +12604,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.42080220657055545
+      "snr_db": 0.4275638510277118
     },
     {
       "file": "samples/demo-stereo__48k__M700Y__awgn-cn0-60dBHz.flac",
-      "sha256": "6cc3a2d063e6afa0b499ec10ef3d79ad18faa86e885cbd5957bad3e4caa0bf62",
+      "sha256": "740a847259ae226fbbdb0b851ff25174de70e792b2a5ff22f13c83b218d45d78",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -12692,11 +12692,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.944868876559845
+      "snr_db": 11.820172449652333
     },
     {
       "file": "samples/demo-stereo__48k__M700Y__awgn-cn0-66dBHz.flac",
-      "sha256": "5cb95467a07ccb9fe5e6c1379365dc83e3637f8ed7b20d3e0424fd613c5d726e",
+      "sha256": "c1f56a40419cb6305f91e6977928cd1c843087a35fa04e4aa8eb51ff5101648c",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -12780,11 +12780,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 16.995792448373454
+      "snr_db": 25.187864637143722
     },
     {
       "file": "samples/demo-stereo__48k__M700Y__awgn-cn0-80dBHz.flac",
-      "sha256": "b7c2826c982de0f6066ce6277f737cbb80c971738744a9812f8f3b3a07cc850d",
+      "sha256": "1dad3bb513966a601001b7760b21bb002dacdf7829ea95491f8413de1418773a",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -12868,11 +12868,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.736284551640832
+      "snr_db": 44.043273556348154
     },
     {
       "file": "samples/demo-stereo__48k__M700Y__rayleigh-cn0-60dBHz.flac",
-      "sha256": "4b31ab307c05513fc872ab2b2a94c97fff3c78f982cddc9e12f38bff0f50a697",
+      "sha256": "e90f1b4513c01e5ab890f4ea739d0a28bbdbc8ea8e51382ed4009353cc1af122",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -12956,11 +12956,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 2.582314667772294
+      "snr_db": 2.646878261653063
     },
     {
       "file": "samples/demo-stereo__48k__M700Y__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "234ad553815175b29d808a24bd5d4a0cf3a35eedf34bc049a9abed22fcef566f",
+      "sha256": "128dacc5506ba93788d7cd087c0bcaff7b71c982636f60d5a092d59d121299f2",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -13044,11 +13044,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.03469638762698784
+      "snr_db": 0.03553128485404217
     },
     {
       "file": "samples/demo-stereo__48k__M700Y+SUB100-48K__awgn-cn0-54dBHz.flac",
-      "sha256": "8106f15a2c80b2a1f757ced800cce53d9c059905954708b7b1477f48a61d44bb",
+      "sha256": "bab3c02c4493b84ef3af26f30f79f2026a5226e5eac6d788fd7d11876f69667e",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -13192,11 +13192,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 12.604141854584704
+      "snr_db": 12.779273717290462
     },
     {
       "file": "samples/demo-stereo__48k__M700Y+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "77868f2144643c38fe1441a75b8ebc6be37584655f07a74cd5cd7347a5ecb5fb",
+      "sha256": "89bd49a8ee5044ebfaf7fc3e152eb0e1a5164ad7e853c999c07d4029774e3c60",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -13340,11 +13340,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 16.512771381846537
+      "snr_db": 17.17120996004827
     },
     {
       "file": "samples/demo-stereo__48k__M700Y+SUB100-48K__awgn-cn0-60dBHz.flac",
-      "sha256": "d2d3441bf50675458a2f3eb0cfafa48d07ceab8c2a1252027288070d30fe6fbd",
+      "sha256": "25e36f281b7c87e4357e5c9a812c3064b1260e1d259d4030fce77b92c63c3677",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -13488,11 +13488,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.315049787771656
+      "snr_db": 24.71220391247205
     },
     {
       "file": "samples/demo-stereo__48k__M700Y+SUB100-48K__awgn-cn0-66dBHz.flac",
-      "sha256": "25d6a273a1599b09732b1cc5ff354f3e2b1df0f3bd23eff7b35856dc096fa03e",
+      "sha256": "1eb637a714d6599d7267a7f685bb1607d65784f77c16c3fad26355e8ba77029e",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -13636,11 +13636,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.526948003218614
+      "snr_db": 31.03454057783639
     },
     {
       "file": "samples/demo-stereo__48k__M700Y+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "4ccaea5fd385f9368130849896b2b2863aae2159f201dfdc1770720a5c1d0d42",
+      "sha256": "c98f98b0340c586bd116f5c2482a4308c73efc615ae6b4909459a6b0bc37c00f",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -13784,11 +13784,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.737047521031307
+      "snr_db": 44.21790701432818
     },
     {
       "file": "samples/demo-stereo__48k__M700Y+SUB100-48K__rayleigh-cn0-60dBHz.flac",
-      "sha256": "ea07f8a15171124321fce7c7a38a58977d03d60ca251c5b9190aae1be36a0f02",
+      "sha256": "a59a6756f756849fee792f1c56cf426a53e653ca3685e71e4c1ebe3ba45b6d7a",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -13932,11 +13932,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 12.03270873376602
+      "snr_db": 12.724958431892134
     },
     {
       "file": "samples/demo-stereo__48k__M700Y+SUB100-48K__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "9250fa48fbd73dd009e2005d73eabc6de36a88a59bd19a5b95ba72162f76b715",
+      "sha256": "f1220a52b54b42cc4c201c920133cebf2808af8d70c4d183f75b7f52ed13ca3b",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -14080,7 +14080,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 20.06149909549624
+      "snr_db": 21.331422247281395
     },
     {
       "file": "samples/piano-mono__32k__B200M__codec.flac",
@@ -14172,7 +14172,7 @@
     },
     {
       "file": "samples/piano-mono__32k__B200M__awgn-cn0-54dBHz.flac",
-      "sha256": "66dcb9def7ef4132eac914172a9cba58017909d907b7b2f53c9fc3367a994122",
+      "sha256": "2b412df516e1470e92e9d23233e0e50560dab99f9410aafb494e41cf85ed67fa",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -14256,11 +14256,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.5670711772300505
+      "snr_db": 0.6324356847936266
     },
     {
       "file": "samples/piano-mono__32k__B200M__awgn-cn0-57dBHz.flac",
-      "sha256": "63454b45c6dabcd314d29f4e650686f975c588e2eee3a798c62d449941597764",
+      "sha256": "5b9009bb681073dec7f86715d674f26f37731f4cb87f3551283f463af5cc62d6",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -14344,11 +14344,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 7.9239592211138055
+      "snr_db": 10.516778333782195
     },
     {
       "file": "samples/piano-mono__32k__B200M__awgn-cn0-60dBHz.flac",
-      "sha256": "eaacf98e5ea1e94bbe414b52ec832c51053ff1851407ca270213d81dd902ca0f",
+      "sha256": "a21ffae2812f88e145da66a28f798db5ec99f5abad4dba1f3ea094ae2eaa6a30",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -14432,11 +14432,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.790525327977656
+      "snr_db": 21.549706163154386
     },
     {
       "file": "samples/piano-mono__32k__B200M__awgn-cn0-66dBHz.flac",
-      "sha256": "45c75cafdb876c068a0f741c1f15399d05b50a421a36efa588e10905b39ca5d1",
+      "sha256": "17019dca50ea887056493a76e116354e17d8a89106657f6b4fe7e2e80e33ab7b",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -14520,11 +14520,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.99787783815036
+      "snr_db": 25.127020555583247
     },
     {
       "file": "samples/piano-mono__32k__B200M__awgn-cn0-80dBHz.flac",
-      "sha256": "943db0158a41202a845d073ca8c0816515cead9e30176c40a64ba56ad077669c",
+      "sha256": "6b2df6a56abf7ad23ed19707beb9a190a7abb890491024b7c2e74f498cde73c7",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -14608,11 +14608,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.164599374037225
+      "snr_db": 52.5669131088938
     },
     {
       "file": "samples/piano-mono__32k__B200M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "8869f2463a97d763544e2ecf38ed42692a70e3dfec6a7723a1039aa34da891e9",
+      "sha256": "297c963cc7fcd8ad8fa95426e007e42715bf239f650e923854ce1c12112f8aaf",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -14696,11 +14696,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 4.58321340061204
+      "snr_db": 5.310263360640589
     },
     {
       "file": "samples/piano-mono__32k__B200M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "a2db7a2be74f4a1bb26174d277afe7dd73dc134b889fefb95cf2bac3fbb1af8c",
+      "sha256": "98b300246bff052cf39c12ad666d7a246051fe071d9398d4f9a147ae63ee0e67",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -14784,11 +14784,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 4.581012939307136
+      "snr_db": 5.404993077206946
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "179e75a3ea5e0b6793f1f21e2701e4d648034cf847daa53048b51ed2e82678fe",
+      "sha256": "51d9317a10a53d60c8ca01b89b73f55dba9fae169bc68ddbcc435f73a1cb584a",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -14932,11 +14932,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.612007971710497
+      "snr_db": 15.402433643351362
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "ad38bec2ddb7d6633176374f30e2282d1ad5a66d92995b4ed390318d5091f3f0",
+      "sha256": "806fa20cebdb211b86b2e6dbab617f79dfd931feee10609ba40d83eb3fac4446",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -15080,11 +15080,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.84476583186859
+      "snr_db": 23.525972188559283
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "c0e20ebba3cddbf13c23c416b2188b218174e018deadb08c457f00f0e78c3172",
+      "sha256": "8824b7f886f4533d0c9c79b68019850acc91cda5f38231ae8850172e266acb15",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -15228,11 +15228,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.119646687444662
+      "snr_db": 30.229617523059048
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "7acc25ae8841f2272108c715c4ee5df1af030b81ad76ddf1b1024c8dda1089fc",
+      "sha256": "367f62e76771fe5815636255fe0532e6552fc5139a943db634fc0ad14df3ac01",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -15376,11 +15376,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.139742953449794
+      "snr_db": 32.65443384284811
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "5fe6e006684572b86f77da1fe308ee29f0207c1a5447541af43141dce66ce2b0",
+      "sha256": "bd314095963605a3cda8fbff568c146256bb192a77dd7b150e93d0b663eeb846",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -15524,11 +15524,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.164710072869182
+      "snr_db": 52.599614411468984
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "96f29c6b9562fcd13d569a3f155bcb9153a0fc773527552fa1a0f96627c3796d",
+      "sha256": "f4bcdb6471b7b5b713ccc27efd0df56d30979feeaab4b46030ccd152739f9301",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -15672,11 +15672,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.82488217193299
+      "snr_db": 15.652820124594587
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "28fa9f8acb89e4cac5e7a6c06d03dde8c8787ca6d59c8f12dead325b73e48553",
+      "sha256": "78aeffcec9db27513b4645ff0bb2c4ddb51675b53a8809d627523804dfbb6add",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -15820,7 +15820,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.591911249264749
+      "snr_db": 21.54198590985309
     },
     {
       "file": "samples/piano-mono__32k__B200MY__codec.flac",
@@ -15912,7 +15912,7 @@
     },
     {
       "file": "samples/piano-mono__32k__B200MY__awgn-cn0-54dBHz.flac",
-      "sha256": "53a2164b56f8b492ad440f215ff0ebc4bbc6c09e1d928323894bb66548c4c80b",
+      "sha256": "d31aa31f034005c4676d106299215281dd347eeca1d6bfe740be4879324872ad",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -15996,11 +15996,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 2.7730491008322544
+      "snr_db": 3.1629184322591195
     },
     {
       "file": "samples/piano-mono__32k__B200MY__awgn-cn0-57dBHz.flac",
-      "sha256": "b19a83fcb6518412dfa53bcd5a6043be6ffb8b74b3e6d7d49fdf4cc1c4faeec5",
+      "sha256": "85d583107e70c1c1148968d40f31aab3a0908e6a1282d993911e9bd1877c78bd",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -16084,11 +16084,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.265172255989848
+      "snr_db": 17.175115204704717
     },
     {
       "file": "samples/piano-mono__32k__B200MY__awgn-cn0-60dBHz.flac",
-      "sha256": "d7fa28db9ca50c116737cd6af86fc1b56f318e87117dd5d1dc46195f9faa9e18",
+      "sha256": "623b1ab1586c0f8f36439e482bbc9b350fb057c475e06d25fd6010c6eda62658",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -16172,11 +16172,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.700966819396807
+      "snr_db": 20.46692712825394
     },
     {
       "file": "samples/piano-mono__32k__B200MY__awgn-cn0-66dBHz.flac",
-      "sha256": "4eac379dcaea6371f90545812c56011519bdcee342016c61b4dead10cb199ebd",
+      "sha256": "f1407b840774d1ce1f6b3b046c38726dedd38e243ef9e8da1b22733b80d60152",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -16260,11 +16260,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.98664222899384
+      "snr_db": 24.98476591160793
     },
     {
       "file": "samples/piano-mono__32k__B200MY__awgn-cn0-80dBHz.flac",
-      "sha256": "32270ccf669a73d162c59377c008d3bb2c06d5079ec1f317f41451ceb5d5f5a6",
+      "sha256": "8beeb109364deea6815de3b30cbd36b65bd92c075c9bd4ccbbb0f50595aeffc4",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -16348,11 +16348,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.161734182281899
+      "snr_db": 42.36928783311861
     },
     {
       "file": "samples/piano-mono__32k__B200MY__rayleigh-cn0-60dBHz.flac",
-      "sha256": "cfdc73925ef7607feccff24fee283c0ea2b1d68333f8b989e64ff7a4b1995e58",
+      "sha256": "2cc69a648d8f5a9138482feb88d1482cb40a1c6ff8cd018e74dbad0ae042158e",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -16436,11 +16436,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 5.35495829349287
+      "snr_db": 6.317942422664228
     },
     {
       "file": "samples/piano-mono__32k__B200MY__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "51b0cc257b1652e37359e86e93ddf9c1fd58f97e3bd751c3e67d3aed7c6506b1",
+      "sha256": "8c19e552bd91bdf8fa0e2df38379ad95405e042893f00cebfbf728ac8d821151",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -16524,11 +16524,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 8.680509921400477
+      "snr_db": 12.03111590498158
     },
     {
       "file": "samples/piano-mono__32k__B200MY+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "b581d9f5f0427b7410eb427f045544182f4121e83bc13feec2cf897c07593b50",
+      "sha256": "44fe927dd06e922c192c23ad3bd92c8b3c6d3ff2e20387fae5448c214b40133c",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -16672,11 +16672,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.676481942046756
+      "snr_db": 15.668449777780229
     },
     {
       "file": "samples/piano-mono__32k__B200MY+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "ff425e128925d8e725e835b524fa87df41cd7b60c1e42686bcaea1475fe1d4e4",
+      "sha256": "71d314d294a1bad0f785bf868e01a76ae19798e8d64a1b5baa162ed21958424d",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -16820,11 +16820,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.010207314449257
+      "snr_db": 24.505196174797387
     },
     {
       "file": "samples/piano-mono__32k__B200MY+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "7a82f7a21bb488e18c208c687d3466afeafb93f0b780760c9510d5bb448328dd",
+      "sha256": "447bff0c72080b57d45ed4708ebc195df1d1d77347b941355062815854999691",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -16968,11 +16968,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.08831619938094
+      "snr_db": 26.99838550720658
     },
     {
       "file": "samples/piano-mono__32k__B200MY+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "97d57cd561fe0a26cc2ccba41dc74d8c39d845b686cef5bdc8e677258f98f01e",
+      "sha256": "3d559c989947a475b7044305ba609a6d6eb7cafe4bb6f40db2cd4992c4aa0304",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -17116,11 +17116,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.13423181494581
+      "snr_db": 30.443063078454735
     },
     {
       "file": "samples/piano-mono__32k__B200MY+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "01943b47df1492757e6983bdab258e101d1248073d6b5c43e9b665d9182285b6",
+      "sha256": "6f4da294945c46c692a8456940c0bc2f4281bedbb02b8758688350a077351c95",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -17264,11 +17264,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.162859567001064
+      "snr_db": 42.49074157943915
     },
     {
       "file": "samples/piano-mono__32k__B200MY+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "71c8196a7854ec642415f74b6c8254ea183f9cec08d25990f680382589a26a85",
+      "sha256": "b4098899c705e349443ffa8d4417ad5c7bc73d092ef98a35b09aa2307aed3c54",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -17412,11 +17412,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.040272868424536
+      "snr_db": 16.3858449887412
     },
     {
       "file": "samples/piano-mono__32k__B200MY+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "2817bcd6a435e8ee0c216df20bfbafcd0156b828299e187410a0b2bdf7af35a5",
+      "sha256": "0ae196c729c87f27f7c073c3f13632acb3e779d4e24d94d2d1c158ae2e7e7fb2",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -17560,7 +17560,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.940553299580717
+      "snr_db": 23.833731349056556
     },
     {
       "file": "samples/piano-mono__32k__FM__awgn-cn0-54dBHz.flac",
@@ -17845,7 +17845,7 @@
     },
     {
       "file": "samples/piano-stereo__32k__B200__awgn-cn0-57dBHz.flac",
-      "sha256": "88f6fc12ffb8b26a7e3466c7588760afdf3f9a4d88adbd69036911a07d7ce3c3",
+      "sha256": "9683adf1dc176e80464d43d732225eff89e79f23fd9dda463579d722984f3080",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -17929,11 +17929,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.5416355282615943
+      "snr_db": 0.6053240592374747
     },
     {
       "file": "samples/piano-stereo__32k__B200__awgn-cn0-60dBHz.flac",
-      "sha256": "a7181ab8da0ae4c9766e0c5eb29c5bf452e9bac1e5c9e724079cd482c465d726",
+      "sha256": "6ff08a8fe59066ffe37d6d3d08472f4327a15982f7670788b28f8c484e94fbf6",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -18017,11 +18017,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 8.561558727863446
+      "snr_db": 12.313829887022811
     },
     {
       "file": "samples/piano-stereo__32k__B200__awgn-cn0-66dBHz.flac",
-      "sha256": "e31144058619c24f8e418959de82649d14707a06a9f09f4382ff72fb8e284c1b",
+      "sha256": "5517b86287576f86bea817fb808e921ccbde9f056165ff138be23ba0a8d58e46",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -18105,11 +18105,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.57930129938919
+      "snr_db": 22.892161589640025
     },
     {
       "file": "samples/piano-stereo__32k__B200__awgn-cn0-80dBHz.flac",
-      "sha256": "7365980503f11d2ed94d26058b854d47a1efd65bc46e70a0386e87007c60dbd9",
+      "sha256": "966be9c3d7f55af5008946bdd451f2828a0fa491450c522b1b3a28e118859b2e",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -18193,11 +18193,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.848743650764368
+      "snr_db": 50.502697008327175
     },
     {
       "file": "samples/piano-stereo__32k__B200__rayleigh-cn0-60dBHz.flac",
-      "sha256": "b44e65a8a7a04a430fb77ece65c8246945f54898768aea42c11ee41ff0a8cea1",
+      "sha256": "05b7739c77f7e3ff5d60d31376d23615ae44f910aba68b8a35260ea3aa3cca7f",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -18281,11 +18281,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 2.6973177113654896
+      "snr_db": 3.0386770835174826
     },
     {
       "file": "samples/piano-stereo__32k__B200__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "b618f2340f777757329498296849bf02baa0842cd47b66689fb5a635c00e97df",
+      "sha256": "4d00214cb16761c3961a151adc4090d0ff25ae765bbce07f4e618aac4bec79d5",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -18369,11 +18369,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.07891225543541572
+      "snr_db": 0.09051815406915244
     },
     {
       "file": "samples/piano-stereo__32k__B200+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "16b38b9ee8f3b90600ae45174cbaa752525845f6a70dea5bf3d69ab311e3d39c",
+      "sha256": "89a06213bd49191694bbff2f203d6750826317f453d1553d1e971703b55273e9",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -18517,11 +18517,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 5.1102078815990994
+      "snr_db": 6.054049818792003
     },
     {
       "file": "samples/piano-stereo__32k__B200+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "0d7b73a742ba764152e313388788d7f7e5b0fa601c9d302829408c70e68f7899",
+      "sha256": "435c4f337a23b64c328128e175d6421e13cbb13dde5e92ea4e3408d724a10717",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -18665,11 +18665,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 5.683064284658641
+      "snr_db": 6.873111334468607
     },
     {
       "file": "samples/piano-stereo__32k__B200+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "7ac1399f57801cc8c276eb4bef11b8764543670fd74196adef17ce38c1c9a628",
+      "sha256": "b57b2884b57883f26baefae163f9ff43cbb721994b1b44eb7fa4204480d7fbea",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -18813,11 +18813,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.038119460063388
+      "snr_db": 17.597252388968677
     },
     {
       "file": "samples/piano-stereo__32k__B200+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "3bece458b8a5d4344fefe2a4e4236db9d43c9c042bb3fdebf8584d8ad82e0a5c",
+      "sha256": "1a7a48197c2540b94867e63a03bfea0020231adbd79665163b270b9e84edfe70",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -18961,11 +18961,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.744864349102713
+      "snr_db": 27.007481310853024
     },
     {
       "file": "samples/piano-stereo__32k__B200+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "130b4463d6d0c09e9ad829fd522e7903333d5047f0dd870faa16d4f9b332eefd",
+      "sha256": "b63651ed280dc41a8fce576759b3f2d662b232869c9afb916dadae1abac182ec",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -19109,11 +19109,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.84865501460104
+      "snr_db": 50.55320583740077
     },
     {
       "file": "samples/piano-stereo__32k__B200+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "81cd5b35dc60806aabb9fba1fbe518d11edbd4e94fd3401720194d95bea7fb46",
+      "sha256": "dbb27d4dcff407d44d2420d05d01d795394ccfd459ef8e171294b612e9d8413c",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -19257,11 +19257,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 6.635654193964228
+      "snr_db": 8.314381431102868
     },
     {
       "file": "samples/piano-stereo__32k__B200+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "ac04a61ea9799ffd40b7a70ef59100bd6c5fdef335771b86a8e588c84271e0c0",
+      "sha256": "5877406e5d8d0584944e6ba415553f4f2356425819f84b9cf38d4b7e00e5091d",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -19405,7 +19405,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 5.396829586356229
+      "snr_db": 6.4442727387328365
     },
     {
       "file": "samples/piano-stereo__32k__B200Y__codec.flac",
@@ -19497,7 +19497,7 @@
     },
     {
       "file": "samples/piano-stereo__32k__B200Y__awgn-cn0-54dBHz.flac",
-      "sha256": "21e07a7cdb7c93d8f1be9e4ffbd7a5cb652dba5db3a1d02ee5cab82fe77ce658",
+      "sha256": "aafd8c98aee9258e1b6827d63a68b3b6379979c2986fa9aa4ae6e62a8f606b17",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -19581,11 +19581,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": -0.0004647112602247791
+      "snr_db": 0.0007757279501181002
     },
     {
       "file": "samples/piano-stereo__32k__B200Y__awgn-cn0-57dBHz.flac",
-      "sha256": "0ab464153d27ea43f7f75609d0de0841202d15ea32a73614013c376289f78a26",
+      "sha256": "874ae70420abd38449b4794f852cf57f7bdfab43fe1401cd3bf7d38d82fce5e4",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -19669,11 +19669,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 3.183415450801178
+      "snr_db": 3.6944204422478935
     },
     {
       "file": "samples/piano-stereo__32k__B200Y__awgn-cn0-60dBHz.flac",
-      "sha256": "6e7383b7aec83a33788280ce584910b974261e44fe11fa9ef40bbc486cfc0d87",
+      "sha256": "09f6d5889c6b2f1926ded563651f3e6057114ef6af53736576427855a32b41a1",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -19757,11 +19757,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.129910589136973
+      "snr_db": 17.962761431234302
     },
     {
       "file": "samples/piano-stereo__32k__B200Y__awgn-cn0-66dBHz.flac",
-      "sha256": "fbdd12e926f31b5b576f35351a2f276672afd488b1d0babc79e408a34a1fac9b",
+      "sha256": "1f5ec5897e8e7782d021288394dcbad00f5fe5246adf56ea5db04ca220f9af86",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -19845,11 +19845,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.595692571929261
+      "snr_db": 22.898438120830512
     },
     {
       "file": "samples/piano-stereo__32k__B200Y__awgn-cn0-80dBHz.flac",
-      "sha256": "844ebc1770bab6dbdfff0baf45bf77c32d0d0df9824e3275fe9ae2dc6eef7ec2",
+      "sha256": "bd463ca9fc8fbb3aa7c6c60f2b269bdfbbfaa2084b2cfadb1b0e0cef73b9223b",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -19933,11 +19933,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.844354436274202
+      "snr_db": 39.93896385373304
     },
     {
       "file": "samples/piano-stereo__32k__B200Y__rayleigh-cn0-60dBHz.flac",
-      "sha256": "3a41dca09f014908639f6b976ebc0a5adc28f031ef74b2d70910b490be841797",
+      "sha256": "2fc55226824afaf65714f194d8f6e9a0bfae07b4300e1e9f8fb4b7004d3bbbe5",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -20021,11 +20021,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 3.5805568497896494
+      "snr_db": 4.090893187531515
     },
     {
       "file": "samples/piano-stereo__32k__B200Y__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "85c89995c53edbc45bd7d6f1d7d5ec1b0ee73d9e38d1f3e2f9d3c518efc50d8b",
+      "sha256": "7a5404342ab2736a6a45ce427d856b1c43f01f10e1a3d5196e85d1bd8b1b0e0e",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -20109,11 +20109,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 1.0203654163625562
+      "snr_db": 1.138961646329953
     },
     {
       "file": "samples/piano-stereo__32k__B200Y+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "c41db16ff9357086e036c58ea5475ad6ffa0e9709ce6e12a3ffe4ea25204059b",
+      "sha256": "8b2a408144dc3346de7a65b54fb2d7ef2edf866fa312b4d7de901eb95a4d8a5d",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -20257,11 +20257,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 5.056693747622139
+      "snr_db": 5.993607973937596
     },
     {
       "file": "samples/piano-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "0b366c9a093e6892e112d9b239dd531cb614e6c021195a4efcfda50e5ed074a7",
+      "sha256": "a4f5cbe670149c3ce3229b59e4f6e01f8ccbe24f9a5571ce3b105b0ae182015f",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -20405,11 +20405,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 7.334688864027909
+      "snr_db": 9.652044479507612
     },
     {
       "file": "samples/piano-stereo__32k__B200Y+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "6c5cf0e7c80df3708f2a42843def33957d2031d906bd306de1f44ac695b8a3ec",
+      "sha256": "55bbb33506c125cc4592252a14d4e8ca7fa1222ca278da71752e1db5b0687036",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -20553,11 +20553,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.580318687770669
+      "snr_db": 22.238575012102977
     },
     {
       "file": "samples/piano-stereo__32k__B200Y+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "daf672bcd05d209513b917f662c1690480a259e7a6ca7cb291d5175d5c0b6916",
+      "sha256": "e2ef1bfec02ff4510d77c66623aa884a4dfc6cc5911e6a763e31e4d35349c7ae",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -20701,11 +20701,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.754917392812793
+      "snr_db": 26.668665656894742
     },
     {
       "file": "samples/piano-stereo__32k__B200Y+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "0c0beeeef735f1a1c1a34544419dc813c0590074e5d06385b8c0a87ce9526027",
+      "sha256": "1b9a037f47a3ba9e6168c4d35b133319cf6779ea53e9cbbe22176721da68a0dd",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -20849,11 +20849,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.845886995013782
+      "snr_db": 40.09979532780826
     },
     {
       "file": "samples/piano-stereo__32k__B200Y+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "b04fcdf418244a9a4efadd874c20377a283b41c4f9d856a6a6e4891d1d9bd948",
+      "sha256": "5b593be6d94fb8383e78c2fd94fbf9808f2ad79c91fe85b43cda48ddfef2db58",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -20997,11 +20997,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 7.200248634765477
+      "snr_db": 9.267365639112718
     },
     {
       "file": "samples/piano-stereo__32k__B200Y+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "cf90aae331b183ef9ffef7c3325521e445f378117afc917ccaec35d9018a5f9d",
+      "sha256": "82ae163df34e5e37ba49a8acde28302af46c799e93bdb8310fe98b81f48c1f48",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -21145,7 +21145,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 6.072815897491459
+      "snr_db": 7.474683833447273
     },
     {
       "file": "samples/piano-mono__48k__M700M__codec.flac",
@@ -21237,7 +21237,7 @@
     },
     {
       "file": "samples/piano-mono__48k__M700M__awgn-cn0-54dBHz.flac",
-      "sha256": "ca752e82011e295aa9cd8df1ce9fcd18464c460b4612d5ad5b3173ead3b9ca48",
+      "sha256": "67b1f317e4aac3b3d50731e6919341705b3c626e908142a7ec7f89f0a76f8561",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -21321,11 +21321,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.03736533843403742
+      "snr_db": 0.03813515072094065
     },
     {
       "file": "samples/piano-mono__48k__M700M__awgn-cn0-57dBHz.flac",
-      "sha256": "11588416470d83ff41af592082a7201b6774e4a3e92bca0fcf8073ae4fe09b5f",
+      "sha256": "8159bac181e1561380ce61fe0bb8da28560226e36d7d328f4252a135dc0b1a1a",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -21409,11 +21409,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 2.643605954901718
+      "snr_db": 3.1133637232036127
     },
     {
       "file": "samples/piano-mono__48k__M700M__awgn-cn0-60dBHz.flac",
-      "sha256": "0930e0f43e966f5a551d1efb4767530365b664bfd5251d518c5dbc39e2b27be2",
+      "sha256": "09c77004fa64d87af06b4825a7d744f66a2b8147c61b504f445d6c2e87db83d0",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -21497,11 +21497,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.496441226317199
+      "snr_db": 17.230829657717358
     },
     {
       "file": "samples/piano-mono__48k__M700M__awgn-cn0-66dBHz.flac",
-      "sha256": "c44f537caea264a6b6d078a662ae8f0174ea751ece14aa92a3332ad4984a4380",
+      "sha256": "855a0f8205ce45276e712509b7181625e374e9d2b1ca9cd40ffc37b2c08fec8a",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -21585,11 +21585,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.139940590398858
+      "snr_db": 24.435531196044487
     },
     {
       "file": "samples/piano-mono__48k__M700M__awgn-cn0-80dBHz.flac",
-      "sha256": "4b4f37bb6d45fc1a843fa6043c6dbd9d5efe1e9dd5a2d9fbeead105c4d449bc2",
+      "sha256": "044eae6be1881fd2e0caf9ab47f6712e456c3e7df8e3dcdd2a5568240e46d593",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -21673,11 +21673,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.302718163452198
+      "snr_db": 54.93666244317869
     },
     {
       "file": "samples/piano-mono__48k__M700M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "1a1cbc0d227c3b69417ba1cfc2751d4aabd540bdd1026521a913d94b7eca70d8",
+      "sha256": "1ab24fdb49dcecee594a1c6f2a29e036791dd73f9b3338dfab1ff4a336829b92",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -21761,11 +21761,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 3.346135098497581
+      "snr_db": 3.9238712746280746
     },
     {
       "file": "samples/piano-mono__48k__M700M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "cfac2d2f3ac3043a31f2b8d1ff31612da2f8ba86a2726c67290909575988826f",
+      "sha256": "f1858ff276817c7a6f13ac2d2a677f48f89888be672263d58ee48db0a26d8fe6",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -21849,11 +21849,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.9494704701093937
+      "snr_db": 1.0755561082286225
     },
     {
       "file": "samples/piano-mono__48k__M700M+SUB100-48K__awgn-cn0-54dBHz.flac",
-      "sha256": "fc1b5a378b0563de6f2c6273931cd1abed3d0e31d0444031aea936b17e2a78fa",
+      "sha256": "d8a3812dc495b53d26a096576af16ebc0bda98d00f42ab2c568eda8f169f1903",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -21997,11 +21997,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 7.86967801050988
+      "snr_db": 11.072877388235689
     },
     {
       "file": "samples/piano-mono__48k__M700M+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "743d539d6df3b3465757d92bc77f58219d1420c8ed250b1c0c4e49fee22b9849",
+      "sha256": "8b9e2e5ac35cb6e3c9b9a6ead3835603ac58c9673c2b828f206bfb5ef8f266e0",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -22145,11 +22145,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.57749460349756
+      "snr_db": 17.685351254034295
     },
     {
       "file": "samples/piano-mono__48k__M700M+SUB100-48K__awgn-cn0-60dBHz.flac",
-      "sha256": "7a13bb3a02039f22624cc903d23958334e69906b310bb7ac535c28b9f0e3f898",
+      "sha256": "432e938572c80c1ff6b2fa3572e96dc7cea0f3236fe0beecb48189c461dd7d51",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -22293,11 +22293,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.252538952237071
+      "snr_db": 29.359510923012998
     },
     {
       "file": "samples/piano-mono__48k__M700M+SUB100-48K__awgn-cn0-66dBHz.flac",
-      "sha256": "1debd8c9acf6a338291d9efa1471a951f68d84ff35adc7d5cf0f32220a3d9afe",
+      "sha256": "d255a47001291181cf46b32388c4044b8a2a539087437dcadf747c6e0eab0209",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -22441,11 +22441,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.292781015683135
+      "snr_db": 34.917711876722485
     },
     {
       "file": "samples/piano-mono__48k__M700M+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "49c7b33aeb77e182bc55c570e035a23ac847f03eac870e628da8361de58af419",
+      "sha256": "a244cf30edd9f1a4ee680b971d92fb371d03f97e3928c191b7eb5c31cde9db52",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -22589,11 +22589,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.302759441945428
+      "snr_db": 54.9805002049154
     },
     {
       "file": "samples/piano-mono__48k__M700M+SUB100-48K__rayleigh-cn0-60dBHz.flac",
-      "sha256": "5423e565f07a26010d6a644d07ab07d7fab9590fd93ac708097e1596f9e3ee2f",
+      "sha256": "3e6e189ea59e5a0da0513cf527e97b2aaa8f332927858a1b2e5e704ed6bf214e",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -22737,11 +22737,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 8.497192176402956
+      "snr_db": 12.853681270346009
     },
     {
       "file": "samples/piano-mono__48k__M700M+SUB100-48K__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "e829d3a5fbef2173624324d4c2c9c1f2a9cfea5cae778b91564e5e4d262f4532",
+      "sha256": "ae850daaa61628a586125b047c0a0695da50f172dcc2879a4d1c265fe599bf1a",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -22885,7 +22885,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.31399499142962
+      "snr_db": 25.63155033927339
     },
     {
       "file": "samples/piano-mono__48k__M700MY__codec.flac",
@@ -22977,7 +22977,7 @@
     },
     {
       "file": "samples/piano-mono__48k__M700MY__awgn-cn0-54dBHz.flac",
-      "sha256": "ee4ad7cd268f9480c50ad52810a21b46a4515b9ca0718c4485f0e3cdfab46326",
+      "sha256": "9c4a8359c910d80876bd016cb6cb4fafeda49c11a6d2e7b85750a6bf0e0961d2",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -23061,11 +23061,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.33829253251648916
+      "snr_db": 0.3778391164366717
     },
     {
       "file": "samples/piano-mono__48k__M700MY__awgn-cn0-57dBHz.flac",
-      "sha256": "90b281638e55e0a332c6d6278752b631c5c68debdf64f57c78489eb3529df059",
+      "sha256": "793ea47b0eb6fcc69cc5cf0980462ed35400afaaf14514eaad3ae8e54b9d70c0",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -23149,11 +23149,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 6.463035266547655
+      "snr_db": 8.546589851409372
     },
     {
       "file": "samples/piano-mono__48k__M700MY__awgn-cn0-60dBHz.flac",
-      "sha256": "1d97ad1cda96b2d10a7aaa79fe74c0daf8d3f69e7fc2fac1647941bb63d3e623",
+      "sha256": "910b402fb1e337900daae4146c97d1d76502b90f8c74ecf76e24811c3c7e24c3",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -23237,11 +23237,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.934147488755515
+      "snr_db": 20.483845032820266
     },
     {
       "file": "samples/piano-mono__48k__M700MY__awgn-cn0-66dBHz.flac",
-      "sha256": "a2aac98788dbbbc82261c2ef40807521922039ed5f043a073683e7fa3647b956",
+      "sha256": "c90c6ac23bb0ecf02af0d77f23ebe622a778031006aada7a18a9d0ce25a0666c",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -23325,11 +23325,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.155570513098954
+      "snr_db": 24.45195480513561
     },
     {
       "file": "samples/piano-mono__48k__M700MY__awgn-cn0-80dBHz.flac",
-      "sha256": "50e4a277e92054c455fe53d12fd28edee0f878de1784c97b9c1f52018862d2aa",
+      "sha256": "debfe7663820e07ac8d0f9fdac9c48a1cf5f3110f8723853bd37dcc48d5b62ff",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -23413,11 +23413,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.301119643885624
+      "snr_db": 44.081240487424616
     },
     {
       "file": "samples/piano-mono__48k__M700MY__rayleigh-cn0-60dBHz.flac",
-      "sha256": "e6035c45943bcf7fef8d8a43bede222ed85291e4aa75949d9d868ef4b65c00ec",
+      "sha256": "25d405c776fc3ea26f078755d2e53a2bd4e4126b53bd0759ae1a47dced154898",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -23501,11 +23501,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 4.207695814887767
+      "snr_db": 5.0367807502558275
     },
     {
       "file": "samples/piano-mono__48k__M700MY__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "62316c22e12de046bba91ccdb04b0ec5578a02a280314f52d44c719978174a23",
+      "sha256": "09037c55d7895d1a4ea579a66988597fba87456749696137f8a9387d5d2f8c53",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -23589,11 +23589,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 3.5239619867814174
+      "snr_db": 4.198847554689415
     },
     {
       "file": "samples/piano-mono__48k__M700MY+SUB100-48K__awgn-cn0-54dBHz.flac",
-      "sha256": "ee40df607a04c68f6ec43d9f6d0ad6726e153fc5a425d2a34c475090a8c4754c",
+      "sha256": "6f1db2159d418871ed5dbdcd87babeb036e32df66b15bfa7d8a77d58ba8974bb",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -23737,11 +23737,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 7.899710288251161
+      "snr_db": 11.183674479739205
     },
     {
       "file": "samples/piano-mono__48k__M700MY+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "ac6116c4a61bfa0030613d2bd3560f5a4923433786c212c19b0519f5aa747b71",
+      "sha256": "10b09c4d918b39c0fd9bcb78efd0fb5d409c0fffa9fa8b86a2abca98928bede4",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -23885,11 +23885,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.846514476490839
+      "snr_db": 19.937008923540013
     },
     {
       "file": "samples/piano-mono__48k__M700MY+SUB100-48K__awgn-cn0-60dBHz.flac",
-      "sha256": "b81d3210ca2b4967922ca2029bf32e17171cbfe93b9233b6cd3ef72125f96790",
+      "sha256": "cc05439670f8812a1e029e07f867fec2c2efd737d402c671c1c47d0a7b234f8d",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -24033,11 +24033,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.25963422354452
+      "snr_db": 28.076941494307395
     },
     {
       "file": "samples/piano-mono__48k__M700MY+SUB100-48K__awgn-cn0-66dBHz.flac",
-      "sha256": "2826f574a26c63b897e8aed71482b3c352c153ce37beccf8fe8798c9e4b08b4a",
+      "sha256": "ede8c8215a81316b6c100cab2da572b5ffdb942cc14b93ec6cd0f34a58758d4b",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -24181,11 +24181,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.29415615966193
+      "snr_db": 32.64153862089462
     },
     {
       "file": "samples/piano-mono__48k__M700MY+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "b3e9060985d4a3b1f6efe8597a732bae2e7e01a2bdcbcec2176596a9d62df474",
+      "sha256": "c267aa5be5ba46b112e32ff4b100551a9444860c8902d676f36820a4a8306697",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -24329,11 +24329,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.302230404761945
+      "snr_db": 44.29924333948528
     },
     {
       "file": "samples/piano-mono__48k__M700MY+SUB100-48K__rayleigh-cn0-60dBHz.flac",
-      "sha256": "488f0e202c7c67f00efe597092b4be193fa2966a73bc7f3d9e8c4533c6bc9e44",
+      "sha256": "482e251842f77397018583e9b5a721417956fcb9e6cad0abdf1e0498cc3897d8",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -24477,11 +24477,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 8.97340394051952
+      "snr_db": 14.386514413967914
     },
     {
       "file": "samples/piano-mono__48k__M700MY+SUB100-48K__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "2e84bd5cd0998032068af9e045ce969fb8e1860e24bea8eca63a4293cf6ff045",
+      "sha256": "be050660f3cbe140f227a06b413d828c0215e4ccfccca3ec5121ffc3f50c02c6",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__48k__reference.flac",
@@ -24625,7 +24625,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.080621764368793
+      "snr_db": 23.639484349302936
     },
     {
       "file": "samples/piano-stereo__48k__M700__codec.flac",
@@ -24805,7 +24805,7 @@
     },
     {
       "file": "samples/piano-stereo__48k__M700__awgn-cn0-57dBHz.flac",
-      "sha256": "5d7b0cf4ebe513143d5e426f2eb2f47d3b8b01914d61504ca96be9ab85216109",
+      "sha256": "c10fc494d95872b2a8bd31beb22381ba7bb5be59c334506ac3aefc32d596b9b1",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -24889,11 +24889,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.03549034507887152
+      "snr_db": 0.04061049955297864
     },
     {
       "file": "samples/piano-stereo__48k__M700__awgn-cn0-60dBHz.flac",
-      "sha256": "ff5e8ea6e57fc853b0d8956a2ac35602de196b7b55e13f2a40f3525dfe74eb25",
+      "sha256": "a10f79554f8027f4dc1d455716cba946304ffbc611b1cd12266644341223dc23",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -24977,11 +24977,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 3.9642216005319444
+      "snr_db": 4.877492637540715
     },
     {
       "file": "samples/piano-stereo__48k__M700__awgn-cn0-66dBHz.flac",
-      "sha256": "68f81f0c6472349b57fb57a625f2309517f4dac5d917fc331cb0f0fc154cef19",
+      "sha256": "7d89c76b6b1bed72c13f4baf4c6e54182438689b819ae15ba795cc181702c463",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -25065,11 +25065,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.772748142214144
+      "snr_db": 22.967566618421827
     },
     {
       "file": "samples/piano-stereo__48k__M700__awgn-cn0-80dBHz.flac",
-      "sha256": "c5a6a905c94a72dfacfc68ee8ca9c321b9a7e6d8ce064fa645c9972a13f670ec",
+      "sha256": "3330820c200ecb6bf0a22605bb2c3f26fc712b40310c43b904fcb8791be2b83e",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -25153,11 +25153,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.988252509354988
+      "snr_db": 47.62792130514136
     },
     {
       "file": "samples/piano-stereo__48k__M700__rayleigh-cn0-60dBHz.flac",
-      "sha256": "6371ede52d0aa28c04fde08b6c5904e2292266ae94bfc9d27271438d2f10a47d",
+      "sha256": "012585d69bf2e4d0fc953d12f0036d378bafd4dc95c0be59ee66df865f1a8922",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -25241,11 +25241,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 1.925685186308947
+      "snr_db": 2.221484911698205
     },
     {
       "file": "samples/piano-stereo__48k__M700__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "ed5dda1a9c32a7f4a58209d9ede2ccc7cc35c8fc537c2e0a3ab50af0b0999c9b",
+      "sha256": "45a9c64ce4b4111b2ec128c803cad630a8da99bc6bcb228ca368f1bfafb60416",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -25329,11 +25329,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": -0.0038925166368576542
+      "snr_db": -0.0030875315658937513
     },
     {
       "file": "samples/piano-stereo__48k__M700+SUB100-48K__awgn-cn0-54dBHz.flac",
-      "sha256": "7315605d760036a7c7d9c8809a004b173dfcbc218c517d08f07c241707b7c0c0",
+      "sha256": "a25fd5f9e8e3b1b28046c7a56876b8dd98fdef95e3cb8d5992127cb35f57c671",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -25477,11 +25477,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 7.701900182672673
+      "snr_db": 10.882229321896338
     },
     {
       "file": "samples/piano-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "5aa049ffaf56609bc458288798110a6132e01dd5baf54a3fd291d2a50663ee54",
+      "sha256": "03f2f5b66057af9196b121074f68a1c7882ef1ccaff9e84d688bea9461731ee5",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -25625,11 +25625,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.404660248070373
+      "snr_db": 16.111622816562456
     },
     {
       "file": "samples/piano-stereo__48k__M700+SUB100-48K__awgn-cn0-60dBHz.flac",
-      "sha256": "5ae440c7212959ed133661a29d997da97314ce2e9c5796cb50c5434ffac6fd58",
+      "sha256": "d4f65cd50d5e0fc418706ecc681affee694fb3665af49f5e1b22a1e9fb9e59ef",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -25773,11 +25773,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.685218412622778
+      "snr_db": 21.789311621878745
     },
     {
       "file": "samples/piano-stereo__48k__M700+SUB100-48K__awgn-cn0-66dBHz.flac",
-      "sha256": "cb059887e0ef75d75930d3049a7d2592a939f6fdf78677c8d79c74c3ddb356a5",
+      "sha256": "cbbed17ebaf4cb4bdbc16bc3ad75677f9269184a9a8ec1689762f5e578382677",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -25921,11 +25921,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.958437993385363
+      "snr_db": 30.824121152821256
     },
     {
       "file": "samples/piano-stereo__48k__M700+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "1f42c8f8d851f7f395c08987547c2a65dc483a251471679cef42d3c6cf7d13c6",
+      "sha256": "947f8d1068a36ee4c9d6ae0cc0840aeb9daad6fb1de9371adca009b9ba869666",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -26069,11 +26069,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.9886535623515
+      "snr_db": 48.43454671898801
     },
     {
       "file": "samples/piano-stereo__48k__M700+SUB100-48K__rayleigh-cn0-60dBHz.flac",
-      "sha256": "117afd29ee85980b34c611dd865122d34e48b8923ae901a59987d667ac314f4b",
+      "sha256": "7cd27bb3f51b4b120a100e65810d4c04e75a1b4b4945ec158d351c215a725307",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -26217,11 +26217,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 7.815757035679152
+      "snr_db": 11.294841949765797
     },
     {
       "file": "samples/piano-stereo__48k__M700+SUB100-48K__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "bfb07d9b5c5714b3369d668e9e8439a833051aa0a8642b17100a6054d981411a",
+      "sha256": "c38761096f74b3259a4bbf349083aa43c8a32e919fcdd56868695ccff29776f5",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -26365,7 +26365,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.29297141996392
+      "snr_db": 25.82596491332936
     },
     {
       "file": "samples/piano-stereo__48k__M700Y__codec.flac",
@@ -26457,7 +26457,7 @@
     },
     {
       "file": "samples/piano-stereo__48k__M700Y__awgn-cn0-54dBHz.flac",
-      "sha256": "c279e183088bf5c0f214861d6311e12a8edd50c6e01fe972ed99720c615e7e9b",
+      "sha256": "b4dbf65f5b7b020bcfe8915bcd2fe71645d373933081ee9c39f5f5f84a586685",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -26541,11 +26541,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": -0.003405318950533529
+      "snr_db": -0.002667435473159005
     },
     {
       "file": "samples/piano-stereo__48k__M700Y__awgn-cn0-57dBHz.flac",
-      "sha256": "69daecb22c0751cebe5a2a5fe1dc9e8b6e374b23279fa6edb11008f6ff34c86c",
+      "sha256": "3b955b580e4c9834b0647d82b4e19ce69afa900ab2e301a30f0f3f61f9f18f3f",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -26629,11 +26629,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.33246826469597224
+      "snr_db": 0.3770962955793553
     },
     {
       "file": "samples/piano-stereo__48k__M700Y__awgn-cn0-60dBHz.flac",
-      "sha256": "8fd214623c41974373be62c9953dc45ada640b6f73539f852b5c94e93d36c0c0",
+      "sha256": "9724c93b50d9b0eb033872c3553bbf1126ab3d50f823195a5b77ec7b8d30b996",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -26717,11 +26717,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 7.556971550398368
+      "snr_db": 10.925793462121227
     },
     {
       "file": "samples/piano-stereo__48k__M700Y__awgn-cn0-66dBHz.flac",
-      "sha256": "e500fb7066adc9a89be4d34e9ab4cde63c37e933104d8a11fe65130b93bdad90",
+      "sha256": "dd55072e6018cd07e9ab584321cd6e916e0fa2ed55cd9ff8f7f2a7bce4c8c2d8",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -26805,11 +26805,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.776839390091334
+      "snr_db": 22.98390596861487
     },
     {
       "file": "samples/piano-stereo__48k__M700Y__awgn-cn0-80dBHz.flac",
-      "sha256": "43bb24e48a6ec0a4828b657205a7bea44b96cfdee642d7f0af92aafe774f4cc9",
+      "sha256": "dc38ae809e0e4d9ef9f631b09dd854f906db5141ba4eea19aad075ed93620f32",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -26893,11 +26893,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.986744889647472
+      "snr_db": 41.684022861567136
     },
     {
       "file": "samples/piano-stereo__48k__M700Y__rayleigh-cn0-60dBHz.flac",
-      "sha256": "a6644f4134ed247dacf724011df99e9f5761da3c99ef53ba900f828eb260365e",
+      "sha256": "2db304b240e5c08ebfdcb0ccc152c233c3a7ea3288d0e695701abb519abf933d",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -26981,11 +26981,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 2.425171956288849
+      "snr_db": 2.822946070571542
     },
     {
       "file": "samples/piano-stereo__48k__M700Y__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "946e6621d5d7aab15da1267c77b764486c9b5163d082126b3aeed4f33671e429",
+      "sha256": "5bb06cf864883204a8c0e6ba719ea552ef809fb66b06c2424f5fbcb684bc9368",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -27069,11 +27069,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.038641589845209136
+      "snr_db": 0.045089397284338945
     },
     {
       "file": "samples/piano-stereo__48k__M700Y+SUB100-48K__awgn-cn0-54dBHz.flac",
-      "sha256": "901a1b8e181c6d332ac1d574060349d6a0e95e15f068814279282fa71cba8a60",
+      "sha256": "e68c6e356f5d482e445b0bb91150bcc681b02e3f1d83e428b1d80c9d4ee338df",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -27217,11 +27217,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 7.780515589478757
+      "snr_db": 10.986699139251925
     },
     {
       "file": "samples/piano-stereo__48k__M700Y+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "f63fd019a10b0200126f716a89611f41b1ed67e2725baa818af68ad4fe06a1c7",
+      "sha256": "0d8ba884f80b1fef8c08d82c7c5b60f2e17d104d6a18f1d555a7866eb7d07a0a",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -27365,11 +27365,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.422753435336253
+      "snr_db": 16.48147622986249
     },
     {
       "file": "samples/piano-stereo__48k__M700Y+SUB100-48K__awgn-cn0-60dBHz.flac",
-      "sha256": "9a1e0c9531d311b528eefa1c354b81f6662cfdd912e20ea3b4efd5b6d0a02014",
+      "sha256": "7c982849c597ecf2f09b9d4ad856c2e79b954ce69b7052e1dfde2dd06d704c2d",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -27513,11 +27513,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.821690199235242
+      "snr_db": 23.784925570562628
     },
     {
       "file": "samples/piano-stereo__48k__M700Y+SUB100-48K__awgn-cn0-66dBHz.flac",
-      "sha256": "5f33c3bfe3fd8f86a0dc82fab49dd82108cd41a9da43246a6ec3946524fe19b7",
+      "sha256": "067e4f2d02635d12afd5c247f96aebf329a46a3c3c2d1978a19bea05a0716cf8",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -27661,11 +27661,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.95548840152183
+      "snr_db": 29.46487519236986
     },
     {
       "file": "samples/piano-stereo__48k__M700Y+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "81d28a41240b15dc6cc588087b10227ea59badb45f3852ca7bf7680e135f8494",
+      "sha256": "14b896b79d582ee40fbfb08348dd4653d5922941350faf6e3d5041d7cf371df2",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -27809,11 +27809,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.988033991529905
+      "snr_db": 41.95073296938436
     },
     {
       "file": "samples/piano-stereo__48k__M700Y+SUB100-48K__rayleigh-cn0-60dBHz.flac",
-      "sha256": "8c90ae010667c9273f8c2cd5723eb157be63efd5ffefc2cacf63763ce6a43451",
+      "sha256": "06f89d1739fd8188bd7452ee7933600271e20d410cdfe96aa0d0ddda5b41c312",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -27957,11 +27957,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 8.117721758748198
+      "snr_db": 12.044924989837838
     },
     {
       "file": "samples/piano-stereo__48k__M700Y+SUB100-48K__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "7512bc7009465fb9cec45470e75ef6ee8c0d430965507556acc1021a1ae65bb5",
+      "sha256": "74ea1d0b6231742652547909e821d532cbd66ab8cd00a753a12f91e666813a83",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -28105,7 +28105,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.271743496628217
+      "snr_db": 25.609372440822362
     },
     {
       "file": "samples/percussion-mono__32k__B200M__codec.flac",
@@ -28197,7 +28197,7 @@
     },
     {
       "file": "samples/percussion-mono__32k__B200M__awgn-cn0-54dBHz.flac",
-      "sha256": "ad25043750cb3217704a4bb23ef49ecc9c698ad68343268af88eb3ca8dc73f9c",
+      "sha256": "60279eca4b8d15ffee707f21d78e77160e69aeef1c19dc5898784a8dc706118a",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -28281,11 +28281,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.727167871635424
+      "snr_db": 0.7463251680054739
     },
     {
       "file": "samples/percussion-mono__32k__B200M__awgn-cn0-57dBHz.flac",
-      "sha256": "310bd300eabdcb413073ea23334d4df1c1577149e1e2a741c67a42d194dbba26",
+      "sha256": "17aced80ea0f56609df48b664edb3a56aa1f7bb275a4f592032fa291ed0778fb",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -28369,11 +28369,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.711061827961347
+      "snr_db": 11.030141611194908
     },
     {
       "file": "samples/percussion-mono__32k__B200M__awgn-cn0-60dBHz.flac",
-      "sha256": "2a6efba22360709efa999546c3a0fb99f928be4da82126078a66075038457e68",
+      "sha256": "230c97afd3aa9b749e5711de8762e6bd2385cf47adabc6140c9730055f5236e1",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -28457,11 +28457,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.642159970721526
+      "snr_db": 22.43016211377103
     },
     {
       "file": "samples/percussion-mono__32k__B200M__awgn-cn0-66dBHz.flac",
-      "sha256": "fe333c9c99ffd3c80fe5a17692f2f9813da41ed9a0ea006c7f825e7513633331",
+      "sha256": "0c3b1f9e041550ca17089ef02cab9a829598e155602b1e847f1ad1dede8d6118",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -28545,11 +28545,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.09502321805742
+      "snr_db": 25.83196742219875
     },
     {
       "file": "samples/percussion-mono__32k__B200M__awgn-cn0-80dBHz.flac",
-      "sha256": "4b23f106b98d7791531ce8712a61ba67ed16cb33b4e6e60274523944564ea4e8",
+      "sha256": "7b1a4c963242b778ef9c1cd8834dfe63914423fc76816b275cd87c3f3db133b1",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -28633,11 +28633,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.47001318404038
+      "snr_db": 55.48934298451306
     },
     {
       "file": "samples/percussion-mono__32k__B200M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "7d42426df87efa0e0805800ca707bb4fbc62d9b86160dc033b72043e1fc6ab49",
+      "sha256": "9938bef7a71c2dd39d9cf0604ef3fb36a07800ac43908252a42f2a83ca0038d5",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -28721,11 +28721,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 4.874084455670649
+      "snr_db": 5.16031170615153
     },
     {
       "file": "samples/percussion-mono__32k__B200M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "497e92bca38d44f93f7f05b26c7d43b9ac124db199ad4c14fe5eef1dfeda4000",
+      "sha256": "f4fae579470826427fea6109a1f6c1fe1fb836502c0b7554fe9c07789b48e093",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -28809,11 +28809,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 5.792852848565522
+      "snr_db": 6.203388423405571
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "f2564b611351452dfe8db4cd3c6c95fef809a6d01d246373a7f1fd1848e60af0",
+      "sha256": "fb42e0a94ed300f616776acc8162e51911f2f7d900be72a981dbb4922aa8eaaa",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -28957,11 +28957,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 12.98621925805981
+      "snr_db": 16.32395521120553
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "37c4516dcd8058c9f8149b777c064d27a6dbd7d0216e52fbd6832895f3cf7f13",
+      "sha256": "1ce1ea264b9f7c8fd0db095e0625d5348c4f87a466193da49a8493f80b951178",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -29105,11 +29105,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.121449992539894
+      "snr_db": 26.083876809300413
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "3fd5de1a13c4e86b4031d969558448b76819b49f93629b1b6b32a97abb953ea6",
+      "sha256": "413e1e4c2249a24dbb29bb7a056952296a04c6ba12c3888da8e04c2cd696ba04",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -29253,11 +29253,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.447447094541161
+      "snr_db": 34.047895573673145
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "bd2805f157cd6025eda4e0e40daec73c2b30faa4de2503aeaf33580dda3d8ccc",
+      "sha256": "35b0df5df92f01a73837c715205295477a73e22ec78e424528346b27247457c3",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -29401,11 +29401,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.470374175736655
+      "snr_db": 36.03798529632316
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "23f63953227983ea0fc5952c46fb699774c6266f6e52d56d0d5320e8df63c020",
+      "sha256": "7e74d7493f962665205a9c929a3f612522d78f4926cec3ce03374f5876af0239",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -29549,11 +29549,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.470326844542297
+      "snr_db": 55.55064382899467
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "1eb91ce89e83132c11d1d6605a0e4568bfbc696ea096abdb7e4eb244eef12a96",
+      "sha256": "3f906b69eb993e57b1987c568350dfda900a7eed53162359731669a8a8753ea6",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -29697,11 +29697,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.007888531204092
+      "snr_db": 13.003201601727321
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "e2dcc6904aeb557b19b32db27b2fd288fec2522ad331e34ef8ae5944d4972d3c",
+      "sha256": "4ade8067d1adca5e9c9cf434929600c18efa31d95feffc80b4ae9aa0b72b47ff",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -29845,7 +29845,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.048838892516073
+      "snr_db": 25.409889608136442
     },
     {
       "file": "samples/percussion-mono__32k__B200MY__codec.flac",
@@ -29937,7 +29937,7 @@
     },
     {
       "file": "samples/percussion-mono__32k__B200MY__awgn-cn0-54dBHz.flac",
-      "sha256": "e3662d5cbb287d670ae6ce080363ffeea481939a04276a267ba36a8a2467bdcf",
+      "sha256": "568e1f2297062bba5c8d01d98a4bebabeb4558faa47de4859287ee3f97d6b3f3",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -30021,11 +30021,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 3.1779030412680265
+      "snr_db": 3.34493848825713
     },
     {
       "file": "samples/percussion-mono__32k__B200MY__awgn-cn0-57dBHz.flac",
-      "sha256": "3e716a67388060c0509605bc72a8f1799fc9f2b90e216049793095c9f6f845bd",
+      "sha256": "0f9f151be40b19d76304c85bd60f28dd6fe6b4be3d8254e2393993aa5b0c13f7",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -30109,11 +30109,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.564833922206386
+      "snr_db": 17.958778838311297
     },
     {
       "file": "samples/percussion-mono__32k__B200MY__awgn-cn0-60dBHz.flac",
-      "sha256": "9375bfc8b0976900a9db517c7c0cd4871e76e0e59c19c820ca9b63d270f93aa6",
+      "sha256": "c5bd20ec8a4b7fbc6cf23168a9ad2b4cb2cc12c451ef5ba8d00d35a0965696a3",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -30197,11 +30197,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.693000072181764
+      "snr_db": 22.32089529986365
     },
     {
       "file": "samples/percussion-mono__32k__B200MY__awgn-cn0-66dBHz.flac",
-      "sha256": "98c7696b2ce9da10c125a0c57def1390d1b004e24c499f0dde936c17e7e8642c",
+      "sha256": "1c7ab8bc85908cdfdd2965602dfda5beb386ebbb61b65b675d09390776b3c6b5",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -30285,11 +30285,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.14467433523994
+      "snr_db": 26.31770356529355
     },
     {
       "file": "samples/percussion-mono__32k__B200MY__awgn-cn0-80dBHz.flac",
-      "sha256": "b3e7a19e44d8daa72e6f417cb6a8ce85d98c454ddaa326c8294c04dfdc98eb81",
+      "sha256": "8e39bc31fea187abb8496c13ca4663fd0549fb13c79d87ae37efea6f12564ff9",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -30373,11 +30373,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.468796877341786
+      "snr_db": 46.684214847236454
     },
     {
       "file": "samples/percussion-mono__32k__B200MY__rayleigh-cn0-60dBHz.flac",
-      "sha256": "589501fccec34fae59b42e51cc026e7c3e3f72627288960458e06a017d2beebd",
+      "sha256": "041485cd356a718de60c285a4c02a2eb1c9d68edc4036032e4659d61cd973708",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -30461,11 +30461,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 6.0826421831846975
+      "snr_db": 6.506430257953674
     },
     {
       "file": "samples/percussion-mono__32k__B200MY__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "b196a38135ca9e3890ba2d210d817246671e94e30b1c45c910a6e856db7e4f23",
+      "sha256": "244fdfd702c77c1ad40fa6cfc6b1e5fc5f6ccb32bb3e6c59cb441697abcd8054",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -30549,11 +30549,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.901469678304041
+      "snr_db": 12.621780957495952
     },
     {
       "file": "samples/percussion-mono__32k__B200MY+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "e7a4943b8f7ec8242244dda3642c17a17ad45d8300a3d79726630516476239f7",
+      "sha256": "8cff853bd38eead42137739af17e661fa718286285c38e56d641accca27daa0e",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -30697,11 +30697,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.224175339769724
+      "snr_db": 16.864250498950693
     },
     {
       "file": "samples/percussion-mono__32k__B200MY+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "a0bdefad1e50c0d8319091fa5538c710178ea93bac79407997becfc01d1e66a2",
+      "sha256": "f19f72994bdd595192c0812c2c87bfc2ed599bc221d3fce5744882dc54b0ae2f",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -30845,11 +30845,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.240187637115445
+      "snr_db": 27.444859355689132
     },
     {
       "file": "samples/percussion-mono__32k__B200MY+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "1fa163afe851d0306d47316fbdafdef78ec3e96561f17bbff879eb6a14efa892",
+      "sha256": "55604f02c1a5d999e1a56bccc9b2facce665c053eeef74888be9fa532e9038f2",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -30993,11 +30993,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.397013124150963
+      "snr_db": 30.78016405992006
     },
     {
       "file": "samples/percussion-mono__32k__B200MY+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "ce1893c291eb88c9052d2c53cb7b84687f8a267646536f4b5bb10058e759c05e",
+      "sha256": "cebb06f036552aaf839f629996d5e38724ef3bbb5e222966d94a61de1c87250b",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -31141,11 +31141,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.448610127733655
+      "snr_db": 34.08769587106541
     },
     {
       "file": "samples/percussion-mono__32k__B200MY+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "9e4d2474147bb4b0dd291b882a4723caf5eccfffe5ea40888c9f6caaabd619f0",
+      "sha256": "7a6ffda3cdf786ab9def6e06ae6cff307139fec8208a8d4924322c2d4a5e7eab",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -31289,11 +31289,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.470254143010283
+      "snr_db": 46.82504513595632
     },
     {
       "file": "samples/percussion-mono__32k__B200MY+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "fd76a20db7272323ba68a9d20eddb56db06fc06f7688c402c13bdd350471e0c2",
+      "sha256": "c5d464bdf81bb55b31683b667d49bc3eef5c604b0a3337ecb5bd984701c61965",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -31437,11 +31437,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.673454722270273
+      "snr_db": 13.939440115771182
     },
     {
       "file": "samples/percussion-mono__32k__B200MY+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "e69fb164ac77b8db152550c3c241a88a91799397b1f74aa6f1889f615a5ef10b",
+      "sha256": "7001a73f9944e5c636a5f3b3a3585320c1419c94840382cd840dc1c367381a54",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -31585,7 +31585,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.29760196629256
+      "snr_db": 26.635135190790578
     },
     {
       "file": "samples/percussion-mono__32k__FM__awgn-cn0-54dBHz.flac",
@@ -31870,7 +31870,7 @@
     },
     {
       "file": "samples/percussion-stereo__32k__B200__awgn-cn0-57dBHz.flac",
-      "sha256": "ed013acaa904986de538070fe9dd2db2ed21b5feff8e3566aa9d44572be2fff0",
+      "sha256": "2f4ff66f04ae6e892655e569528635bb14612b150dcaa023538fb77fcaff017f",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -31954,11 +31954,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.4351774654972634
+      "snr_db": 0.46046865695251227
     },
     {
       "file": "samples/percussion-stereo__32k__B200__awgn-cn0-60dBHz.flac",
-      "sha256": "bec2b63e2b34643dd9aa61c418fbede37ec801fdd0a297dbbd8e7c8f255d444d",
+      "sha256": "a92c39e25089de35f93d9803b22fdc765f43894f0d400f84fb51c045676547d6",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -32042,11 +32042,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.318042528847755
+      "snr_db": 12.142703150497805
     },
     {
       "file": "samples/percussion-stereo__32k__B200__awgn-cn0-66dBHz.flac",
-      "sha256": "db58c0a0e893073a8f57bd34acb21972c0401d181317eb5370ca7f4ec6ea581f",
+      "sha256": "d50d23f82f8aab7af74aa1f9dd6dffc8ce16fa81601ee028c7b2a24041749a91",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -32130,11 +32130,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.577080964330516
+      "snr_db": 23.748297151393473
     },
     {
       "file": "samples/percussion-stereo__32k__B200__awgn-cn0-80dBHz.flac",
-      "sha256": "0baef7f683d757548989bff07aacd21b78144d9e9a65b6507813edc9fa8535df",
+      "sha256": "e7a6a620ece98e0ab3481e239b7df74928d46e02e51728ca029ed72dee99219e",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -32218,11 +32218,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.091308095666573
+      "snr_db": 52.749005828409494
     },
     {
       "file": "samples/percussion-stereo__32k__B200__rayleigh-cn0-60dBHz.flac",
-      "sha256": "8340aebce697750124ae7a1106eebb6631c1f9e8666b213e7d33212c3409f39d",
+      "sha256": "3d2bda4d38f2ed8ec884ba5099b8b1d3478fd6d60d1d32f04f1e21ab1caf92c0",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -32306,11 +32306,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 2.8570932661922672
+      "snr_db": 3.0091830448340446
     },
     {
       "file": "samples/percussion-stereo__32k__B200__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "8c7a1c402425af5b6882ea0f4d64d22f9ca9e06306ac7a841faeed80e7d97982",
+      "sha256": "5164f1dd178bafb8b33e3a63932929070779e209a0a27546ee2a3ae427cf1557",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -32394,11 +32394,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.05696735037680227
+      "snr_db": 0.0632191144414911
     },
     {
       "file": "samples/percussion-stereo__32k__B200+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "1b6199e25fd3d7deac1aaf34997a30d11552c7371372bb48e4e41bbdc8114e6a",
+      "sha256": "9f32ebca72cc42ee81530eec1d23b29fbecce129b968cd511f9f12f2d244ef43",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -32542,11 +32542,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.250802375924323
+      "snr_db": 13.135944438404952
     },
     {
       "file": "samples/percussion-stereo__32k__B200+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "e02b14d68b8c9cc89a2e64b9ad2f3d1323eb2938bb5ac40a2cef6c8b5e570b58",
+      "sha256": "67436ab02e00596076c747cbeb92faefd8447740178ac8c4174e2798acbc4ccd",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -32690,11 +32690,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 12.827223478562729
+      "snr_db": 16.067807004523043
     },
     {
       "file": "samples/percussion-stereo__32k__B200+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "4a9ef7bd0ef462e704348fb10a23bb83f8a8a75b0c7d1bb3f160598a9b0c3c78",
+      "sha256": "08bece0f8153e073f8826f52c2a34d71b98a04a18d11aece6b5f0feeb74bc054",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -32838,11 +32838,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.74328428485161
+      "snr_db": 25.629853297452474
     },
     {
       "file": "samples/percussion-stereo__32k__B200+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "d07f90fed48e11c7e64171c9b4268c72d08874e2baf376634380dde516a571f6",
+      "sha256": "2e94c14dafa05a6cff761c9763d1f07e11287330a44c81f8fc21f537b52e9f8a",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -32986,11 +32986,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.058022074438277
+      "snr_db": 33.36479847263441
     },
     {
       "file": "samples/percussion-stereo__32k__B200+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "269cc60d8674ea0b8645609f8856beb1e8ca75dd181bab33d2ddb65bcbc78c67",
+      "sha256": "e0f6ae0e3f463c8a9a1d1f891e139eb3d6ccde5cd5b58b35e782eeba6a945030",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -33134,11 +33134,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.09064610997829
+      "snr_db": 54.788448496270554
     },
     {
       "file": "samples/percussion-stereo__32k__B200+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "5d11866886325d641c5fbdb521308b085fad3b3cd3d3f4c34246251c3a2c2070",
+      "sha256": "4545f9fcafa13f7e50add15a8ed857be61fbd17f0227988fb6476d28ca3f54c1",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -33282,11 +33282,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.219514137511512
+      "snr_db": 11.809903395718395
     },
     {
       "file": "samples/percussion-stereo__32k__B200+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "70ba67a7fc6ae83939b9dbf242782f42cadd3815571c218d8101889fd6be4c39",
+      "sha256": "12b18700b75ef7bd1c88773dfb6e26e5ed2d5c11aec297b95a2f4aca106b9470",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -33430,7 +33430,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 12.910609924517203
+      "snr_db": 16.043313413485947
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y__codec.flac",
@@ -33522,7 +33522,7 @@
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y__awgn-cn0-54dBHz.flac",
-      "sha256": "13c23547e059204c1c3e48096643dd8dd928cd6584be7637f540abf88d60e3a6",
+      "sha256": "202c56d56b2dfc019712bdf420c7ef8394151904088bb7b156d1d91d3d549f46",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -33606,11 +33606,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.022361568706804134
+      "snr_db": 0.02328199644022754
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y__awgn-cn0-57dBHz.flac",
-      "sha256": "5eb47079749193b07b26dbdedefe9f14cfe9416e37947ca1f6e43980c6389474",
+      "sha256": "8b0dce24a6e37bfc9846f236b8be263db72f2b5460936efbeabe177f2f247340",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -33694,11 +33694,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 4.105195351780693
+      "snr_db": 4.358629834230224
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y__awgn-cn0-60dBHz.flac",
-      "sha256": "173f1ab8b5545eebb3988de3f70e196346639c43c789a1b462a39e8382a46692",
+      "sha256": "4d12088ab5403c8e9766a0b1b1217c904fb7a93cd077c9828a4ffcdcb14f7d4d",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -33782,11 +33782,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.978087900475984
+      "snr_db": 20.181951991679817
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y__awgn-cn0-66dBHz.flac",
-      "sha256": "39554560a96c2927a1e2f9a2508276ad66172df6c5aea1084e9e7b97018855d2",
+      "sha256": "df12791031bb4bccd4e8ac74f524babc248b45ac8ea517808b4935307662534c",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -33870,11 +33870,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.647008688252622
+      "snr_db": 24.572206105254057
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y__awgn-cn0-80dBHz.flac",
-      "sha256": "5e758c8ee79f455ae4bb5a17484fd1d20477921595d3ccd0214510965f14db90",
+      "sha256": "7ca11afa393e398e2400584e0fc118d436ec077071be61f6ab4b3c339574e77e",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -33958,11 +33958,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.08812041808657
+      "snr_db": 44.414348815792394
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y__rayleigh-cn0-60dBHz.flac",
-      "sha256": "155b0be7a831a494c8b1356d943ca18895de553e8fabbd5e12a82f625366913e",
+      "sha256": "d3a2f5ee0bbef7b4ae3854d1f55c44367307a4f7395953ea2287dbf3ab3e646e",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -34046,11 +34046,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 4.116074299543214
+      "snr_db": 4.338348266086801
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "f4fb70880bf49cabdaeb198c019aa928aec82d7b430773c866b43ce1634c69ff",
+      "sha256": "daad966f145097569ae89f1a1c57d32e6691c9aac85ee04afd0f44b66b20442b",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -34134,11 +34134,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 1.3631508006873863
+      "snr_db": 1.4068614461926074
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "52a73cef35a4fdcc5420de34ccb7ab1d9384986594f63562a375abe6624cdefb",
+      "sha256": "9e6055263a2ad98e26cd23b73f029097f078a3f4c7cac4bf0abae94b4b7032a7",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -34282,11 +34282,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 11.134418004929266
+      "snr_db": 12.915027289715553
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "1c7e6c7be317948d152d220635eb3ce5a8d9f023013df1fd04a8c2f5463a14e8",
+      "sha256": "a960bfc1b2d9369c2eb5822d89585c0a11bfbc30ba5175d498e4afcd945446a8",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -34430,11 +34430,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.4945805608134
+      "snr_db": 18.191741561152885
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "56f70e156a24071c9b317bbcf63484467ef51aa93166a4764dccfd467ddb4b99",
+      "sha256": "6ac0543074479a2f73fd781a766b67135ba5d9bbd3e98007d482f24530b46cd8",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -34578,11 +34578,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.963144856203176
+      "snr_db": 28.491998521174743
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "0d687ca1564e1863033286c63ae6e34b43e853ca8df20ca2dfe7fb1a13a1744d",
+      "sha256": "3c44a8313cd557b9f3c38f1f1fa4b54a2e51a9a4525606f52540ad8f9989af3e",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -34726,11 +34726,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.04605953772165
+      "snr_db": 32.096532971732074
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "7c0624275f0dd962570d6e10b43a7d74c27d0c960824424ebe382c6f1f9c581d",
+      "sha256": "1be6e795c8ed2cf4ace82dcaf83be08f6daed862dbb4251579e8c5be1ff2c235",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -34874,11 +34874,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.089951145981013
+      "snr_db": 44.594057229261495
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y+SUB50M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "237aead573eca3e753d7a8ed1d86649443f9c2a0e5f0f5ab5917d86453715452",
+      "sha256": "b86b0808c632bdcf383ff374a5377315881f508c10bc865c02b3a181cbaf9451",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -35022,11 +35022,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.285380922679712
+      "snr_db": 11.925699457769092
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y+SUB50M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "3eb87f40b3d175540bc213d60e820a35cd659db2439d4bacce3547516f5174ff",
+      "sha256": "d9be1df740f94ac183be6e1777d52263e3c656cfb9ba39d43b164881a16f8c90",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -35170,7 +35170,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 12.927233392153958
+      "snr_db": 16.363767239787027
     },
     {
       "file": "samples/percussion-mono__48k__M700M__codec.flac",
@@ -35262,7 +35262,7 @@
     },
     {
       "file": "samples/percussion-mono__48k__M700M__awgn-cn0-54dBHz.flac",
-      "sha256": "eea7683fc5b2285524442014dc038a42ae7674612ce9dd3e01921111c099190a",
+      "sha256": "34a81bceda105b0b1858c0fbff1066d64ce53598c0beaef2425a543f1ff7e211",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -35346,11 +35346,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.0421205728763012
+      "snr_db": 0.04217591891248855
     },
     {
       "file": "samples/percussion-mono__48k__M700M__awgn-cn0-57dBHz.flac",
-      "sha256": "906cace3c028db004c41cd3370398e0e3db4a59b0d71fad273b6129bd18710aa",
+      "sha256": "d137e1cf5f1f5cb0a3f6f71d43d532b1bd31fa470a7f8af3399936166e9782c3",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -35434,11 +35434,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 3.130670819263337
+      "snr_db": 3.2951751485121745
     },
     {
       "file": "samples/percussion-mono__48k__M700M__awgn-cn0-60dBHz.flac",
-      "sha256": "7a8a93ea130ae49fbbba081c7af6b111fdf74ed026495747cc0c3c48145266fd",
+      "sha256": "ff7435bf7cbfa486692d9879a3d3d0cc31b0d7e2aa9a41eaf16767fa1255c8b9",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -35522,11 +35522,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.085671800637183
+      "snr_db": 17.922513666591087
     },
     {
       "file": "samples/percussion-mono__48k__M700M__awgn-cn0-66dBHz.flac",
-      "sha256": "a40308f01a5d11444ea152212828a6f86bbf32eaf3b88654b412aaa12124202e",
+      "sha256": "7a9df5e56f616e1bb2a100fb58fcedaabab7390c5d041f22be853ef446aa7299",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -35610,11 +35610,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.312604936954678
+      "snr_db": 24.991672393899194
     },
     {
       "file": "samples/percussion-mono__48k__M700M__awgn-cn0-80dBHz.flac",
-      "sha256": "20f69d24a3da684ca9ea925fc34f35577f3e181d1417b54067f67067f70d6a32",
+      "sha256": "63a42165bc1d0b3c5d136ab8f199cc5b1a3c46b9abbef67fbcfba62f6860c8b3",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -35698,11 +35698,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.679214031738734
+      "snr_db": 57.19844841266401
     },
     {
       "file": "samples/percussion-mono__48k__M700M__rayleigh-cn0-60dBHz.flac",
-      "sha256": "9b0d28c4c007af41ca4db71eab8730ac59841de0cf058dbd11cfaca591670ee0",
+      "sha256": "72a4f1c3630d11b0eeef90fcf5d0acce829576150d660d97eff75631cee25182",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -35786,11 +35786,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 2.8939830180057244
+      "snr_db": 3.0157969370955935
     },
     {
       "file": "samples/percussion-mono__48k__M700M__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "912f99052e3765634f78acfd7f3b54ca146fde424215a5db6c351b73fd139bca",
+      "sha256": "128096a722e47bac8e7b58fde7033d833870b41a302dcb3d41b134dc8edbd522",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -35874,11 +35874,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.9365449922424591
+      "snr_db": 0.9805265946339636
     },
     {
       "file": "samples/percussion-mono__48k__M700M+SUB100-48K__awgn-cn0-54dBHz.flac",
-      "sha256": "f22584e53bbf2a6fd848a911ac931b40fbce8181b7b4e5f98e0c608080ba9380",
+      "sha256": "12845279d61ae4a9303fcf533912d8395cc277a6edadb176fa79a223a1687391",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -36022,11 +36022,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.214656118036508
+      "snr_db": 11.732394818086664
     },
     {
       "file": "samples/percussion-mono__48k__M700M+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "45f57a05b0e79ebafa013daf74194ad18200120ccb63ec0981487e02fde944a3",
+      "sha256": "c0fb924a032ca8ef3b44408732957dfd1375ecae2475d54ddadda80f4aaa6639",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -36170,11 +36170,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.524258470938758
+      "snr_db": 19.0818564308865
     },
     {
       "file": "samples/percussion-mono__48k__M700M+SUB100-48K__awgn-cn0-60dBHz.flac",
-      "sha256": "0211a1f7eb6cfc7aac55101813d55299b9e47f038ddaa7c68c8506e54c4cb401",
+      "sha256": "046f2f61a507a6970e6394b72b4d2377b9fb05c0a1fb2952b5860b73a67d76a2",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -36318,11 +36318,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.586515465920815
+      "snr_db": 31.219014127611622
     },
     {
       "file": "samples/percussion-mono__48k__M700M+SUB100-48K__awgn-cn0-66dBHz.flac",
-      "sha256": "925c289ec38c5b1e67a8daac9e3d4cef8f94bfbef165bea77dee5a5734fde67f",
+      "sha256": "b33c6a8ef171c2483cc5e9356b7c3a6ae3c4d13f9f524349572c15b75a295108",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -36466,11 +36466,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.659788129867287
+      "snr_db": 37.62463099786007
     },
     {
       "file": "samples/percussion-mono__48k__M700M+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "1d1f9b24d9514f92da7506751ea2645d93a899ddf259487f7e875498886e827c",
+      "sha256": "6a6cf60d5e6be8cd8164721b0c575b5cdeeea6c55741bccbef66183754131ae4",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -36614,11 +36614,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.679185502931025
+      "snr_db": 57.25888603372333
     },
     {
       "file": "samples/percussion-mono__48k__M700M+SUB100-48K__rayleigh-cn0-60dBHz.flac",
-      "sha256": "78896347d4e3af0a5059fb636edd1b344317e4116cce90aac92ac5f6573011ed",
+      "sha256": "8686fba86613afc5c456601ab81833bd03d5985a83ee6b83ba3e212a3e9386db",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -36762,11 +36762,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.300568880055438
+      "snr_db": 11.993484211297556
     },
     {
       "file": "samples/percussion-mono__48k__M700M+SUB100-48K__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "5c0e52e03b3a796f63503104366dcee91ec6652124c2c3398b5ae3399f0213d2",
+      "sha256": "b49aad2a7cd68af10759ca523b7a8d47aade355b8ad1fa1672cbbb5e61d1fa21",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -36910,7 +36910,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.700732550937179
+      "snr_db": 25.680351749654445
     },
     {
       "file": "samples/percussion-mono__48k__M700MY__codec.flac",
@@ -37002,7 +37002,7 @@
     },
     {
       "file": "samples/percussion-mono__48k__M700MY__awgn-cn0-54dBHz.flac",
-      "sha256": "95327940e63d92a129af9ac0557d2d3de7b5e2d10770ffa1fae0c314bf4824ec",
+      "sha256": "018d0e49140f2cb0093b0e940bda83d60b4d94ca2a15a4345e4810782375ce16",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -37086,11 +37086,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.4995049342395934
+      "snr_db": 0.5285565387111476
     },
     {
       "file": "samples/percussion-mono__48k__M700MY__awgn-cn0-57dBHz.flac",
-      "sha256": "5c84921426e82565717c5147a46811cad91b36ec1c5b36b767430f60e6a873e7",
+      "sha256": "fba6df3169eb4a44014844c39228473a252a02460aace3b565c7195552bb8646",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -37174,11 +37174,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 7.4350762198291775
+      "snr_db": 8.298025225325203
     },
     {
       "file": "samples/percussion-mono__48k__M700MY__awgn-cn0-60dBHz.flac",
-      "sha256": "7750aa05177433a873185d121f46c63b18543b329890bd48c6369852b4a3ec4f",
+      "sha256": "0d48ca59f73217bb8edccb4b59053838b69a02a13e6aa5c1ffeb80ff07cdaee5",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -37262,11 +37262,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.968520835006595
+      "snr_db": 21.92940527457147
     },
     {
       "file": "samples/percussion-mono__48k__M700MY__awgn-cn0-66dBHz.flac",
-      "sha256": "c51c6a8c9ca6c6406f5985f37b4529f26fd7337ffc4644b2851b6587549c2856",
+      "sha256": "321c2811a3362c61205db6b64d62715a36654f34df3ba64951d95372b86834cc",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -37350,11 +37350,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.364150817467209
+      "snr_db": 25.60445510794843
     },
     {
       "file": "samples/percussion-mono__48k__M700MY__awgn-cn0-80dBHz.flac",
-      "sha256": "ae38c5bd04a9cf4a4e88dcd9ddc985f7887ba07c6c1f40b9729d772972f33e4f",
+      "sha256": "a425b37228eaff7191e19b4f9b6c2d608c0e5ffa23786007b05fde1b5f9c0b0b",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -37438,11 +37438,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.676497150951246
+      "snr_db": 48.080876663583396
     },
     {
       "file": "samples/percussion-mono__48k__M700MY__rayleigh-cn0-60dBHz.flac",
-      "sha256": "c9226b0eece00e71dbb8818c92cadc8248be7d6fc4b4a958b19c837c5c5bf97f",
+      "sha256": "9b06ba3cf16d124d7b05cd209fe8da72a8e6ec2d7ed030f78c211ebf4d50bb3d",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -37526,11 +37526,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 3.6974135821668215
+      "snr_db": 3.885973824861222
     },
     {
       "file": "samples/percussion-mono__48k__M700MY__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "b7a1ecdd2b25cd5fb72597cd5dcfe5d71a899e33565dd643e99725fd05e6214b",
+      "sha256": "534900b3239f70e9e6df2e81c9865a86993f323ab1e4d56627873f005ecabc16",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -37614,11 +37614,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 3.740574644379957
+      "snr_db": 3.995636164534769
     },
     {
       "file": "samples/percussion-mono__48k__M700MY+SUB100-48K__awgn-cn0-54dBHz.flac",
-      "sha256": "8eebb7df8c1847409551bcb9d4f181b5feea086d61af6dc485412ad1c9aa467a",
+      "sha256": "6e540a08c73bf31a0e812606d61885ad0086fa4819aefc7589c90b0a0f19af5c",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -37762,11 +37762,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.578268702335627
+      "snr_db": 12.516074567297107
     },
     {
       "file": "samples/percussion-mono__48k__M700MY+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "fe0bd592f09b636964928cf2be3165d79bd55a2d53a137e0723a692f08392f93",
+      "sha256": "e9a3321a4e16e5a1337f146e6a096f34e011d74dcfa608435e519c64e768a9ac",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -37910,11 +37910,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.883877517553618
+      "snr_db": 21.605783408946678
     },
     {
       "file": "samples/percussion-mono__48k__M700MY+SUB100-48K__awgn-cn0-60dBHz.flac",
-      "sha256": "e5dc84ba04dc978efb48178bdd47a060ef06c6bf768d9707382c0b87d195fac7",
+      "sha256": "28fbed21391dab02eb910e940190f13cafa910bc27c240d8abed74f6362bfeb8",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -38058,11 +38058,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.561299496427226
+      "snr_db": 29.741939882982386
     },
     {
       "file": "samples/percussion-mono__48k__M700MY+SUB100-48K__awgn-cn0-66dBHz.flac",
-      "sha256": "fdfd14773212c349342e6bd12288459dd007ab2e1d7c0d5c99343e7af2026b6f",
+      "sha256": "5f7379b7762878dcc1fcbdcd5e0261e5c7fb9335c4907e97b8e469ed2a63513b",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -38206,11 +38206,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.656363227971067
+      "snr_db": 35.868172395692646
     },
     {
       "file": "samples/percussion-mono__48k__M700MY+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "99a9c0ae00076b1f1a9683f9708c7275d2da360892c4a939d3140a60e78f817c",
+      "sha256": "8934c3ea560d249a140c040c54c32b1faf97f839a9f92ec06d5b67cf1bf5ee82",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -38354,11 +38354,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.67812355298764
+      "snr_db": 48.262159123278195
     },
     {
       "file": "samples/percussion-mono__48k__M700MY+SUB100-48K__rayleigh-cn0-60dBHz.flac",
-      "sha256": "b60f61f16fefa4d7eed335f4a5259a34e11adf06b2920843f745154bf1f19780",
+      "sha256": "5b4df081314704c47b119092d14498e8ae41629c9a036f8ef18de302e285b681",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -38502,11 +38502,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.883008530757719
+      "snr_db": 13.056461984782818
     },
     {
       "file": "samples/percussion-mono__48k__M700MY+SUB100-48K__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "d20d845c57fdb36442fa27e2f99c00fb087aff4081e1a007b1542e1ca15d3b18",
+      "sha256": "cab2b1ed6e216c94f1139ca5358d921ee18aceb044f41cd05ef88bef05027e26",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__48k__reference.flac",
@@ -38650,7 +38650,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.50338704297291
+      "snr_db": 25.714151875706698
     },
     {
       "file": "samples/percussion-stereo__48k__M700__codec.flac",
@@ -38830,7 +38830,7 @@
     },
     {
       "file": "samples/percussion-stereo__48k__M700__awgn-cn0-57dBHz.flac",
-      "sha256": "2a72f8cfa463e80fd10586653ac64aba3b2cd2ec36a8632f4df671131653c590",
+      "sha256": "99d27e4f8f6136de4039709a8d68bbd8c8c6ae16e15ec90be64a66c3dd37a542",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -38914,11 +38914,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.0055692702053962515
+      "snr_db": 0.007786347057661689
     },
     {
       "file": "samples/percussion-stereo__48k__M700__awgn-cn0-60dBHz.flac",
-      "sha256": "4ea0d979b5ac95a7af392019566d4861d79fe613f5d65ed1ab8d2154b733ba30",
+      "sha256": "efe7ff144cf4df8163114b0326a67fabe6336c078e4a0062739ee85399002b8a",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -39002,11 +39002,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 4.499747988415405
+      "snr_db": 4.844986870742156
     },
     {
       "file": "samples/percussion-stereo__48k__M700__awgn-cn0-66dBHz.flac",
-      "sha256": "c662de4559bf328216ba360c14dc36ad235cbb3bba23483560fb491a5e06e3f1",
+      "sha256": "d9d4b53ddccf2e80f6b0911d107bb0180cc0ba46296f97c13a19a833b6c083e0",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -39090,11 +39090,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.88996515472996
+      "snr_db": 23.898009314015244
     },
     {
       "file": "samples/percussion-stereo__48k__M700__awgn-cn0-80dBHz.flac",
-      "sha256": "8447233bfefd472c089c149695ff755e4ea689b59d7a25df3e6f909421758032",
+      "sha256": "efc029bd1ee22c475d73bec1172d23030c7e1e9a4b4e77cc7dd73d674ee97c63",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -39178,11 +39178,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.316520917666827
+      "snr_db": 48.066075827226044
     },
     {
       "file": "samples/percussion-stereo__48k__M700__rayleigh-cn0-60dBHz.flac",
-      "sha256": "ae2288ca9a21c0a5cceeed181cec15b06180e9a2fe13acfaba22767e7dec9b3e",
+      "sha256": "c5d9aea1c75e2d1dccae1af9043e7a59514b38adfc7a77a2ac1af112f4fdb07e",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -39266,11 +39266,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 1.4415890741306576
+      "snr_db": 1.4919323894275274
     },
     {
       "file": "samples/percussion-stereo__48k__M700__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "91bfa35351863f6ba759c4297d70e87d8a7b23389b6fb563e0d4549e0b0d2476",
+      "sha256": "b23e4adaebe5e32ffeb834db609abd91e04b0e3af352b6772ec1857e6881e7fe",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -39354,11 +39354,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.00020926297425270373
+      "snr_db": 0.0001393378096272457
     },
     {
       "file": "samples/percussion-stereo__48k__M700+SUB100-48K__awgn-cn0-54dBHz.flac",
-      "sha256": "9043a06d2b3fa3d29c3fc5e5405c84111d1b411577203f07e9ad02425a9ea086",
+      "sha256": "f9d12b09a921d7515327d9400918efc8022f4ef28fb455cbf6cff40b2c97840c",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -39502,11 +39502,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 10.211047093861431
+      "snr_db": 11.821969891799986
     },
     {
       "file": "samples/percussion-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "b040ccd5051a311ee363773018ed555b7a0d8745f9a8d0fdfe28540d57a0d79c",
+      "sha256": "5a5f1eb9ae94c740df9ddec672bb60fd74482abe223b79fee80b9878d5aa1713",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -39650,11 +39650,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 12.848105700522956
+      "snr_db": 16.837971594484365
     },
     {
       "file": "samples/percussion-stereo__48k__M700+SUB100-48K__awgn-cn0-60dBHz.flac",
-      "sha256": "ee10a948bd26ff228550822dcedc4a1e33ffc8f8d4cbecb44ce089dbad8eee43",
+      "sha256": "bf3fe0cbf474e552e9a9ddcb49d0aa55cf5c10cc21adad883b7bd06ac93a2929",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -39798,11 +39798,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.043654240333428
+      "snr_db": 24.62111858020633
     },
     {
       "file": "samples/percussion-stereo__48k__M700+SUB100-48K__awgn-cn0-66dBHz.flac",
-      "sha256": "78989962ded850eb1b7e89eb945f7b4c4ab75b731f2fd8b7aa1418ef4680264d",
+      "sha256": "70fd8dab6a6bb77300137f98bb26e293ac64efb09b6bafbce2c2145c64f0607e",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -39946,11 +39946,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.291327926913088
+      "snr_db": 35.669295628790366
     },
     {
       "file": "samples/percussion-stereo__48k__M700+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "23a7cf88fdec4ffe6204a886e8365cda3bd4c3a436a17875ba7875c6feeccbb3",
+      "sha256": "97f1307e6b4b67c3b60809acdf7ba3be7fe415d2f86857345914e635c1d36ec2",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -40094,11 +40094,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.317572767606986
+      "snr_db": 51.86347395852117
     },
     {
       "file": "samples/percussion-stereo__48k__M700+SUB100-48K__rayleigh-cn0-60dBHz.flac",
-      "sha256": "75480166df858cc912d89949ac5fe33d6fbcb765204f3dd073f2e7ffc8626ce1",
+      "sha256": "abdc819c546dca18baeae8348a126c0e845b58705bb807856375fa655ebfbc68",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -40242,11 +40242,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.796203195813346
+      "snr_db": 11.37998564317713
     },
     {
       "file": "samples/percussion-stereo__48k__M700+SUB100-48K__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "64eb21b802cf002a072776a3d9e1ca829dc1519fe87859940291f5b830668c48",
+      "sha256": "7c612739d8e3e53c6a3ee714be42e00ff69d3a7446d7142ca8b3ec72957e3a6e",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -40390,7 +40390,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.815043067599426
+      "snr_db": 28.634585807676586
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y__codec.flac",
@@ -40482,7 +40482,7 @@
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y__awgn-cn0-54dBHz.flac",
-      "sha256": "fe76fd328d0f4b1e4a7f0753daed48c03f26e6fdd9a846a4bfa7a2ce74eb6e80",
+      "sha256": "fb7fe1c714d89afc09af5ff6d6e7f567f7c1c1ae5224ffba307779d4ce2b5c2c",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -40566,11 +40566,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": -0.029686411875675476
+      "snr_db": -0.029662709865451414
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y__awgn-cn0-57dBHz.flac",
-      "sha256": "85f52d30854af5c9f9aac8417a8d15f844446b0c8cd8ddfa67d39951ac4f5c39",
+      "sha256": "13ccf52e19fe1df443b93993cd1a9316e65dde553489e698f17e85cef452f41c",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -40654,11 +40654,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.4532049654760758
+      "snr_db": 0.472949593451985
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y__awgn-cn0-60dBHz.flac",
-      "sha256": "8720740a5f69f723e9bc4c8d6d4050c9e880e20b7c2f10cb6df68e9b35d7795b",
+      "sha256": "ab5720807b595f471aa1cdb68484e51c14d0906b3de1d0948193cf3aab07fb9d",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -40742,11 +40742,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.722302824105537
+      "snr_db": 11.300878901367458
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y__awgn-cn0-66dBHz.flac",
-      "sha256": "b29253e287dcf30635cb7a98325297bcdb1051915febbebdfec207526664de65",
+      "sha256": "3d1834fa0f748532e4681871091ff506630d91279e82da17d53de20242d7e159",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -40830,11 +40830,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 13.910139287410752
+      "snr_db": 24.02782811369883
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y__awgn-cn0-80dBHz.flac",
-      "sha256": "485ca0bab8152e73d345428f91827071a0ae9cd4b5207bb4d270df2f6e4f7748",
+      "sha256": "7a61ade19c6a4347fa43f78411e7b1b75ed7fd22f79a2327df6096903d20aafa",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -40918,11 +40918,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.321647030719827
+      "snr_db": 45.600725331861156
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y__rayleigh-cn0-60dBHz.flac",
-      "sha256": "a07477a4fa51e55a19fc3b50694291a4d7ae96edd09457f8a575421f8cbc1099",
+      "sha256": "d61051ea8cf881cbe0da795d20ec2d20f78e501a7f3efd56a76c168071ae5147",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -41006,11 +41006,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 1.991767333888784
+      "snr_db": 2.0710029995353345
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "0a180d0731ef1fed364dc34c5713525562c4a5952025dbcb962d8286f7f4ac9e",
+      "sha256": "1287d21157cdf4c46b2e94d350fd2fea18a366c91bedd2df5160ab6c3bb0f0ce",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -41094,11 +41094,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 0.059441062321455254
+      "snr_db": 0.06393772473214468
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y+SUB100-48K__awgn-cn0-54dBHz.flac",
-      "sha256": "c117a3df9f85ce90296b65a5756e571a24da188a2d3b86d94dabeb8faf738d53",
+      "sha256": "ddd020726441e4980a80a5c424e11149ecc747b0e75a75e575a2838a6d13295e",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -41242,11 +41242,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.994431376123696
+      "snr_db": 11.677284000335387
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "3dbf4cd213223084df422f73974faed78c9ad07f6d840f590d96c8a1a4599c96",
+      "sha256": "117b0385a8b4a563860da504dcde3ff573354d69f3b8432119ae6242e168da2b",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -41390,11 +41390,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 12.969061105443277
+      "snr_db": 17.387884726679456
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y+SUB100-48K__awgn-cn0-60dBHz.flac",
-      "sha256": "482d971658b8dc299f142f262e594e3a04ace5b3cda46fb30065aceb1cd513cb",
+      "sha256": "1ddc7da2c8f1a0872482f83679347a956457a58ca030d1d176027f75f0ee8c1e",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -41538,11 +41538,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.236284977886113
+      "snr_db": 26.673112103777413
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y+SUB100-48K__awgn-cn0-66dBHz.flac",
-      "sha256": "29bdf138d78489f41ee0cc67a0df6c35c72cf8578909bdd39e1c5121c076cbf7",
+      "sha256": "4f174ac6afcc687330313eecd3a6e3d9820dd0f8c681abb9d349f051a248ae14",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -41686,11 +41686,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.29723707452402
+      "snr_db": 33.992272147757056
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y+SUB100-48K__awgn-cn0-80dBHz.flac",
-      "sha256": "521d73c5f4a74aa93153c5e9056f9345d2a21d120116ab68ccf89ab7bac9d4de",
+      "sha256": "a1223ea5c1254ccf3015a53745bea93f22d6e3549a8ed25de60b0281973426c4",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -41834,11 +41834,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.323661433211146
+      "snr_db": 46.03063775727204
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y+SUB100-48K__rayleigh-cn0-60dBHz.flac",
-      "sha256": "745dc9d7159b3ce94ee1267a370daa094f53728dae540fb06a128a8955d0bdf9",
+      "sha256": "28e769c51be9c3ffb08de184b13198f96898836702f3346cbf27b863c9c6c55f",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -41982,11 +41982,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.96370003509346
+      "snr_db": 11.656211756672711
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y+SUB100-48K__main-fade-10dB-cn0-66dBHz.flac",
-      "sha256": "5159f3f0041b3dc60de8a63e72855000faf77cf65b611947fea91bf136632221",
+      "sha256": "a0469ed63d0e26643d24f905e4f1dfe326eafece75496401dd125c2c97341ec0",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -42130,7 +42130,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 14.798333698392415
+      "snr_db": 28.424325770862016
     }
   ]
 }

@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from tools.common import metrics, wavio
 from gracefm.profiles import PROFILES
+from gracefm.iir import ALT_DELAY
 from tools.samples.make_samples import CASES, CN0_LIST, MATERIALS, SEC, SETS, cn, source_name
 from tools.samples.sample_names import reference_name, sample_name
 
@@ -44,6 +45,15 @@ def expected():
     return rows
 
 
+def snr_db(reference, audio, case, config, fs):
+    """波形SNR。通信路を通した試料は末尾 ALT_DELAY サンプルが遅れ分の無音 (make_samples.aligned) なので、それを除いて測る。
+    除かないと、高い C/N0 では末尾の数サンプルの誤差だけで値が 2 dB 下がる。コーデックだけと FM は除かない。"""
+    if case == 'codec' or config == 'FM':
+        return metrics.snr_db(reference, audio)
+    n = len(audio) - ALT_DELAY[fs]
+    return metrics.snr_db(reference[:n], audio[:n])
+
+
 def build():
     rows = expected()
     folder = ROOT / 'samples'
@@ -65,7 +75,7 @@ def build():
                             reference_file=f'samples/{refpath.name}', reference_sha256=digest(refpath),
                             sample_rate_hz=fs, seconds=len(audio) / fs, channels=sf.info(path).channels,
                             configuration=config, condition=case, profiles=profiles,
-                            snr_db=float(metrics.snr_db(reference, audio))))
+                            snr_db=float(snr_db(reference, audio, case, config, fs))))
     code = {str(p.relative_to(ROOT)): digest(p) for d in ('gracefm', 'tools') for p in sorted((ROOT / d).rglob('*.py'))}
     report = dict(description='10-second listening samples; decoded FLAC measurements, not RF capture',
                   expected_sample_count=len(rows), seed=1, code_sha256=code, samples=entries)
