@@ -8,23 +8,23 @@
     "gracefm/channel.py": "0443e633aeb800bbdaf2ebb145bcd82a070a8edafbca3a388ead356c4932b860",
     "gracefm/codec.py": "b9ee71da01e3ea11d48900fa20d6ef6d3f099aa8fa284300e24a4a5822e174dc",
     "gracefm/crypto.py": "9fde6b9a6831796884dfbfae0797507b297a9c1cb41c1ebd65c6ec0411698841",
-    "gracefm/decoder.py": "ff5cb6014877b10799535da1aa9b1897f49e0160665a95c643d914dd63549e3d",
-    "gracefm/dsp.py": "ac5d2b98049998e678ab499d9e977834a5efdacfc9aca5febe16913dd4fd592c",
+    "gracefm/decoder.py": "9722216cfd498978726a84e6bbbdbc91545495a7f557beaeb9a3117570237e93",
+    "gracefm/dsp.py": "55645660ab19315a6ea4f380d6db3e558f826442618e1724b7ea0224eeb6ea62",
     "gracefm/encoder.py": "3996f8fb0c2e12dfae3a71acdd165d56c5635d17ad989f55c64d846f85f15063",
-    "gracefm/equalizer.py": "947c7a5796c91a8243ceb3b48bc5206c5c20547650d1398b2c5e20b9514289ff",
+    "gracefm/equalizer.py": "565ac9e4961702ff39adb62280e2f55b63fdec7b634a272d0c208597f4023297",
     "gracefm/fec.py": "d84f2dbdf3242afba6f10976593ee6905409e82a1d140fcfb42cc5f65890f529",
     "gracefm/framing.py": "e08a60f2a3d1cfe8aef0bf5d0e3bd212c2c2383100dd890eb3a5e408e14c7e99",
     "gracefm/fusion.py": "30dacd8336e76e2c1a5cc07fe2d346864c7a83cc9d2b859701b66c98e18268ef",
-    "gracefm/iir.py": "f1ace55884a9f017266dac6af2630c610be891ae742fd131499ed5867e848d87",
+    "gracefm/iir.py": "2432fc42d7836e146984e375fcf46e50ab2541ecb1193f045030d85d4e50d934",
     "gracefm/layout.py": "98e6deb9655f85451081a265eb6fbfc1bbb47efa6a972a885574832efa7eeedc",
     "gracefm/linalg.py": "0ae0a2117fbd510176d1393b6eb696813d45723fb6708e71682f6e930002f3d9",
-    "gracefm/modem.py": "4b6aa1bc2975af084d697518c332fcf96a8a3a6af9cae88864eb2f90a24316d0",
+    "gracefm/modem.py": "42996ba05e33e37e3e413866164c4d7a21f5b7fdb434ceb79c95da81aa2ec07a",
     "gracefm/plc.py": "3530910dabb2395b27e5d29df9f1e2dbb98eba71be6e13613f5d1b882c8f05b0",
-    "gracefm/postfilter.py": "f3177593ff4e71690029988e691f3c1092a1325ba3f40d2b00a528f44575a9ca",
+    "gracefm/postfilter.py": "34bbc96bcab8bd670d3c5f6268eb663ab236e3bdcae02bc6ae3eedbdb38b4c42",
     "gracefm/profiles.py": "dbf023e1bee767ce4bc66b6e8c31bb841d95f05b943b5442173eae01ad42cc19",
     "gracefm/receiver.py": "a232bb720652308d70ad1aed07bb65b19590ce933311b7e312b73c8ea3e361ec",
     "gracefm/scrambler.py": "03aa5922e8e971f360f6fac1b39d686c8b4387d5743f8368cab1e6216ced13b3",
-    "gracefm/tables.py": "fbd9e8c9120a89bca9162454557fe468ddf181841091656a41564e84b40d4b59",
+    "gracefm/tables.py": "8f53d246983797bb0f541d1928c2fdfe063711bd7972df7ce190829b1f474f14",
     "gracefm/timing.py": "7dcc5735ad1ef332e58b1bbbd815b714baaa7c504033529f9ee7e0cca24b3712",
     "tools/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/common/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -41,7 +41,7 @@
     "tools/eval/eval_m700.py": "22fd6c5486f25129a85852ede4a6407445c14bf3f4c1058ede5ecabd7e18a609",
     "tools/eval/fetch_lossless_benchmark_audio.py": "8e5c80600a854e83ca021910e733ba15a14e83818e5f3b99e2391da9681f3433",
     "tools/gen/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "tools/gen/gen_tables.py": "f5976b9a03f79fe0497364190bc18575e3eb7b74a26e9abbcd6bdf5a2e8f65ba",
+    "tools/gen/gen_tables.py": "8b9bce977db3c0c10ce8aefebb761d547225f88f493765c5aa56238841896823",
     "tools/report/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/report/circuit_estimate.py": "a0094a483e9b00d0d5d7aaa40472b92d243b395acafe08443d82724b5c0ce0d2",
     "tools/report/pcm_equivalent.py": "0d2aecf8238478be718467de21cd4074e355ad2b423eb9804130a8d3f6aac5bc",
@@ -62,7 +62,7 @@
   "samples": [
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "073708b07bec53f6f85f2d974d3918d7ba577ad821068c7003f41ad520e5e499",
+      "sha256": "4690eeed031b31ac9f76744a40c1f38aeb4ef4ec9b8a968afcb5bcc70bcd14c5",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -206,11 +206,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 18.59462041539884
+      "snr_db": 18.594572892425553
     },
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "7958c7a0ed1c925efbe633b896f86adb97317fca1bcff49c79ec5b54ba73e67a",
+      "sha256": "81e7dbdcb08f07f5e6af56448430ca418a8e104c55abc9e4f3ef91f346eaf935",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -354,7 +354,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 30.24618740964883
+      "snr_db": 30.24587061365625
     },
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac",
@@ -877,7 +877,7 @@
     },
     {
       "file": "samples/demo-stereo__32k__B200+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "7c7eea6436c28e08c027fb48d3d2fdee9e2dee9eeafa0c9f32674968e375643c",
+      "sha256": "369acb3353a34fece54df1dca77e7d349e160ac14df2ab4d2dededf6926e01ad",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -1021,11 +1021,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 24.351158035380873
+      "snr_db": 24.350779464149475
     },
     {
       "file": "samples/demo-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "aa8cb916a6c2bc25e988832fb2a6251cadaa84c145f2b0e74532280cbea3f276",
+      "sha256": "74313c61db9959d76f2440e04f45081d958fb31dd502f5efea9376150fc2cd67",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -1169,11 +1169,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 25.04100779740996
+      "snr_db": 25.040470253188243
     },
     {
       "file": "samples/demo-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "acecf6d432393263e5f7104b1728a5bc65188a2351197c788aaebddcd2243212",
+      "sha256": "b566a93ebe97e36e127f672195cc8d5486ec4c4e2e27d87622bf03309a6053a2",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -1317,11 +1317,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.083753437706264
+      "snr_db": 17.084011968223134
     },
     {
       "file": "samples/demo-stereo__48k__M700Y+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "89bd49a8ee5044ebfaf7fc3e152eb0e1a5164ad7e853c999c07d4029774e3c60",
+      "sha256": "52681167112d58f3d48eebcd06e4babb76e1d78a59d3d9c8ef68404bc10b3a09",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -1465,7 +1465,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.17120996004827
+      "snr_db": 17.17141922430079
     },
     {
       "file": "samples/demo-stereo__32k__B200__codec.flac",
@@ -1821,7 +1821,7 @@
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "51d9317a10a53d60c8ca01b89b73f55dba9fae169bc68ddbcc435f73a1cb584a",
+      "sha256": "287b85afbf0966bcb72dc5003b8212c063f597ad12dd59f728e5e9edcda530e3",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -1965,11 +1965,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 15.402433643351362
+      "snr_db": 15.402755343969778
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "806fa20cebdb211b86b2e6dbab617f79dfd931feee10609ba40d83eb3fac4446",
+      "sha256": "2f21b8ebc283019a51a7c4a56f357e94800039a84f4f79eeeb2f0321b16f1c5b",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -2113,7 +2113,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 23.525972188559283
+      "snr_db": 23.52568696422064
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac",
@@ -2636,7 +2636,7 @@
     },
     {
       "file": "samples/piano-stereo__32k__B200+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "435c4f337a23b64c328128e175d6421e13cbb13dde5e92ea4e3408d724a10717",
+      "sha256": "97f04e2b593b709779e9c6b1a9114b57b372995a351b86b0adb163f58092e5df",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -2780,11 +2780,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 6.873111334468607
+      "snr_db": 6.87308485580213
     },
     {
       "file": "samples/piano-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "a4f5cbe670149c3ce3229b59e4f6e01f8ccbe24f9a5571ce3b105b0ae182015f",
+      "sha256": "1a117e74f65c498ea77ccde0019854b6570edb0f7bc034c622e7603fc03680be",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -2928,11 +2928,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 9.652044479507612
+      "snr_db": 9.65196513752662
     },
     {
       "file": "samples/piano-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "03f2f5b66057af9196b121074f68a1c7882ef1ccaff9e84d688bea9461731ee5",
+      "sha256": "f4151b52418b4ffd2376bd0c42c5c6f67744b723e9dbea42e006791daa8c434c",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -3076,11 +3076,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 16.111622816562456
+      "snr_db": 16.108623273539536
     },
     {
       "file": "samples/piano-stereo__48k__M700Y+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "0d8ba884f80b1fef8c08d82c7c5b60f2e17d104d6a18f1d555a7866eb7d07a0a",
+      "sha256": "b4170c1af7a24759bfad889921edc01e98241e9d3ca0436ba7e2bdb24260d55e",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -3224,7 +3224,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 16.48147622986249
+      "snr_db": 16.479481367491367
     },
     {
       "file": "samples/piano-stereo__32k__B200__codec.flac",
@@ -3580,7 +3580,7 @@
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "fb42e0a94ed300f616776acc8162e51911f2f7d900be72a981dbb4922aa8eaaa",
+      "sha256": "cff4e339f4e50d9324067400da0a041f4c3b687fa5b1f512c009cb9580e12770",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -3724,11 +3724,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 16.32395521120553
+      "snr_db": 16.32430996402717
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "1ce1ea264b9f7c8fd0db095e0625d5348c4f87a466193da49a8493f80b951178",
+      "sha256": "802932ed501402857db60fc7ffafb7de324724c5f8e53a9b7c773095b2c4c031",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -3872,7 +3872,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 26.083876809300413
+      "snr_db": 26.083312032101613
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac",
@@ -4395,7 +4395,7 @@
     },
     {
       "file": "samples/percussion-stereo__32k__B200+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "67436ab02e00596076c747cbeb92faefd8447740178ac8c4174e2798acbc4ccd",
+      "sha256": "dde711e94ab44933dce767475e9c86579835b4402df066908666fdd091334c0f",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -4539,11 +4539,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 16.067807004523043
+      "snr_db": 16.0676943969644
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "a960bfc1b2d9369c2eb5822d89585c0a11bfbc30ba5175d498e4afcd945446a8",
+      "sha256": "6459dd64a965676a2a1a758fd15662d612c5596eae60f31c77908c54e405b8a2",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -4687,11 +4687,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 18.191741561152885
+      "snr_db": 18.191648996838875
     },
     {
       "file": "samples/percussion-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "5a5f1eb9ae94c740df9ddec672bb60fd74482abe223b79fee80b9878d5aa1713",
+      "sha256": "9e485dfee2ac854c86ef289960f32029269004161a7c86cb468f2605f88f5fe2",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -4835,11 +4835,11 @@
           "format_id": 3
         }
       ],
-      "snr_db": 16.837971594484365
+      "snr_db": 16.833851996635207
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "117b0385a8b4a563860da504dcde3ff573354d69f3b8432119ae6242e168da2b",
+      "sha256": "8294ff5c446fde5f67f7986251207c07580d729bb55089c3fce51f39efbeb2d7",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -4983,7 +4983,7 @@
           "format_id": 3
         }
       ],
-      "snr_db": 17.387884726679456
+      "snr_db": 17.385155269353213
     },
     {
       "file": "samples/percussion-stereo__32k__B200__codec.flac",
