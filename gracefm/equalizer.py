@@ -10,7 +10,7 @@ FIR は重みを DSP の乗算器の幅に収まる Q14 の整数にして畳み
 import numpy as np
 
 from . import fec, modem
-from .dsp import saturate
+from .dsp import saturate, wide_matmul, wide_mul
 from .layout import Layout, int_bits
 from .linalg import FRAC as W_FRAC
 from .linalg import hermitian_solve
@@ -54,8 +54,8 @@ def _solve_taps(X, y):
     hr, hi = hermitian_solve(Ar.tolist(), Ai.tolist(), br.tolist(), bi.tolist(), ridge=top >> 24)
     taps = np.stack([np.array(hr, np.int64), np.array(hi, np.int64)], axis=1)
     xr, xi = X[..., 0], X[..., 1]
-    pr = xr @ taps[:, 0] - xi @ taps[:, 1]
-    pim = xr @ taps[:, 1] + xi @ taps[:, 0]
+    pr = wide_matmul(xr, taps[:, 0]) - wide_matmul(xi, taps[:, 1])
+    pim = wide_matmul(xr, taps[:, 1]) + wide_matmul(xi, taps[:, 0])
     rr = (y[:, 0] << W_FRAC) - pr
     ri = (y[:, 1] << W_FRAC) - pim
     rr, ri = rr >> 20, ri >> 20                                  # 残差 (Q10 + Q24 = Q34) を Q14 に
@@ -112,24 +112,24 @@ def design_mmse_equalizer(lags, taps, noise_power, ntaps=11, max_lookahead=4):
             H[valid, j] = taps[src[valid] - lo]
         zero = int(np.flatnonzero(eff == 0)[0])
         hr, hi_ = H[..., 0], H[..., 1]
-        Ar = (hr.T @ hr + hi_.T @ hi_) >> W_FRAC
-        Ai = (hr.T @ hi_ - hi_.T @ hr) >> W_FRAC
+        Ar = (wide_matmul(hr.T, hr) + wide_matmul(hi_.T, hi_)) >> W_FRAC
+        Ai = (wide_matmul(hr.T, hi_) - wide_matmul(hi_.T, hr)) >> W_FRAC
         br, bi = hr[zero].copy(), -hi_[zero]                        # Hᴴ d  (d は 0 ラグだけ 1)
         wr, wi = hermitian_solve(Ar.tolist(), Ai.tolist(), br.tolist(), bi.tolist(), ridge=noise_q24)
         w = np.stack([np.array(wr, np.int64), np.array(wi, np.int64)], axis=1)
-        gr = int((hr[zero] * w[:, 0] - hi_[zero] * w[:, 1]).sum() >> W_FRAC)
-        gi = int((hr[zero] * w[:, 1] + hi_[zero] * w[:, 0]).sum() >> W_FRAC)
+        gr = int((wide_mul(hr[zero], w[:, 0]) - wide_mul(hi_[zero], w[:, 1])).sum() >> W_FRAC)
+        gi = int((wide_mul(hr[zero], w[:, 1]) + wide_mul(hi_[zero], w[:, 0])).sum() >> W_FRAC)
         mag2 = (gr * gr + gi * gi) >> W_FRAC
         if mag2 < (1 << W_FRAC) >> 16:
             continue
-        nr = (w[:, 0] * gr + w[:, 1] * gi) >> W_FRAC                # w · conj(g)
-        ni = (w[:, 1] * gr - w[:, 0] * gi) >> W_FRAC
+        nr = (wide_mul(w[:, 0], gr) + wide_mul(w[:, 1], gi)) >> W_FRAC                # w · conj(g)
+        ni = (wide_mul(w[:, 1], gr) - wide_mul(w[:, 0], gi)) >> W_FRAC
         w = np.stack([(nr << W_FRAC) // mag2, (ni << W_FRAC) // mag2], axis=1)
-        rr = ((hr @ w[:, 0] - hi_ @ w[:, 1]) >> W_FRAC)
-        ri = ((hr @ w[:, 1] + hi_ @ w[:, 0]) >> W_FRAC)
+        rr = ((wide_matmul(hr, w[:, 0]) - wide_matmul(hi_, w[:, 1])) >> W_FRAC)
+        ri = ((wide_matmul(hr, w[:, 1]) + wide_matmul(hi_, w[:, 0])) >> W_FRAC)
         rr[zero] -= 1 << W_FRAC
-        err = int(((rr >> 8) ** 2 + (ri >> 8) ** 2).sum())                         # Q32
-        mse = err + int((noise_q24 * ((w[:, 0] >> 8) ** 2 + (w[:, 1] >> 8) ** 2).sum()) >> W_FRAC)
+        err = int((wide_mul(rr >> 8, rr >> 8) + wide_mul(ri >> 8, ri >> 8)).sum())                 # Q32
+        mse = err + int((noise_q24 * int((wide_mul(w[:, 0] >> 8, w[:, 0] >> 8) + wide_mul(w[:, 1] >> 8, w[:, 1] >> 8)).sum())) >> W_FRAC)
         if best is None or mse < best[0]:
             best = mse, lead, w
     if best is None:

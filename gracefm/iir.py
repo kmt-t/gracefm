@@ -1,22 +1,24 @@
 """出力段の切り替え先の因果 IIR (整数のみ)。区間 (biquad) を直接形 II の転置で直列に通す。
-係数は tables.py の ALT_IIR_*_Q28 (Q28、a0 = 1)。状態と積は 64 bit 整数に収まる (PCM 24 bit の入力)。"""
+係数は tables.py の ALT_IIR_*_Q16 (区間ごとの (b0_q, s, a1_q, a2_q)、b0 = b0_q / 2^(16+s)、a1 と a2 は Q16、a0 = 1)。
+低域通過の区間は b1 = 2·b0、b2 = b0 なので、b0 だけ持つ。s は b0 の精度を上げるための増分 (gen_tables.py)。
+係数はすべて 18 bit 符号つきに収まる。信号は PCM の 24 bit で、積は 25×18 bit、累積は 48 bit に収まる（フィードバックの
+a1·y を 2^s 倍する項が最大で 2^45 程度）。"""
 import numpy as np
 
-from .tables import ALT_IIR_32K_Q28, ALT_IIR_48K_Q28
+from .dsp import saturate_bits
+from .tables import ALT_IIR_32K_Q16, ALT_IIR_48K_Q16
 
-Q = 28
-HALF = 1 << (Q - 1)
-PCM_MAX = (1 << 23) - 1
-PCM_MIN = -(1 << 23)
+Q = 16
+PCM_BITS = 24
 
 
 def alt_sections(fs):
-    """サンプリング周波数に対応する切り替え先の IIR の区間"""
-    return ALT_IIR_32K_Q28 if fs == 32000 else ALT_IIR_48K_Q28
+    """サンプリング周波数に対応する切り替え先の IIR の区間 (b0, a1, a2)"""
+    return ALT_IIR_32K_Q16 if fs == 32000 else ALT_IIR_48K_Q16
 
 
 def iir_filter(x, sections):
-    """x: (n, ch) の整数 (PCM の範囲)。区間の列 sections に通した (n, ch) の整数を返す (因果、遅延は群遅延の分だけ)。"""
+    """x: (n, ch) の PCM (24 bit 整数)。区間の列 sections に通した (n, ch) の PCM を返す (因果、遅延は群遅延の分だけ)。"""
     x = np.asarray(x, np.int64)
     n, ch = x.shape
     out = np.empty((n, ch), np.int64)
@@ -24,13 +26,13 @@ def iir_filter(x, sections):
     coefs = [tuple(np.int64(c) for c in sec) for sec in sections]
     for k in range(n):
         v = x[k]
-        for j, (b0, b1, b2, a1, a2) in enumerate(coefs):
+        for j, (b0_q, sc, a1_q, a2_q) in enumerate(coefs):
             s = states[j]
-            acc = b0 * v + s[0]                                # 2^Q 倍の尺度
-            y = (acc + HALF) >> Q
-            y = np.clip(y, PCM_MIN, PCM_MAX)
-            s[0] = b1 * v - a1 * y + s[1]
-            s[1] = b2 * v - a2 * y
+            qs = Q + sc                                        # b0 の尺度。状態と出力はこの尺度で持つ
+            acc = b0_q * v + s[0]
+            y = saturate_bits((acc + (1 << (qs - 1))) >> qs, PCM_BITS)
+            s[0] = 2 * b0_q * v - ((a1_q * y) << sc) + s[1]    # b1 = 2·b0
+            s[1] = b0_q * v - ((a2_q * y) << sc)               # b2 = b0
             v = y
         out[k] = v
     return out

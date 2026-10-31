@@ -17,7 +17,7 @@ from math import isqrt
 
 import numpy as np
 
-from .dsp import CONST_BITS
+from .dsp import CONST_BITS, wide_mul
 
 SYM_FRAC = 22
 DIST_BITS = CONST_BITS - 1                      # 二乗する距離の幅 (符号を除く)
@@ -233,16 +233,16 @@ def y_demodulate(sym, msb, parity, step=(2, 105), scramble=None, var=1, lower_bi
     proj = ((sign[:, 0] * y[:, 0] + sign[:, 1] * y[:, 1]) * INV_SQRT2) >> SYM_FRAC          # 象限の軸への射影 (Q SYM_FRAC)
     num, den = step
     # 観測された段 = (proj × scale − 1) / a + 中心。a = num/den、中心 = (levels − 1)/2。小数 MANT_FRAC bit
-    scaled = (proj * scale) >> SYM_FRAC                                                     # proj × scale (Q SYM_FRAC)
+    scaled = wide_mul(proj, scale) >> SYM_FRAC                                              # proj × scale (Q SYM_FRAC)、片に分けて掛ける
     obs = ((((scaled - (1 << SYM_FRAC)) * den) << MANT_FRAC) + ((num << SYM_FRAC) >> 1)) // (num << SYM_FRAC) + (((levels - 1) << MANT_FRAC) >> 1)
     obs = np.where(mask[:, 2] != 0, ((levels - 1) << MANT_FRAC) - obs, obs)
     center = ((levels - 1) << MANT_FRAC) >> 1
     # 雑音の段あたりの分散 = σ² × scale² / a² (σ² は demodulate と同じ単位 → Q SYM_FRAC の二乗へ戻す)
     sigma2 = (max(var, 1) << (2 * DIST_SHIFT))                                          # (Q SYM_FRAC)² 単位
-    noise = ((sigma2 >> SYM_FRAC) * ((scale * scale) >> SYM_FRAC) >> SYM_FRAC) * den * den // (num * num)
+    noise = (wide_mul(sigma2 >> SYM_FRAC, wide_mul(scale, scale) >> SYM_FRAC) >> SYM_FRAC) * den * den // (num * num)
     noise_l = (noise << (2 * MANT_FRAC)) >> SYM_FRAC                                       # 段² を小数 MANT_FRAC 桁の二乗で
     prior = ((levels * levels - 1) << (2 * MANT_FRAC)) // 12
     gain = 0 if phase_only else (prior << 15) // (prior + noise_l + 1)                 # Q15
     est = np.clip(center + ((gain * (obs - center) + (1 << 14)) >> 15), 0, (levels - 1) << MANT_FRAC)
-    variance = (gain * noise_l) >> 15
+    variance = wide_mul(gain, noise_l) >> 15
     return (msb * levels << MANT_FRAC) + est, np.full(len(y), variance, np.int64)

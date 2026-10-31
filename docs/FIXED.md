@@ -18,7 +18,7 @@
 
 ## 2. 数値形式
 
-**方針。** 値は 0〜1 の範囲で、固定小数点のフルレンジは 20 bit 強（[SPEC](SPEC.md) 6.1）なので、PCM は符号つき 24 bit（±1 = 2^23）、IQ と Haar の係数は **小数 22 bit**（±1 = 2^22）の固定小数点で扱う。Haar 4 段の利得で最低域は ±2^24 になるが、これは乗算器の入力（25 bit）に余裕を持たせて載せているだけで、精度が 25 bit あるわけではない。IQ は受け取った段階（12 bit の ADC 出力）で小数 22 bit に変換する。**DSP の都合で精度が下がることは容認する**。64 bit 整数が出るのは、乗算とアキュムレータ（`gracefm/dsp.py`）だけを想定する。
+**方針。** 値は 0〜1 の範囲で、固定小数点のフルレンジは 20 bit 強（[SPEC](SPEC.md) 6.1）なので、PCM は符号つき 24 bit（±1 = 2^23）、IQ と Haar の係数は **小数 22 bit**（±1 = 2^22）の固定小数点で扱う。Haar 4 段の利得で最低域は ±2^24 になるが、これは乗算器の入力（25 bit）に余裕を持たせて載せているだけで、精度が 25 bit あるわけではない。IQ は受け取った段階（12 bit の ADC 出力）で小数 22 bit に変換する。**DSP の都合で精度が下がることは容認する**。参照実装は numpy の int64 で計算する。ハードでは、乗算の入力と積和の幅（25×18 bit、48 bit）に収まる必要がある。収まることを確かめた箇所は、テストで検査する（`tests/test_fixed.py`）。確かめていない箇所は、下の表に残りとして示す。
 
 | 量 | 形式 |
 |---|---|
@@ -54,6 +54,10 @@
 | [`fusion.py`](../gracefm/fusion.py) | 2 系統の帯域ごとの融合（逆分散重み、Q15） |
 | [`plc.py`](../gracefm/plc.py) | LPC による補間（整数のレビンソン・ダービン）とクロスフェード |
 | [`postfilter.py`](../gracefm/postfilter.py) | 出力段（Lanczos 補間、LPF、再標本化）。係数は整数の表 |
+| [`iir.py`](../gracefm/iir.py) | 出力の切り替え先の IIR（因果、4 次 Butterworth、4 kHz）。係数は 18 bit（b0 は区間ごとに小数の位を増やし、a1・a2 は Q16）。積は 25×18 bit、累積は 48 bit。精度は 32 kHz で約 13 LSB、48 kHz で約 51 LSB の誤差（振幅 3×10^5 の入力）で、ベストエフォート |
+| [`dsp.py`](../gracefm/dsp.py) の `wide_mul` / `wide_matmul` | 広い積（等化器の行列積、係数との積）を 11 bit ずつの片に分けて足す。値は正確な積と同じ。片どうしの積は 22 bit 以内で、乗算器に収まる |
+| CPU 側（分割の方針） | 等化器の連立方程式（`linalg.py`）、PLC の Levinson 再帰と外挿（`plc.py`）、割り算（変数どうし）。逐次の処理で、幅は Python の整数 |
+| [`equalizer.py`](../gracefm/equalizer.py)、[`modem.py`](../gracefm/modem.py) の Y 帯域 | 行列積、係数との積、二乗和、分散の積は `wide_mul` / `wide_matmul` で分割して掛ける。値は正確な積と同じ（テストで確認） |
 | [`equalizer.py`](../gracefm/equalizer.py)、[`linalg.py`](../gracefm/linalg.py) | 訓練つき MMSE 等化器。通信路の推定と重みの設計を、整数のコレスキー分解で解く |
 | [`tables.py`](../gracefm/tables.py) | 定数表（`tools/gen/gen_tables.py` が作る） |
 | [`profiles.py`](../gracefm/profiles.py)、[`timing.py`](../gracefm/timing.py) | 設定値（整数と分数）、遅延モデル（分数） |

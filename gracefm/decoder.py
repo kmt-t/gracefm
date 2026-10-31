@@ -23,7 +23,7 @@ from .codec import (
     synthesize,
 )
 from .crypto import unwrap_counter
-from .dsp import log2_q8, saturate, shift_signed, sigmoid_q15
+from .dsp import log2_q8, saturate, shift_signed, sigmoid_q15, wide_mul
 from .fusion import INF_LOG
 from .layout import Layout
 from .profiles import Profile
@@ -77,7 +77,7 @@ def soft_coeffs(lay: Layout, bd: BlockData, p1_coef, y_mant, y_var, high_ok=True
     hard = (p1_coef > 16384).astype(np.int64)
     w = np.int64(1) << lay.coef_pos
     du = lay.segment_sum((p1_coef - hard * 32768) * w)
-    var = lay.segment_sum(((p1_coef * (32768 - p1_coef)) >> 15) * w * w)
+    var = lay.segment_sum(wide_mul((p1_coef * (32768 - p1_coef)) >> 15, w * w))     # w·w は最大 2^20 (B 入力の幅を超えるので分割して掛ける)
     coefs = {}
     rb = np.full((2, 2, p.nbands), INF_LOG, np.int64)
     for ci, (ch, bits) in enumerate((("M", p.bits_m), ("S", p.bits_s))):

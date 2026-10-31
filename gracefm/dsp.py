@@ -54,6 +54,41 @@ def shift_signed(m, s):
     return np.where(s >= 0, left, right)
 
 
+PIECE_BITS = 11                 # 広い値を分けるときの 1 片の幅 (片 × 片 の積は 22 bit、乗算器の 25×18 に収まる)
+
+
+def _pieces(v):
+    """整数配列 v を、下位から PIECE_BITS bit ずつの片に分ける。v = Σ piece_i · 2^(PIECE_BITS·i)。
+    下位の片は 0 以上、最上位の片だけ符号つき。"""
+    v = np.asarray(v, np.int64)
+    width = max(int(np.abs(v).max()).bit_length(), 1) if v.size else 1
+    count = -(-(width + 1) // PIECE_BITS)                         # 符号の 1 bit を含める
+    mask = (1 << PIECE_BITS) - 1
+    out = [((v >> (PIECE_BITS * i)) & mask) for i in range(count - 1)]
+    out.append(v >> (PIECE_BITS * (count - 1)))
+    return out
+
+
+def wide_mul(a, b):
+    """a × b を、片どうしの積の和で計算する。片 × 片 は乗算器の幅に収まる。結果は int64 なので、|a·b| < 2^63 の範囲で正確な積と同じ。"""
+    total = np.zeros(np.broadcast(np.asarray(a), np.asarray(b)).shape, np.int64)
+    for i, pa in enumerate(_pieces(a)):
+        for j, pb in enumerate(_pieces(b)):
+            total = total + ((pa * pb) << (PIECE_BITS * (i + j)))
+    return total
+
+
+def wide_matmul(a, b):
+    """行列積 a @ b。片どうしの積を、同じ位置の片ごとに足す。結果は int64 なので、各要素の和が 2^63 未満の範囲で正確な積と同じ。"""
+    a, b = np.asarray(a, np.int64), np.asarray(b, np.int64)
+    total = None
+    for i, pa in enumerate(_pieces(a)):
+        for j, pb in enumerate(_pieces(b)):
+            part = (pa @ pb) << (PIECE_BITS * (i + j))
+            total = part if total is None else total + part
+    return total
+
+
 def bit_length(n):
     """n >= 0 の整数配列のbit長 (0 のとき 0)"""
     n = np.asarray(n, np.int64)

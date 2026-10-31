@@ -30,6 +30,33 @@ def test_multiplier_constant_fits_18_bit_signed():
     assert 0 < SQ2_INV < (1 << (CONST_BITS - 1))
 
 
+def test_wide_products_are_exact_and_split_into_dsp_widths():
+    """広い積は、乗算器の幅の片に分けて足す。結果は正確な積と同じ (int64 の範囲で)"""
+    from gracefm.dsp import PIECE_BITS, wide_matmul, wide_mul
+    rng = np.random.default_rng(7)
+    a = rng.integers(-2**40, 2**40, size=200)
+    b = rng.integers(-2**20, 2**20, size=200)
+    assert all(int(g) == int(p) * int(q) for g, p, q in zip(wide_mul(a, b), a, b))
+    A = rng.integers(-2**22, 2**22, size=(30, 5))
+    B = rng.integers(-2**30, 2**30, size=(5, 4))
+    G = wide_matmul(A, B)
+    assert all(int(G[i, j]) == sum(int(A[i, k]) * int(B[k, j]) for k in range(5)) for i in range(30) for j in range(4))
+    assert PIECE_BITS + PIECE_BITS <= 18 + 4          # 片どうしの積は 22 bit 以内
+
+
+def test_postfilter_datapath_fits_dsp_widths():
+    """ポストフィルタの信号は 25 bit (乗算器の A 入力)、係数は 18 bit (B 入力)、積和は 48 bit (アキュムレータ) に収まる"""
+    from gracefm import postfilter, tables
+    from gracefm.dsp import ACC_BITS, CONST_BITS, MULT_BITS, MULT_MIN
+    assert postfilter.GUARD_BITS + 24 == MULT_BITS
+    for name, table in (("LANCZOS", tables.LANCZOS_Q16), ("LPF_32K", tables.LPF_32K_Q17), ("LPF_48K", tables.LPF_48K_Q17),
+                        ("RESAMPLE_3_8", tables.RESAMPLE_3_8_Q16), ("RESAMPLE_1_4", tables.RESAMPLE_1_4_Q16)):
+        c = np.abs(np.array(table, np.int64))
+        assert int(c.max()) < 1 << (CONST_BITS - 1), name
+        # 最悪の積和: 入力の最大 (|x| = 2^(MULT_BITS-1)) × 係数の絶対値の和
+        assert int(c.sum()) * (-MULT_MIN) < 1 << (ACC_BITS - 1), name
+
+
 def test_haar_stays_within_multiplier_width_and_inverts():
     rng = np.random.default_rng(1)
     for levels in (4,):

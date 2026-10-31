@@ -1,15 +1,20 @@
 """
-出力段のポストフィルタ (DAC 前の再構成フィルタ)。すべて整数演算。
+出力段のポストフィルタ (DAC 前の再構成フィルタ)。すべて整数演算で、DSP (gracefm/dsp.py) の幅に従う。
 
-符号つき24 bit整数の PCM を、Lanczos 補間で 4 倍にオーバーサンプリングし、元のナイキスト周波数の LPF で鏡像を落としてから、
-48 kHz へ再標本化して、符号つき32 bit整数にする。量子化区間への射影は行わない。フィルタ係数は符号つき18 bit
-(Q16 または Q17 の整数、gracefm/tables.py) で、積和は 64 bit 整数 (DSP のアキュムレータ 48 bit に収まる範囲)。
+符号つき24 bit整数の PCM に 1 bit のガードを足して 25 bit にし、Lanczos 補間で 4 倍にオーバーサンプリングする。
+元のナイキスト周波数の LPF で鏡像を落としてから、48 kHz へ再標本化して、符号つき32 bit整数にする。
+量子化区間への射影は行わない。
+
+幅 (docs/FIXED.md): 信号は 25 bit (乗算器の A 入力)、係数は 18 bit 以内 (B 入力)、積和は 48 bit (アキュムレータ)。
+各段の出力は 25 bit に飽和させる (Lanczos のオーバーシュートは入力の約 1.76 倍まで出るため)。
+累積の上限は、係数の絶対値の和 × 2^24 が 2^47 未満であることを tests/test_fixed.py で確かめる。
 
 遅延: Lanczos の先読み LANCZOS_A 入力サンプルと LPF の群遅延 (オーバーサンプル後の LPF_TAPS // 2 サンプル) を、
 ブロックを待つ分とは別に加える。ここでは位相を補正して出力を入力と時刻合わせする。
 """
 import numpy as np
 
+from .dsp import round_shift, saturate
 from .tables import (
     LANCZOS_Q16,
     LPF_32K_Q17,
@@ -22,18 +27,19 @@ OVERSAMPLE = 4
 OUT_FS = 48000
 LANCZOS_A = 8           # Lanczos 窓の半幅 [入力サンプル]
 LPF_TAPS = 511          # オーバーサンプル後の線形位相 FIR (奇数)
-INT32_MAX = 2 ** 31 - 1
+GUARD_BITS = 1          # 24 bit の PCM に足すガード (25 bit = 乗算器の A 入力)
+OUT_SHIFT = 32 - 24 - GUARD_BITS                 # 出力 (32 bit) へ戻すシフト
 
 
 def _fir_centered(x, h, shift):
-    """x (n, ch) と h の畳み込みの中央 n 点 (線形位相)。結果を shift bit 右シフト (四捨五入)"""
+    """x (n, ch) と h の畳み込みの中央 n 点 (線形位相)。積和を shift bit 右シフト (四捨五入) し、25 bit に飽和させる"""
     half = len(h) // 2
     out = np.stack([np.convolve(x[:, c], h)[half:half + len(x)] for c in range(x.shape[1])], axis=1)
-    return (out + (1 << (shift - 1))) >> shift
+    return saturate(round_shift(out, shift))
 
 
 def lanczos_upsample(x, oversample=OVERSAMPLE):
-    """x: (n, ch) の整数 → (n·oversample, ch)。元の標本点は変えず、間を Lanczos で補間する。端は 0 とみなす"""
+    """x: (n, ch) の 25 bit 整数 → (n·oversample, ch)。元の標本点は変えず、間を Lanczos で補間する。端は 0 とみなす"""
     z = np.zeros((len(x) * oversample, x.shape[1]), np.int64)
     z[::oversample] = x
     return _fir_centered(z, np.array(LANCZOS_Q16, np.int64), 16)
@@ -48,7 +54,7 @@ def postfilter(y, fs, out_fs=OUT_FS):
     x = np.asarray(y, np.int64)
     if x.ndim == 1:
         x = x[:, None]
-    x = x << 8                                                         # 24 bit → 32 bit
+    x = x << GUARD_BITS                                                # 24 bit → 25 bit
     up = lanczos_upsample(x)
     lpf = np.array(LPF_32K_Q17 if fs == 32000 else LPF_48K_Q17, np.int64)
     filt = _fir_centered(up, lpf, 17)
@@ -58,8 +64,7 @@ def postfilter(y, fs, out_fs=OUT_FS):
     stuffed[::up_f] = filt
     resampled = _fir_centered(stuffed, np.array(kernel, np.int64), 16)[::down_f]
     n_out = len(x) * out_fs // fs
-    out = resampled[:n_out]
-    return np.clip(out, -INT32_MAX - 1, INT32_MAX)
+    return resampled[:n_out] << OUT_SHIFT
 
 
 def select_by_quality(y, alt, quality, block, use_alt=(1, 2), fade=16):
