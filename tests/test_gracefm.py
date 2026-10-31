@@ -449,10 +449,9 @@ def test_alt_iir_coefficients_fit_18_bit_and_are_stable():
     """切り替え先の IIR の係数は 18 bit 符号つき (Q16)、極は単位円の内側、低域通過の区間は b1 = 2·b0、b2 = b0"""
     from gracefm.iir import alt_sections
     for fs in (32000, 48000):
-        for b0_q, sc, a1_q, a2_q in alt_sections(fs):
-            assert all(abs(c) < 1 << 17 for c in (b0_q, a1_q, a2_q))
-            assert 0 <= sc <= 5
-            assert np.abs(np.roots([1, a1_q / 65536, a2_q / 65536])).max() < 1
+        for b0, a1, a2 in alt_sections(fs):
+            assert all(abs(c) < 1 << 17 for c in (b0, a1, a2))
+            assert np.abs(np.roots([1, a1 / 65536, a2 / 65536])).max() < 1
 
 
 def test_alt_iir_matches_float_design_and_switches_only_marked_blocks():
@@ -465,8 +464,8 @@ def test_alt_iir_matches_float_design_and_switches_only_marked_blocks():
     for fs in (32000, 48000):
         x = np.clip(np.cumsum(rng.normal(size=(4000, 2)), axis=0) * 2**12, -2**22, 2**22).astype(np.int64)
         ref = sosfilt(butter(4, 4000, fs=fs, output="sos"), x.astype(float), axis=0)
-        # Q16 の係数の丸め (|x| ≤ 2^22 で約 70 LSB、-102 dBFS) の範囲で一致する
-        assert np.abs(iir_filter(x, alt_sections(fs)) - ref).max() < 128
+        # 係数は Q16 の固定 (仕様の 18 bit)。丸めのずれは、ランダムウォーク入力で 48 kHz 約 440 LSB、32 kHz 約 70 LSB (FIXED.md)
+        assert np.abs(iir_filter(x, alt_sections(fs)) - ref).max() < 512
         block = 64
         q = np.array([0, 2, 0] + [0] * (len(x) // block - 3))
         out = apply_alt(x, q, fs, block)

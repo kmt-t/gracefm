@@ -54,7 +54,7 @@
 | [`fusion.py`](../gracefm/fusion.py) | 2 系統の帯域ごとの融合（逆分散重み、Q15） |
 | [`plc.py`](../gracefm/plc.py) | LPC による補間（整数のレビンソン・ダービン）とクロスフェード |
 | [`postfilter.py`](../gracefm/postfilter.py) | 出力段（Lanczos 補間、LPF、再標本化）。係数は整数の表 |
-| [`iir.py`](../gracefm/iir.py) | 出力の切り替え先の IIR（因果、4 次 Butterworth、4 kHz）。係数は 18 bit（b0 は区間ごとに小数の位を増やし、a1・a2 は Q16）。積は 25×18 bit、累積は 48 bit。精度は 32 kHz で約 13 LSB、48 kHz で約 51 LSB の誤差（振幅 3×10^5 の入力）で、ベストエフォート |
+| [`iir.py`](../gracefm/iir.py) | 出力の切り替え先の IIR（因果、4 次 Butterworth、4 kHz）。係数は符号つき 18 bit の Q16（固定）。積は 25×18 bit、累積は 48 bit。係数は Q16 の固定（仕様どおり）。浮動小数点の設計との誤差は、振幅 3×10^5 のランダムウォーク入力で 32 kHz 約 70 LSB、48 kHz 約 440 LSB。1 kHz・振幅 2^22 の正弦波では 32 kHz 約 600 LSB、48 kHz 約 4200 LSB（約 −60 dB）。48 kHz の精度は不足（未解決、下の「未実装」を参照） |
 | [`dsp.py`](../gracefm/dsp.py) の `wide_mul` / `wide_matmul` | 広い積（等化器の行列積、係数との積）を 11 bit ずつの片に分けて足す。値は正確な積と同じ。片どうしの積は 22 bit 以内で、乗算器に収まる |
 | CPU 側（分割の方針） | 等化器の連立方程式（`linalg.py`）、PLC の Levinson 再帰と外挿（`plc.py`）、割り算（変数どうし）。逐次の処理で、幅は Python の整数 |
 | [`equalizer.py`](../gracefm/equalizer.py)、[`modem.py`](../gracefm/modem.py) の Y 帯域 | 行列積、係数との積、二乗和、分散の積は `wide_mul` / `wide_matmul` で分割して掛ける。値は正確な積と同じ（テストで確認） |
@@ -87,7 +87,7 @@
 - Haar 逆変換（`mac_sq2_inv`、係数 1/√2 は 17 bit）。
 - 軟判定の復号（`decoder.soft_coeffs`）。確率と係数の積。
 - 出力のポストフィルタ（`postfilter.py`）。信号は 25 bit（PCM 24 bit に 1 bit のガード）、係数は 18 bit 以内、各段の出力は 25 bit に飽和、累積は 48 bit。
-- 出力切り替えの IIR（`iir.py`）。係数は 18 bit。b0 だけ持ち（b1 = 2·b0、b2 = b0）、区間ごとに小数の位を増やして精度を取る。
+- 出力切り替えの IIR（`iir.py`）。係数は符号つき 18 bit の Q16（固定）。低域通過の区間は b1 = 2·b0、b2 = b0 なので b0 だけ持つ。
 - 等化器の行列積とタップとの積（`equalizer.py`）、Y 帯域の半径の積と分散（`modem.py`）。幅が 25×18 を超える積は、`dsp.wide_mul` / `dsp.wide_matmul` で 11 bit の片に分けて掛け、正確な積と同じ値にする。
 - LLR の計算（8 bit の整数、`dsp.log2_q8` などは乗算と比較だけ）、ビタビ（加算・比較・選択）、CRC（ビット演算）。
 
@@ -99,7 +99,7 @@
 - 同期（シンボルタイミング、搬送波、AGC）、AD9363 の制御、フレーム管理、暗号（AES-CTR）、ヘッダの解析。
 
 **精度の注意。**
-- IIR の出力は、浮動小数点の設計との差が 32 kHz で約 13 LSB、48 kHz で約 51 LSB（振幅 3×10^5 のランダムウォークで測定）。品質コードが 1 か 2 のブロックにだけ効く。
+- IIR の出力は、浮動小数点の設計との差が、ランダムウォーク入力で 32 kHz 約 70 LSB、48 kHz 約 440 LSB。1 kHz・振幅 2^22 の正弦波では 32 kHz 約 600 LSB、48 kHz 約 4200 LSB。係数の Q16 の丸めによる（48 kHz の 1 段目の b0 は 0.0026 で、Q16 では 169 しか表せない）。品質コードが 1 か 2 のブロックにだけ効く。
 - CPU 側の幅は Python の任意精度の整数で、ハードで実装するときは幅を決め直す必要がある。
 - 割り算を含む処理は、DSP の幅の検査（テスト）の対象外。
 

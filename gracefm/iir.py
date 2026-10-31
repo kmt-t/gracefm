@@ -1,6 +1,6 @@
 """出力段の切り替え先の因果 IIR (整数のみ)。区間 (biquad) を直接形 II の転置で直列に通す。
-係数は tables.py の ALT_IIR_*_Q16 (区間ごとの (b0_q, s, a1_q, a2_q)、b0 = b0_q / 2^(16+s)、a1 と a2 は Q16、a0 = 1)。
-低域通過の区間は b1 = 2·b0、b2 = b0 なので、b0 だけ持つ。s は b0 の精度を上げるための増分 (gen_tables.py)。
+係数は tables.py の ALT_IIR_*_Q16 (区間ごとの (b0, a1, a2)、Q16 の固定形式、符号つき 18 bit、a0 = 1)。
+低域通過の区間は b1 = 2·b0、b2 = b0 なので、b0 だけ持つ。
 係数はすべて 18 bit 符号つきに収まる。信号は PCM の 24 bit で、積は 25×18 bit、累積は 48 bit に収まる（フィードバックの
 a1·y を 2^s 倍する項が最大で 2^45 程度）。"""
 import numpy as np
@@ -9,6 +9,7 @@ from .dsp import saturate_bits
 from .tables import ALT_IIR_32K_Q16, ALT_IIR_48K_Q16
 
 Q = 16
+HALF = 1 << (Q - 1)
 PCM_BITS = 24
 
 
@@ -26,13 +27,12 @@ def iir_filter(x, sections):
     coefs = [tuple(np.int64(c) for c in sec) for sec in sections]
     for k in range(n):
         v = x[k]
-        for j, (b0_q, sc, a1_q, a2_q) in enumerate(coefs):
+        for j, (b0, a1, a2) in enumerate(coefs):
             s = states[j]
-            qs = Q + sc                                        # b0 の尺度。状態と出力はこの尺度で持つ
-            acc = b0_q * v + s[0]
-            y = saturate_bits((acc + (1 << (qs - 1))) >> qs, PCM_BITS)
-            s[0] = 2 * b0_q * v - ((a1_q * y) << sc) + s[1]    # b1 = 2·b0
-            s[1] = b0_q * v - ((a2_q * y) << sc)               # b2 = b0
+            acc = b0 * v + s[0]                                # 2^Q 倍の尺度
+            y = saturate_bits((acc + HALF) >> Q, PCM_BITS)
+            s[0] = 2 * b0 * v - a1 * y + s[1]                  # b1 = 2·b0
+            s[1] = b0 * v - a2 * y                             # b2 = b0
             v = y
         out[k] = v
     return out
