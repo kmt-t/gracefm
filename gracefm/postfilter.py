@@ -54,3 +54,25 @@ def postfilter(y, fs, out_fs=OUT_FS):
     n_out = len(x) * out_fs // fs
     out = resampled[:n_out]
     return np.clip(out, -INT32_MAX - 1, INT32_MAX)
+
+
+def select_by_quality(y, alt, quality, block, use_alt=(1, 2), fade=16):
+    """ブロックごとの品質コード (0 正常, 1 高域欠落, 2 欠落) に応じて、y と alt を切り替える。
+    use_alt に入るコードのブロックでは alt を使う。切り替えは、そのブロックの先頭から fade サンプルの直線で行う (因果的)。
+    重みは Q15 の整数。fade は 2 のべき乗にする。既定の出力には使わない (呼び出し側が選ぶ)。"""
+    y = np.asarray(y, np.int64)
+    alt = np.asarray(alt, np.int64)
+    n = len(y)
+    out = np.empty_like(y)
+    w = 0                                                      # Q15 の重み (0 = y, 32768 = alt)
+    for i, q in enumerate(quality):
+        s0 = i * block
+        if s0 >= n:
+            break
+        s1 = min(n, s0 + block)
+        target = 32768 if int(q) in use_alt else 0
+        m = np.minimum(np.arange(1, s1 - s0 + 1, dtype=np.int64), fade)
+        r = (w + ((target - w) * m) // fade)[:, None]          # 各サンプルの重み
+        out[s0:s1] = (y[s0:s1] * (32768 - r) + alt[s0:s1] * r + 16384) >> 15
+        w = int(r[-1, 0])
+    return out

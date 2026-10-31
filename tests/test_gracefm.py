@@ -384,3 +384,26 @@ def test_header_recovery_flips_least_reliable_bits():
     from math import comb
     from gracefm import framing
     assert 1 + sum(comb(framing.RECOVER_CANDIDATES, t) for t in range(1, framing.RECOVER_MAX_FLIPS + 1)) <= 29
+
+
+def test_block_quality_marks_lost_frames_and_switch_is_identity_when_clean():
+    """受信の品質コードは、欠落フレームを 2 として出す。切り替えは、コードが 0 のときは y をそのまま返す。"""
+    from gracefm import channel
+    from gracefm.postfilter import select_by_quality
+    from gracefm.txrx import Transmitter, receive
+    p = PROFILES["B200M"]
+    rng = np.random.default_rng(8)
+    x = np.clip(np.cumsum(rng.normal(size=(p.block * 20, 2)), axis=0) * 2**10, -2**22, 2**22).astype(np.int64)
+    frames = Transmitter(p, 0).run(x)
+    lost = {5, 6}
+    rx = [None if i in lost else f for i, f in enumerate(frames)]
+    y, stats = receive(p, rx, None, len(x), 0, return_streams=False)
+    q = stats["quality"]
+    assert len(q) == len(x) // p.block
+    assert all(q[i] == 2 for i in lost) and all(q[i] == 0 for i in range(len(q)) if i not in lost)
+    clean = np.arange(len(q)) * 0
+    yy = np.arange(p.block * len(q) * 2).reshape(-1, 2)
+    assert np.array_equal(select_by_quality(yy, yy * 0, clean, p.block), yy)
+    sel = select_by_quality(yy, yy * 0 + 7, np.full(len(q), 2), p.block)
+    assert np.all(sel[p.block:] == 7)                            # 1 ブロック目以降は alt に切り替わっている
+    assert sel[0, 0] == yy[0, 0]                                  # 先頭のサンプルは切り替え前の y

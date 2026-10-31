@@ -80,6 +80,7 @@ class StreamDecoder:
         self.layout = Layout(profile, encrypted=cipher is not None)
         self.digital_nsym = modem.n_symbols(self.layout.n_tx, self.layout.n_strong, profile.modulation)
         self.stats = {"frames": 0, "lost": 0, "crc_fail": 0, "high_crc_fail": 0}
+        self.last_quality = 2                                    # 直近フレームの品質: 0 正常, 1 高域欠落, 2 欠落
         self.last_rb = None
 
     def _y_mask(self):
@@ -170,6 +171,7 @@ class StreamDecoder:
         if sym is None:
             self.stats["lost"] += 1
             self.last_rb = None
+            self.last_quality = 2
             return np.zeros((p.block, 2), np.int64), False
         digital = sym[n_pre:n_pre + self.digital_nsym]
         llr, hard, var = modem.demodulate(digital, lay.n_tx, p.modulation, p.alpha)
@@ -180,6 +182,7 @@ class StreamDecoder:
         if bd is None:
             self.stats["crc_fail"] += 1
             self.last_rb = None
+            self.last_quality = 2
             return np.zeros((p.block, 2), np.int64), False
         p1_coef = sigmoid_q15(llr[lay.coef_stream_idx])
         if self.cipher is not None:                              # 仮数bitの事後確率も暗号を戻す
@@ -188,6 +191,7 @@ class StreamDecoder:
         if lay.n_top:                                            # パリティで訂正した上位K bitを確定値にする
             p1_coef[lay.top_coef_idx] = hdr["top_bits"] * 32768
         high_ok = hdr["high_ok"]
+        self.last_quality = 0 if high_ok else 1
         if not high_ok:
             self.stats["high_crc_fail"] += 1
         y_mant, y_var = ({}, {})
@@ -213,8 +217,10 @@ class StreamDecoder:
         y = np.zeros((len(frames) * b, 2), np.int64)
         v = np.zeros(len(frames) * b, bool)
         rb = np.full((len(frames) * b, 2, self.p.nbands), INF_LOG, np.int64)
+        self.quality = np.zeros(len(frames), np.int64)           # フレームごとの品質コード
         for i, sym in enumerate(frames):
             y[i * b:(i + 1) * b], v[i * b:(i + 1) * b] = self.decode(sym)
+            self.quality[i] = self.last_quality
             if self.last_rb is not None:
                 rb[i * b:i * b + h] = self.last_rb[0]
                 rb[i * b + h:(i + 1) * b] = self.last_rb[1]
@@ -224,6 +230,23 @@ class StreamDecoder:
 
 def fec_parity(msb):
     return fec.rsc_parity(msb)[0][:len(msb)]
+
+
+def block_quality(profile: Profile, dA, dB, offset_b, n_blocks):
+    """出力のブロックごとの品質コード (0 正常, 1 高域欠落, 2 欠落)。2系統のときは、良い方の系統の値を採る。
+    副系のフレームは、出力の時刻から offset_b を引いた位置で対応づける。"""
+    b = profile.block
+    out = np.full(n_blocks, 2, np.int64)
+    for i in range(n_blocks):
+        q = []
+        if i < len(dA.quality):
+            q.append(int(dA.quality[i]))
+        if dB is not None:
+            j = (i * b + offset_b) // b
+            if 0 <= j < len(dB.quality):
+                q.append(int(dB.quality[j]))
+        out[i] = min(q) if q else 2
+    return out
 
 
 def receive(profile: Profile, framesA, framesB, n, offset_b, plc_order=16,
@@ -249,6 +272,7 @@ def receive(profile: Profile, framesA, framesB, n, offset_b, plc_order=16,
     else:
         y, v = yA, vA
     stats["plc_samples"] = int((~v).sum())
+    stats["quality"] = block_quality(profile, dA, dB if framesB is not None else None, offset_b, len(y) // profile.block)
     traces = [dA.rb_trace] + ([dB.rb_trace] if framesB is not None else [])
     patterns = [tuple(np.concatenate([(rb[i * profile.block] != INF_LOG).ravel() for rb in traces]))
                 for i in range(len(y) // profile.block)]
