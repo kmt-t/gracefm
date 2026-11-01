@@ -19,6 +19,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 sys.path.insert(0, ROOT)
 
 from gracefm import channel
+from gracefm.iir import ALT_DELAY
 from gracefm.profiles import PROFILES
 from tools.common import metrics, wavio
 
@@ -39,7 +40,8 @@ def job(a):
         yt, _, _ = channel.link(wavio.to_pcm24(tone), PROFILES[pm], cn0, sub=ps, seed=1)
         y, yt = wavio.from_pcm24(y), wavio.from_pcm24(yt)
         thd, thdn = metrics.thd(yt[:, 0], 48000, 1000.0)
-        out[name] = (metrics.snr_db(x, y), thd, thdn, es["esn0_main"], st["plc_samples"] / len(x) * 100)
+        d = ALT_DELAY[32000]                                  # 出力は ALT_DELAY サンプル遅れる。原音と時刻を合わせて比べる
+        out[name] = (metrics.snr_db(x[:len(y) - d], y[d:]), thd, thdn, es["esn0_main"], st["plc_samples"] / len(x) * 100)
     return a, out
 
 

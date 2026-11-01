@@ -63,6 +63,35 @@ def aptx_roundtrip(x, variant, ffmpeg):
     return y, round(kbps, 3), delay
 
 
+def opus_roundtrip(x, bitrate_kbps, ffmpeg, frame_ms=2.5):
+    """Opus の低遅延モード (libopus, application lowdelay, フレーム frame_ms) の往復。48 kHz、x は (n, ch)。
+    返り値: (復号した音声 (x と同じ長さ), 設定した音声レート kb/s (Ogg の容器のオーバーヘッドは含めない), 遅れのサンプル数)"""
+    pad = 512
+    with tempfile.TemporaryDirectory() as directory:
+        directory = Path(directory)
+        original = directory / "source.wav"
+        encoded = directory / "audio.opus"
+        decoded = directory / "decoded.wav"
+        padded = np.pad(x, ((0, pad), (0, 0)))
+        wavio.write_pcm24(original, padded, 48000)
+        subprocess.run([ffmpeg, "-y", "-hide_banner", "-loglevel", "error",
+                        "-i", str(original), "-ac", str(x.shape[1]), "-c:a", "libopus", "-application", "lowdelay",
+                        "-frame_duration", str(frame_ms), "-b:a", f"{bitrate_kbps}k",
+                        str(encoded)], check=True)
+        subprocess.run([ffmpeg, "-y", "-hide_banner", "-loglevel", "error",
+                        "-i", str(encoded), "-ac", str(x.shape[1]), "-c:a", "pcm_f32le", "-ar", "48000", str(decoded)], check=True)
+        import soundfile as sf
+        y, fs = sf.read(decoded, dtype="float64", always_2d=True)
+    if fs != 48000 or len(y) < len(x) + 256:
+        raise ValueError("opus: unexpected decoder length or sample rate")
+    n = min(48000, len(x))
+    delay = int(np.argmax(correlate(y[:n + 256, 0], x[:n, 0], mode="valid", method="fft")))
+    y = y[delay:delay + len(x)]
+    if len(y) != len(x):
+        raise ValueError("opus: delay compensation failed")
+    return y, float(bitrate_kbps), delay
+
+
 def heaac_roundtrip(x, aot, bitrate, fdkaac, ffmpeg):
     """FDK HE-AAC v1 mono (AOT 5) or HE-AAC v2 stereo (AOT 29)."""
     expected_channels = {5: 1, 29: 2}.get(aot)

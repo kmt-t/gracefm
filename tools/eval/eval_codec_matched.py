@@ -15,7 +15,12 @@ sys.path.insert(0, str(ROOT))
 from gracefm.decoder import roundtrip as codec
 from gracefm.profiles import PROFILES
 from tools.common import metrics, wavio
-from tools.eval.codec_benchmark_io import aptx_roundtrip, heaac_roundtrip, source
+from tools.eval.codec_benchmark_io import (
+    aptx_roundtrip,
+    heaac_roundtrip,
+    opus_roundtrip,
+    source,
+)
 
 
 def bandlimit(x):
@@ -25,7 +30,7 @@ def bandlimit(x):
 def evaluate(task):
     from visqol import VisqolApi
 
-    entry, seconds, channels, bandwidth, fdkaac, gracefm_only = task
+    entry, seconds, channels, bandwidth, fdkaac, gracefm_only, opus_only, skip_heaac = task
     x48, _, _ = source(entry, seconds)
     if channels == 1:
         x48 = x48.mean(axis=1, keepdims=True)
@@ -38,7 +43,11 @@ def evaluate(task):
     if not gracefm_only:
         if channels == 2:
             methods += ("aptX", "aptX HD")
-        methods += ("HE-AAC v1 32k", "HE-AAC v1 48k") if channels == 1 else ("HE-AAC v2 32k", "HE-AAC v2 48k")
+        if not skip_heaac:
+            methods += ("HE-AAC v1 32k", "HE-AAC v1 48k") if channels == 1 else ("HE-AAC v2 32k", "HE-AAC v2 48k")
+        methods += ("Opus LD 32k", "Opus LD 64k", "Opus LD 128k")
+    if opus_only:
+        methods = ("Opus LD 32k", "Opus LD 64k", "Opus LD 128k")
     api = VisqolApi()
     api.create(mode="audio")
     ffmpeg = None
@@ -58,6 +67,9 @@ def evaluate(task):
             if p.fs == 32000:
                 decoded = wavio.resample(decoded, 32000, 48000)
             bitrate, delay = float(p.audio_kbps()), 0
+        elif method.startswith("Opus LD"):
+            kbps = int(method.split()[-1].rstrip("k"))
+            decoded, bitrate, delay = opus_roundtrip(reference, kbps, ffmpeg)
         elif method in ("aptX", "aptX HD"):
             decoded, bitrate, delay = aptx_roundtrip(reference, "aptx" if method == "aptX" else "aptx_hd", ffmpeg)
         else:
@@ -90,16 +102,25 @@ def main():
     parser.add_argument("--json", type=Path, default=ROOT / "docs/results/codec_matched.json")
     parser.add_argument("--gracefm-only", action="store_true",
                         help="GraceFMの行だけ測り直し、既存JSONのaptX・HE-AACの行と測定条件はそのまま残す")
+    parser.add_argument("--skip-heaac", action="store_true",
+                        help="HE-AAC の行は測らず、既存JSONのHE-AACの行をそのまま残す (fdkaac が HE-AAC に対応していないとき)")
+    parser.add_argument("--opus-only", action="store_true",
+                        help="Opus LD の行だけ測り直し、既存JSONの他の行はそのまま残す (fdkaac が要らない)")
     args = parser.parse_args()
     if args.seconds < 3 or args.workers < 1:
         parser.error("seconds must be >= 3 and workers >= 1")
     manifest = json.loads((ROOT / "eval_audio/lossless/manifest.json").read_text())
     entries = manifest["sources"]
-    tasks = [(entry, args.seconds, channels, bandwidth, args.fdkaac, args.gracefm_only)
+    tasks = [(entry, args.seconds, channels, bandwidth, args.fdkaac, args.gracefm_only, args.opus_only, args.skip_heaac)
              for entry in entries for channels in (1, 2) if channels == 1 or entry["channels"] == 2
              for bandwidth in (16, 24)]
     with ProcessPoolExecutor(max_workers=args.workers) as executor:
         rows = [row for result in executor.map(evaluate, tasks) for row in result]
+    if args.opus_only:
+        result = json.loads(args.json.read_text())
+        result["rows"] = [r for r in result["rows"] if not r["method"].startswith("Opus")] + rows
+        args.json.write_text(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False) + "\n")
+        return
     if args.gracefm_only:
         result = json.loads(args.json.read_text())
         result["rows"] = [r for r in result["rows"] if r["method"] not in PROFILES] + rows
@@ -107,6 +128,9 @@ def main():
         args.json.write_text(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False) + "\n")
         return
     from imageio_ffmpeg import get_ffmpeg_exe
+    if args.skip_heaac:
+        kept = [r for r in json.loads(args.json.read_text())["rows"] if r["method"].startswith("HE-AAC")]
+        rows = rows + kept
     result = {"method": "Codec-only channel-count and bandwidth matched comparison",
                   "source_seconds": args.seconds, "source_offset_seconds": 1, "source_peak": 0.89,
                   "mono_source_policy": "Original mono retained; stereo sources downmixed to (L+R)/2",

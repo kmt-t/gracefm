@@ -25,6 +25,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from gracefm import channel as chan
 from gracefm import modem
 from gracefm.encoder import Encoder
+from gracefm.iir import ALT_DELAY
 from gracefm.postfilter import OUT_FS, postfilter
 from gracefm.profiles import PROFILES
 from gracefm.receiver import receive
@@ -40,6 +41,14 @@ def channel(frames, snr_db, loss, rng):
         else:
             out.append(chan.adc(chan.awgn(f / float(1 << modem.SYM_FRAC), snr_db, rng)))
     return out
+
+
+def aligned(x, y, fs):
+    """受信の出力 y は出力切り替え用 IIR に揃えるため ALT_DELAY サンプル遅れる。原音 x と時刻を合わせた対 (原音, 出力) を返す。
+    末尾の遅れ分は比べない (samples の値と同じ方法)。"""
+    d = ALT_DELAY[fs]
+    n = len(y) - d
+    return x[:n], y[d:]
 
 
 def run_once(x, p, snr_a, snr_b, loss, single, seed):
@@ -84,10 +93,10 @@ def main():
           f"同じプロファイル2系統の合計 {rs * (100 + p.pulse_beta_pct) / 100 * 2 / 1000:.0f}kHz)")
     print(f"  C/N0 = Es/N0 + {10 * np.log10(rs):.2f}dB, "
           f"C/N({args.bn / 1000:g}kHz) = Es/N0 + {10 * np.log10(rs / args.bn):+.2f}dB (各系統)")
-    bm = metrics.BandMetric(x, p.fs)
-
     def report(y):
-        return (bm(y - x), np.mean([metrics.seg_snr_db(x[:, c], y[:, c], p.fs) for c in range(2)]))
+        xa, ya = aligned(x, y, p.fs)
+        bm = metrics.BandMetric(xa, p.fs)
+        return (bm(ya - xa), np.mean([metrics.seg_snr_db(xa[:, c], ya[:, c], p.fs) for c in range(2)]))
 
     if args.sweep:
         snrs = [-2, 0, 2, 4, 6, 8, 10, 12, 15, 20]
@@ -114,8 +123,11 @@ def main():
                   f"基本CRC不一致 {s['crc_fail']} / H1/H2 CRC不一致 {s['high_crc_fail']}")
     print(f"  PLC で埋めたサンプル {st['plc_samples']} ({st['plc_samples'] / len(x) * 100:.2f}%)")
     m, seg = report(y)
-    print(f"  波形SNR {metrics.snr_db(x, y):.2f}dB  セグメンタルSNR {seg:.1f}dB  帯域指標 {m:.2f}")
+    xa, ya = aligned(x, y, p.fs)
+    print(f"  波形SNR {metrics.snr_db(xa, ya):.2f}dB  セグメンタルSNR {seg:.1f}dB  帯域指標 {m:.2f}")
     if args.output:
+        d = ALT_DELAY[p.fs]                                   # 原音と時刻を揃えて書く (末尾に同じ数の無音を足す)
+        y = np.concatenate([y[d:], np.zeros((d,) + y.shape[1:], y.dtype)])
         if args.no_postfilter:
             wavio.write(args.output, y, p.fs)
         else:

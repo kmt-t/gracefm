@@ -22,6 +22,7 @@ sys.path.insert(0, ROOT)
 from gracefm import channel
 from gracefm.encoder import Encoder
 from gracefm.equalizer import equalize_static
+from gracefm.iir import ALT_DELAY
 from gracefm.profiles import PROFILES
 from gracefm.receiver import receive
 from tools.common import metrics, wavio
@@ -42,8 +43,9 @@ SCENARIOS = (
 )
 
 
-def score(api, x, y, stats, start, end):
-    ref, deg = x[start:end, 0], wavio.from_pcm24(y)[start:end].mean(axis=1)
+def score(api, x, y, stats, start, end, delay):
+    """delay: 出力が原音より遅れるサンプル数 (受信機は ALT_DELAY、FM は 0)。原音の [start, end - delay) と出力の [start + delay, end) を比べる"""
+    ref, deg = x[start:end - delay, 0], wavio.from_pcm24(y)[start + delay:end].mean(axis=1)
     snr = float(metrics.snr_db(ref, deg))
     vr = wavio.resample(ref, 32000, 48000)
     vd = wavio.resample(deg, 32000, 48000)
@@ -85,7 +87,7 @@ def material_job(entry, seconds, strengths, scenarios, spacing_hz, training_fram
             for method, a, b in (("GraceFM unequalized", ra, rb), ("GraceFM equalized", eq_a, eq_b)):
                 y, st = receive(pm, list(a), list(b), len(x), off, profile_b=ps, return_streams=True)
                 row = dict(material=entry["name"], cn0_db_hz=cn0, scenario=scenario, method=method,
-                           **score(api, x, y, st, start, end))
+                           **score(api, x, y, st, start, end, ALT_DELAY[pm.fs]))
                 if method == "GraceFM equalized":
                     row["main_lookahead_symbols"] = diag_a["lookahead_symbols"]
                     row["sub_lookahead_symbols"] = diag_b["lookahead_symbols"]
@@ -96,7 +98,7 @@ def material_job(entry, seconds, strengths, scenarios, spacing_hz, training_fram
             mono = fm.receive(cn0, np.random.default_rng(1), ghost=ghost)
             yfm = np.repeat(mono[:, None], 2, axis=1)
             out.append(dict(material=entry["name"], cn0_db_hz=cn0, scenario=scenario, method="FM",
-                            **score(api, x, yfm, {}, start, end)))
+                            **score(api, x, yfm, {}, start, end, 0)))
             print(f"{entry['name']} {cn0} {scenario}: "
                   f"FM {out[-1]['snr_db']:.1f}, no-EQ {out[-3]['snr_db']:.1f}, "
                   f"EQ {out[-2]['snr_db']:.1f} dB", flush=True)
