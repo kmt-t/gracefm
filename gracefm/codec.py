@@ -3,8 +3,8 @@
 帯域分割はプロファイルで決まる。Haar はブロック内で完結し、LeGall 5/3 はブロックをまたぐ (analyze_stream、synthesize_stream)。
 
 PCM は符号つき24 bit整数 (±1 = 2^23)。係数は小数22 bit (±1 = 2^22) の整数で、M/S は M = (L+R)/2、S = (L-R)/2 を
-最後の2 bit を四捨五入して作る。Haar の各段の出力は最大で 2^(段/2) 倍になり、4段の最低域は満点の直流で ±2^24 に達して、
-乗算器の入力 25 bit 符号つきの上限 2^24 - 1 を 1 だけ超える。この 1 LSB (2^-22) は飽和で切る (saturate)。共有指数 s = e + 22 は、最小の刻みを s >= 1 に
+最後の2 bit を四捨五入して作る。帯域分割は Haar も LeGall 5/3 も整数可逆のリフティングで、加算とシフトだけで書け、乗算器を使わない。
+低域の直流の利得は 1、詳細帯域の振幅は最大で約 2 倍。共有指数 s = e + 22 は、最小の刻みを s >= 1 に
 制限して、アッテネータの半刻みも整数にする (e < -21 の細かい刻みは使わない。デコーダは s <= 0 でも右シフトで復号する)。
 DSP に依存する演算は gracefm.dsp にある (docs/FIXED.md)。
 
@@ -17,13 +17,12 @@ import numpy as np
 from .dsp import (
     ERR_FRAC_BITS,
     bit_length,
-    mac_sq2_inv,
     round_shift,
     saturate,
     saturate_bits,
     sq_err_sum,
 )
-from .profiles import Profile, band_level
+from .profiles import Profile
 
 
 def qmax_of(b):
@@ -42,12 +41,11 @@ def offset_of(b, profile: Profile, ch: str, k: int):
 def exp_range(k, b, profile: Profile):
     """帯域 k・仮数幅 b・プロファイルで固定する指数範囲 [emin, emax]。
 
-    emax は、その帯域で取りうる最大振幅 2^(lev/2) (入力 |x| <= 1) を、最大の仮数 qmax で表せる最小の指数
-    ceil(log2(2^(lev/2) × 2 / qmax)) で、整数だけで (lev // 2) + 3 - b と書ける。
+    emax は、どの帯域でも振幅 2 (入力 |x| <= 1 の詳細帯域の上限) を、最大の仮数 qmax で表せる最小の指数
+    ceil(log2(2 × 2 / qmax)) で、整数だけで 4 - b と書ける。k はどの帯域でも使わない。
     送受信で同じ値を計算する。フレームにはオフセット emin を送らず、eidx = e - emin だけを格納する。
     """
-    lev = band_level(k, profile.levels)
-    emax = (lev >> 1) + 3 - b
+    emax = 4 - b
     emin = emax - (2 ** profile.exp_bits - 1)
     return emin, emax
 
@@ -73,22 +71,30 @@ PCM_BITS = 24                   # PCM の幅 (符号つき)
 
 
 def haar_forward(x, levels):
+    """Haar の多段分解 (整数可逆の S 変換)。d = o - e、a = e + floor(d / 2)。加算とシフトだけ"""
     a = saturate(np.asarray(x, np.int64))
     details = []
     for _ in range(levels):
         e, o = a[..., 0::2], a[..., 1::2]
-        details.append(mac_sq2_inv(e, o, -1))
-        a = mac_sq2_inv(e, o, 1)
+        d = saturate(o - e)
+        a = saturate(e + (d >> 1))
+        details.append(d)
     return [a] + details[::-1]
 
 
+def _interleave(e, o):
+    x = np.empty(e.shape[:-1] + (e.shape[-1] * 2,), np.int64)
+    x[..., 0::2] = e
+    x[..., 1::2] = o
+    return x
+
+
 def haar_inverse(bands):
+    """haar_forward の逆変換。飽和しない範囲で入力と 1 LSB も違わない"""
     a = bands[0]
     for d in bands[1:]:
-        x = np.empty(a.shape[:-1] + (a.shape[-1] * 2,), np.int64)
-        x[..., 0::2] = mac_sq2_inv(a, d, 1)
-        x[..., 1::2] = mac_sq2_inv(a, d, -1)
-        a = x
+        e = saturate(a - (d >> 1))
+        a = _interleave(e, saturate(e + d))
     return a
 
 
@@ -103,30 +109,24 @@ def _prev(x):
 
 
 def legall_forward(x, levels):
-    """LeGall 5/3 の多段分解。x はストリーム全体 (最後の軸が時間)。リフティングは加算とシフトだけで、
-    スケーリング (低域 ×√2、高域 ÷√2) を Haar と同じ乗算で行い、帯域の尺度を Haar にそろえる。"""
+    """LeGall 5/3 の多段分解 (整数可逆のリフティング)。x はストリーム全体 (最後の軸が時間)。
+    d = o - floor((e + e') / 2)、a = e + floor((d' + d + 2) / 4)。加算とシフトだけ"""
     a = saturate(np.asarray(x, np.int64))
     details = []
     for _ in range(levels):
         e, o = a[..., 0::2], a[..., 1::2]
         d = saturate(o - ((e + _next(e)) >> 1))
-        low = saturate(e + ((_prev(d) + d + 2) >> 2))
-        details.append(mac_sq2_inv(d, 0, 1))
-        a = mac_sq2_inv(low, low, 1)
+        a = saturate(e + ((_prev(d) + d + 2) >> 2))
+        details.append(d)
     return [a] + details[::-1]
 
 
 def legall_inverse(bands):
-    """legall_forward の逆変換"""
+    """legall_forward の逆変換。飽和しない範囲で入力と 1 LSB も違わない"""
     a = bands[0]
-    for scaled in bands[1:]:
-        low = mac_sq2_inv(a, 0, 1)
-        d = mac_sq2_inv(scaled, scaled, 1)
-        e = saturate(low - ((_prev(d) + d + 2) >> 2))
-        x = np.empty(a.shape[:-1] + (a.shape[-1] * 2,), np.int64)
-        x[..., 0::2] = e
-        x[..., 1::2] = saturate(d + ((e + _next(e)) >> 1))
-        a = x
+    for d in bands[1:]:
+        e = saturate(a - ((_prev(d) + d + 2) >> 2))
+        a = _interleave(e, saturate(d + ((e + _next(e)) >> 1)))
     return a
 
 

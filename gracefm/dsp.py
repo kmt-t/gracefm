@@ -16,12 +16,6 @@ ACC_BITS = 48                   # アキュムレータの幅 (符号つき)
 MULT_MAX = (1 << (MULT_BITS - 1)) - 1
 MULT_MIN = -(1 << (MULT_BITS - 1))
 
-SQ2_SHIFT = 16
-SQ2_INV = 46341                 # 1/√2 を 2^SQ2_SHIFT 倍した整数 (相対誤差 約1e-6)
-assert SQ2_INV < (1 << (CONST_BITS - 1))
-assert (MULT_MAX * SQ2_INV * 2) < (1 << (ACC_BITS - 1))
-
-
 def saturate(v):
     """乗算器の入力幅 (符号つき25 bit) に飽和させる。設計上は起きない (保険)"""
     return np.minimum(np.maximum(v, MULT_MIN), MULT_MAX)
@@ -31,12 +25,6 @@ def saturate_bits(v, bits):
     """符号つき bits bit に飽和させる (対称: ±(2^(bits-1) - 1))"""
     lim = (1 << (bits - 1)) - 1
     return np.minimum(np.maximum(v, -lim), lim)
-
-
-def mac_sq2_inv(p, q, sign=1):
-    """(p + sign*q) / √2。p*C + sign*q*C をアキュムレータで足し合わせ、四捨五入して右シフトする"""
-    acc = np.asarray(p, np.int64) * SQ2_INV + sign * np.asarray(q, np.int64) * SQ2_INV
-    return saturate((acc + (1 << (SQ2_SHIFT - 1))) >> SQ2_SHIFT)
 
 
 def round_shift(c, s):

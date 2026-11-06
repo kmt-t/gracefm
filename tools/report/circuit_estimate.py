@@ -27,9 +27,9 @@ from gracefm import fec
 from gracefm.channel import DEFAULT_SUB, symbol_rate
 from gracefm.layout import Layout
 from gracefm.modem import bits_per_symbol, n_symbols
-from gracefm.postfilter import LANCZOS_A, LPF_TAPS, OUT_FS, OVERSAMPLE
+from gracefm.postfilter import OUT_FS
 from gracefm.profiles import PROFILES
-from gracefm.tables import LANCZOS_Q16, RESAMPLE_1_4_Q16, RESAMPLE_3_8_Q16
+from gracefm.tables import RESAMPLE_3_2_Q16
 
 CLOCK_HZ = 100e6
 UTILIZATION = 1.0
@@ -57,27 +57,16 @@ def front_end(p):
 
 
 def back_end(p, two_streams):
-    """合成以降 (Haar 合成、融合、補間、ポストフィルタ) の1秒あたりの演算。主系のブロック格子で数える"""
+    """合成以降 (融合、補間、出力段) の1秒あたりの演算。帯域合成は加算とシフトなので数えない。主系のブロック格子で数える"""
     fps = p.fs / p.block
-    outs = sum(2 * p.ncoef(k) for k in range(1, p.nbands))                         # Haar 合成の出力数 (1成分)
-    haar = 2 * outs                                                                # 積 p·C と q·C を共有して 1 組 2 乗算 ≒ 出力数
-    haar_per_block = 2 * haar                                                      # M と S
-    fuse_per_block = (4 + 2) * haar + 2 * sum(p.ncoef(k) for k in range(p.nbands)) * 2 if two_streams else 0
+    fuse_per_block = 2 * sum(p.ncoef(k) for k in range(p.nbands)) * 2 if two_streams else 0   # 係数ごとの重み (帯域分割は加算とシフトで乗算なし)
     lpc_block = 2 * (LPC_HIST + LPC_HIST * (LPC_ORDER + 1) // 2 + LPC_ORDER * LPC_ORDER
                      + LPC_ORDER * (p.block + 16))                                 # 窓 + 自己相関 + Levinson + 外挿 (成分ごと)
-    lanczos = 2 * p.fs * (2 * LANCZOS_A * OVERSAMPLE // OVERSAMPLE) * OVERSAMPLE   # オーバーサンプルの各点が 2a 入力の和
-    lpf_sequential = 2 * p.fs * OVERSAMPLE * LPF_TAPS                              # 定義どおり: オーバーサンプル後のレートの全点
-    up_f, kernel = (3, RESAMPLE_3_8_Q16) if p.fs == 32000 else (1, RESAMPLE_1_4_Q16)
-    resample = 2 * OUT_FS * math.ceil(len(kernel) / up_f)
-    lpf_at_output = 2 * OUT_FS * LPF_TAPS // 2                                     # 出力点だけ、対称な係数の半分
+    resample = 2 * OUT_FS * math.ceil(len(RESAMPLE_3_2_Q16) / 3) if p.fs != OUT_FS else 0   # 32 kHz 系だけ。位相ごとに入力が違うので対称でも乗算は減らない
     return {
-        "haar_synthesis_mac": haar_per_block // 2 * fps,
         "fusion_mac": fuse_per_block * fps,
         "plc_worst_case_mac": lpc_block * fps,
-        "postfilter_lanczos_mac": lanczos,
-        "postfilter_lpf_sequential_mac": lpf_sequential,
         "postfilter_resample_mac": resample,
-        "postfilter_lpf_at_output_points_mac": lpf_at_output,
     }
 
 
@@ -90,8 +79,8 @@ def memory_bits(p, lay, two_streams):
         "coefficients": 2 * p.block * DATA_BITS,
         "output_double_buffer": 2 * p.block * 2 * DATA_BITS * (2 if two_streams else 1),
         "plc_history": LPC_HIST * 2 * DATA_BITS,
-        "postfilter_delay_line": (LPF_TAPS // 2 + LANCZOS_A * 2) * 2 * DATA_BITS,
-        "rom_coefficients": (LPF_TAPS // 2 + 1 + len(LANCZOS_Q16) + len(RESAMPLE_3_8_Q16 if p.fs == 32000 else RESAMPLE_1_4_Q16)) * COEF_BITS + p.pulse_span * 2 * COEF_BITS,
+        "postfilter_delay_line": (math.ceil(len(RESAMPLE_3_2_Q16) / 3) * 2 * DATA_BITS) if p.fs != OUT_FS else 0,
+        "rom_coefficients": ((len(RESAMPLE_3_2_Q16) // 2 + 1 if p.fs != OUT_FS else 0) + p.pulse_span * 2) * COEF_BITS,
     }
 
 
@@ -192,8 +181,8 @@ def logic_estimate(name):
         "rrc": math.ceil(rate("rrc_mac") / cap),
         "equalizer": math.ceil(rate("eq_mac") / cap),
         "demod_soft": math.ceil(rate("llr_mul", "soft_mantissa_mul") / cap),
-        "haar_fusion": math.ceil(rate("haar_synthesis_mac", "fusion_mac") / cap),
-        "postfilter": math.ceil(rate("postfilter_lanczos_mac", "postfilter_lpf_at_output_points_mac", "postfilter_resample_mac") / cap),
+        "fusion": math.ceil(rate("fusion_mac") / cap),
+        "postfilter": math.ceil(rate("postfilter_resample_mac") / cap),
         "plc": math.ceil(rate("plc_worst_case_mac") / cap),
     }
     unit = {m: v + (SEQUENCER_LUT if m == "lut" else SEQUENCER_FF if m == "ff" else 0) for m, v in mac_engine().items()}
@@ -230,15 +219,12 @@ def estimate(name):
         for k, v in s.items():
             totals[k] = totals.get(k, 0) + v
     be = back_end(p, bool(sub))
-    mac = sum(v for k, v in {**totals, **be}.items() if k.endswith(("_mac", "_mul"))) \
-        - be["postfilter_lpf_sequential_mac"] - be["plc_worst_case_mac"]
-    macs_min = mac                                                                 # 出力点だけで LPF を評価、補間なし
+    mac = sum(v for k, v in {**totals, **be}.items() if k.endswith(("_mac", "_mul"))) - be["plc_worst_case_mac"]
     mem = memory_bits(p, lay, bool(sub))
-    return {"name": name, "sub": sub, "front_end_per_s": totals, "back_end_per_s": be, "mac_per_s_restructured": macs_min,
-                "mac_per_s_sequential": macs_min - be["postfilter_lpf_at_output_points_mac"] + be["postfilter_lpf_sequential_mac"],
+    return {"name": name, "sub": sub, "front_end_per_s": totals, "back_end_per_s": be, "mac_per_s": mac,
                 "plc_worst_case_mac_per_s": be["plc_worst_case_mac"],
-                "dsp_slices_min_restructured": math.ceil(macs_min / (CLOCK_HZ * UTILIZATION)),
-                "dsp_slices_min_restructured_with_plc": math.ceil((macs_min + be["plc_worst_case_mac"]) / (CLOCK_HZ * UTILIZATION)),
+                "dsp_slices_min": math.ceil(mac / (CLOCK_HZ * UTILIZATION)),
+                "dsp_slices_min_with_plc": math.ceil((mac + be["plc_worst_case_mac"]) / (CLOCK_HZ * UTILIZATION)),
                 "memory_bits": mem, "memory_total_bits": sum(mem.values())}
 
 
@@ -253,9 +239,9 @@ def main():
         print(r["name"], r["sub"], "LUT {} ({:.0f}%) FF {} ({:.0f}%) DSP {} BRAM18 {} ({:.0f}%)".format(
             t["lut"], 100 * f["lut"], t["ff"], 100 * f["ff"], t["dsp"], t["bram18"], 100 * f["bram18"]))
     for r in rows:
-        print(r["name"], r["sub"], "MMAC/s restructured {:.1f} sequential {:.1f} plc {:.1f}".format(
-            r["mac_per_s_restructured"] / 1e6, r["mac_per_s_sequential"] / 1e6, r["plc_worst_case_mac_per_s"] / 1e6),
-            "ACS/s {:.1f}M".format(r["front_end_per_s"]["viterbi_acs"] / 1e6), "DSP>=", r["dsp_slices_min_restructured"],
+        print(r["name"], r["sub"], "MMAC/s {:.1f} plc {:.1f}".format(
+            r["mac_per_s"] / 1e6, r["plc_worst_case_mac_per_s"] / 1e6),
+            "ACS/s {:.1f}M".format(r["front_end_per_s"]["viterbi_acs"] / 1e6), "DSP>=", r["dsp_slices_min"],
             "mem {:.0f} kbit".format(r["memory_total_bits"] / 1e3))
 
 

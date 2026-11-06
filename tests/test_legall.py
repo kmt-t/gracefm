@@ -31,12 +31,12 @@ def _audio(p, frames, seed=1):
     return np.rint(np.stack([x + side, x - side], axis=1) * 2 ** 23).astype(np.int64)
 
 
-def test_transform_reconstructs_and_keeps_the_haar_scale():
+def test_transform_is_reversible_and_keeps_the_dc_gain():
     x = np.random.default_rng(2).integers(-2 ** 21, 2 ** 21, 64 * 16)
     bands = legall_forward(x, 4)
     assert [len(b) for b in bands] == [4 * 16, 4 * 16, 8 * 16, 16 * 16, 32 * 16]
-    assert np.abs(legall_inverse(bands) - x).max() <= 64                # 定数 46341/65536 の誤差と丸め
-    assert abs(legall_forward(np.full(64, 1 << 20, np.int64), 4)[0][0] - (1 << 22)) <= 64  # 直流の利得は Haar と同じ 4 倍 (定数の誤差を除く)
+    assert np.array_equal(legall_inverse(bands), x)                     # 整数可逆
+    assert legall_forward(np.full(64, 1 << 20, np.int64), 4)[0][0] == 1 << 20   # 直流の利得は 1
 
 
 def test_reach_constants_match_the_transform():

@@ -38,24 +38,10 @@ def lpc_bandwidth_q15(order=16):
     return [round(32768 * 0.998 ** i) for i in range(order + 1)]
 
 
-def lanczos_q16(oversample=4, a=8):
-    """Lanczos 補間核 (長さ 2·a·oversample + 1、Q16)"""
-    import numpy as np
-    n = np.arange(-a * oversample, a * oversample + 1) / oversample
-    return [round(v * 65536) for v in np.sinc(n) * np.sinc(n / a)]
-
-
-def lpf_q17(taps=511, cutoff_hz=0.98 * 32000 / 2, fs_hz=32000 * 4):
-    """Kaiser(9) 窓の線形位相 LPF (Q17)。fs=32 kHz の 4 倍レート。48 kHz の 4 倍レートは cutoff が異なる"""
+def resample_3_2_q16(taps=95, beta=7.0):
+    """32 kHz → 48 kHz (3/2) の FIR。96 kHz で動く線形位相、カットオフ 16 kHz、Kaiser 窓、利得 3 (Q16)"""
     from scipy.signal import firwin
-    return [round(v * 131072) for v in firwin(taps, cutoff_hz, window=("kaiser", 9.0), fs=fs_hz)]
-
-
-def resample_q16(up, down):
-    """resample_poly の既定フィルタ (Kaiser 9、長さ 2·10·max(up, down) + 1、利得 up) (Q16)"""
-    from scipy.signal import firwin
-    half = 10 * max(up, down)
-    return [round(v * up * 65536) for v in firwin(2 * half + 1, 1.0 / max(up, down), window=("kaiser", 9.0))]
+    return [round(v * 3 * 65536) for v in firwin(taps, 16000, window=("kaiser", beta), fs=96000, scale=False)]
 
 
 def iir_sos_q16(fs_hz, cutoff_hz=4000, order=4):
@@ -77,11 +63,7 @@ def main():
     out = ['"""整数実装の定数表。tools/gen/gen_tables.py が作る (手で書き換えない)。ハードウェアでは ROM になる。"""', '']
     for name, tab, doc in (
             ("HANN128_Q15", hann128_q15(), "ハン窓 128 点 (Q15)"),
-            ("LANCZOS_Q16", lanczos_q16(), "Lanczos 補間核 (4 倍、a = 8、長さ 65、Q16)"),
-            ("LPF_32K_Q17", lpf_q17(), "32 kHz 系の 4 倍レートの LPF (Kaiser 9、511 タップ、通過域端 0.98 × 16 kHz、Q17)"),
-            ("LPF_48K_Q17", lpf_q17(cutoff_hz=0.98 * 48000 / 2, fs_hz=48000 * 4), "48 kHz 系の 4 倍レートの LPF (同、通過域端 0.98 × 24 kHz、Q17)"),
-            ("RESAMPLE_3_8_Q16", resample_q16(3, 8), "32 kHz 系の 128 kHz → 48 kHz (3/8) のフィルタ (161 タップ、Q16)"),
-            ("RESAMPLE_1_4_Q16", resample_q16(1, 4), "48 kHz 系の 192 kHz → 48 kHz (1/4) のフィルタ (81 タップ、Q16)")):
+            ("RESAMPLE_3_2_Q16", resample_3_2_q16(), "32 kHz 系の 96 kHz → 48 kHz のフィルタ (3 倍のゼロ挿入のあと。95 タップ、Kaiser 7、カットオフ 16 kHz、Q16)")):
         out.append(f"# {doc}")
         out.append(f"{name} = (")
         for i in range(0, len(tab), 12):

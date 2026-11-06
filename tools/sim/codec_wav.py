@@ -5,7 +5,7 @@ wav をコーデックに通す (通信路なし)。
   python tools/sim/codec_wav.py 入力.wav 出力.wav --profile B200
   python tools/sim/codec_wav.py 入力.wav 出力.wav --profile M700M
 
-入力はプロファイルのサンプリング周波数に変換して処理する。出力は既定でポストフィルタを通した 48 kHz / int32、--no-postfilter ならそのサンプリング周波数の 32bit float。
+入力はプロファイルのサンプリング周波数に変換して処理する。出力は既定で出力段を通した 48 kHz / int32、--no-postfilter ならそのサンプリング周波数の 32bit float。
 """
 import argparse
 import os
@@ -28,7 +28,7 @@ def main():
     ap.add_argument("output")
     ap.add_argument("--profile", default="B200", choices=PROFILES)
     ap.add_argument("--no-postfilter", action="store_true",
-                    help=f"出力段のポストフィルタ (Lanczos x4 → LPF → {OUT_FS} Hz int32) を使わず、fs の 32bit float で書く")
+                    help=f"出力段 ({OUT_FS} Hz int32 への変換) を使わず、fs の 32bit float で書く")
     args = ap.parse_args()
 
     p = PROFILES[args.profile]

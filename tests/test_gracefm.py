@@ -53,7 +53,7 @@ def noisy(frames, snr_db, rng):
 
 def test_haar_perfect_reconstruction():
     x = np.random.default_rng(1).integers(-(1 << 20), 1 << 20, (10, 64)).astype(np.int64)
-    assert np.abs(haar_inverse(haar_forward(x, 4)) - x).max() <= 64         # 定数 46341/65536 の誤差と丸め
+    assert np.array_equal(haar_inverse(haar_forward(x, 4)), x)              # 整数可逆
 
 
 def test_fec_roundtrip_and_correction():
@@ -210,6 +210,19 @@ def test_latency_model():
         assert min_latency(p, True) == 2 * B + alt
         tm = Timing(t_enc=Fraction(1, 10000), t_filt=Fraction(2, 10000), t_dec=Fraction(3, 10000), t_out=Fraction(4, 10000))
         assert min_latency(p, True, tm) == 2 * B + Fraction(1, 1000) + alt
+
+
+def test_postfilter_48k_passes_through_and_32k_rejects_images():
+    from gracefm.postfilter import postfilter
+    rng = np.random.default_rng(4)
+    x = rng.integers(-2 ** 23 + 1, 2 ** 23, (480, 2))
+    assert np.array_equal(postfilter(x, 48000), x << 8)                 # 48 kHz 系はフィルタなし
+    t = np.arange(32000) / 32000
+    y = postfilter(pcm(0.5 * np.sin(2 * np.pi * 14000 * t)[:, None]), 32000)[2000:-2000, 0].astype(float)
+    spectrum = np.abs(np.fft.rfft(y * np.hanning(len(y)))) ** 2
+    f = np.fft.rfftfreq(len(y), 1 / 48000)
+    tone, image = spectrum[np.abs(f - 14000) < 20].max(), spectrum[np.abs(f - 18000) < 20].max()
+    assert 10 * np.log10(image / tone) < -45                            # 14 kHz の鏡像 (18 kHz)
 
 
 def test_receiver_is_causal():

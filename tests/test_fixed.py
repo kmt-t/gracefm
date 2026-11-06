@@ -13,7 +13,7 @@ from gracefm.codec import (
     haar_inverse,
 )
 from gracefm.decoder import reconstruct, roundtrip
-from gracefm.dsp import CONST_BITS, MULT_MAX, MULT_MIN, SQ2_INV
+from gracefm.dsp import MULT_MAX, MULT_MIN
 from gracefm.profiles import PROFILES
 
 
@@ -24,10 +24,6 @@ def _music_like(n, fs, seed=3):
             ((0.4, 220, 0.1), (0.2, 880, 1.3), (0.1, 3520, 2.1), (0.02, 9000, 0.4)))
     x = x + 0.01 * rng.standard_normal(n)
     return np.stack([x, 0.8 * x + 0.05 * np.sin(2 * np.pi * 330 * t)], axis=1)
-
-
-def test_multiplier_constant_fits_18_bit_signed():
-    assert 0 < SQ2_INV < (1 << (CONST_BITS - 1))
 
 
 def test_wide_products_are_exact_and_split_into_dsp_widths():
@@ -49,25 +45,36 @@ def test_postfilter_datapath_fits_dsp_widths():
     from gracefm import postfilter, tables
     from gracefm.dsp import ACC_BITS, CONST_BITS, MULT_BITS, MULT_MIN
     assert postfilter.GUARD_BITS + 24 == MULT_BITS
-    for name, table in (("LANCZOS", tables.LANCZOS_Q16), ("LPF_32K", tables.LPF_32K_Q17), ("LPF_48K", tables.LPF_48K_Q17),
-                        ("RESAMPLE_3_8", tables.RESAMPLE_3_8_Q16), ("RESAMPLE_1_4", tables.RESAMPLE_1_4_Q16)):
+    for name, table in (("RESAMPLE_3_2", tables.RESAMPLE_3_2_Q16),):
         c = np.abs(np.array(table, np.int64))
         assert int(c.max()) < 1 << (CONST_BITS - 1), name
         # 最悪の積和: 入力の最大 (|x| = 2^(MULT_BITS-1)) × 係数の絶対値の和
         assert int(c.sum()) * (-MULT_MIN) < 1 << (ACC_BITS - 1), name
 
 
-def test_haar_stays_within_multiplier_width_and_inverts():
+def test_transforms_are_reversible_and_fit_the_width():
+    """Haar と LeGall 5/3 は整数可逆。乱数でも満点でも 1 LSB も違わず、係数は 25 bit に収まる"""
+    from gracefm.codec import legall_forward, legall_inverse
     rng = np.random.default_rng(1)
-    for levels in (4,):
-        x = rng.integers(-(1 << 22), 1 << 22, (50, 1 << levels * 2)).astype(np.int64)
-        bands = haar_forward(x, levels)
-        assert all(b.max() <= MULT_MAX and b.min() >= MULT_MIN for b in bands)
-        y = haar_inverse(bands)
-        assert np.abs(y - x).max() <= 64                # 定数46341/65536の誤差 (約1e-6) と丸めの累積。22 bitの満点 2^22 に対し約 -96 dB 以下
-    full = np.full((1, 64), 1 << 22, np.int64)                  # 満点の直流: 最低域が最大 (4倍)
-    peak = max(np.abs(b).max() for b in haar_forward(full, 4))
-    assert peak <= (1 << 24) + 64                               # 満点の直流は 25 bitの上限 2^24 - 1 を 1 LSB (2^-22) だけ超え、飽和で切る
+    signals = [rng.integers(-(1 << 22), 1 << 22, 64 * 8).astype(np.int64),
+               np.full(64 * 8, (1 << 22) - 1, np.int64),
+               ((1 << 22) - 1) * (1 - 2 * (np.arange(64 * 8) & 1)),
+               ((1 << 22) - 1) * np.sign(np.sin(np.arange(64 * 8) * 1.3)).astype(np.int64)]
+    for x in signals:
+        for forward, inverse in ((haar_forward, haar_inverse), (legall_forward, legall_inverse)):
+            bands = forward(x, 4)
+            assert all(b.max() <= MULT_MAX and b.min() >= MULT_MIN for b in bands)
+            assert np.array_equal(inverse(bands), x)
+
+
+def test_transforms_use_no_multiplier():
+    """帯域分割の本体に乗算がない (DSP を使わない)"""
+    import ast
+    import inspect
+    from gracefm import codec
+    for function in (codec.haar_forward, codec.haar_inverse, codec.legall_forward, codec.legall_inverse):
+        tree = ast.parse(inspect.getsource(function))
+        assert not [n for n in ast.walk(tree) if isinstance(n, ast.BinOp) and isinstance(n.op, ast.Mult)], function.__name__
 
 
 def test_roundtrip_matches_original_audio_for_all_profiles():
