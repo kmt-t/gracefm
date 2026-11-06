@@ -11,49 +11,49 @@
     "snr_by_material": {
       "demo": 59.4,
       "piano": 52.6,
-      "percussion": 55.5
+      "percussion": 55.4
     },
     "snr_by_input_level_db": {
       "0": {
         "piano": 52.6,
-        "sine_1khz": 49.1
+        "sine_1khz": 54.3
       },
       "-20": {
         "piano": 52.6,
-        "sine_1khz": 47.0
+        "sine_1khz": 49.4
       },
       "-40": {
-        "piano": 52.7,
-        "sine_1khz": 50.9
+        "piano": 52.6,
+        "sine_1khz": 49.1
       },
       "-60": {
-        "piano": 46.8,
-        "sine_1khz": 50.5
+        "piano": 46.3,
+        "sine_1khz": 46.9
       },
       "-80": {
-        "piano": 27.3,
-        "sine_1khz": 40.4
+        "piano": 26.6,
+        "sine_1khz": 39.8
       },
       "-90": {
-        "piano": 19.4,
-        "sine_1khz": 28.8
+        "piano": 18.6,
+        "sine_1khz": 27.8
       },
       "-100": {
-        "piano": 14.3,
-        "sine_1khz": 20.7
+        "piano": 13.2,
+        "sine_1khz": 19.6
       },
       "-110": {
-        "piano": 8.0,
-        "sine_1khz": 12.8
+        "piano": 7.2,
+        "sine_1khz": 11.9
       },
       "-120": {
-        "piano": 0.2,
-        "sine_1khz": 5.7
+        "piano": -1.4,
+        "sine_1khz": 6.7
       }
     },
-    "floor_level_sine_db": -100.9,
-    "floor_level_piano_db": -89.2,
-    "pcm_bits_at_floor_sine": 19.8
+    "floor_level_sine_db": -99.5,
+    "floor_level_piano_db": -88.2,
+    "pcm_bits_at_floor_sine": 19.6
   },
   {
     "name": "B200",
@@ -67,49 +67,49 @@
     "snr_by_material": {
       "demo": 58.8,
       "piano": 50.7,
-      "percussion": 55.0
+      "percussion": 54.9
     },
     "snr_by_input_level_db": {
       "0": {
         "piano": 50.7,
-        "sine_1khz": 49.1
+        "sine_1khz": 54.3
       },
       "-20": {
         "piano": 50.7,
-        "sine_1khz": 47.0
+        "sine_1khz": 49.4
       },
       "-40": {
-        "piano": 50.7,
-        "sine_1khz": 50.9
+        "piano": 50.6,
+        "sine_1khz": 49.1
       },
       "-60": {
-        "piano": 43.9,
-        "sine_1khz": 50.5
+        "piano": 43.4,
+        "sine_1khz": 46.9
       },
       "-80": {
-        "piano": 24.2,
-        "sine_1khz": 40.4
+        "piano": 23.6,
+        "sine_1khz": 39.8
       },
       "-90": {
-        "piano": 16.3,
-        "sine_1khz": 28.8
+        "piano": 15.6,
+        "sine_1khz": 27.8
       },
       "-100": {
-        "piano": 11.7,
-        "sine_1khz": 20.7
+        "piano": 10.7,
+        "sine_1khz": 19.6
       },
       "-110": {
-        "piano": 6.9,
-        "sine_1khz": 12.8
+        "piano": 5.8,
+        "sine_1khz": 11.9
       },
       "-120": {
-        "piano": 0.1,
-        "sine_1khz": 5.7
+        "piano": -0.8,
+        "sine_1khz": 6.7
       }
     },
-    "floor_level_sine_db": -100.9,
-    "floor_level_piano_db": -85.3,
-    "pcm_bits_at_floor_sine": 19.8
+    "floor_level_sine_db": -99.5,
+    "floor_level_piano_db": -84.5,
+    "pcm_bits_at_floor_sine": 19.6
   },
   {
     "name": "B200MY",
@@ -122,50 +122,50 @@
     "pcm_bits": 9.0,
     "snr_by_material": {
       "demo": 59.4,
-      "piano": 53.0,
-      "percussion": 55.9
+      "piano": 53.1,
+      "percussion": 55.8
     },
     "snr_by_input_level_db": {
       "0": {
-        "piano": 53.0,
-        "sine_1khz": 49.1
+        "piano": 53.1,
+        "sine_1khz": 54.3
       },
       "-20": {
         "piano": 53.1,
-        "sine_1khz": 47.0
+        "sine_1khz": 49.4
       },
       "-40": {
-        "piano": 53.2,
-        "sine_1khz": 50.9
+        "piano": 53.1,
+        "sine_1khz": 49.1
       },
       "-60": {
-        "piano": 49.6,
-        "sine_1khz": 50.8
+        "piano": 48.7,
+        "sine_1khz": 46.9
       },
       "-80": {
-        "piano": 30.7,
-        "sine_1khz": 43.7
+        "piano": 29.1,
+        "sine_1khz": 42.8
       },
       "-90": {
-        "piano": 21.1,
-        "sine_1khz": 33.3
+        "piano": 19.9,
+        "sine_1khz": 30.4
       },
       "-100": {
-        "piano": 14.4,
-        "sine_1khz": 23.5
+        "piano": 13.2,
+        "sine_1khz": 21.7
       },
       "-110": {
-        "piano": 8.0,
-        "sine_1khz": 12.8
+        "piano": 7.2,
+        "sine_1khz": 12.1
       },
       "-120": {
-        "piano": 0.2,
-        "sine_1khz": 5.7
+        "piano": -1.4,
+        "sine_1khz": 6.7
       }
     },
-    "floor_level_sine_db": -103.3,
-    "floor_level_piano_db": -91.6,
-    "pcm_bits_at_floor_sine": 20.2
+    "floor_level_sine_db": -101.8,
+    "floor_level_piano_db": -89.9,
+    "pcm_bits_at_floor_sine": 19.9
   },
   {
     "name": "B200Y",
@@ -179,49 +179,49 @@
     "snr_by_material": {
       "demo": 58.8,
       "piano": 52.9,
-      "percussion": 55.7
+      "percussion": 55.6
     },
     "snr_by_input_level_db": {
       "0": {
         "piano": 52.9,
-        "sine_1khz": 49.1
+        "sine_1khz": 54.3
       },
       "-20": {
         "piano": 52.9,
-        "sine_1khz": 47.0
+        "sine_1khz": 49.4
       },
       "-40": {
         "piano": 52.9,
-        "sine_1khz": 50.9
+        "sine_1khz": 49.1
       },
       "-60": {
-        "piano": 48.2,
-        "sine_1khz": 50.8
+        "piano": 46.9,
+        "sine_1khz": 46.9
       },
       "-80": {
-        "piano": 28.9,
-        "sine_1khz": 43.7
+        "piano": 27.2,
+        "sine_1khz": 42.8
       },
       "-90": {
-        "piano": 19.8,
-        "sine_1khz": 33.3
+        "piano": 18.4,
+        "sine_1khz": 30.4
       },
       "-100": {
-        "piano": 13.5,
-        "sine_1khz": 23.5
+        "piano": 12.1,
+        "sine_1khz": 21.7
       },
       "-110": {
-        "piano": 6.8,
-        "sine_1khz": 12.8
+        "piano": 5.8,
+        "sine_1khz": 12.1
       },
       "-120": {
-        "piano": -0.5,
-        "sine_1khz": 5.7
+        "piano": -1.1,
+        "sine_1khz": 6.7
       }
     },
-    "floor_level_sine_db": -103.3,
-    "floor_level_piano_db": -89.8,
-    "pcm_bits_at_floor_sine": 20.2
+    "floor_level_sine_db": -101.8,
+    "floor_level_piano_db": -88.2,
+    "pcm_bits_at_floor_sine": 19.9
   },
   {
     "name": "SUB50M",
@@ -250,7 +250,7 @@
     "snr_by_material": {
       "demo": 25.7,
       "piano": 18.6,
-      "percussion": 22.9
+      "percussion": 22.8
     }
   },
   {
@@ -270,44 +270,44 @@
     "snr_by_input_level_db": {
       "0": {
         "piano": 55.0,
-        "sine_1khz": 51.7
+        "sine_1khz": 51.6
       },
       "-20": {
         "piano": 54.9,
-        "sine_1khz": 53.4
+        "sine_1khz": 53.8
       },
       "-40": {
         "piano": 55.0,
-        "sine_1khz": 50.9
+        "sine_1khz": 48.7
       },
       "-60": {
-        "piano": 47.0,
-        "sine_1khz": 54.1
+        "piano": 46.4,
+        "sine_1khz": 52.6
       },
       "-80": {
-        "piano": 27.5,
-        "sine_1khz": 41.6
+        "piano": 26.7,
+        "sine_1khz": 39.8
       },
       "-90": {
-        "piano": 21.2,
-        "sine_1khz": 29.0
+        "piano": 20.1,
+        "sine_1khz": 28.2
       },
       "-100": {
-        "piano": 15.8,
-        "sine_1khz": 18.2
+        "piano": 14.8,
+        "sine_1khz": 18.1
       },
       "-110": {
-        "piano": 8.5,
-        "sine_1khz": 15.8
+        "piano": 7.6,
+        "sine_1khz": 12.6
       },
       "-120": {
-        "piano": 0.3,
-        "sine_1khz": 8.8
+        "piano": -1.8,
+        "sine_1khz": 7.8
       }
     },
-    "floor_level_sine_db": -98.3,
-    "floor_level_piano_db": -92.2,
-    "pcm_bits_at_floor_sine": 19.4
+    "floor_level_sine_db": -98.1,
+    "floor_level_piano_db": -90.2,
+    "pcm_bits_at_floor_sine": 19.3
   },
   {
     "name": "M700",
@@ -319,51 +319,51 @@
     "snr_db": 47.7,
     "pcm_bits": 7.6,
     "snr_by_material": {
-      "demo": 40.4,
+      "demo": 40.5,
       "piano": 49.3,
       "percussion": 53.4
     },
     "snr_by_input_level_db": {
       "0": {
         "piano": 49.3,
-        "sine_1khz": 51.7
+        "sine_1khz": 51.6
       },
       "-20": {
-        "piano": 49.3,
-        "sine_1khz": 53.4
+        "piano": 49.2,
+        "sine_1khz": 53.8
       },
       "-40": {
-        "piano": 49.1,
-        "sine_1khz": 50.9
+        "piano": 48.5,
+        "sine_1khz": 48.7
       },
       "-60": {
-        "piano": 36.0,
-        "sine_1khz": 54.1
+        "piano": 35.0,
+        "sine_1khz": 52.6
       },
       "-80": {
-        "piano": 24.4,
-        "sine_1khz": 41.6
+        "piano": 23.8,
+        "sine_1khz": 39.8
       },
       "-90": {
-        "piano": 17.6,
-        "sine_1khz": 29.0
+        "piano": 16.9,
+        "sine_1khz": 28.2
       },
       "-100": {
-        "piano": 13.7,
-        "sine_1khz": 18.2
+        "piano": 12.6,
+        "sine_1khz": 18.1
       },
       "-110": {
-        "piano": 7.5,
-        "sine_1khz": 15.8
+        "piano": 6.4,
+        "sine_1khz": 12.6
       },
       "-120": {
-        "piano": 0.2,
-        "sine_1khz": 8.8
+        "piano": -1.1,
+        "sine_1khz": 7.8
       }
     },
-    "floor_level_sine_db": -98.3,
-    "floor_level_piano_db": -86.5,
-    "pcm_bits_at_floor_sine": 19.4
+    "floor_level_sine_db": -98.1,
+    "floor_level_piano_db": -85.5,
+    "pcm_bits_at_floor_sine": 19.3
   },
   {
     "name": "M700MY",
@@ -376,50 +376,50 @@
     "pcm_bits": 9.2,
     "snr_by_material": {
       "demo": 58.7,
-      "piano": 55.4,
+      "piano": 55.3,
       "percussion": 57.5
     },
     "snr_by_input_level_db": {
       "0": {
-        "piano": 55.4,
-        "sine_1khz": 51.6
+        "piano": 55.3,
+        "sine_1khz": 51.5
       },
       "-20": {
         "piano": 55.3,
-        "sine_1khz": 53.3
+        "sine_1khz": 53.7
       },
       "-40": {
         "piano": 55.4,
-        "sine_1khz": 50.8
+        "sine_1khz": 48.6
       },
       "-60": {
-        "piano": 50.0,
-        "sine_1khz": 54.0
+        "piano": 48.9,
+        "sine_1khz": 52.6
       },
       "-80": {
-        "piano": 30.7,
-        "sine_1khz": 43.8
+        "piano": 29.2,
+        "sine_1khz": 41.1
       },
       "-90": {
-        "piano": 22.0,
-        "sine_1khz": 32.4
+        "piano": 20.7,
+        "sine_1khz": 31.4
       },
       "-100": {
-        "piano": 15.8,
-        "sine_1khz": 24.5
+        "piano": 14.8,
+        "sine_1khz": 23.0
       },
       "-110": {
-        "piano": 8.5,
-        "sine_1khz": 15.8
+        "piano": 7.6,
+        "sine_1khz": 12.6
       },
       "-120": {
-        "piano": 0.3,
-        "sine_1khz": 8.8
+        "piano": -1.8,
+        "sine_1khz": 7.8
       }
     },
-    "floor_level_sine_db": -105.2,
-    "floor_level_piano_db": -93.2,
-    "pcm_bits_at_floor_sine": 20.5
+    "floor_level_sine_db": -102.9,
+    "floor_level_piano_db": -91.2,
+    "pcm_bits_at_floor_sine": 20.1
   },
   {
     "name": "M700Y",
@@ -433,49 +433,49 @@
     "snr_by_material": {
       "demo": 57.3,
       "piano": 55.2,
-      "percussion": 57.4
+      "percussion": 57.3
     },
     "snr_by_input_level_db": {
       "0": {
         "piano": 55.2,
-        "sine_1khz": 51.6
+        "sine_1khz": 51.5
       },
       "-20": {
         "piano": 55.1,
-        "sine_1khz": 53.3
+        "sine_1khz": 53.7
       },
       "-40": {
-        "piano": 55.1,
-        "sine_1khz": 50.8
+        "piano": 55.2,
+        "sine_1khz": 48.6
       },
       "-60": {
-        "piano": 48.5,
-        "sine_1khz": 54.0
+        "piano": 47.1,
+        "sine_1khz": 52.6
       },
       "-80": {
-        "piano": 29.0,
-        "sine_1khz": 43.8
+        "piano": 27.4,
+        "sine_1khz": 41.1
       },
       "-90": {
-        "piano": 20.9,
-        "sine_1khz": 32.4
+        "piano": 19.3,
+        "sine_1khz": 31.4
       },
       "-100": {
-        "piano": 15.0,
-        "sine_1khz": 24.5
+        "piano": 13.6,
+        "sine_1khz": 23.0
       },
       "-110": {
-        "piano": 7.1,
-        "sine_1khz": 15.8
+        "piano": 6.1,
+        "sine_1khz": 12.6
       },
       "-120": {
-        "piano": -0.3,
-        "sine_1khz": 8.8
+        "piano": -1.4,
+        "sine_1khz": 7.8
       }
     },
-    "floor_level_sine_db": -105.2,
-    "floor_level_piano_db": -91.5,
-    "pcm_bits_at_floor_sine": 20.5
+    "floor_level_sine_db": -102.9,
+    "floor_level_piano_db": -89.1,
+    "pcm_bits_at_floor_sine": 20.1
   },
   {
     "name": "SUB100-48K",
@@ -490,6 +490,171 @@
       "demo": 21.4,
       "piano": 19.6,
       "percussion": 25.0
+    }
+  },
+  {
+    "name": "B200M-L",
+    "fs": 32000,
+    "channels": 1,
+    "audio_kbps": 254.0,
+    "pcm16_kbps": 512.0,
+    "compression_ratio": 2.02,
+    "snr_db": 59.0,
+    "pcm_bits": 9.5,
+    "snr_by_material": {
+      "demo": 60.9,
+      "piano": 57.4,
+      "percussion": 58.7
+    }
+  },
+  {
+    "name": "B200-L",
+    "fs": 32000,
+    "channels": 2,
+    "audio_kbps": 500.0,
+    "pcm16_kbps": 1024.0,
+    "compression_ratio": 2.05,
+    "snr_db": 57.7,
+    "pcm_bits": 9.3,
+    "snr_by_material": {
+      "demo": 59.9,
+      "piano": 55.0,
+      "percussion": 58.2
+    }
+  },
+  {
+    "name": "B200MY-L",
+    "fs": 32000,
+    "channels": 1,
+    "audio_kbps": 254.0,
+    "pcm16_kbps": 512.0,
+    "compression_ratio": 2.02,
+    "snr_db": 59.1,
+    "pcm_bits": 9.5,
+    "snr_by_material": {
+      "demo": 60.9,
+      "piano": 57.5,
+      "percussion": 59.0
+    }
+  },
+  {
+    "name": "B200Y-L",
+    "fs": 32000,
+    "channels": 2,
+    "audio_kbps": 508.0,
+    "pcm16_kbps": 1024.0,
+    "compression_ratio": 2.02,
+    "snr_db": 58.7,
+    "pcm_bits": 9.5,
+    "snr_by_material": {
+      "demo": 59.8,
+      "piano": 57.4,
+      "percussion": 58.8
+    }
+  },
+  {
+    "name": "SUB50M-L",
+    "fs": 32000,
+    "channels": 1,
+    "audio_kbps": 43.0,
+    "pcm16_kbps": 512.0,
+    "compression_ratio": 11.91,
+    "snr_db": 29.5,
+    "pcm_bits": 4.6,
+    "snr_by_material": {
+      "demo": 29.0,
+      "piano": 29.8,
+      "percussion": 29.6
+    }
+  },
+  {
+    "name": "SUB100-L",
+    "fs": 32000,
+    "channels": 2,
+    "audio_kbps": 82.0,
+    "pcm16_kbps": 1024.0,
+    "compression_ratio": 12.49,
+    "snr_db": 27.3,
+    "pcm_bits": 4.2,
+    "snr_by_material": {
+      "demo": 26.0,
+      "piano": 27.6,
+      "percussion": 28.5
+    }
+  },
+  {
+    "name": "M700M-L",
+    "fs": 48000,
+    "channels": 1,
+    "audio_kbps": 381.0,
+    "pcm16_kbps": 768.0,
+    "compression_ratio": 2.02,
+    "snr_db": 59.5,
+    "pcm_bits": 9.6,
+    "snr_by_material": {
+      "demo": 59.6,
+      "piano": 59.1,
+      "percussion": 59.9
+    }
+  },
+  {
+    "name": "M700-L",
+    "fs": 48000,
+    "channels": 2,
+    "audio_kbps": 654.0,
+    "pcm16_kbps": 1536.0,
+    "compression_ratio": 2.35,
+    "snr_db": 51.5,
+    "pcm_bits": 8.3,
+    "snr_by_material": {
+      "demo": 39.7,
+      "piano": 57.3,
+      "percussion": 57.5
+    }
+  },
+  {
+    "name": "M700MY-L",
+    "fs": 48000,
+    "channels": 1,
+    "audio_kbps": 381.0,
+    "pcm16_kbps": 768.0,
+    "compression_ratio": 2.02,
+    "snr_db": 59.5,
+    "pcm_bits": 9.6,
+    "snr_by_material": {
+      "demo": 59.4,
+      "piano": 59.1,
+      "percussion": 60.0
+    }
+  },
+  {
+    "name": "M700Y-L",
+    "fs": 48000,
+    "channels": 2,
+    "audio_kbps": 762.0,
+    "pcm16_kbps": 1536.0,
+    "compression_ratio": 2.02,
+    "snr_db": 58.8,
+    "pcm_bits": 9.5,
+    "snr_by_material": {
+      "demo": 57.5,
+      "piano": 59.0,
+      "percussion": 59.8
+    }
+  },
+  {
+    "name": "SUB100-48K-L",
+    "fs": 48000,
+    "channels": 2,
+    "audio_kbps": 101.25,
+    "pcm16_kbps": 1536.0,
+    "compression_ratio": 15.17,
+    "snr_db": 26.9,
+    "pcm_bits": 4.2,
+    "snr_by_material": {
+      "demo": 21.4,
+      "piano": 28.9,
+      "percussion": 30.4
     }
   }
 ]

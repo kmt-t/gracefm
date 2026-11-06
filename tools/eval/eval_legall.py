@@ -26,7 +26,7 @@ from gracefm.receiver import receive
 from tools.common import metrics, wavio
 
 MATERIALS = ("demo", "percussion", "piano")
-BASES = ("B200M", "B200MY", "M700Y")
+BASES = ("B200M", "B200", "B200MY", "M700Y")
 CN0 = (54, 57, 60, 66)
 LOSS = (0.01, 0.05)
 LOSS_CN0 = 80

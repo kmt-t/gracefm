@@ -34,13 +34,17 @@ MATERIALS = ("demo", "piano", "percussion")
 LEVELS = (0, -20, -40, -60, -80, -90, -100, -110, -120)      # 入力ピーク [dB]
 
 
+def reference(material, p):
+    """試聴素材の参照音声を2チャンネルで返す。モノラルはL=R (試聴サンプルと同じ (L+R)/2 の縮約)"""
+    x, _ = wavio.read(ROOT / "samples" / f"{material}-stereo__{p.fs // 1000}k__reference.flac")
+    return np.repeat(x.mean(axis=1, keepdims=True), 2, axis=1) if not any(p.bits_s) else x
+
+
 def measure(name, p):
-    mono = name.endswith(("M", "MY")) or name == "SUB50M"
-    channels = 1 if mono else 2
+    channels = 2 if any(p.bits_s) else 1
     snrs = []
     for material in MATERIALS:
-        x, _ = wavio.read(ROOT / "samples" / f"{material}-{'mono' if mono else 'stereo'}__{p.fs // 1000}k__reference.flac")
-        x = np.repeat(x, 2, axis=1) if x.shape[1] == 1 else x
+        x = reference(material, p)
         y = wavio.from_pcm24(roundtrip(wavio.to_pcm24(x), p))
         snrs.append(float(metrics.snr_db(x[:, :channels], y[:, :channels])))
     snr = float(np.mean(snrs))
@@ -52,12 +56,10 @@ def measure(name, p):
 
 def level_curve(name):
     p = PROFILES[name]
-    mono = name.endswith(("M", "MY"))
-    x, _ = wavio.read(ROOT / "samples" / f"piano-{'mono' if mono else 'stereo'}__{p.fs // 1000}k__reference.flac")
-    x = np.repeat(x, 2, axis=1) if x.shape[1] == 1 else x
+    x = reference("piano", p)
     t = np.arange(len(x)) / p.fs
     sine = np.repeat((0.89 * np.sin(2 * np.pi * 1000 * t))[:, None], 2, axis=1)
-    channels = 1 if mono else 2
+    channels = 2 if any(p.bits_s) else 1
     curve = {}
     for level in LEVELS:
         gain = 10 ** (level / 20)
