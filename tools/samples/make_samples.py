@@ -4,10 +4,11 @@ samples/ の試聴音声を、素材 × 形（モノラル・ステレオ）× �
 
   python tools/samples/make_samples.py                 # eval_audio/lossless の原音から全部作り直す
   python tools/samples/make_samples.py --source demo   # 素材を一つだけ
+  python tools/samples/make_samples.py --legall-only   # -L の試料だけ (原音と Haar・FM の試料は作らない)
 
 素材: demo（合成試験信号）、piano、percussion（どちらもステレオの CC0 音源）。各10秒。
 COMPARISON.md の数値に使う試料だけを作る: モノラル形、32 kHz、主系 B200M + 副系 SUB50M、
-AWGN の C/N0 54・57・60・66・80、および同じ条件のアナログFM。
+AWGN の C/N0 54・57・60・66・80、および同じ条件のアナログFM。各主系には LeGall 5/3 の -L 版も作る (副系も -L にそろえる)。
 通信路は主系・副系とも独立のチャンネルで、C/N0は同じ値。
 """
 import argparse
@@ -23,7 +24,7 @@ sys.path.insert(0, ROOT)
 from gracefm import channel
 from gracefm.decoder import roundtrip
 from gracefm.iir import ALT_DELAY
-from gracefm.profiles import PROFILES
+from gracefm.profiles import LEGALL_SUFFIX, PROFILES
 from tools.common import wavio
 from tools.common.analog_fm import AnalogFM
 from tools.common.demo_signal import make_demo
@@ -39,13 +40,19 @@ MATERIALS = (("demo", None, 0.0),
 CN0_LIST = (54, 57, 60, 66, 80)      # C/N0 [dB-Hz]。66 は 5m・室内の保守的な見積もり (SPEC 付録D)
 CASES = tuple(f"awgn{c}" for c in CN0_LIST)
 # (サンプリング周波数, 形, 主系, 副系, 条件)。ステレオ形は C/N0 57 だけ、主系＋副系で作る
-SETS = ((32000, "mono", ("B200M",), ("SUB50M",), CASES),
-        (32000, "stereo", ("B200", "B200Y"), ("SUB50M",), ("awgn57",)),
-        (48000, "stereo", ("M700", "M700Y"), ("SUB100-48K",), ("awgn57",)))
+SETS = ((32000, "mono", ("B200M", "B200M-L"), ("SUB50M",), CASES),
+        (32000, "stereo", ("B200", "B200Y", "B200-L", "B200Y-L"), ("SUB50M",), ("awgn57",)),
+        (48000, "stereo", ("M700", "M700Y", "M700-L", "M700Y-L"), ("SUB100-48K",), ("awgn57",)))
 # コーデックだけの試料 (通信路なし): (サンプリング周波数, 形, 主系, 副系は空, 条件は空)
-CODEC_SETS = ((32000, "stereo", ("B200", "B200Y"), (), ()), (48000, "stereo", ("M700", "M700Y"), (), ()))
+CODEC_SETS = ((32000, "stereo", ("B200", "B200Y", "B200-L", "B200Y-L"), (), ()),
+              (48000, "stereo", ("M700", "M700Y", "M700-L", "M700Y-L"), (), ()))
 ALL_SETS = SETS + CODEC_SETS
 BN = 180e3                           # C/N を表示する雑音帯域 [Hz] (FM放送 1波ぶん)
+
+
+def paired_sub(main, sub):
+    """主系に組み合わせる副系の名前。-L の主系には、帯域分割をそろえた -L の副系を使う"""
+    return sub + LEGALL_SUFFIX if PROFILES[main].overlapped else sub
 
 
 def source_name(material, form):
@@ -85,17 +92,20 @@ def save(name, y, mono, fs):
 
 
 def generate(task):
-    material, form, fs, mains, subs, cases, x = task
+    material, form, fs, mains, subs, cases, x, legall_only = task
     mono = form == "mono"
     src = source_name(material, form)
     print(src, flush=True)
-    wavio.write_flac24(os.path.join(OUT, reference_name(src, fs)), x[:, :1] if mono else x, fs)
-    fm = AnalogFM(x[:, 0], fs) if mono and fs == 32000 else None
+    if legall_only:
+        mains = tuple(m for m in mains if PROFILES[m].overlapped)
+    else:
+        wavio.write_flac24(os.path.join(OUT, reference_name(src, fs)), x[:, :1] if mono else x, fs)
+    fm = AnalogFM(x[:, 0], fs) if mono and fs == 32000 and not legall_only else None
     xi = wavio.to_pcm24(x)
     for main in mains:
         if not subs:
             save(sample_name(src, fs, main), wavio.from_pcm24(roundtrip(xi, PROFILES[main])), mono, fs)
-        for sub in subs:
+        for sub in (paired_sub(main, s) for s in subs):
             for case in cases:
                 cn0 = int(case[len("awgn"):])
                 y, _, _ = channel.link(xi, main, cn0, sub=sub, seed=1)
@@ -113,6 +123,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--eval-audio", default=os.path.join(ROOT, "eval_audio"), help="原音の置き場")
     ap.add_argument("--source", choices=[m[0] for m in MATERIALS], help="素材を一つだけ作る")
+    ap.add_argument("--legall-only", action="store_true", help="-L の試料だけ作る")
     ap.add_argument("--workers", type=int, default=6)
     args = ap.parse_args()
     os.makedirs(OUT, exist_ok=True)
@@ -124,7 +135,7 @@ def main():
         for fs, form, mains, subs, cases in ALL_SETS:
             if fs not in loaded:
                 loaded[fs] = load_material(material, path, start, args.eval_audio, fs)
-            tasks.append((material, form, fs, mains, subs, cases, to_form(loaded[fs], form)))
+            tasks.append((material, form, fs, mains, subs, cases, to_form(loaded[fs], form), args.legall_only))
     with ProcessPoolExecutor(max_workers=min(args.workers, len(tasks))) as ex:
         list(ex.map(generate, tasks))
     print("generated; run tools/samples/sample_catalog.py to validate and write the index")

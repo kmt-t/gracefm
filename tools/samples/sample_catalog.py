@@ -21,6 +21,7 @@ from tools.samples.make_samples import (
     MATERIALS,
     SEC,
     cn,
+    paired_sub,
     source_name,
 )
 from tools.samples.sample_names import reference_name, sample_name
@@ -44,7 +45,7 @@ def expected():
             for main in mains:
                 if not subs:
                     rows.append((material, form, main, 'codec', sample_name(src, fs, main), fs))
-                for sub in subs:
+                for sub in (paired_sub(main, s) for s in subs):
                     for case in cases:
                         rows.append((material, form, main + (f'+{sub}' if sub else ''), case,
                                      sample_name(src, fs, main, case, sub=sub), fs))
@@ -105,8 +106,9 @@ def write_readme(entries):
              '| 軸 | 内容 |', '|---|---|',
              '| 主系 | B200M（32 kHz） |',
              '| 副系 | SUB50M |',
-             '| ステレオ主系 | 32 kHz：B200・B200Y、48 kHz：M700・M700Y（コーデックだけ） |',
+             '| ステレオ主系 | 32 kHz：B200・B200Y、48 kHz：M700・M700Y |',
              '| ステレオ副系・条件 | 32 kHz：SUB50M、48 kHz：SUB100-48K。C/N0 57 だけ |',
+             '| LeGall 5/3 | 上の主系それぞれに `-L` 版があり、副系も `-L` にそろえる |',
              '| 条件 | 白色雑音 C/N0 ' + '・'.join(map(str, CN0_LIST)) + ' |',
              '| アナログFM | 32 kHzのモノラル形だけ、上の通信路条件 |', '',
              '## 電波の強さ', '', '| C/N0 | C/N（180kHz） |', '|---|---|']
@@ -115,7 +117,7 @@ def write_readme(entries):
     lines += ['', '66 dB-Hz は5m・室内の保守的な見積もり（SPEC 付録D）。通信路は白色雑音のみ。同期・等化は理想で、FMのゴーストは含まない。', '']
     for fs, form, mains, subs, cases in ALL_SETS:
         label = ('モノラル形' if form == 'mono' else 'ステレオ形') + f'・{fs // 1000} kHz'
-        configs = [m + (f'+{s}' if s else '') for m in mains for s in (subs or (None,))] + (['FM'] if form == 'mono' and fs == 32000 else [])
+        configs = [m + (f'+{paired_sub(m, s)}' if s else '') for m in mains for s in (subs or (None,))] + (['FM'] if form == 'mono' and fs == 32000 else [])
         cols = ('codec',) if not subs else cases
         lines += [f'## {label}（波形SNR dB、保存したFLACと原音の差）', '']
         for material, _, _ in MATERIALS:
