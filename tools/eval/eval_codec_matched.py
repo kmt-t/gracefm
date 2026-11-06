@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 from gracefm.decoder import roundtrip as codec
-from gracefm.profiles import PROFILES
+from gracefm.profiles import LEGALL_SUFFIX, PROFILES
 from tools.common import metrics, wavio
 from tools.eval.codec_benchmark_io import (
     aptx_roundtrip,
@@ -40,6 +40,7 @@ def evaluate(task):
     x32 = wavio.resample(reference, 48000, 32000)
     methods = (("B200M", "B200MY") if channels == 1 else ("B200", "B200Y")) if bandwidth == 16 else ()
     methods += ("M700M", "M700MY") if channels == 1 else ("M700", "M700Y")
+    methods += tuple(m + LEGALL_SUFFIX for m in methods)
     if not gracefm_only:
         if channels == 2:
             methods += ("aptX", "aptX HD")

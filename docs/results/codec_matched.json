@@ -762,6 +762,50 @@
       "material": "piano",
       "source_channels": 2,
       "evaluated_channels": 1,
+      "bandwidth_khz": 16,
+      "method": "B200M-L",
+      "audio_kbps": 254.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 54.65,
+      "visqol_mean": 4.407
+    },
+    {
+      "material": "piano",
+      "source_channels": 2,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 16,
+      "method": "B200MY-L",
+      "audio_kbps": 254.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 54.71,
+      "visqol_mean": 4.408
+    },
+    {
+      "material": "piano",
+      "source_channels": 2,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 16,
+      "method": "M700M-L",
+      "audio_kbps": 381.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 57.83,
+      "visqol_mean": 4.518
+    },
+    {
+      "material": "piano",
+      "source_channels": 2,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 16,
+      "method": "M700MY-L",
+      "audio_kbps": 381.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 57.86,
+      "visqol_mean": 4.519
+    },
+    {
+      "material": "piano",
+      "source_channels": 2,
+      "evaluated_channels": 1,
       "bandwidth_khz": 24,
       "method": "M700M",
       "audio_kbps": 381.0,
@@ -779,6 +823,28 @@
       "decoder_delay_samples_48khz": 0,
       "snr_db": 55.53,
       "visqol_mean": 4.167
+    },
+    {
+      "material": "piano",
+      "source_channels": 2,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 24,
+      "method": "M700M-L",
+      "audio_kbps": 381.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 59.06,
+      "visqol_mean": 4.73
+    },
+    {
+      "material": "piano",
+      "source_channels": 2,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 24,
+      "method": "M700MY-L",
+      "audio_kbps": 381.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 59.1,
+      "visqol_mean": 4.731
     },
     {
       "material": "piano",
@@ -828,6 +894,50 @@
       "material": "piano",
       "source_channels": 2,
       "evaluated_channels": 2,
+      "bandwidth_khz": 16,
+      "method": "B200-L",
+      "audio_kbps": 500.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 53.09,
+      "visqol_mean": 4.412
+    },
+    {
+      "material": "piano",
+      "source_channels": 2,
+      "evaluated_channels": 2,
+      "bandwidth_khz": 16,
+      "method": "B200Y-L",
+      "audio_kbps": 508.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 54.46,
+      "visqol_mean": 4.414
+    },
+    {
+      "material": "piano",
+      "source_channels": 2,
+      "evaluated_channels": 2,
+      "bandwidth_khz": 16,
+      "method": "M700-L",
+      "audio_kbps": 654.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 56.54,
+      "visqol_mean": 4.5
+    },
+    {
+      "material": "piano",
+      "source_channels": 2,
+      "evaluated_channels": 2,
+      "bandwidth_khz": 16,
+      "method": "M700Y-L",
+      "audio_kbps": 762.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 57.7,
+      "visqol_mean": 4.518
+    },
+    {
+      "material": "piano",
+      "source_channels": 2,
+      "evaluated_channels": 2,
       "bandwidth_khz": 24,
       "method": "M700",
       "audio_kbps": 654.0,
@@ -845,6 +955,28 @@
       "decoder_delay_samples_48khz": 0,
       "snr_db": 55.37,
       "visqol_mean": 4.206
+    },
+    {
+      "material": "piano",
+      "source_channels": 2,
+      "evaluated_channels": 2,
+      "bandwidth_khz": 24,
+      "method": "M700-L",
+      "audio_kbps": 654.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 57.32,
+      "visqol_mean": 4.65
+    },
+    {
+      "material": "piano",
+      "source_channels": 2,
+      "evaluated_channels": 2,
+      "bandwidth_khz": 24,
+      "method": "M700Y-L",
+      "audio_kbps": 762.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 59.03,
+      "visqol_mean": 4.73
     },
     {
       "material": "percussion",
@@ -894,6 +1026,50 @@
       "material": "percussion",
       "source_channels": 2,
       "evaluated_channels": 1,
+      "bandwidth_khz": 16,
+      "method": "B200M-L",
+      "audio_kbps": 254.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 54.79,
+      "visqol_mean": 4.578
+    },
+    {
+      "material": "percussion",
+      "source_channels": 2,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 16,
+      "method": "B200MY-L",
+      "audio_kbps": 254.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 54.94,
+      "visqol_mean": 4.578
+    },
+    {
+      "material": "percussion",
+      "source_channels": 2,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 16,
+      "method": "M700M-L",
+      "audio_kbps": 381.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 57.81,
+      "visqol_mean": 4.642
+    },
+    {
+      "material": "percussion",
+      "source_channels": 2,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 16,
+      "method": "M700MY-L",
+      "audio_kbps": 381.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 57.86,
+      "visqol_mean": 4.642
+    },
+    {
+      "material": "percussion",
+      "source_channels": 2,
+      "evaluated_channels": 1,
       "bandwidth_khz": 24,
       "method": "M700M",
       "audio_kbps": 381.0,
@@ -911,6 +1087,28 @@
       "decoder_delay_samples_48khz": 0,
       "snr_db": 57.45,
       "visqol_mean": 4.728
+    },
+    {
+      "material": "percussion",
+      "source_channels": 2,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 24,
+      "method": "M700M-L",
+      "audio_kbps": 381.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 60.04,
+      "visqol_mean": 4.732
+    },
+    {
+      "material": "percussion",
+      "source_channels": 2,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 24,
+      "method": "M700MY-L",
+      "audio_kbps": 381.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 60.15,
+      "visqol_mean": 4.732
     },
     {
       "material": "percussion",
@@ -960,6 +1158,50 @@
       "material": "percussion",
       "source_channels": 2,
       "evaluated_channels": 2,
+      "bandwidth_khz": 16,
+      "method": "B200-L",
+      "audio_kbps": 500.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 54.31,
+      "visqol_mean": 4.576
+    },
+    {
+      "material": "percussion",
+      "source_channels": 2,
+      "evaluated_channels": 2,
+      "bandwidth_khz": 16,
+      "method": "B200Y-L",
+      "audio_kbps": 508.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 54.55,
+      "visqol_mean": 4.576
+    },
+    {
+      "material": "percussion",
+      "source_channels": 2,
+      "evaluated_channels": 2,
+      "bandwidth_khz": 16,
+      "method": "M700-L",
+      "audio_kbps": 654.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 56.79,
+      "visqol_mean": 4.643
+    },
+    {
+      "material": "percussion",
+      "source_channels": 2,
+      "evaluated_channels": 2,
+      "bandwidth_khz": 16,
+      "method": "M700Y-L",
+      "audio_kbps": 762.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 57.57,
+      "visqol_mean": 4.642
+    },
+    {
+      "material": "percussion",
+      "source_channels": 2,
+      "evaluated_channels": 2,
       "bandwidth_khz": 24,
       "method": "M700",
       "audio_kbps": 654.0,
@@ -977,6 +1219,28 @@
       "decoder_delay_samples_48khz": 0,
       "snr_db": 57.29,
       "visqol_mean": 4.728
+    },
+    {
+      "material": "percussion",
+      "source_channels": 2,
+      "evaluated_channels": 2,
+      "bandwidth_khz": 24,
+      "method": "M700-L",
+      "audio_kbps": 654.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 57.55,
+      "visqol_mean": 4.729
+    },
+    {
+      "material": "percussion",
+      "source_channels": 2,
+      "evaluated_channels": 2,
+      "bandwidth_khz": 24,
+      "method": "M700Y-L",
+      "audio_kbps": 762.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 59.98,
+      "visqol_mean": 4.732
     },
     {
       "material": "guitar",
@@ -1026,6 +1290,50 @@
       "material": "guitar",
       "source_channels": 1,
       "evaluated_channels": 1,
+      "bandwidth_khz": 16,
+      "method": "B200M-L",
+      "audio_kbps": 254.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 56.93,
+      "visqol_mean": 4.452
+    },
+    {
+      "material": "guitar",
+      "source_channels": 1,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 16,
+      "method": "B200MY-L",
+      "audio_kbps": 254.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 56.95,
+      "visqol_mean": 4.452
+    },
+    {
+      "material": "guitar",
+      "source_channels": 1,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 16,
+      "method": "M700M-L",
+      "audio_kbps": 381.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 59.16,
+      "visqol_mean": 4.563
+    },
+    {
+      "material": "guitar",
+      "source_channels": 1,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 16,
+      "method": "M700MY-L",
+      "audio_kbps": 381.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 59.17,
+      "visqol_mean": 4.563
+    },
+    {
+      "material": "guitar",
+      "source_channels": 1,
+      "evaluated_channels": 1,
       "bandwidth_khz": 24,
       "method": "M700M",
       "audio_kbps": 381.0,
@@ -1043,6 +1351,28 @@
       "decoder_delay_samples_48khz": 0,
       "snr_db": 57.64,
       "visqol_mean": 4.698
+    },
+    {
+      "material": "guitar",
+      "source_channels": 1,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 24,
+      "method": "M700M-L",
+      "audio_kbps": 381.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 60.44,
+      "visqol_mean": 4.732
+    },
+    {
+      "material": "guitar",
+      "source_channels": 1,
+      "evaluated_channels": 1,
+      "bandwidth_khz": 24,
+      "method": "M700MY-L",
+      "audio_kbps": 381.0,
+      "decoder_delay_samples_48khz": 0,
+      "snr_db": 60.45,
+      "visqol_mean": 4.732
     }
   ]
 }
