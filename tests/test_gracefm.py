@@ -75,7 +75,7 @@ def test_crc_detects_error():
 
 def test_frame_roundtrip_bit_exact():
     for name, p in PROFILES.items():
-        if p.has_y:                      # Y帯域の仮数は専用シンボルで送る (test_y.py)
+        if p.has_y or p.overlapped:      # Y帯域の仮数は専用シンボルで送る (test_y.py)。ブロックをまたぐ帯域分割は test_legall.py
             continue
         x = _signal(p.block, p.fs)
         bd = encode_block(x, p)
@@ -200,12 +200,12 @@ def test_postfilter_resamples_to_48k_int32():
 
 
 def test_latency_model():
-    """遅延モデル: 1系統・2系統とも 2ブロック。処理時間は加算"""
+    """遅延モデル: 1系統・2系統とも 2ブロック (ブロックをまたぐ帯域分割は先読みの分を足す)。処理時間は加算"""
     from gracefm.iir import ALT_DELAY
     from gracefm.timing import Timing, min_latency
     for p in PROFILES.values():
         B = Fraction(p.block, p.fs)
-        alt = Fraction(ALT_DELAY[p.fs], p.fs)                 # 切り替え先の IIR に揃える遅延
+        alt = Fraction(ALT_DELAY[p.fs] + p.encoder_lookahead + p.synth_reach_before, p.fs)   # 切り替え先の IIR に揃える遅延と先読み
         assert min_latency(p, False) == 2 * B + alt
         assert min_latency(p, True) == 2 * B + alt
         tm = Timing(t_enc=Fraction(1, 10000), t_filt=Fraction(2, 10000), t_dec=Fraction(3, 10000), t_out=Fraction(4, 10000))

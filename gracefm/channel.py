@@ -12,7 +12,7 @@ import numpy as np
 
 from . import modem
 from .encoder import Encoder
-from .profiles import PROFILES, Profile
+from .profiles import LEGALL_SUFFIX, PROFILES, Profile
 from .receiver import receive
 
 # 主系に組み合わせる副系 (主系より低いビットレートで、別の周波数で送る受け皿)
@@ -22,6 +22,7 @@ DEFAULT_SUB = {
     "M700M": "SUB100-48K", "M700MY": "SUB100-48K",
     "M700": "SUB100-48K", "M700Y": "SUB100-48K",
 }
+DEFAULT_SUB.update({f"{main}{LEGALL_SUFFIX}": f"{sub}{LEGALL_SUFFIX}" for main, sub in tuple(DEFAULT_SUB.items())})
 
 
 def symbol_rate(p):

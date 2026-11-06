@@ -18,6 +18,9 @@
 (+ 融合・出力の処理時間 t_out)。これを満たす最小の D を求める。
 
 処理時間を 0 とすると、1系統も 2系統も D = 2B (蓄積 B + 直列化 B。系統 B の待ちは生じない)。
+
+帯域分割がブロックをまたぐプロファイルでは、符号化がブロック終端の encoder_lookahead サンプル先を待ち (取得完了が遅れる)、
+出力単位の先頭を synth_reach_before サンプル前へずらす (その単位が次のフレームを使わないようにする)。D は両者の和だけ増える。
 """
 from dataclasses import dataclass
 from fractions import Fraction
@@ -43,7 +46,7 @@ def frame_times(profile: Profile, stream: str, nframes: int, tm: Timing | None =
     out = {k: [] for k in ("start", "capture_end", "tx_start", "tx_end", "rx_end", "decoded")}
     for j in range(nframes):
         start = j * B
-        cap_end = start + B
+        cap_end = start + B + Fraction(profile.encoder_lookahead, profile.fs)
         tx_start = cap_end + tm.t_enc
         tx_end = tx_start + B                      # T_ser = B
         rx_end = tx_end + filter_delay
@@ -55,7 +58,8 @@ def frame_times(profile: Profile, stream: str, nframes: int, tm: Timing | None =
 def units(profile: Profile, two_streams: bool, nunits: int):
     """出力ブロックごとに (原音での開始時刻, 使う A のフレーム, 使う B のフレーム一覧)"""
     B = Fraction(profile.block, profile.fs)
-    return [(j * B, [j], [j] if two_streams else []) for j in range(nunits)]
+    shift = Fraction(profile.synth_reach_before, profile.fs)
+    return [(j * B - shift, [j], [j] if two_streams else []) for j in range(nunits)]
 
 
 def min_latency(profile: Profile, two_streams=True, tm: Timing | None = None, nunits=64):

@@ -1,5 +1,6 @@
 """
-音声符号化: M/S → ブロック内 Haar 多段分解 → 帯域ごとのブロック浮動小数点量子化。すべて整数演算。
+音声符号化: M/S → 多段の帯域分割 → 帯域ごとのブロック浮動小数点量子化。すべて整数演算。
+帯域分割はプロファイルで決まる。Haar はブロック内で完結し、LeGall 5/3 はブロックをまたぐ (analyze_stream、synthesize_stream)。
 
 PCM は符号つき24 bit整数 (±1 = 2^23)。係数は小数22 bit (±1 = 2^22) の整数で、M/S は M = (L+R)/2、S = (L-R)/2 を
 最後の2 bit を四捨五入して作る。Haar の各段の出力は最大で 2^(段/2) 倍になり、4段の最低域は満点の直流で ±2^24 に達して、
@@ -7,7 +8,7 @@ PCM は符号つき24 bit整数 (±1 = 2^23)。係数は小数22 bit (±1 = 2^22
 制限して、アッテネータの半刻みも整数にする (e < -21 の細かい刻みは使わない。デコーダは s <= 0 でも右シフトで復号する)。
 DSP に依存する演算は gracefm.dsp にある (docs/FIXED.md)。
 
-すべての処理はブロック (= フレーム) の中で完結し、先読みはない。
+Haar のプロファイルでは、すべての処理はブロック (= フレーム) の中で完結し、先読みはない。
 配列の最後の軸がブロック内のサンプル (または係数) で、それより前の軸はブロックの並び
 (ツールで一括処理するため) として扱う。
 """
@@ -91,6 +92,44 @@ def haar_inverse(bands):
     return a
 
 
+def _next(x):
+    """同じ格子の 1つ先の値。端は折り返す (対称拡張)"""
+    return np.concatenate([x[..., 1:], x[..., -1:]], axis=-1)
+
+
+def _prev(x):
+    """同じ格子の 1つ前の値。端は折り返す (対称拡張)"""
+    return np.concatenate([x[..., :1], x[..., :-1]], axis=-1)
+
+
+def legall_forward(x, levels):
+    """LeGall 5/3 の多段分解。x はストリーム全体 (最後の軸が時間)。リフティングは加算とシフトだけで、
+    スケーリング (低域 ×√2、高域 ÷√2) を Haar と同じ乗算で行い、帯域の尺度を Haar にそろえる。"""
+    a = saturate(np.asarray(x, np.int64))
+    details = []
+    for _ in range(levels):
+        e, o = a[..., 0::2], a[..., 1::2]
+        d = saturate(o - ((e + _next(e)) >> 1))
+        low = saturate(e + ((_prev(d) + d + 2) >> 2))
+        details.append(mac_sq2_inv(d, 0, 1))
+        a = mac_sq2_inv(low, low, 1)
+    return [a] + details[::-1]
+
+
+def legall_inverse(bands):
+    """legall_forward の逆変換"""
+    a = bands[0]
+    for scaled in bands[1:]:
+        low = mac_sq2_inv(a, 0, 1)
+        d = mac_sq2_inv(scaled, scaled, 1)
+        e = saturate(low - ((_prev(d) + d + 2) >> 2))
+        x = np.empty(a.shape[:-1] + (a.shape[-1] * 2,), np.int64)
+        x[..., 0::2] = e
+        x[..., 1::2] = saturate(d + ((e + _next(e)) >> 1))
+        a = x
+    return a
+
+
 def _shared_exponent(peak, qmax, emin, emax):
     """peak <= qmax * 2^s を満たす最小の s から指数 e = s - FRAC を決め、[emin, emax] に収める"""
     ratio = (peak + qmax - 1) // qmax                   # ceil(peak / qmax)
@@ -161,8 +200,40 @@ def quantize(bands, profile: Profile, clip_opt=True) -> BlockData:
 
 
 def encode_block(x, profile: Profile, clip_opt=True) -> BlockData:
-    """x: (block, 2) の L/R、符号つき24 bit整数 (|x| < 2^23)。analyze → quantize"""
+    """x: (block, 2) の L/R、符号つき24 bit整数 (|x| < 2^23)。analyze → quantize。ブロック内で完結する帯域分割だけ"""
+    _require_block_transform(profile)
     return quantize(analyze(x, profile), profile, clip_opt)
+
+
+def _require_block_transform(profile: Profile):
+    if profile.overlapped:
+        raise ValueError(f"{profile.name} の帯域分割はブロックをまたぐので、ストリーム単位で処理してください")
+
+
+def analyze_stream(x, profile: Profile):
+    """x: (block × フレーム数, 2) の L/R → フレームごとの {ch: [帯域の係数]}。ブロックをまたぐ帯域分割を使う。
+    フレーム j の係数はブロック終端の encoder_lookahead サンプル先までに依存する (実機は、その分を待ってから符号化する)。"""
+    x = np.asarray(x, np.int64)
+    ms = {"M": (x[:, 0] + x[:, 1] + 2) >> 2, "S": (x[:, 0] - x[:, 1] + 2) >> 2}
+    full = {ch: legall_forward(ms[ch], profile.levels) for ch in ms}
+    nfr = len(x) // profile.block
+    counts = [profile.ncoef(k) for k in range(profile.nbands)]
+    return [{ch: [b[j * c:(j + 1) * c] for b, c in zip(full[ch], counts)] for ch in full} for j in range(nfr)]
+
+
+def overlap_valid(frame_valid, profile: Profile, n):
+    """届かなかったフレームの係数は前後のブロックにも影響するので、影響する範囲のサンプルを無効にする。
+    frame_valid: フレームごとの有効フラグ。返り値: n サンプルの有効フラグ (フレームの後ろは無効)"""
+    before = profile.synth_reach_before
+    bad = np.repeat(~np.asarray(frame_valid, bool), profile.block).astype(np.int64)
+    touched = np.convolve(bad, np.ones(before + profile.synth_reach_after + 1, np.int64))[before:before + len(bad)]
+    return np.pad(touched == 0, (0, max(n - len(bad), 0)))[:n]
+
+
+def synthesize_stream(frames):
+    """フレームごとの {ch: [帯域係数]} → (block × フレーム数, 2) の L/R、符号つき24 bit整数。analyze_stream の逆"""
+    joined = {ch: [np.concatenate(band) for band in zip(*(f[ch] for f in frames))] for ch in ("M", "S")}
+    return ms_to_lr(legall_inverse(joined["M"]), legall_inverse(joined["S"]))
 
 
 def synthesize(coefs):

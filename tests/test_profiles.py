@@ -28,11 +28,12 @@ def test_catalog_ids_and_standard_attenuation():
     for main, secondary in DEFAULT_SUB.items():
         assert PROFILES[main].fs == PROFILES[secondary].fs
     assert list(BY_ID) == list(range(1, 12))
-    assert set(PROFILES) == {
+    haar = {
         'B200M', 'B200', 'B200MY', 'B200Y',
         'M700M', 'M700', 'M700MY', 'M700Y',
         'SUB50M', 'SUB100', 'SUB100-48K',
     }
+    assert set(PROFILES) == haar | {f'{name}-L' for name in haar}
     assert not {'S50M', 'S100', 'S100-48K'} & PROFILES.keys()
     assert all(PROFILES[name].modulation == 'qpsk' for name in ('SUB50M', 'SUB100', 'SUB100-48K'))
     assert all(PROFILES[name].modulation == 'qam16h' for name in ('B200M', 'B200', 'B200MY', 'B200Y'))
@@ -42,8 +43,10 @@ def test_catalog_ids_and_standard_attenuation():
     assert all(PROFILES[name].bits_s != (0,) * 5 for name in ('M700', 'M700Y'))
     assert not {'M700Q16', 'B150', 'B150M', 'S85M', 'B200M-A4', 'B200-A4'} & PROFILES.keys()
     for p in PROFILES.values():
-        assert p.format_id == 3 and BY_ID[p.pid] is p
-        assert BY_HEADER[p.pid, 3] is p
+        assert (p.format_id, p.transform) == ((2, 'legall53') if p.name.endswith('-L') else (3, 'haar'))
+        assert BY_HEADER[p.pid, p.format_id] is p
+        if not p.overlapped:
+            assert BY_ID[p.pid] is p
         for ch, widths in [('M', p.bits_m), ('S', p.bits_s)]:
             groups = [p.attenuator_group(ch, k) for k in range(p.nbands)]
             if any(widths):
@@ -56,6 +59,8 @@ def test_catalog_ids_and_standard_attenuation():
 def test_all_profiles_roundtrip_and_attenuator_crc():
     rng = np.random.default_rng(24)
     for p in PROFILES.values():
+        if p.overlapped:                             # test_legall.py
+            continue
         x = pcm(rng.uniform(-0.6, 0.6, (p.block, 2)))
         tx = Encoder(p)
         result = Decoder(p).run([tx.frame(x)], p.block)
@@ -136,6 +141,8 @@ def test_layers_are_even_and_balanced():
 
 def test_other_format_identifiers_are_rejected_even_with_matching_id():
     for p in PROFILES.values():
+        if p.overlapped:                             # test_legall.py
+            continue
         current = Layout(p)
         x = np.zeros((p.block, 2), np.int64)
         for tag in (0, 1, 2):

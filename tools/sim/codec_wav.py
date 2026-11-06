@@ -15,8 +15,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from gracefm.codec import encode_block, haar_inverse, ms_to_lr
-from gracefm.decoder import reconstruct_coeffs
+from gracefm.decoder import roundtrip
 from gracefm.postfilter import OUT_FS, postfilter
 from gracefm.profiles import PROFILES
 from gracefm.timing import min_latency
@@ -38,15 +37,7 @@ def main():
     peak = np.abs(x).max()
     if peak > 0.99:
         x = x * (0.99 / peak)
-    n = len(x)
-    nfr = int(np.ceil(n / p.block))
-    xp = np.pad(x, ((0, nfr * p.block - n), (0, 0)))
-    xi = wavio.to_pcm24(xp)
-    out = np.zeros_like(xi)
-    for i in range(nfr):
-        coefs = reconstruct_coeffs(encode_block(xi[i * p.block:(i + 1) * p.block], p), p)
-        out[i * p.block:(i + 1) * p.block] = ms_to_lr(haar_inverse(coefs["M"]), haar_inverse(coefs["S"]))
-    y = wavio.from_pcm24(out[:n])
+    y = wavio.from_pcm24(roundtrip(wavio.to_pcm24(x), p))
     if args.no_postfilter:
         wavio.write(args.output, y, p.fs)
     else:

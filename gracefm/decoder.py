@@ -15,12 +15,16 @@ from .codec import (
     FRAC,
     BlockData,
     attenuator_expanded,
+    analyze_stream,
     encode_block,
     exp_range,
     offset_of,
+    overlap_valid,
     qmax_of,
     qmin_of,
+    quantize,
     synthesize,
+    synthesize_stream,
 )
 from .crypto import unwrap_counter
 from .dsp import log2_q8, saturate, shift_signed, sigmoid_q15, wide_mul
@@ -43,11 +47,12 @@ OK, HIGH_FAIL, LOST, CRC_FAIL = "ok", "high_fail", "lost", "crc_fail"   # フレ
 
 @dataclass
 class DecodedFrame:
-    pcm: np.ndarray                 # (block, 2) の符号つき24 bit整数
+    pcm: np.ndarray | None          # (block, 2) の符号つき24 bit整数。帯域分割がブロックをまたぐ復号済みフレームは None (coefs から run が合成する)
     status: str                     # OK, HIGH_FAIL (高域CRCだけ不一致), LOST (届かない), CRC_FAIL (基本CRCが不一致)
     quality: int                    # 品質コード
     rb: np.ndarray | None        # (2 半ブロック, 2 成分, 帯域数) の誤差分散 (対数領域)。届かない・CRC不一致は None
     frame_no: int | None = None  # 暗号化時の 40 bit のフレーム番号 (次のフレームの番号の復元に使う)
+    coefs: dict | None = None    # 帯域分割がブロックをまたぐときの {ch: [帯域係数]}
 
     @property
     def valid(self):
@@ -62,6 +67,9 @@ class StreamResult:
     quality: np.ndarray             # フレームごとの品質コード (時刻合わせ前)
     rb: np.ndarray                  # 時刻合わせ済みの誤差分散 (n, 2, 帯域数)
     stats: dict                     # frames, lost, crc_fail, high_crc_fail
+    coefs: list | None = None       # 帯域分割がブロックをまたぐときの、フレームごとの {ch: [帯域係数]} (届かないフレームは全 0)
+    frame_valid: np.ndarray | None = None  # 同じくフレームごとの、基本CRCが通ったか
+
 
 
 def soft_coeffs(lay: Layout, bd: BlockData, p1_coef, y_mant, y_var, high_ok=True):
@@ -185,7 +193,8 @@ class Decoder:
         coefs, rb = self.soft_coeffs(u.bd, p1_coef, y_mant, y_var, high_ok)
         # 高域を送らないプロファイルは、高域CRCが通っても常に品質 1 (高域欠落)
         quality = QUALITY_NORMAL if (high_ok and not self.high_absent) else QUALITY_HIGH_MISSING
-        return DecodedFrame(synthesize(coefs), OK if high_ok else HIGH_FAIL, quality, rb, u.frame_no)
+        pcm = None if p.overlapped else synthesize(coefs)
+        return DecodedFrame(pcm, OK if high_ok else HIGH_FAIL, quality, rb, u.frame_no, coefs)
 
     def _keystream_for(self, last_frame_no):
         """(系統, ヘッダの24bit のフレーム番号) → (キーストリーム, 40bit の番号)。暗号化していなければ None"""
@@ -202,6 +211,8 @@ class Decoder:
         b = self.p.block
         h = b // 2
         y = np.zeros((len(frames) * b, 2), np.int64)
+        coefs = []
+        zero = {ch: [np.zeros(self.p.ncoef(k), np.int64) for k in range(self.p.nbands)] for ch in ("M", "S")}
         v = np.zeros(len(frames) * b, bool)
         rb = np.full((len(frames) * b, 2, self.p.nbands), INF_LOG, np.int64)
         quality = np.zeros(len(frames), np.int64)
@@ -211,7 +222,10 @@ class Decoder:
             f = self.decode_frame(sym, last_frame_no)
             if f.frame_no is not None:
                 last_frame_no = f.frame_no
-            y[i * b:(i + 1) * b], v[i * b:(i + 1) * b] = f.pcm, f.valid
+            coefs.append(f.coefs if f.coefs is not None else zero)
+            v[i * b:(i + 1) * b] = f.valid
+            if not self.p.overlapped:
+                y[i * b:(i + 1) * b] = f.pcm
             quality[i] = f.quality
             if f.rb is not None:
                 rb[i * b:i * b + h] = f.rb[0]
@@ -219,7 +233,13 @@ class Decoder:
             stats["lost"] += f.status == LOST
             stats["crc_fail"] += f.status == CRC_FAIL
             stats["high_crc_fail"] += f.status == HIGH_FAIL
-        return StreamResult(y[offset:offset + n], v[offset:offset + n], quality, rb[offset:offset + n], stats)
+        if not self.p.overlapped:
+            return StreamResult(y[offset:offset + n], v[offset:offset + n], quality, rb[offset:offset + n], stats)
+        if offset:
+            raise ValueError("帯域分割がブロックをまたぐプロファイルは、2系統の格子をそろえてください (offset = 0)")
+        frame_valid = v[::b]
+        y = synthesize_stream(coefs) * overlap_valid(frame_valid, self.p, len(frames) * b)[:, None]
+        return StreamResult(y[:n], overlap_valid(frame_valid, self.p, n), quality, rb[:n], stats, coefs, frame_valid)
 
 
 def unpack_recovering(lay: Layout, soft, bits, keystream_for=None, y_soft=None):
@@ -262,7 +282,9 @@ def reconstruct_coeffs(bd: BlockData, profile: Profile):
 
 
 def reconstruct(bd: BlockData, profile: Profile):
-    """BlockData → (block, 2) の L/R、符号つき24 bit整数 (通信路なしの復号)"""
+    """BlockData → (block, 2) の L/R、符号つき24 bit整数 (通信路なしの復号)。ブロック内で完結する帯域分割だけ"""
+    if profile.overlapped:
+        raise ValueError(f"{profile.name} の帯域分割はブロックをまたぐので、1ブロックだけでは合成できません")
     return synthesize(reconstruct_coeffs(bd, profile))
 
 
@@ -271,6 +293,9 @@ def roundtrip(x, profile: Profile):
     n = profile.block
     nfr = -(-len(x) // n)
     xp = np.pad(np.asarray(x, np.int64), ((0, nfr * n - len(x)), (0, 0)))
+    if profile.overlapped:
+        decoded = [reconstruct_coeffs(quantize(bands, profile), profile) for bands in analyze_stream(xp, profile)]
+        return synthesize_stream(decoded)[:len(x)]
     out = np.zeros_like(xp)
     for i in range(nfr):
         out[i * n:(i + 1) * n] = reconstruct(encode_block(xp[i * n:(i + 1) * n], profile), profile)

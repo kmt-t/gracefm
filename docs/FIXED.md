@@ -35,6 +35,7 @@
 
 - **精度を落として幅に収める**: Haar 4 段の最低域は、満点の直流で ±2^24 に達し、乗算器の入力（符号つき 25 bit）の上限 2^24 − 1 を 1 だけ超える。この 1 LSB（2^-22）は `saturate` で切る。
 - **Haar の演算**: (e ± o)/√2 を、e·C ± o·C をアキュムレータで足し合わせ、四捨五入して 16 bit 右シフトする形で書く。
+- **LeGall 5/3 の演算**（`-L` プロファイル）: リフティングは加算とシフトだけで乗算器を使わず、各段の結果を 25 bit に飽和させる。スケーリングは Haar と同じ `mac_sq2_inv` で、√2 倍は s·C + s·C、1/√2 倍は s·C。最低域の分析の利得は最悪で 6.79 倍（Haar は 4 倍）で、その符号に合わせた満点の入力では飽和する（[SPEC](SPEC.md) 6.2）。
 - **刻みの下限**: アッテネータの半刻みを整数にするため、共有指数の刻みは s ≥ 1 に制限する。デコーダは s ≤ 0 の値が来ても、右シフトで復号する。
 - **誤差の二乗和**: エンコーダは、指数とアッテネータの選択で量子化誤差の二乗和を比べる。誤差は 25 bit あるので、量子化刻みに対する相対精度を 8 bit に切り詰めて（`ERR_FRAC_BITS`）18 bit に収めてから二乗する。
 - **距離の二乗**: 復調の距離は右シフトして 17 bit にしてから二乗する。
@@ -44,14 +45,14 @@
 | モジュール | 内容 |
 |---|---|
 | [`dsp.py`](../gracefm/dsp.py) | DSP に依存する演算（乗算、累積、シフト、飽和、誤差の二乗和） |
-| [`codec.py`](../gracefm/codec.py) | M/S、Haar、ブロック浮動小数点の量子化・逆量子化 |
+| [`codec.py`](../gracefm/codec.py) | M/S、Haar、LeGall 5/3、ブロック浮動小数点の量子化・逆量子化 |
 | [`fec.py`](../gracefm/fec.py) | 畳み込み符号、系統符号、CRC、整数ビタビ（乗算なし） |
 | [`modem.py`](../gracefm/modem.py) | 変調、軸ごとの max-log LLR、Y 方式の変調・復調、PRBS |
 | [`layout.py`](../gracefm/layout.py)、[`framing.py`](../gracefm/framing.py) | ビット配置、送信（pack）と受信（unpack） |
 | [`encoder.py`](../gracefm/encoder.py) | 送信機（符号化、フレーム化、スクランブル、変調） |
 | [`decoder.py`](../gracefm/decoder.py) | 1系統の受信機（確率による仮数の期待値、誤差分散、Chase 救済、硬判定の再構成） |
 | [`receiver.py`](../gracefm/receiver.py) | 2 系統の合成と出力段（PLC、クロスフェード、IIR 切替） |
-| [`fusion.py`](../gracefm/fusion.py) | 2 系統の帯域ごとの融合（逆分散重み、Q15） |
+| [`fusion.py`](../gracefm/fusion.py) | 2 系統の帯域ごとの融合（逆分散重み、Q15）。`-L` は係数のまま融合する |
 | [`plc.py`](../gracefm/plc.py) | LPC による補間（整数のレビンソン・ダービン）とクロスフェード |
 | [`postfilter.py`](../gracefm/postfilter.py) | 出力段（Lanczos 補間、LPF、再標本化）。係数は整数の表 |
 | [`iir.py`](../gracefm/iir.py) | 出力の切り替え先の IIR（因果、4 次 Butterworth、4 kHz）。係数は符号つき 18 bit の Q16（固定）。積は 25×18 bit、累積は 48 bit。係数は Q16 の固定（仕様どおり）。浮動小数点の設計との誤差は、振幅 3×10^5 のランダムウォーク入力で 32 kHz 約 70 LSB、48 kHz 約 440 LSB。1 kHz・振幅 2^22 の正弦波では 32 kHz 約 600 LSB、48 kHz 約 4200 LSB（約 −60 dB）。48 kHz の精度は不足（未解決、下の「未実装」を参照） |
@@ -109,9 +110,11 @@
 |---|---|
 | [`tests/test_fixed.py`](../tests/test_fixed.py) | 乗数の幅、Haar が 25 bit に収まること、全プロファイルの SNR、**`gracefm/` に float が無いこと** |
 | [`tests/test_fec.py`](../tests/test_fec.py) | 整数ビタビ |
+| [`tests/test_legall.py`](../tests/test_legall.py) | LeGall 5/3 の再構成、影響範囲と先読みの実測、欠落、融合、遅延 |
 | [`tests/test_gracefm.py`](../tests/test_gracefm.py)、`test_profiles.py`、`test_y.py`、`test_equalizer.py`、`test_baselayer.py` | フレーム、リンク、融合、補間、Y、等化器 |
 
 ## 5. 未実装
 
+- `-L` プロファイルのストリーム処理（遅延線と係数のバッファ）。参照実装は配列全体で変換する。`tools/report/circuit_estimate.py` と [方式間比較](COMPARISON.md) の回路見積もりは Haar のプロファイルだけが対象で、`-L` の演算量・メモリは見積もっていない。
 - 同期（シンボルタイミング、搬送波、AGC）、RRC 整合フィルタ、AD9363 とのインターフェース。
 - 暗号化（AES-128-CTR）は、ライブラリの AES が作るキーストリームとの排他的論理和で、`gracefm/crypto.py` にある。AES 自体の回路は設計していない。

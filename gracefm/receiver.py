@@ -61,6 +61,10 @@ def receive(profile: Profile, framesA, framesB, n, offset_b, plc_order=16,
         stats["B"] = B.stats
     if B is None:
         y, v, tr = A.pcm, A.valid, None
+    elif profile.overlapped:
+        if not pb.overlapped:
+            raise ValueError("帯域分割がブロックをまたぐ主系には、同じ帯域分割の副系を組み合わせてください")
+        y, v, tr = fusion.fuse_overlapped(A, B, profile)
     else:
         y, v, tr = fusion.fuse_band(A.pcm, A.valid, B.pcm, B.valid, profile.block, profile.levels, A.rb, B.rb)
     if B is not None and return_streams:

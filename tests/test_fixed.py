@@ -73,7 +73,7 @@ def test_haar_stays_within_multiplier_width_and_inverts():
 def test_roundtrip_matches_original_audio_for_all_profiles():
     for name, p in PROFILES.items():
         x = np.clip(np.rint(_music_like(p.block * 40, p.fs) * 2 ** 23), -2 ** 23 + 1, 2 ** 23 - 1).astype(np.int64)
-        if name.endswith(("M", "MY")) or name == "SUB50M":
+        if not any(p.bits_s):
             x[:, 1] = x[:, 0]
         y = roundtrip(x, p)
         assert np.abs(y).max() < 2 ** 23

@@ -32,11 +32,14 @@ class Profile:
     y_step: tuple[int, int] = (2, 105)   # 隣接する半径の段の間隔 (正規化前) の分子・分母。7bit時 (半径の段が64) は 0.08 × 7.5 / 31.5 = 2/105
     y_bits: int = 7                  # 最上位bitは位相 (パリティと対)、残りは連続値で推定する半径
     y_channels: tuple[str, ...] = ("M", "S")
-    format_id: int = 3             # 2bitの形式識別子。値3はビット列11を表し、世代番号ではない。
+    format_id: int = 3             # 2bitの形式識別子。値3 (ビット列11) はHaar、値2 (ビット列10) はLeGall 5/3。世代番号ではない。
+    transform: str = "haar"        # 帯域分割: "haar" (ブロック内で完結) | "legall53" (ブロックをまたぐ)
 
     def __post_init__(self):
         if not 0 <= self.pid < 16 or not 0 <= self.format_id < 4:
             raise ValueError("プロファイルIDは4bit、形式識別子は2bitにしてください")
+        if self.transform not in ("haar", "legall53"):
+            raise ValueError("帯域分割は haar か legall53 にしてください")
         if not 0 < self.pulse_beta_pct <= 100 or self.pulse_span < 2 or self.pulse_span % 2:
             raise ValueError("RRC パルスのロールオフは (0, 100] %、長さは正の偶数にしてください")
         if len(self.protect) != self.nbands or any(k < 1 for k in self.protect):
@@ -89,6 +92,26 @@ class Profile:
                 bits = self.bits_m if ch == "M" else self.bits_s
                 if any(b not in (0, self.y_bits) for b in bits[self.y_start_k:]):
                     raise ValueError("Y帯域の仮数幅が設定値と一致しません")
+
+    @property
+    def overlapped(self) -> bool:
+        """帯域分割がブロックをまたぐか (True なら 1ブロックだけでは符号化も合成もできない)"""
+        return self.transform == "legall53"
+
+    @property
+    def encoder_lookahead(self) -> int:
+        """1フレームの符号化に要る、ブロック終端より先のサンプル数"""
+        return (1 << self.levels) - 1 if self.overlapped else 0
+
+    @property
+    def synth_reach_before(self) -> int:
+        """1フレームの係数が影響する、ブロック先頭より前のサンプル数 (受信側の先読み)"""
+        return (1 << self.levels) - 1 if self.overlapped else 0
+
+    @property
+    def synth_reach_after(self) -> int:
+        """1フレームの係数が影響する、ブロック終端より後のサンプル数"""
+        return 1 << self.levels if self.overlapped else 0
 
     @property
     def has_y(self) -> bool:
@@ -175,6 +198,7 @@ def band_level(k: int, levels: int) -> int:
 # Standard catalog. All active M/S components have interval attenuation.
 # IDs: 1–4 32kHz main, 5–6 32kHz secondary, 7–10 48kHz main, 11 48kHz secondary. 0 and 12–15 are reserved.
 # Every row has the same fields; bit widths are explicit, never expanded implicitly.
+# Each row also yields a "-L" profile: the same pid and bit tables, LeGall 5/3 instead of Haar, told apart by format_id.
 PROFILE_MATRIX = (
     {
         "pid": 1,
@@ -398,12 +422,18 @@ PROFILE_MATRIX = (
     },
 )
 
-PROFILES = {row["name"]: Profile(block=64, levels=levels_for(row["fs"], 64), format_id=3, **row)
+LEGALL_SUFFIX = "-L"
+FORMAT_HAAR, FORMAT_LEGALL = 3, 2
+PROFILES = {row["name"]: Profile(block=64, levels=levels_for(row["fs"], 64), format_id=FORMAT_HAAR, **row)
             for row in PROFILE_MATRIX}
-BY_ID = {p.pid: p for p in PROFILES.values()}
+PROFILES.update({
+    row["name"] + LEGALL_SUFFIX: Profile(block=64, levels=levels_for(row["fs"], 64), format_id=FORMAT_LEGALL,
+                                         transform="legall53", **{**row, "name": row["name"] + LEGALL_SUFFIX})
+    for row in PROFILE_MATRIX})
+BY_ID = {p.pid: p for p in PROFILES.values() if p.format_id == FORMAT_HAAR}
 BY_HEADER = {(p.pid, p.format_id): p for p in PROFILES.values()}
-if len(BY_ID) != len(PROFILES):
-    raise ValueError("プロファイルIDが重複しています")
+if len(BY_HEADER) != len(PROFILES):
+    raise ValueError("プロファイルIDと形式識別子の組が重複しています")
 for _profile in PROFILES.values():
     for _ch, _bits in (("M", _profile.bits_m), ("S", _profile.bits_s)):
         if any(_bits) and not any(_profile.attenuator_bits(_ch, k) for k in range(_profile.nbands)):

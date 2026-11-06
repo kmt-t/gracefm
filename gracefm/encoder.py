@@ -7,7 +7,7 @@ analyze (gracefm.codec) → quantize → pack → scramble → modulate の順�
 import numpy as np
 
 from . import framing, modem
-from .codec import encode_block
+from .codec import analyze_stream, encode_block, quantize
 from .layout import Layout
 from .profiles import Profile
 from .scrambler import scramble
@@ -30,7 +30,10 @@ class Encoder:
 
     def frame(self, xblock):
         """xblock: (block, 2) の符号つき24 bit整数 → 1フレームぶんのシンボル (n, 2)"""
-        bd = encode_block(xblock, self.p, self.clip_opt)
+        return self._pack_frame(encode_block(xblock, self.p, self.clip_opt))
+
+    def _pack_frame(self, bd):
+        """1ブロックの量子化結果 → 1フレームぶんのシンボル"""
         ks = None
         if self.cipher is not None:
             ks = self.cipher.keystream(self.sid, self.frame_no, self.layout.n_keystream)
@@ -53,6 +56,8 @@ class Encoder:
         xp = np.pad(np.asarray(x, np.int64), ((self.offset, 0), (0, 0)))
         nfr = -(-len(xp) // b)
         xp = np.pad(xp, ((0, nfr * b - len(xp)), (0, 0)))
+        if self.p.overlapped:
+            return [self._pack_frame(quantize(bands, self.p, self.clip_opt)) for bands in analyze_stream(xp, self.p)]
         return [self.frame(xp[i * b:(i + 1) * b]) for i in range(nfr)]
 
     def symbol_rate(self):

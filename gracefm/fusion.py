@@ -1,13 +1,14 @@
 """
 2系統の融合 (帯域ごとの逆分散重み)。すべて整数演算。
 
-時刻合わせ後の PCM (符号つき24 bit整数) をブロック (block サンプル) の区間ごとに処理する。2系統のブロックの格子は同じ。
-M と S は別々に融合する。区間の出力は、その区間の 2系統の値だけから決まる (未来を使わない)。
+Haar のプロファイルでは、時刻合わせ後の PCM (符号つき24 bit整数) をブロック (block サンプル) の区間ごとに処理する。
+2系統のブロックの格子は同じ。M と S は別々に融合する。区間の出力は、その区間の 2系統の値だけから決まる (未来を使わない)。
+帯域分割がブロックをまたぐプロファイルは PCM に戻さず、復号した係数のまま融合してから合成する (fuse_overlapped)。
 誤差分散は対数領域の整数 (log2 × 2^8、INF_LOG = 情報なし) で受け取り、重みは Q15 の整数で作る。
 """
 import numpy as np
 
-from .codec import haar_forward, haar_inverse, ms_to_lr
+from .codec import haar_forward, haar_inverse, legall_inverse, ms_to_lr, overlap_valid
 from .dsp import inv1p2pow_q15
 
 INF_LOG = 1 << 40
@@ -32,6 +33,55 @@ def _to_ms(y, ns, seg):
     return np.stack([m, s], axis=2)
 
 
+class _Weights:
+    """2系統の誤差分散 (n, 2, 帯域数) から、ブロックごと・帯域ごとの重みを作る"""
+
+    def __init__(self, rbA, rbB, va, vb, seg, n, ns):
+        pad = ns * seg - n
+        no_info = np.int64(INF_LOG)
+        rA = np.pad(rbA, ((0, pad), (0, 0), (0, 0)), constant_values=no_info)
+        rB = np.pad(rbB, ((0, pad), (0, 0), (0, 0)), constant_values=no_info)
+        h = seg // 2
+        self.a1, self.a2, self.b1, self.b2 = rA[::seg], rA[h::seg], rB[::seg], rB[h::seg]
+        self.only_a, self.only_b = va & ~vb, vb & ~va
+
+    def _override(self, w):
+        return np.where(self.only_a[:, None], ONE, np.where(self.only_b[:, None], 0, w))
+
+    def mix(self, cA, cB, ci, k):
+        """帯域 k の 2系統の係数 (ブロック数, 係数数) → (融合した係数, 先頭係数の重み)"""
+        nn = cA.shape[1]
+        w1 = weight_a(self.a1[:, ci, k], self.b1[:, ci, k])[:, None]
+        w2 = weight_a(self.a2[:, ci, k], self.b2[:, ci, k])[:, None]
+        if nn == 1:
+            w = self._override((w1 + w2) >> 1)
+        else:
+            w = np.concatenate([np.repeat(self._override(w1), nn // 2, axis=1),
+                                np.repeat(self._override(w2), nn // 2, axis=1)], axis=1)
+        return (w * cA + (ONE - w) * cB + HALF) >> 15, w[:, 0]
+
+
+def fuse_overlapped(A, B, profile):
+    """帯域分割がブロックをまたぐ 2系統 (StreamResult) の融合。A.coefs と B.coefs は同じ格子なので、係数どうしを直接
+    重み付けしてから合成する。重みの決め方は fuse_band と同じ。返り値も同じ形 (y, valid, M 最低域の w_A)"""
+    n, seg, ns = len(A.pcm), profile.block, len(A.coefs)
+    assert len(B.coefs) == ns
+    weights = _Weights(A.rb, B.rb, A.frame_valid, B.frame_valid, seg, n, ns)
+    out, trace = {}, None
+    for ci, ch in enumerate(("M", "S")):
+        bands = []
+        for k in range(profile.nbands):
+            cA = np.stack([f[ch][k] for f in A.coefs])
+            cB = np.stack([f[ch][k] for f in B.coefs])
+            mixed, w0 = weights.mix(cA, cB, ci, k)
+            if ci == 0 and k == 0:
+                trace = w0
+            bands.append(mixed.reshape(-1))
+        out[ch] = legall_inverse(bands)
+    valid = overlap_valid(A.frame_valid | B.frame_valid, profile, ns * seg)
+    return (ms_to_lr(out["M"], out["S"]) * valid[:, None])[:n], valid[:n], trace
+
+
 def fuse_band(yA, vA, yB, vB, seg, levels, rbA, rbB):
     """
     帯域ごとの融合。2系統のブロックの格子は同じなので、ブロック (seg サンプル) の区間を Haar 変換すると、
@@ -47,18 +97,9 @@ def fuse_band(yA, vA, yB, vB, seg, levels, rbA, rbB):
     assert nb == levels + 1, "帯域数と段数が合わない"
     ns = -(-n // seg)
     pad = ns * seg - n
-    h = seg // 2
     msA, msB = _to_ms(yA, ns, seg), _to_ms(yB, ns, seg)
     va, vb = np.pad(vA, (0, pad))[::seg], np.pad(vB, (0, pad))[::seg]
-    no_info = np.int64(INF_LOG)
-    rA = np.pad(rbA, ((0, pad), (0, 0), (0, 0)), constant_values=no_info)
-    rB = np.pad(rbB, ((0, pad), (0, 0), (0, 0)), constant_values=no_info)
-    a1, a2, b1, b2 = rA[::seg], rA[h::seg], rB[::seg], rB[h::seg]
-    only_a, only_b = va & ~vb, vb & ~va
-
-    def override(w):
-        return np.where(only_a[:, None], ONE, np.where(only_b[:, None], 0, w))
-
+    weights = _Weights(rbA, rbB, va, vb, seg, n, ns)
     out = np.zeros((ns, seg, 2), np.int64)
     trace = None
     for ci in range(2):
@@ -66,16 +107,10 @@ def fuse_band(yA, vA, yB, vB, seg, levels, rbA, rbB):
         bB = haar_forward(msB[:, :, ci], levels)
         bands = []
         for k in range(nb):
-            nn = bA[k].shape[1]
-            w1 = weight_a(a1[:, ci, k], b1[:, ci, k])[:, None]
-            w2 = weight_a(a2[:, ci, k], b2[:, ci, k])[:, None]
-            if nn == 1:
-                w = override((w1 + w2) >> 1)
-            else:
-                w = np.concatenate([np.repeat(override(w1), nn // 2, axis=1), np.repeat(override(w2), nn // 2, axis=1)], axis=1)
+            mixed, w0 = weights.mix(bA[k], bB[k], ci, k)
             if ci == 0 and k == 0:
-                trace = w[:, 0]
-            bands.append((w * bA[k] + (ONE - w) * bB[k] + HALF) >> 15)
+                trace = w0
+            bands.append(mixed)
         out[:, :, ci] = haar_inverse(bands)
     valid = np.repeat(va | vb, seg)[:n]
     y = ms_to_lr(out[:, :, 0].reshape(-1)[:n], out[:, :, 1].reshape(-1)[:n]) * valid[:, None]
