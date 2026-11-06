@@ -10,8 +10,9 @@
 |---|---|
 | 主系 | B200M（32 kHz） |
 | 副系 | SUB50M |
-| ステレオ主系 | 32 kHz：B200・B200Y、48 kHz：M700・M700Y（コーデックだけ） |
+| ステレオ主系 | 32 kHz：B200・B200Y、48 kHz：M700・M700Y |
 | ステレオ副系・条件 | 32 kHz：SUB50M、48 kHz：SUB100-48K。C/N0 57 だけ |
+| LeGall 5/3 | 上の主系それぞれに `-L` 版があり、副系も `-L` にそろえる |
 | 条件 | 白色雑音 C/N0 54・57・60・66・80 |
 | アナログFM | 32 kHzのモノラル形だけ、上の通信路条件 |
 
@@ -33,21 +34,24 @@
 
 | 構成 | awgn54 | awgn57 | awgn60 | awgn66 | awgn80 |
 |---|---:|---:|---:|---:|---:|
-| B200M+SUB50M | [18.6](demo-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac) | [30.2](demo-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac) | [39.3](demo-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac) | [40.8](demo-mono__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac) | [59.5](demo-mono__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac) |
+| B200M+SUB50M | [18.7](demo-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac) | [30.9](demo-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac) | [39.1](demo-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac) | [40.7](demo-mono__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac) | [59.5](demo-mono__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac) |
+| B200M-L+SUB50M-L | [19.9](demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-54dBHz.flac) | [32.0](demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-57dBHz.flac) | [40.2](demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-60dBHz.flac) | [42.1](demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-66dBHz.flac) | [61.0](demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-80dBHz.flac) |
 | FM | [2.1](demo-mono__32k__FM__awgn-cn0-54dBHz.flac) | [9.4](demo-mono__32k__FM__awgn-cn0-57dBHz.flac) | [22.3](demo-mono__32k__FM__awgn-cn0-60dBHz.flac) | [34.2](demo-mono__32k__FM__awgn-cn0-66dBHz.flac) | [38.9](demo-mono__32k__FM__awgn-cn0-80dBHz.flac) |
 
 ### piano
 
 | 構成 | awgn54 | awgn57 | awgn60 | awgn66 | awgn80 |
 |---|---:|---:|---:|---:|---:|
-| B200M+SUB50M | [15.4](piano-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac) | [23.5](piano-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac) | [30.2](piano-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac) | [32.7](piano-mono__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac) | [52.6](piano-mono__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac) |
+| B200M+SUB50M | [15.5](piano-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac) | [23.7](piano-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac) | [30.3](piano-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac) | [32.6](piano-mono__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac) | [52.7](piano-mono__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac) |
+| B200M-L+SUB50M-L | [16.1](piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-54dBHz.flac) | [26.1](piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-57dBHz.flac) | [37.1](piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-60dBHz.flac) | [38.5](piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-66dBHz.flac) | [57.5](piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-80dBHz.flac) |
 | FM | [6.5](piano-mono__32k__FM__awgn-cn0-54dBHz.flac) | [14.1](piano-mono__32k__FM__awgn-cn0-57dBHz.flac) | [26.8](piano-mono__32k__FM__awgn-cn0-60dBHz.flac) | [41.6](piano-mono__32k__FM__awgn-cn0-66dBHz.flac) | [54.2](piano-mono__32k__FM__awgn-cn0-80dBHz.flac) |
 
 ### percussion
 
 | 構成 | awgn54 | awgn57 | awgn60 | awgn66 | awgn80 |
 |---|---:|---:|---:|---:|---:|
-| B200M+SUB50M | [16.3](percussion-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac) | [26.1](percussion-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac) | [34.0](percussion-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac) | [36.0](percussion-mono__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac) | [55.6](percussion-mono__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac) |
+| B200M+SUB50M | [16.5](percussion-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac) | [27.7](percussion-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac) | [33.9](percussion-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac) | [36.0](percussion-mono__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac) | [55.5](percussion-mono__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac) |
+| B200M-L+SUB50M-L | [16.6](percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-54dBHz.flac) | [29.0](percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-57dBHz.flac) | [38.5](percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-60dBHz.flac) | [39.9](percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-66dBHz.flac) | [58.8](percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-80dBHz.flac) |
 | FM | [1.2](percussion-mono__32k__FM__awgn-cn0-54dBHz.flac) | [8.5](percussion-mono__32k__FM__awgn-cn0-57dBHz.flac) | [21.2](percussion-mono__32k__FM__awgn-cn0-60dBHz.flac) | [34.5](percussion-mono__32k__FM__awgn-cn0-66dBHz.flac) | [44.4](percussion-mono__32k__FM__awgn-cn0-80dBHz.flac) |
 
 ## ステレオ形・32 kHz（波形SNR dB、保存したFLACと原音の差）
@@ -56,22 +60,28 @@
 
 | 構成 | awgn57 |
 |---|---:|
-| B200+SUB50M | [24.4](demo-stereo__32k__B200+SUB50M__awgn-cn0-57dBHz.flac) |
-| B200Y+SUB50M | [25.0](demo-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac) |
+| B200+SUB50M | [24.3](demo-stereo__32k__B200+SUB50M__awgn-cn0-57dBHz.flac) |
+| B200Y+SUB50M | [24.9](demo-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac) |
+| B200-L+SUB50M-L | [25.0](demo-stereo__32k__B200-L+SUB50M-L__awgn-cn0-57dBHz.flac) |
+| B200Y-L+SUB50M-L | [24.9](demo-stereo__32k__B200Y-L+SUB50M-L__awgn-cn0-57dBHz.flac) |
 
 ### piano
 
 | 構成 | awgn57 |
 |---|---:|
 | B200+SUB50M | [6.9](piano-stereo__32k__B200+SUB50M__awgn-cn0-57dBHz.flac) |
-| B200Y+SUB50M | [9.7](piano-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac) |
+| B200Y+SUB50M | [9.9](piano-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac) |
+| B200-L+SUB50M-L | [6.9](piano-stereo__32k__B200-L+SUB50M-L__awgn-cn0-57dBHz.flac) |
+| B200Y-L+SUB50M-L | [10.4](piano-stereo__32k__B200Y-L+SUB50M-L__awgn-cn0-57dBHz.flac) |
 
 ### percussion
 
 | 構成 | awgn57 |
 |---|---:|
 | B200+SUB50M | [16.1](percussion-stereo__32k__B200+SUB50M__awgn-cn0-57dBHz.flac) |
-| B200Y+SUB50M | [18.2](percussion-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac) |
+| B200Y+SUB50M | [18.4](percussion-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac) |
+| B200-L+SUB50M-L | [16.2](percussion-stereo__32k__B200-L+SUB50M-L__awgn-cn0-57dBHz.flac) |
+| B200Y-L+SUB50M-L | [18.5](percussion-stereo__32k__B200Y-L+SUB50M-L__awgn-cn0-57dBHz.flac) |
 
 ## ステレオ形・48 kHz（波形SNR dB、保存したFLACと原音の差）
 
@@ -81,13 +91,17 @@
 |---|---:|
 | M700+SUB100-48K | [17.1](demo-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac) |
 | M700Y+SUB100-48K | [17.2](demo-stereo__48k__M700Y+SUB100-48K__awgn-cn0-57dBHz.flac) |
+| M700-L+SUB100-48K-L | [17.8](demo-stereo__48k__M700-L+SUB100-48K-L__awgn-cn0-57dBHz.flac) |
+| M700Y-L+SUB100-48K-L | [18.0](demo-stereo__48k__M700Y-L+SUB100-48K-L__awgn-cn0-57dBHz.flac) |
 
 ### piano
 
 | 構成 | awgn57 |
 |---|---:|
 | M700+SUB100-48K | [16.1](piano-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac) |
-| M700Y+SUB100-48K | [16.5](piano-stereo__48k__M700Y+SUB100-48K__awgn-cn0-57dBHz.flac) |
+| M700Y+SUB100-48K | [16.4](piano-stereo__48k__M700Y+SUB100-48K__awgn-cn0-57dBHz.flac) |
+| M700-L+SUB100-48K-L | [16.8](piano-stereo__48k__M700-L+SUB100-48K-L__awgn-cn0-57dBHz.flac) |
+| M700Y-L+SUB100-48K-L | [17.5](piano-stereo__48k__M700Y-L+SUB100-48K-L__awgn-cn0-57dBHz.flac) |
 
 ### percussion
 
@@ -95,6 +109,8 @@
 |---|---:|
 | M700+SUB100-48K | [16.8](percussion-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac) |
 | M700Y+SUB100-48K | [17.4](percussion-stereo__48k__M700Y+SUB100-48K__awgn-cn0-57dBHz.flac) |
+| M700-L+SUB100-48K-L | [18.0](percussion-stereo__48k__M700-L+SUB100-48K-L__awgn-cn0-57dBHz.flac) |
+| M700Y-L+SUB100-48K-L | [18.9](percussion-stereo__48k__M700Y-L+SUB100-48K-L__awgn-cn0-57dBHz.flac) |
 
 ## ステレオ形・32 kHz（波形SNR dB、保存したFLACと原音の差）
 
@@ -104,6 +120,8 @@
 |---|---:|
 | B200 | [58.8](demo-stereo__32k__B200__codec.flac) |
 | B200Y | [58.8](demo-stereo__32k__B200Y__codec.flac) |
+| B200-L | [59.9](demo-stereo__32k__B200-L__codec.flac) |
+| B200Y-L | [59.8](demo-stereo__32k__B200Y-L__codec.flac) |
 
 ### piano
 
@@ -111,13 +129,17 @@
 |---|---:|
 | B200 | [50.7](piano-stereo__32k__B200__codec.flac) |
 | B200Y | [52.9](piano-stereo__32k__B200Y__codec.flac) |
+| B200-L | [55.0](piano-stereo__32k__B200-L__codec.flac) |
+| B200Y-L | [57.4](piano-stereo__32k__B200Y-L__codec.flac) |
 
 ### percussion
 
 | 構成 | codec |
 |---|---:|
-| B200 | [55.0](percussion-stereo__32k__B200__codec.flac) |
-| B200Y | [55.7](percussion-stereo__32k__B200Y__codec.flac) |
+| B200 | [54.9](percussion-stereo__32k__B200__codec.flac) |
+| B200Y | [55.6](percussion-stereo__32k__B200Y__codec.flac) |
+| B200-L | [58.2](percussion-stereo__32k__B200-L__codec.flac) |
+| B200Y-L | [58.8](percussion-stereo__32k__B200Y-L__codec.flac) |
 
 ## ステレオ形・48 kHz（波形SNR dB、保存したFLACと原音の差）
 
@@ -125,8 +147,10 @@
 
 | 構成 | codec |
 |---|---:|
-| M700 | [40.4](demo-stereo__48k__M700__codec.flac) |
+| M700 | [40.5](demo-stereo__48k__M700__codec.flac) |
 | M700Y | [57.3](demo-stereo__48k__M700Y__codec.flac) |
+| M700-L | [39.7](demo-stereo__48k__M700-L__codec.flac) |
+| M700Y-L | [57.5](demo-stereo__48k__M700Y-L__codec.flac) |
 
 ### piano
 
@@ -134,13 +158,17 @@
 |---|---:|
 | M700 | [49.3](piano-stereo__48k__M700__codec.flac) |
 | M700Y | [55.2](piano-stereo__48k__M700Y__codec.flac) |
+| M700-L | [57.3](piano-stereo__48k__M700-L__codec.flac) |
+| M700Y-L | [59.0](piano-stereo__48k__M700Y-L__codec.flac) |
 
 ### percussion
 
 | 構成 | codec |
 |---|---:|
 | M700 | [53.4](percussion-stereo__48k__M700__codec.flac) |
-| M700Y | [57.4](percussion-stereo__48k__M700Y__codec.flac) |
+| M700Y | [57.3](percussion-stereo__48k__M700Y__codec.flac) |
+| M700-L | [57.5](percussion-stereo__48k__M700-L__codec.flac) |
+| M700Y-L | [59.8](percussion-stereo__48k__M700Y-L__codec.flac) |
 
 ## 原音と出典
 

@@ -1,31 +1,31 @@
 {
   "description": "10-second listening samples; decoded FLAC measurements, not RF capture",
-  "expected_sample_count": 54,
+  "expected_sample_count": 93,
   "seed": 1,
   "code_sha256": {
     "gracefm/__init__.py": "8abf7535ba210c9045bd2224ca4de812ba291c5c84d743fb34cd480f31d46ea8",
     "gracefm/baselayer.py": "8397e42cad4edecf877ed8eb23936b45aef06ffbcb6b430a3b9e18a3f804ed98",
-    "gracefm/channel.py": "0443e633aeb800bbdaf2ebb145bcd82a070a8edafbca3a388ead356c4932b860",
-    "gracefm/codec.py": "b9ee71da01e3ea11d48900fa20d6ef6d3f099aa8fa284300e24a4a5822e174dc",
+    "gracefm/channel.py": "6e1f64a4cf8bc305bffe8324d5f5778d2d8d5cdcab834d0b85ded42df6e7ba63",
+    "gracefm/codec.py": "bf0fde016301ee1f9f67ad7f973e8265996d684ca58669128b585ee448579e68",
     "gracefm/crypto.py": "9fde6b9a6831796884dfbfae0797507b297a9c1cb41c1ebd65c6ec0411698841",
-    "gracefm/decoder.py": "9722216cfd498978726a84e6bbbdbc91545495a7f557beaeb9a3117570237e93",
-    "gracefm/dsp.py": "55645660ab19315a6ea4f380d6db3e558f826442618e1724b7ea0224eeb6ea62",
-    "gracefm/encoder.py": "3996f8fb0c2e12dfae3a71acdd165d56c5635d17ad989f55c64d846f85f15063",
+    "gracefm/decoder.py": "c0042d3d71330cffc519e7bda9efc6227a70a589d89512ae367ff97d5b7a149e",
+    "gracefm/dsp.py": "648f055c53b7ae6cddf0977b06d7ba461fe16d6005bed24e322b39d17017c78f",
+    "gracefm/encoder.py": "c54bfd000a743b56788ba474eb4070802e728cb42c2adf8373970d778f059f5a",
     "gracefm/equalizer.py": "565ac9e4961702ff39adb62280e2f55b63fdec7b634a272d0c208597f4023297",
     "gracefm/fec.py": "d84f2dbdf3242afba6f10976593ee6905409e82a1d140fcfb42cc5f65890f529",
     "gracefm/framing.py": "e08a60f2a3d1cfe8aef0bf5d0e3bd212c2c2383100dd890eb3a5e408e14c7e99",
-    "gracefm/fusion.py": "30dacd8336e76e2c1a5cc07fe2d346864c7a83cc9d2b859701b66c98e18268ef",
+    "gracefm/fusion.py": "7192d564f0d219377866988bc6f9127b43ab73b7dbfd62ce474828ad6405cc8e",
     "gracefm/iir.py": "2432fc42d7836e146984e375fcf46e50ab2541ecb1193f045030d85d4e50d934",
-    "gracefm/layout.py": "98e6deb9655f85451081a265eb6fbfc1bbb47efa6a972a885574832efa7eeedc",
+    "gracefm/layout.py": "67863ac002c6a68534567c3aa4c5dc51652dea90846499ba0ffde98533703ba7",
     "gracefm/linalg.py": "0ae0a2117fbd510176d1393b6eb696813d45723fb6708e71682f6e930002f3d9",
     "gracefm/modem.py": "42996ba05e33e37e3e413866164c4d7a21f5b7fdb434ceb79c95da81aa2ec07a",
     "gracefm/plc.py": "3530910dabb2395b27e5d29df9f1e2dbb98eba71be6e13613f5d1b882c8f05b0",
-    "gracefm/postfilter.py": "34bbc96bcab8bd670d3c5f6268eb663ab236e3bdcae02bc6ae3eedbdb38b4c42",
-    "gracefm/profiles.py": "dbf023e1bee767ce4bc66b6e8c31bb841d95f05b943b5442173eae01ad42cc19",
-    "gracefm/receiver.py": "a232bb720652308d70ad1aed07bb65b19590ce933311b7e312b73c8ea3e361ec",
+    "gracefm/postfilter.py": "d00640d0492bc416ef96f8dafee485bb87659f89e07f663f84de1cacf471d071",
+    "gracefm/profiles.py": "cc69d75ed6ef4f00e7e08058b677cbfd742e8e98904b18fa5619ae4f4af7fddd",
+    "gracefm/receiver.py": "727828893d15c0b7128b0ab60231d77aec513462d27ecc68f7212be45e616b60",
     "gracefm/scrambler.py": "03aa5922e8e971f360f6fac1b39d686c8b4387d5743f8368cab1e6216ced13b3",
-    "gracefm/tables.py": "8f53d246983797bb0f541d1928c2fdfe063711bd7972df7ce190829b1f474f14",
-    "gracefm/timing.py": "7dcc5735ad1ef332e58b1bbbd815b714baaa7c504033529f9ee7e0cca24b3712",
+    "gracefm/tables.py": "22d26e566d01054bdad767d03d4a1668403a01052fc3545fbe6172a6849a7e6e",
+    "gracefm/timing.py": "8fc5e2f727693b0fd7ab0eaa34e1a5346d847b81a36962e4ed8da92104722fce",
     "tools/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/common/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/common/analog_fm.py": "57cbbfd1a22a81332b4e631598a1342c795b5dbc8a84f3be7746f54f765c693a",
@@ -35,34 +35,35 @@
     "tools/common/pulse.py": "b309a72a20f4c92342f19ff35e64695d2be72186bfc72fa57356ed04fa579e6e",
     "tools/common/wavio.py": "e9dc7e065df019b579165c9997ddbc9bce96cc2cea07e060087cc66289b78df8",
     "tools/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "tools/eval/codec_benchmark_io.py": "f6bd64e15dd7f5d8ab47c282d70911675175de2e194acbbc46540c3c5fd886f1",
-    "tools/eval/eval_codec_matched.py": "a3e10de75001b75cc11356fb1d0d993418a9b9624be573757727a39282ef186e",
-    "tools/eval/eval_ghost.py": "4e037ed9217dd765c5aa9899d54e217695ff5554016296f960f75d807076b596",
-    "tools/eval/eval_m700.py": "22fd6c5486f25129a85852ede4a6407445c14bf3f4c1058ede5ecabd7e18a609",
+    "tools/eval/codec_benchmark_io.py": "4beb2ca672c8d65dfa4e0559c54298ce119dea74e83720667e37e21acaf1d838",
+    "tools/eval/eval_codec_matched.py": "1eb6c53145cfa4882bd940820aaf9a297151b2644424365da0e0823c5f8d169c",
+    "tools/eval/eval_ghost.py": "9b87e4ef3416aaf4d15f9da4c084b5ff657f7c0fdeedad0884ff3e0b050ff640",
+    "tools/eval/eval_legall.py": "4870c2270cc9d5ad434286f6103e0fb049bb66334132c125357c3ac807ebb7cf",
+    "tools/eval/eval_m700.py": "2539ac23e2e91f20c085bcc34b60adc4c48dafa85dc5744cfea5086b890f8362",
     "tools/eval/fetch_lossless_benchmark_audio.py": "8e5c80600a854e83ca021910e733ba15a14e83818e5f3b99e2391da9681f3433",
     "tools/gen/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "tools/gen/gen_tables.py": "8b9bce977db3c0c10ce8aefebb761d547225f88f493765c5aa56238841896823",
+    "tools/gen/gen_tables.py": "7218e5dafde4b8853501749236dcfafda916b839a176a78c9f25bad928dba7f2",
     "tools/report/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "tools/report/circuit_estimate.py": "a0094a483e9b00d0d5d7aaa40472b92d243b395acafe08443d82724b5c0ce0d2",
+    "tools/report/circuit_estimate.py": "a8fe577365ab7953c9d04c409dec1b0af1c63f45eb8cd7584f6b683bd5d86c8f",
     "tools/report/pcm_equivalent.py": "0d2aecf8238478be718467de21cd4074e355ad2b423eb9804130a8d3f6aac5bc",
-    "tools/report/profile_matrix.py": "346be51f869416ba69d5db725f6cae3be1fe7920c5b52c30b93128486874fa61",
+    "tools/report/profile_matrix.py": "79d7ef459dc5d664b9edb0394cca7b063683f1286285c31ec4cc882f6b3bea5b",
     "tools/report/rtp_budget.py": "35fa7e90093a9874012bf12f8ea26c9c88b08ea7b7f0bc5170ee746fb4692858",
     "tools/report/spectrum.py": "5400cd6e8081471842be4f7d06b34d8e10f879204d56de92904b6e161226e7cc",
     "tools/report/symbol_layout.py": "5589c2f5bdfe45d3990ab8a6a82e78a3d7ec46123abc4aa15ceb53cbdb2e525d",
     "tools/samples/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "tools/samples/make_samples.py": "d9dd412c6152f13cbdf6a133e10d0d844eeb9b91754ce4938465cec642248bfd",
+    "tools/samples/make_samples.py": "b84cc79fc614d50c2bdd76b89021ae0276d84e687558a14e97f581acf774669a",
     "tools/samples/regenerate_samples.py": "c208b387ad0ba8b3cf3d5e59c44e22e5d8bb0e54c8f8c89e2bd39ede46a77372",
-    "tools/samples/sample_catalog.py": "ed11afb94298095bba8634b87ebe56f20e5f04a64b51541985b3b1328f8cc5ae",
+    "tools/samples/sample_catalog.py": "51bfa7ae59c6b6e65327e2bd2016a94d1e6f6a294095c1ad59d7fc0c7ea9b4f7",
     "tools/samples/sample_names.py": "17a092c6b41854eab30d5a8f1ba1ddd8c241a5646ed9921ecb8386ce4ae28a89",
     "tools/sim/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "tools/sim/codec_wav.py": "5a5dae3b51fc9765ae49d27a7265520068ceec8261e97cbb8b3a23274e24985d",
+    "tools/sim/codec_wav.py": "13c4e76698a1f7854c8df797a847076f05c4baa05776e467db069a937991cbb2",
     "tools/sim/multipath.py": "54722eecd9d3eab6f14f06143ce71eb67c5d743440b632f8be19d7ec0ec3b878",
-    "tools/sim/sim_link.py": "af2fb76fd721b7d4b34c07d82b754764b9a3250d88806dd465a60c0ad9d9832c"
+    "tools/sim/sim_link.py": "476e5f4a9fb95e496d8fdedb54f1e49909ac69dcf76facbf2c8a254dc6982e39"
   },
   "samples": [
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "4690eeed031b31ac9f76744a40c1f38aeb4ef4ec9b8a968afcb5bcc70bcd14c5",
+      "sha256": "3de0b0dad732a4ca0bec742d8bad905f3efdc6bbdd02897fcf871bd18ccbbfd1",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -143,7 +144,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -203,14 +205,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 18.594572892425553
+      "snr_db": 18.736631602649222
     },
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "81e7dbdcb08f07f5e6af56448430ca418a8e104c55abc9e4f3ef91f346eaf935",
+      "sha256": "5a8999512e74048e1e05e54830c14e4faa7b098c3efd1b4a7beef4d1c87b70de",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -291,7 +294,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -351,14 +355,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 30.24587061365625
+      "snr_db": 30.88350723823293
     },
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "1fc204382000a830a517c2a8346cc6879e48d3687bb2c92a896507622add144f",
+      "sha256": "f80681a7d35984d9aa1be53ae31e1657d1167a17e48b76fe9cb83873ced69fed",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -439,7 +444,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -499,14 +505,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 39.31439090624341
+      "snr_db": 39.125676681193305
     },
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "f3be7011fd4cd7ef6e58ed4c02ec2938b6a0d3231296384b712699310c231fa4",
+      "sha256": "112748725946b15cb5ce2d0ce9f9651018f48590cdd95143970248def950c5a7",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -587,7 +594,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -647,14 +655,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 40.77410825076565
+      "snr_db": 40.67774818987203
     },
     {
       "file": "samples/demo-mono__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "0358e81f5e46f9f1ea6c96d1d50b7605be117f5037b67952997b57736e6fb6e4",
+      "sha256": "e023963dd1fb4cacc272d63960dd731208989b04420492c4242ae90b4816b24d",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -735,7 +744,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -795,10 +805,761 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 59.5350444963634
+      "snr_db": 59.521219576812584
+    },
+    {
+      "file": "samples/demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-54dBHz.flac",
+      "sha256": "030d9c4ead5d71cccb7ac145e7a22624a2ec58b10e979c7b4dbc974098f01dda",
+      "material": "demo",
+      "form": "mono",
+      "reference_file": "samples/demo-mono__32k__reference.flac",
+      "reference_sha256": "d9ab1b8db439e5d2512e02089d1a722cdd71c1ac35af65c74f91e7f5deb2093b",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn54",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 19.899990848352115
+    },
+    {
+      "file": "samples/demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-57dBHz.flac",
+      "sha256": "2b857d2b534a8e58416384db35846f901a0fa5a71047b010fda805df2e79be13",
+      "material": "demo",
+      "form": "mono",
+      "reference_file": "samples/demo-mono__32k__reference.flac",
+      "reference_sha256": "d9ab1b8db439e5d2512e02089d1a722cdd71c1ac35af65c74f91e7f5deb2093b",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 31.961128736674873
+    },
+    {
+      "file": "samples/demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-60dBHz.flac",
+      "sha256": "522b1f0976c5e890823dd005c0d8724e167f33798b54fd077e7f318dfef8ae65",
+      "material": "demo",
+      "form": "mono",
+      "reference_file": "samples/demo-mono__32k__reference.flac",
+      "reference_sha256": "d9ab1b8db439e5d2512e02089d1a722cdd71c1ac35af65c74f91e7f5deb2093b",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn60",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 40.23220528012701
+    },
+    {
+      "file": "samples/demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-66dBHz.flac",
+      "sha256": "c947a2a26d840f2fb88eeac4916540db73744018098df3af673df74eb011c678",
+      "material": "demo",
+      "form": "mono",
+      "reference_file": "samples/demo-mono__32k__reference.flac",
+      "reference_sha256": "d9ab1b8db439e5d2512e02089d1a722cdd71c1ac35af65c74f91e7f5deb2093b",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn66",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 42.100984394684
+    },
+    {
+      "file": "samples/demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-80dBHz.flac",
+      "sha256": "e4bcf3e7664531a3cd348d6d1765b34c481259cb32a1d457294cb905a4454f9d",
+      "material": "demo",
+      "form": "mono",
+      "reference_file": "samples/demo-mono__32k__reference.flac",
+      "reference_sha256": "d9ab1b8db439e5d2512e02089d1a722cdd71c1ac35af65c74f91e7f5deb2093b",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn80",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 61.02198237723819
     },
     {
       "file": "samples/demo-mono__32k__FM__awgn-cn0-54dBHz.flac",
@@ -877,7 +1638,7 @@
     },
     {
       "file": "samples/demo-stereo__32k__B200+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "369acb3353a34fece54df1dca77e7d349e160ac14df2ab4d2dededf6926e01ad",
+      "sha256": "0e3e2afe19b64ebae3e9431c146ebabeaf448e9fd1905c28a5c737c1fbdafb39",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -958,7 +1719,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -1018,14 +1780,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 24.350779464149475
+      "snr_db": 24.27559971679215
     },
     {
       "file": "samples/demo-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "74313c61db9959d76f2440e04f45081d958fb31dd502f5efea9376150fc2cd67",
+      "sha256": "3d0416bb99b10aa5d06c773be72a56dc1fea6d59058881178be213f90c7ae211",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -1106,7 +1869,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -1166,14 +1930,315 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 25.040470253188243
+      "snr_db": 24.863166705814777
+    },
+    {
+      "file": "samples/demo-stereo__32k__B200-L+SUB50M-L__awgn-cn0-57dBHz.flac",
+      "sha256": "6fb8ad7ceb573002598c51103c32a994f2ac19ec73df1e0ca31c7d40f0be3293",
+      "material": "demo",
+      "form": "stereo",
+      "reference_file": "samples/demo-stereo__32k__reference.flac",
+      "reference_sha256": "01db7c6b3f6687a636a920d5753c76c5b9fcc0717de4971d30f646bdad5f7392",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "B200-L+SUB50M-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 2,
+          "name": "B200-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            7,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 10,
+          "pulse_span": 32,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 24.962137704471274
+    },
+    {
+      "file": "samples/demo-stereo__32k__B200Y-L+SUB50M-L__awgn-cn0-57dBHz.flac",
+      "sha256": "d20cefcc17ee3ae56f5b3a2ba92338b52143342535fdc6192d7193be2dc3dab5",
+      "material": "demo",
+      "form": "stereo",
+      "reference_file": "samples/demo-stereo__32k__reference.flac",
+      "reference_sha256": "01db7c6b3f6687a636a920d5753c76c5b9fcc0717de4971d30f646bdad5f7392",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "B200Y-L+SUB50M-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 4,
+          "name": "B200Y-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 10,
+          "pulse_span": 32,
+          "base_m": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "base_s": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "y_start_k": 2,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 24.91882640160481
     },
     {
       "file": "samples/demo-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "b566a93ebe97e36e127f672195cc8d5486ec4c4e2e27d87622bf03309a6053a2",
+      "sha256": "9790a88df9fd48c6a83f3807773b78ce9469d7bc393d52fb5d2356a991906a59",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -1254,7 +2319,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 11,
@@ -1314,14 +2380,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 17.084011968223134
+      "snr_db": 17.10156732944855
     },
     {
       "file": "samples/demo-stereo__48k__M700Y+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "52681167112d58f3d48eebcd06e4babb76e1d78a59d3d9c8ef68404bc10b3a09",
+      "sha256": "af5357d36c3ebda08189a6b1b1d7f916d02c81b4266651915f18ca4da7a5a784",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -1402,7 +2469,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 11,
@@ -1462,14 +2530,315 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 17.17141922430079
+      "snr_db": 17.226414518650184
+    },
+    {
+      "file": "samples/demo-stereo__48k__M700-L+SUB100-48K-L__awgn-cn0-57dBHz.flac",
+      "sha256": "6da6b8c5ec4294aabcd53764f11859d5dc6c79794ef5f71581a9200a388479d4",
+      "material": "demo",
+      "form": "stereo",
+      "reference_file": "samples/demo-stereo__48k__reference.flac",
+      "reference_sha256": "da3e0d847c65d4464c2a04906c240d63c932752ded25e404a37dc786d4893d21",
+      "sample_rate_hz": 48000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "M700-L+SUB100-48K-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 8,
+          "name": "M700-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            7,
+            7,
+            7,
+            3
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            4,
+            3,
+            3,
+            3,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 11,
+          "name": "SUB100-48K-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            7,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            5,
+            3,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            4,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 17.764112737475468
+    },
+    {
+      "file": "samples/demo-stereo__48k__M700Y-L+SUB100-48K-L__awgn-cn0-57dBHz.flac",
+      "sha256": "f8f87789c7e2d3a1b78e8a8e61d74d948c77ba15d1f424cb94b189a33f1f6146",
+      "material": "demo",
+      "form": "stereo",
+      "reference_file": "samples/demo-stereo__48k__reference.flac",
+      "reference_sha256": "da3e0d847c65d4464c2a04906c240d63c932752ded25e404a37dc786d4893d21",
+      "sample_rate_hz": 48000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "M700Y-L+SUB100-48K-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 10,
+          "name": "M700Y-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "base_s": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "y_start_k": 2,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 11,
+          "name": "SUB100-48K-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            7,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            5,
+            3,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            4,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 18.011561241380488
     },
     {
       "file": "samples/demo-stereo__32k__B200__codec.flac",
-      "sha256": "41e84f949316c51e15a662308c706b740bd881fe3b6222479eca74474cd1fe01",
+      "sha256": "1bf455a22ed28de34bea9b60d3a9edb92371604920d656f6dda982bbe4916508",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -1550,14 +2919,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 58.83377483475552
+      "snr_db": 58.79446328830545
     },
     {
       "file": "samples/demo-stereo__32k__B200Y__codec.flac",
-      "sha256": "459ed69e0cf96d4ec9874008143e986c8a484bec4eff64e77c84914cf5fd8397",
+      "sha256": "2d48b01eb29b60b755e43fcf340fe5f50007dab0a1bc3a2332fcf2b1d1696203",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -1638,14 +3008,193 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 58.81920285717443
+      "snr_db": 58.76173599375261
+    },
+    {
+      "file": "samples/demo-stereo__32k__B200-L__codec.flac",
+      "sha256": "ea4211da2cb914f45c7da09af6c7302f8a7817fdb7c89ba1cb27b718d5e1de13",
+      "material": "demo",
+      "form": "stereo",
+      "reference_file": "samples/demo-stereo__32k__reference.flac",
+      "reference_sha256": "01db7c6b3f6687a636a920d5753c76c5b9fcc0717de4971d30f646bdad5f7392",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "B200-L",
+      "condition": "codec",
+      "profiles": [
+        {
+          "pid": 2,
+          "name": "B200-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            7,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 10,
+          "pulse_span": 32,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 59.93793350997709
+    },
+    {
+      "file": "samples/demo-stereo__32k__B200Y-L__codec.flac",
+      "sha256": "4c95b56510dabafb29189e0176f85159bb9d0c0a875c0224002d86f25eb99ca0",
+      "material": "demo",
+      "form": "stereo",
+      "reference_file": "samples/demo-stereo__32k__reference.flac",
+      "reference_sha256": "01db7c6b3f6687a636a920d5753c76c5b9fcc0717de4971d30f646bdad5f7392",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "B200Y-L",
+      "condition": "codec",
+      "profiles": [
+        {
+          "pid": 4,
+          "name": "B200Y-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 10,
+          "pulse_span": 32,
+          "base_m": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "base_s": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "y_start_k": 2,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 59.843302661923715
     },
     {
       "file": "samples/demo-stereo__48k__M700__codec.flac",
-      "sha256": "cebd78406b9315355d40603e23d6e453dc7c6316ba1b5705444603505c2c07ce",
+      "sha256": "8132623a6b996489ae2f5e33846f1daebeade8981af8f60cd94d5b48966a2ee0",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -1726,14 +3275,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 40.37374847008905
+      "snr_db": 40.467112200454174
     },
     {
       "file": "samples/demo-stereo__48k__M700Y__codec.flac",
-      "sha256": "276d4a12e34e37bde86f10e8d6d03fb05b4213fa02c000da73f6b1ffe1b6024e",
+      "sha256": "cf42a73584c3381e9298a25fce3b07d25dc0277c2f1810c6ceb877f7cbe167c4",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -1814,14 +3364,193 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 57.32280562561597
+      "snr_db": 57.34158538545535
+    },
+    {
+      "file": "samples/demo-stereo__48k__M700-L__codec.flac",
+      "sha256": "2640cf46e302c02cb8a246bacd85ec2e2613990f58dd5952ed40ca866e43415a",
+      "material": "demo",
+      "form": "stereo",
+      "reference_file": "samples/demo-stereo__48k__reference.flac",
+      "reference_sha256": "da3e0d847c65d4464c2a04906c240d63c932752ded25e404a37dc786d4893d21",
+      "sample_rate_hz": 48000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "M700-L",
+      "condition": "codec",
+      "profiles": [
+        {
+          "pid": 8,
+          "name": "M700-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            7,
+            7,
+            7,
+            3
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            4,
+            3,
+            3,
+            3,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 39.657636921913316
+    },
+    {
+      "file": "samples/demo-stereo__48k__M700Y-L__codec.flac",
+      "sha256": "f62385654803d85c62351b5192f2f2e4f896d1d8210c93cf774d62d86be4a964",
+      "material": "demo",
+      "form": "stereo",
+      "reference_file": "samples/demo-stereo__48k__reference.flac",
+      "reference_sha256": "da3e0d847c65d4464c2a04906c240d63c932752ded25e404a37dc786d4893d21",
+      "sample_rate_hz": 48000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "M700Y-L",
+      "condition": "codec",
+      "profiles": [
+        {
+          "pid": 10,
+          "name": "M700Y-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "base_s": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "y_start_k": 2,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 57.47481276411527
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "287b85afbf0966bcb72dc5003b8212c063f597ad12dd59f728e5e9edcda530e3",
+      "sha256": "e46dc5c76b60379c2dbdf76aaa70bf70c75beb0326f18e0043880608622f307a",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -1902,7 +3631,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -1962,14 +3692,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 15.402755343969778
+      "snr_db": 15.464418038482496
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "2f21b8ebc283019a51a7c4a56f357e94800039a84f4f79eeeb2f0321b16f1c5b",
+      "sha256": "fcd44b053a84855e741d6bc307ed58e4bbedeee188924f40cb72ae4f3592365f",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -2050,7 +3781,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -2110,14 +3842,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 23.52568696422064
+      "snr_db": 23.71685361226273
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "8824b7f886f4533d0c9c79b68019850acc91cda5f38231ae8850172e266acb15",
+      "sha256": "9ca50bef8ff85810fde6485f9e858dbed53a18095b9ba00be7260ff40ba8321b",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -2198,7 +3931,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -2258,14 +3992,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 30.229617523059048
+      "snr_db": 30.255183076769
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "367f62e76771fe5815636255fe0532e6552fc5139a943db634fc0ad14df3ac01",
+      "sha256": "600a5d922df64a1eabc87779553c6ac7b70392cec34e4e6a79544c37c5472345",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -2346,7 +4081,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -2406,14 +4142,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 32.65443384284811
+      "snr_db": 32.604451194667114
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "bd314095963605a3cda8fbff568c146256bb192a77dd7b150e93d0b663eeb846",
+      "sha256": "6c140be667aba31c724ecd4c35379847e24d1d303341285e186d21e6160dd46d",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -2494,7 +4231,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -2554,10 +4292,761 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 52.599614411468984
+      "snr_db": 52.66786463914785
+    },
+    {
+      "file": "samples/piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-54dBHz.flac",
+      "sha256": "c9001b5488d749f13faff24d071d69e57740948cb1444fd9771cb4e5b0e1257e",
+      "material": "piano",
+      "form": "mono",
+      "reference_file": "samples/piano-mono__32k__reference.flac",
+      "reference_sha256": "ac5cb4e16035ed62b6de06d34b16de323ad0fbee7be9f0bcdf26d021b70ec2e0",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn54",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 16.148903013098945
+    },
+    {
+      "file": "samples/piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-57dBHz.flac",
+      "sha256": "e425ac980e406219236bbe95d0f14041215d5572e84d89059703af1f6e09c200",
+      "material": "piano",
+      "form": "mono",
+      "reference_file": "samples/piano-mono__32k__reference.flac",
+      "reference_sha256": "ac5cb4e16035ed62b6de06d34b16de323ad0fbee7be9f0bcdf26d021b70ec2e0",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 26.129308089723438
+    },
+    {
+      "file": "samples/piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-60dBHz.flac",
+      "sha256": "b64449fe657d617730317067306cc8bc9d86acbf6667ac844b98e9c19ca69371",
+      "material": "piano",
+      "form": "mono",
+      "reference_file": "samples/piano-mono__32k__reference.flac",
+      "reference_sha256": "ac5cb4e16035ed62b6de06d34b16de323ad0fbee7be9f0bcdf26d021b70ec2e0",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn60",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 37.109571227996
+    },
+    {
+      "file": "samples/piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-66dBHz.flac",
+      "sha256": "bfd2d2bfc45d11fd8a2b6823fc9d0cbadada3922a4373c461d1bad16b9ca8c2b",
+      "material": "piano",
+      "form": "mono",
+      "reference_file": "samples/piano-mono__32k__reference.flac",
+      "reference_sha256": "ac5cb4e16035ed62b6de06d34b16de323ad0fbee7be9f0bcdf26d021b70ec2e0",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn66",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 38.458652771730954
+    },
+    {
+      "file": "samples/piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-80dBHz.flac",
+      "sha256": "99ba52640d90633be5772fbf0106e30863d4e6e3b7ddc35333f1ea5de349a7dd",
+      "material": "piano",
+      "form": "mono",
+      "reference_file": "samples/piano-mono__32k__reference.flac",
+      "reference_sha256": "ac5cb4e16035ed62b6de06d34b16de323ad0fbee7be9f0bcdf26d021b70ec2e0",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn80",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 57.49662154687939
     },
     {
       "file": "samples/piano-mono__32k__FM__awgn-cn0-54dBHz.flac",
@@ -2636,7 +5125,7 @@
     },
     {
       "file": "samples/piano-stereo__32k__B200+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "97f04e2b593b709779e9c6b1a9114b57b372995a351b86b0adb163f58092e5df",
+      "sha256": "e45fecbe79f3bb58aaaad859c881628a79e33b95d1bf11ff83908f7f5d737ab3",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -2717,7 +5206,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -2777,14 +5267,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 6.87308485580213
+      "snr_db": 6.911480594773406
     },
     {
       "file": "samples/piano-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "1a117e74f65c498ea77ccde0019854b6570edb0f7bc034c622e7603fc03680be",
+      "sha256": "f0b597fa93c7b6cd914abc45fd08a40edd7b78351e195c4a79126957bd23633e",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -2865,7 +5356,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -2925,14 +5417,315 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 9.65196513752662
+      "snr_db": 9.90571586171821
+    },
+    {
+      "file": "samples/piano-stereo__32k__B200-L+SUB50M-L__awgn-cn0-57dBHz.flac",
+      "sha256": "d3c90525646b3272ca283c6c343583538617f866fa2a3d4138035e54bfe9cd6f",
+      "material": "piano",
+      "form": "stereo",
+      "reference_file": "samples/piano-stereo__32k__reference.flac",
+      "reference_sha256": "df80092393080f04a9dc7c8c70aa29da5a4a14075243cd546d922e2abce560dc",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "B200-L+SUB50M-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 2,
+          "name": "B200-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            7,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 10,
+          "pulse_span": 32,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 6.8592314246775405
+    },
+    {
+      "file": "samples/piano-stereo__32k__B200Y-L+SUB50M-L__awgn-cn0-57dBHz.flac",
+      "sha256": "acf797753e4ebe5ecaabf1925749ddcca2d3a4bd717dcf9fe44ef13f55a5bd59",
+      "material": "piano",
+      "form": "stereo",
+      "reference_file": "samples/piano-stereo__32k__reference.flac",
+      "reference_sha256": "df80092393080f04a9dc7c8c70aa29da5a4a14075243cd546d922e2abce560dc",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "B200Y-L+SUB50M-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 4,
+          "name": "B200Y-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 10,
+          "pulse_span": 32,
+          "base_m": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "base_s": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "y_start_k": 2,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 10.370857212796704
     },
     {
       "file": "samples/piano-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "f4151b52418b4ffd2376bd0c42c5c6f67744b723e9dbea42e006791daa8c434c",
+      "sha256": "d71f0789b527c91fe11c5b4c8fab57788674e095d041684dbaf6530b17611333",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -3013,7 +5806,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 11,
@@ -3073,14 +5867,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 16.108623273539536
+      "snr_db": 16.05731949644857
     },
     {
       "file": "samples/piano-stereo__48k__M700Y+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "b4170c1af7a24759bfad889921edc01e98241e9d3ca0436ba7e2bdb24260d55e",
+      "sha256": "987817d638994b49ccb90962aaf56e780e162f0e035a1e0de2d9ba7a8a08a720",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -3161,7 +5956,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 11,
@@ -3221,14 +6017,315 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 16.479481367491367
+      "snr_db": 16.405921743149484
+    },
+    {
+      "file": "samples/piano-stereo__48k__M700-L+SUB100-48K-L__awgn-cn0-57dBHz.flac",
+      "sha256": "2b4eaabfee92fa7b6fff63e3222e373ddccbca0f2267e886c34bac91e2036f9c",
+      "material": "piano",
+      "form": "stereo",
+      "reference_file": "samples/piano-stereo__48k__reference.flac",
+      "reference_sha256": "f1afe403a46750c62a662aaecfb2847723d15aabdf01c5277b218b7973aaa14c",
+      "sample_rate_hz": 48000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "M700-L+SUB100-48K-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 8,
+          "name": "M700-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            7,
+            7,
+            7,
+            3
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            4,
+            3,
+            3,
+            3,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 11,
+          "name": "SUB100-48K-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            7,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            5,
+            3,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            4,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 16.816097142999936
+    },
+    {
+      "file": "samples/piano-stereo__48k__M700Y-L+SUB100-48K-L__awgn-cn0-57dBHz.flac",
+      "sha256": "92dedf5effe56efcdd0406df10f77caf3dbec1e0cbbf86da53da42c13df72e91",
+      "material": "piano",
+      "form": "stereo",
+      "reference_file": "samples/piano-stereo__48k__reference.flac",
+      "reference_sha256": "f1afe403a46750c62a662aaecfb2847723d15aabdf01c5277b218b7973aaa14c",
+      "sample_rate_hz": 48000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "M700Y-L+SUB100-48K-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 10,
+          "name": "M700Y-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "base_s": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "y_start_k": 2,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 11,
+          "name": "SUB100-48K-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            7,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            5,
+            3,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            4,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 17.479566602797213
     },
     {
       "file": "samples/piano-stereo__32k__B200__codec.flac",
-      "sha256": "2434d9039f02f7c7d828c1abede4ae5291d248a39522e6ec6e19e6499d41e6c9",
+      "sha256": "034a32d0bb7de00d41cdc5b576e2f0877e3535f6c4938ab18fa26a05f2806fc8",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -3309,14 +6406,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 50.69176825337976
+      "snr_db": 50.71616428170361
     },
     {
       "file": "samples/piano-stereo__32k__B200Y__codec.flac",
-      "sha256": "ec52414e5ceecc8991fc1f1d14e23e6562f7eef7dba8e51866ab19c127ba87a3",
+      "sha256": "7933f3c407c5c8f6b2cb4dd6b61bba1bb563529dd293374149eff6216cf8d72c",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -3397,14 +6495,193 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 52.85273410215894
+      "snr_db": 52.88917216208007
+    },
+    {
+      "file": "samples/piano-stereo__32k__B200-L__codec.flac",
+      "sha256": "62e818e94a933fc9ec5cc5fa2713bdcfa2d98338b742bb55dbc4e30ba0341d15",
+      "material": "piano",
+      "form": "stereo",
+      "reference_file": "samples/piano-stereo__32k__reference.flac",
+      "reference_sha256": "df80092393080f04a9dc7c8c70aa29da5a4a14075243cd546d922e2abce560dc",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "B200-L",
+      "condition": "codec",
+      "profiles": [
+        {
+          "pid": 2,
+          "name": "B200-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            7,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 10,
+          "pulse_span": 32,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 55.00205770712273
+    },
+    {
+      "file": "samples/piano-stereo__32k__B200Y-L__codec.flac",
+      "sha256": "1ae79dd927cbae5f27cf366cebcb777a03edc46053f3f11a8e805943515b0d4b",
+      "material": "piano",
+      "form": "stereo",
+      "reference_file": "samples/piano-stereo__32k__reference.flac",
+      "reference_sha256": "df80092393080f04a9dc7c8c70aa29da5a4a14075243cd546d922e2abce560dc",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "B200Y-L",
+      "condition": "codec",
+      "profiles": [
+        {
+          "pid": 4,
+          "name": "B200Y-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 10,
+          "pulse_span": 32,
+          "base_m": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "base_s": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "y_start_k": 2,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 57.39184840166285
     },
     {
       "file": "samples/piano-stereo__48k__M700__codec.flac",
-      "sha256": "a411f7474284eb780cc4252c415f0eb174093e5c0146cbb1134b4018b5784329",
+      "sha256": "b9f6906de6b19b8f4efde9e89cdadea5942b7af4e44a317d7e4e9de98589a81d",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -3485,14 +6762,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 49.2573528361785
+      "snr_db": 49.261858344744155
     },
     {
       "file": "samples/piano-stereo__48k__M700Y__codec.flac",
-      "sha256": "2cae80f2698ecb378ef79571425082a5c8f0169d4803d33617bab8a47134c8fa",
+      "sha256": "2b758f42806b675449fcfb8de940ce62b85292847081a4f0762a408f622c0d8c",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -3573,14 +6851,193 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 55.1843558046391
+      "snr_db": 55.160136005905194
+    },
+    {
+      "file": "samples/piano-stereo__48k__M700-L__codec.flac",
+      "sha256": "ff2b8f3bf332522c42e2a3ed5636edd3e46af9402477727ba364087e4e832513",
+      "material": "piano",
+      "form": "stereo",
+      "reference_file": "samples/piano-stereo__48k__reference.flac",
+      "reference_sha256": "f1afe403a46750c62a662aaecfb2847723d15aabdf01c5277b218b7973aaa14c",
+      "sample_rate_hz": 48000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "M700-L",
+      "condition": "codec",
+      "profiles": [
+        {
+          "pid": 8,
+          "name": "M700-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            7,
+            7,
+            7,
+            3
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            4,
+            3,
+            3,
+            3,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 57.31410088720462
+    },
+    {
+      "file": "samples/piano-stereo__48k__M700Y-L__codec.flac",
+      "sha256": "262e2357b9482635e17cf36cd599ee7e8538fab334139e40f2cc328562226842",
+      "material": "piano",
+      "form": "stereo",
+      "reference_file": "samples/piano-stereo__48k__reference.flac",
+      "reference_sha256": "f1afe403a46750c62a662aaecfb2847723d15aabdf01c5277b218b7973aaa14c",
+      "sample_rate_hz": 48000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "M700Y-L",
+      "condition": "codec",
+      "profiles": [
+        {
+          "pid": 10,
+          "name": "M700Y-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "base_s": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "y_start_k": 2,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 59.0056596075162
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac",
-      "sha256": "cff4e339f4e50d9324067400da0a041f4c3b687fa5b1f512c009cb9580e12770",
+      "sha256": "c13f27dc0bd5d803a9edfe760db69ca0d61a80926a9d4f0fc7a3e8af64730f84",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -3661,7 +7118,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -3721,14 +7179,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 16.32430996402717
+      "snr_db": 16.508273279110885
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "802932ed501402857db60fc7ffafb7de324724c5f8e53a9b7c773095b2c4c031",
+      "sha256": "e9e6fadd1e284f42ae8e29ccd16c8822d48fe9234d6b2b6b7caa8f4d1072a2b2",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -3809,7 +7268,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -3869,14 +7329,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 26.083312032101613
+      "snr_db": 27.717160542116627
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-60dBHz.flac",
-      "sha256": "413e1e4c2249a24dbb29bb7a056952296a04c6ba12c3888da8e04c2cd696ba04",
+      "sha256": "850fd04354cd6568b85a2372c9cb322e3cb7eba23d2c65329cf23a5056ec80ba",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -3957,7 +7418,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -4017,14 +7479,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 34.047895573673145
+      "snr_db": 33.92458092997218
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-66dBHz.flac",
-      "sha256": "35b0df5df92f01a73837c715205295477a73e22ec78e424528346b27247457c3",
+      "sha256": "207f814f33c0e14eb4b2e297f139092724ac86d8fedf39f76c31440dc6fe5c4c",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -4105,7 +7568,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -4165,14 +7629,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 36.03798529632316
+      "snr_db": 35.953149948342784
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-80dBHz.flac",
-      "sha256": "7e74d7493f962665205a9c929a3f612522d78f4926cec3ce03374f5876af0239",
+      "sha256": "c0028edd376d8341b3c9d091ae94c37bdfc454f914227ac01b5c288df0b19a31",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -4253,7 +7718,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -4313,10 +7779,761 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 55.55064382899467
+      "snr_db": 55.49392354065198
+    },
+    {
+      "file": "samples/percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-54dBHz.flac",
+      "sha256": "b678b953a4e7ea3fda57e2489858145a8250e175c946f525e840a4e231aa44ad",
+      "material": "percussion",
+      "form": "mono",
+      "reference_file": "samples/percussion-mono__32k__reference.flac",
+      "reference_sha256": "5a37831423962b8fcaa06d609b8b0de5cb8cfba8af0347dd39404c9f1247f31f",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn54",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 16.571667741636396
+    },
+    {
+      "file": "samples/percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-57dBHz.flac",
+      "sha256": "8d6a9f9e64e3f6bf515698836f9b797c7a25a8c82c9e760aae53af5a2a30af2b",
+      "material": "percussion",
+      "form": "mono",
+      "reference_file": "samples/percussion-mono__32k__reference.flac",
+      "reference_sha256": "5a37831423962b8fcaa06d609b8b0de5cb8cfba8af0347dd39404c9f1247f31f",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 29.000301502972977
+    },
+    {
+      "file": "samples/percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-60dBHz.flac",
+      "sha256": "6ff3d0749de87a6c2e3e0f164f17f1a25c0387527d6424c75a603be4e532a3ff",
+      "material": "percussion",
+      "form": "mono",
+      "reference_file": "samples/percussion-mono__32k__reference.flac",
+      "reference_sha256": "5a37831423962b8fcaa06d609b8b0de5cb8cfba8af0347dd39404c9f1247f31f",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn60",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 38.52782139622386
+    },
+    {
+      "file": "samples/percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-66dBHz.flac",
+      "sha256": "e8f7202041a4c27db38b1418f0b29cae4b194a1aad76a098168233420a3f1af3",
+      "material": "percussion",
+      "form": "mono",
+      "reference_file": "samples/percussion-mono__32k__reference.flac",
+      "reference_sha256": "5a37831423962b8fcaa06d609b8b0de5cb8cfba8af0347dd39404c9f1247f31f",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn66",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 39.87040766734327
+    },
+    {
+      "file": "samples/percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-80dBHz.flac",
+      "sha256": "429b6b7829e716ece3e8d163ce00d28e12af1d6d60b6f077d749a815513fa94f",
+      "material": "percussion",
+      "form": "mono",
+      "reference_file": "samples/percussion-mono__32k__reference.flac",
+      "reference_sha256": "5a37831423962b8fcaa06d609b8b0de5cb8cfba8af0347dd39404c9f1247f31f",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 1,
+      "configuration": "B200M-L+SUB50M-L",
+      "condition": "awgn80",
+      "profiles": [
+        {
+          "pid": 1,
+          "name": "B200M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 58.81554855534474
     },
     {
       "file": "samples/percussion-mono__32k__FM__awgn-cn0-54dBHz.flac",
@@ -4395,7 +8612,7 @@
     },
     {
       "file": "samples/percussion-stereo__32k__B200+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "dde711e94ab44933dce767475e9c86579835b4402df066908666fdd091334c0f",
+      "sha256": "f52954089d9097dffac71f1b98f6f351ddde700bc3a566098b4e9381233defe0",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -4476,7 +8693,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -4536,14 +8754,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 16.0676943969644
+      "snr_db": 16.06151342614924
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y+SUB50M__awgn-cn0-57dBHz.flac",
-      "sha256": "6459dd64a965676a2a1a758fd15662d612c5596eae60f31c77908c54e405b8a2",
+      "sha256": "39e24699d43f295674480211fdecabdfdde192a4bf6c0371571832320bdeacf3",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -4624,7 +8843,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 5,
@@ -4684,14 +8904,315 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 18.191648996838875
+      "snr_db": 18.37512271264204
+    },
+    {
+      "file": "samples/percussion-stereo__32k__B200-L+SUB50M-L__awgn-cn0-57dBHz.flac",
+      "sha256": "58318a9ca4cce7b8b2c5f348f4625f5f191f515dfca178923ad8f6a5bace1966",
+      "material": "percussion",
+      "form": "stereo",
+      "reference_file": "samples/percussion-stereo__32k__reference.flac",
+      "reference_sha256": "f42190eafda8b88a53ff95d7952d065335d44a4858018bb95f12d0fd3d6b2e88",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "B200-L+SUB50M-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 2,
+          "name": "B200-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            7,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 10,
+          "pulse_span": 32,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 16.192343417421846
+    },
+    {
+      "file": "samples/percussion-stereo__32k__B200Y-L+SUB50M-L__awgn-cn0-57dBHz.flac",
+      "sha256": "6a3fc367e428a4c56090b0ad1082efebeff5bb8609b710e6fc5db53d5a95a234",
+      "material": "percussion",
+      "form": "stereo",
+      "reference_file": "samples/percussion-stereo__32k__reference.flac",
+      "reference_sha256": "f42190eafda8b88a53ff95d7952d065335d44a4858018bb95f12d0fd3d6b2e88",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "B200Y-L+SUB50M-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 4,
+          "name": "B200Y-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 10,
+          "pulse_span": 32,
+          "base_m": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "base_s": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "y_start_k": 2,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 5,
+          "name": "SUB50M-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            5,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 18.546482095509823
     },
     {
       "file": "samples/percussion-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "9e485dfee2ac854c86ef289960f32029269004161a7c86cb468f2605f88f5fe2",
+      "sha256": "953544524288fed366ad3677d0e796a1776a299cce3552a1eba3cc1008e67544",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -4772,7 +9293,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 11,
@@ -4832,14 +9354,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 16.833851996635207
+      "snr_db": 16.816285367541564
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y+SUB100-48K__awgn-cn0-57dBHz.flac",
-      "sha256": "8294ff5c446fde5f67f7986251207c07580d729bb55089c3fce51f39efbeb2d7",
+      "sha256": "e8f9af277415152a3c209fd0e7e3541590bf8444af19943ad48bf5df321544a4",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -4920,7 +9443,8 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         },
         {
           "pid": 11,
@@ -4980,14 +9504,315 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 17.385155269353213
+      "snr_db": 17.398352663443543
+    },
+    {
+      "file": "samples/percussion-stereo__48k__M700-L+SUB100-48K-L__awgn-cn0-57dBHz.flac",
+      "sha256": "5a6ae51c54b83cbcffe971a1a50696537137a561ece207b9c16f270e2c24258e",
+      "material": "percussion",
+      "form": "stereo",
+      "reference_file": "samples/percussion-stereo__48k__reference.flac",
+      "reference_sha256": "a2d4f0975a29174de07e59e357a1e78bdc7963f6ead56dda99609f146346b9b1",
+      "sample_rate_hz": 48000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "M700-L+SUB100-48K-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 8,
+          "name": "M700-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            7,
+            7,
+            7,
+            3
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            4,
+            3,
+            3,
+            3,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 11,
+          "name": "SUB100-48K-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            7,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            5,
+            3,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            4,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 18.020870747808637
+    },
+    {
+      "file": "samples/percussion-stereo__48k__M700Y-L+SUB100-48K-L__awgn-cn0-57dBHz.flac",
+      "sha256": "309b97b3e69b6d21af0de9ff3404ad752b126bee8b82d2ce559beea5c473e5da",
+      "material": "percussion",
+      "form": "stereo",
+      "reference_file": "samples/percussion-stereo__48k__reference.flac",
+      "reference_sha256": "a2d4f0975a29174de07e59e357a1e78bdc7963f6ead56dda99609f146346b9b1",
+      "sample_rate_hz": 48000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "M700Y-L+SUB100-48K-L",
+      "condition": "awgn57",
+      "profiles": [
+        {
+          "pid": 10,
+          "name": "M700Y-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "base_s": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "y_start_k": 2,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        },
+        {
+          "pid": 11,
+          "name": "SUB100-48K-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            7,
+            7,
+            3,
+            0,
+            0
+          ],
+          "bits_s": [
+            5,
+            3,
+            0,
+            0,
+            0
+          ],
+          "exp_bits": 4,
+          "protect": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qpsk",
+          "alpha": 1,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": null,
+          "base_s": null,
+          "attn_group_m": [
+            0,
+            0,
+            4,
+            0,
+            0
+          ],
+          "attn_group_s": [
+            0,
+            4,
+            0,
+            0,
+            0
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 18.891519667818606
     },
     {
       "file": "samples/percussion-stereo__32k__B200__codec.flac",
-      "sha256": "531c795edf43189b421a8dd3a6be6272780a4c8d8fb5d3bb68aa77c71a32afe8",
+      "sha256": "5f874f85f2da8f43e706b69748676bf68c5de8eac314ff2165afe6eb66fd7806",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -5068,14 +9893,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 54.95149977778618
+      "snr_db": 54.91417491566117
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y__codec.flac",
-      "sha256": "85175fba8c263acfaa25099e9231582831937de6e5fa37f281b8f336b5fe8bce",
+      "sha256": "9d84b6b696e06267cb3198ea42d3f1e8830b4d7e243dadc6a7719eea8dc82ca8",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -5156,14 +9982,193 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 55.693331259587644
+      "snr_db": 55.64049658761489
+    },
+    {
+      "file": "samples/percussion-stereo__32k__B200-L__codec.flac",
+      "sha256": "b335196e64f07552a35827debc413f6f5a3e70ee4c9ad8b0e0db1147f028f8e4",
+      "material": "percussion",
+      "form": "stereo",
+      "reference_file": "samples/percussion-stereo__32k__reference.flac",
+      "reference_sha256": "f42190eafda8b88a53ff95d7952d065335d44a4858018bb95f12d0fd3d6b2e88",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "B200-L",
+      "condition": "codec",
+      "profiles": [
+        {
+          "pid": 2,
+          "name": "B200-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            7,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 10,
+          "pulse_span": 32,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 58.24742842417017
+    },
+    {
+      "file": "samples/percussion-stereo__32k__B200Y-L__codec.flac",
+      "sha256": "f48e2015fd13a91aac49979cfe4433aa056f19e431ef5328168d62c1f1af8b40",
+      "material": "percussion",
+      "form": "stereo",
+      "reference_file": "samples/percussion-stereo__32k__reference.flac",
+      "reference_sha256": "f42190eafda8b88a53ff95d7952d065335d44a4858018bb95f12d0fd3d6b2e88",
+      "sample_rate_hz": 32000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "B200Y-L",
+      "condition": "codec",
+      "profiles": [
+        {
+          "pid": 4,
+          "name": "B200Y-L",
+          "fs": 32000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 10,
+          "pulse_span": 32,
+          "base_m": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "base_s": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "y_start_k": 2,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 58.80888011882378
     },
     {
       "file": "samples/percussion-stereo__48k__M700__codec.flac",
-      "sha256": "3d652893e59ef7e0a5b11e728cd8b1d9b1567e50ebea619ddbd092e4e58a76de",
+      "sha256": "d97b13e78c83961865fa4e8984cf28338be74e3c73e3fd2160ead848c4c029fb",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -5244,14 +10249,15 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 53.44407887457426
+      "snr_db": 53.391135947919054
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y__codec.flac",
-      "sha256": "0e9fb5d5fae2b776e475387976b17a877ecce357d02ed419cc25660d96b987e4",
+      "sha256": "5695675a829cd89b79b2617ba63f910d69ec4a0cbbb2832a7457d702f40d7f2d",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -5332,10 +10338,189 @@
             "M",
             "S"
           ],
-          "format_id": 3
+          "format_id": 3,
+          "transform": "haar"
         }
       ],
-      "snr_db": 57.356482700446314
+      "snr_db": 57.326165400107804
+    },
+    {
+      "file": "samples/percussion-stereo__48k__M700-L__codec.flac",
+      "sha256": "34def51d89bd8192019c9819764775885232bb9c8f4745e064e8dddb900a8204",
+      "material": "percussion",
+      "form": "stereo",
+      "reference_file": "samples/percussion-stereo__48k__reference.flac",
+      "reference_sha256": "a2d4f0975a29174de07e59e357a1e78bdc7963f6ead56dda99609f146346b9b1",
+      "sample_rate_hz": 48000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "M700-L",
+      "condition": "codec",
+      "profiles": [
+        {
+          "pid": 8,
+          "name": "M700-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            7,
+            7,
+            7,
+            3
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "base_s": [
+            4,
+            3,
+            3,
+            3,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            0,
+            4
+          ],
+          "y_start_k": null,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 57.518355257023984
+    },
+    {
+      "file": "samples/percussion-stereo__48k__M700Y-L__codec.flac",
+      "sha256": "4ad36868dec41935d63a2c0b832a9826b06a7ac229ac898def20500b7fe6591e",
+      "material": "percussion",
+      "form": "stereo",
+      "reference_file": "samples/percussion-stereo__48k__reference.flac",
+      "reference_sha256": "a2d4f0975a29174de07e59e357a1e78bdc7963f6ead56dda99609f146346b9b1",
+      "sample_rate_hz": 48000,
+      "seconds": 10.0,
+      "channels": 2,
+      "configuration": "M700Y-L",
+      "condition": "codec",
+      "profiles": [
+        {
+          "pid": 10,
+          "name": "M700Y-L",
+          "fs": 48000,
+          "block": 64,
+          "levels": 4,
+          "bits_m": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "bits_s": [
+            10,
+            11,
+            7,
+            7,
+            7
+          ],
+          "exp_bits": 4,
+          "protect": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "modulation": "qam16h",
+          "alpha": 5,
+          "pulse_beta_pct": 25,
+          "pulse_span": 16,
+          "base_m": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "base_s": [
+            4,
+            5,
+            1,
+            1,
+            1
+          ],
+          "attn_group_m": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "attn_group_s": [
+            0,
+            0,
+            2,
+            4,
+            8
+          ],
+          "y_start_k": 2,
+          "y_step": [
+            2,
+            105
+          ],
+          "y_bits": 7,
+          "y_channels": [
+            "M",
+            "S"
+          ],
+          "format_id": 2,
+          "transform": "legall53"
+        }
+      ],
+      "snr_db": 59.815577234282394
     }
   ]
 }
