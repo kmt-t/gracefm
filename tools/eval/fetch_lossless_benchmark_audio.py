@@ -4,6 +4,7 @@
 The audio is deliberately never placed in samples/ or committed to Git. Wikimedia
 Commons metadata is checked at download time; the local manifest records hashes.
 """
+import argparse
 import hashlib
 import json
 import os
@@ -99,4 +100,5 @@ def main():
 
 
 if __name__ == "__main__":
+    argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter).parse_args()
     main()

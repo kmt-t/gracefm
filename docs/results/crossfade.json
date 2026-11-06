@@ -1,0 +1,114 @@
+{
+ "condition": "no noise; main frames dropped at random; see tools/eval/eval_crossfade.py",
+ "seed": 5,
+ "rows": [
+  {
+   "material": "demo",
+   "main": "B200M",
+   "crossfade": false,
+   "main_received": 0.673,
+   "boundary_ratio": 1.799,
+   "snr_db": 33.26,
+   "visqol": 2.775
+  },
+  {
+   "material": "demo",
+   "main": "B200M",
+   "crossfade": true,
+   "main_received": 0.673,
+   "boundary_ratio": 1.686,
+   "snr_db": 29.99,
+   "visqol": 2.324
+  },
+  {
+   "material": "demo",
+   "main": "B200M-L",
+   "crossfade": false,
+   "main_received": 0.673,
+   "boundary_ratio": 1.225,
+   "snr_db": 33.39,
+   "visqol": 4.66
+  },
+  {
+   "material": "demo",
+   "main": "B200M-L",
+   "crossfade": true,
+   "main_received": 0.673,
+   "boundary_ratio": 1.695,
+   "snr_db": 29.91,
+   "visqol": 3.238
+  },
+  {
+   "material": "piano",
+   "main": "B200M",
+   "crossfade": false,
+   "main_received": 0.673,
+   "boundary_ratio": 3.546,
+   "snr_db": 29.76,
+   "visqol": 1.558
+  },
+  {
+   "material": "piano",
+   "main": "B200M",
+   "crossfade": true,
+   "main_received": 0.673,
+   "boundary_ratio": 1.322,
+   "snr_db": 22.14,
+   "visqol": 1.831
+  },
+  {
+   "material": "piano",
+   "main": "B200M-L",
+   "crossfade": false,
+   "main_received": 0.673,
+   "boundary_ratio": 1.903,
+   "snr_db": 33.7,
+   "visqol": 2.853
+  },
+  {
+   "material": "piano",
+   "main": "B200M-L",
+   "crossfade": true,
+   "main_received": 0.673,
+   "boundary_ratio": 1.705,
+   "snr_db": 23.67,
+   "visqol": 2.887
+  },
+  {
+   "material": "percussion",
+   "main": "B200M",
+   "crossfade": false,
+   "main_received": 0.673,
+   "boundary_ratio": 2.635,
+   "snr_db": 31.93,
+   "visqol": 3.797
+  },
+  {
+   "material": "percussion",
+   "main": "B200M",
+   "crossfade": true,
+   "main_received": 0.673,
+   "boundary_ratio": 1.637,
+   "snr_db": 26.33,
+   "visqol": 3.605
+  },
+  {
+   "material": "percussion",
+   "main": "B200M-L",
+   "crossfade": false,
+   "main_received": 0.673,
+   "boundary_ratio": 1.352,
+   "snr_db": 34.0,
+   "visqol": 4.202
+  },
+  {
+   "material": "percussion",
+   "main": "B200M-L",
+   "crossfade": true,
+   "main_received": 0.673,
+   "boundary_ratio": 1.923,
+   "snr_db": 27.75,
+   "visqol": 3.701
+  }
+ ]
+}

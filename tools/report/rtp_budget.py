@@ -11,6 +11,7 @@ IP/UDP/RTP のヘッダは IPv4 で 40 byte、IPv6 で 60 byte。
 
 出力: docs/results/rtp_budget.json
 """
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -49,4 +50,5 @@ def main():
 
 
 if __name__ == "__main__":
+    argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter).parse_args()
     main()

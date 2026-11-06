@@ -9,7 +9,4 @@ def reference_name(source, fs=32000):
 def sample_name(source, fs, profile, case='codec', *, sub=None):
     config = profile + (f'+{sub}' if sub else '')
     case = re.sub(r'^awgn(\d+)$', r'awgn-cn0-\1dBHz', case)
-    case = re.sub(r'^rayleigh(\d+)$', r'rayleigh-cn0-\1dBHz', case)
-    case = re.sub(r'^main_minus10db(\d+)$', r'main-fade-10dB-cn0-\1dBHz', case)
-    case = re.sub(r'^phase_only(\d+)$', r'phase-only-awgn-cn0-\1dBHz', case)
     return f'{source}__{fs // 1000}k__{config}__{case}.flac'

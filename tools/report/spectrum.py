@@ -13,6 +13,7 @@
 
 出力: docs/figures/rf_spectrum.png, docs/figures/audio_spectrum.png, docs/results/spectrum.json
 """
+import argparse
 import json
 import os
 import sys
@@ -164,4 +165,5 @@ def main():
 
 
 if __name__ == "__main__":
+    argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter).parse_args()
     main()

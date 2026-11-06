@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""試聴音声の一式を検証し、索引 (samples/index.json) と samples/README.md を作る。"""
+"""試聴音声の一式を検証し、索引 (samples/index.json) と samples/README.md を作る。
+
+--check は何も書かず、FLAC と音声を作るコードが索引と一致するかだけを確かめる (不一致なら終了コード 1)。
+"""
+import argparse
 import hashlib
 import json
 import sys
@@ -36,6 +40,31 @@ def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def code_digests():
+    """試料の中身を左右するコードのハッシュ。評価や文書の道具は含めない"""
+    return {str(p.relative_to(ROOT)): digest(p)
+            for d in ('gracefm', 'tools/common', 'tools/samples') for p in sorted((ROOT / d).rglob('*.py'))}
+
+
+def expected_names():
+    return {r[4] for r in expected()} | {reference_name(source_name(m, f), fs) for m, _, _ in MATERIALS for fs, f, _, _, _ in ALL_SETS}
+
+
+def check():
+    """索引と現状の違いの一覧を返す"""
+    index = json.loads((ROOT / 'samples' / 'index.json').read_text())
+    want = expected_names()
+    found = {p.name for p in (ROOT / 'samples').glob('*.flac')}
+    problems = [f'missing: {n}' for n in sorted(want - found)] + [f'unexpected: {n}' for n in sorted(found - want)]
+    recorded = {Path(e['file']).name: e['sha256'] for e in index['samples']}
+    recorded.update({Path(e['reference_file']).name: e['reference_sha256'] for e in index['samples']})
+    problems += [f'not in index: {n}' for n in sorted(want - set(recorded))]
+    problems += [f'hash differs: {n}' for n in sorted(want & found & set(recorded)) if digest(ROOT / 'samples' / n) != recorded[n]]
+    code = code_digests()
+    problems += [f'code changed: {n}' for n in sorted(set(code) | set(index['code_sha256'])) if code.get(n) != index['code_sha256'].get(n)]
+    return problems
+
+
 def expected():
     """(素材, 形, 構成, 条件, ファイル名, サンプリング周波数) の一覧"""
     rows = []
@@ -67,7 +96,7 @@ def snr_db(reference, audio, case, config, fs):
 def build():
     rows = expected()
     folder = ROOT / 'samples'
-    want = {r[4] for r in rows} | {reference_name(source_name(m, f), fs) for m, _, _ in MATERIALS for fs, f, _, _, _ in ALL_SETS}
+    want = expected_names()
     found = {p.name for p in folder.glob('*.flac')}
     if want != found:
         raise ValueError({'missing': sorted(want - found), 'unexpected': sorted(found - want)})
@@ -86,7 +115,7 @@ def build():
                             'sample_rate_hz': fs, 'seconds': len(audio) / fs, 'channels': sf.info(path).channels,
                             'configuration': config, 'condition': case, 'profiles': profiles,
                             'snr_db': float(snr_db(reference, audio, case, config, fs))})
-    code = {str(p.relative_to(ROOT)): digest(p) for d in ('gracefm', 'tools') for p in sorted((ROOT / d).rglob('*.py'))}
+    code = code_digests()
     report = {'description': '10-second listening samples; decoded FLAC measurements, not RF capture',
                   'expected_sample_count': len(rows), 'seed': 1, 'code_sha256': code, 'samples': entries}
     destination = ROOT / 'samples' / 'index.json'
@@ -114,7 +143,7 @@ def write_readme(entries):
              '## 電波の強さ', '', '| C/N0 | C/N（180kHz） |', '|---|---|']
     for c in sorted(CN0_LIST, reverse=True):
         lines.append(f'| {c} dB-Hz | {cn(c):.1f} dB |')
-    lines += ['', '66 dB-Hz は5m・室内の保守的な見積もり（SPEC 付録D）。通信路は白色雑音のみ。同期・等化は理想で、FMのゴーストは含まない。', '']
+    lines += ['', '66 dB-Hz は5m・室内の保守的な見積もり（[比較資料](../docs/COMPARISON.md)の「C/Nと音質の対応」）。通信路は白色雑音のみ。同期・等化は理想で、FMのゴーストは含まない。', '']
     for fs, form, mains, subs, cases in ALL_SETS:
         label = ('モノラル形' if form == 'mono' else 'ステレオ形') + f'・{fs // 1000} kHz'
         configs = [m + (f'+{paired_sub(m, s)}' if s else '') for m in mains for s in (subs or (None,))] + (['FM'] if form == 'mono' and fs == 32000 else [])
@@ -142,4 +171,10 @@ def write_readme(entries):
 
 
 if __name__ == '__main__':
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument('--check', action='store_true', help='何も書かず、索引との一致だけを確かめる')
+    if ap.parse_args().check:
+        problems = check()
+        print('\n'.join(problems) if problems else 'samples match the index and the code')
+        sys.exit(1 if problems else 0)
     build()

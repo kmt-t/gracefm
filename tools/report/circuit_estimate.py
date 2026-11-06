@@ -15,6 +15,7 @@ DSP スライス数は、MAC/s ÷ (クロック × 稼働率) の下限で、ク
 (シンボルレートより高い固定のレートからのリサンプリング)、制御用 ARM のソフトウェア、暗号化 (AES-CTR)。
 出力: docs/results/circuit_estimate.json
 """
+import argparse
 import json
 import math
 import sys
@@ -246,4 +247,5 @@ def main():
 
 
 if __name__ == "__main__":
+    argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter).parse_args()
     main()

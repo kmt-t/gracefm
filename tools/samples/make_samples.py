@@ -5,11 +5,14 @@ samples/ の試聴音声を、素材 × 形（モノラル・ステレオ）× �
   python tools/samples/make_samples.py                 # eval_audio/lossless の原音から全部作り直す
   python tools/samples/make_samples.py --source demo   # 素材を一つだけ
   python tools/samples/make_samples.py --legall-only   # -L の試料だけ (原音と Haar・FM の試料は作らない)
+  python tools/samples/make_samples.py --out 別の場所   # samples/ を変えずに作る (再現の確認用)
 
+原音は先に python tools/eval/fetch_lossless_benchmark_audio.py で取得する (demo だけなら不要)。
 素材: demo（合成試験信号）、piano、percussion（どちらもステレオの CC0 音源）。各10秒。
-COMPARISON.md の数値に使う試料だけを作る: モノラル形、32 kHz、主系 B200M + 副系 SUB50M、
-AWGN の C/N0 54・57・60・66・80、および同じ条件のアナログFM。各主系には LeGall 5/3 の -L 版も作る (副系も -L にそろえる)。
-通信路は主系・副系とも独立のチャンネルで、C/N0は同じ値。
+作る試料は SETS と CODEC_SETS のとおり:
+  モノラル形 32 kHz: B200M + SUB50M と、C/N0 54・57・60・66・80。同じ条件のアナログFM (COMPARISON.md の表)。
+  ステレオ形 32 kHz: B200・B200Y + SUB50M、48 kHz: M700・M700Y + SUB100-48K。C/N0 57 と、通信路なしのコーデック単体。
+各主系には LeGall 5/3 の -L 版も作る (副系も -L にそろえる)。通信路は主系・副系とも独立のチャンネルで、C/N0は同じ値。
 """
 import argparse
 import os
@@ -37,7 +40,7 @@ SEC = 10.0
 MATERIALS = (("demo", None, 0.0),
              ("piano", "lossless/Emotional_piano.wav", 1.0),
              ("percussion", "lossless/Ceramic_Djembe.wav", 0.5))
-CN0_LIST = (54, 57, 60, 66, 80)      # C/N0 [dB-Hz]。66 は 5m・室内の保守的な見積もり (SPEC 付録D)
+CN0_LIST = (54, 57, 60, 66, 80)      # C/N0 [dB-Hz]。66 は 5m・室内の保守的な見積もり (COMPARISON.md の C/Nと音質の対応)
 CASES = tuple(f"awgn{c}" for c in CN0_LIST)
 # (サンプリング周波数, 形, 主系, 副系, 条件)。ステレオ形は C/N0 57 だけ、主系＋副系で作る
 SETS = ((32000, "mono", ("B200M", "B200M-L"), ("SUB50M",), CASES),
@@ -86,37 +89,41 @@ def aligned(y, fs):
     return np.concatenate([y[d:], np.zeros((d,) + y.shape[1:], y.dtype)])
 
 
-def save(name, y, mono, fs):
-    path = os.path.join(OUT, name)
+def save(out, name, y, mono, fs):
+    path = os.path.join(out, name)
     wavio.write_flac24(path, y[:, :1] if mono else y, fs)
 
 
 def generate(task):
-    material, form, fs, mains, subs, cases, x, legall_only = task
+    material, form, fs, mains, subs, cases, x, legall_only, out = task
     mono = form == "mono"
     src = source_name(material, form)
     print(src, flush=True)
     if legall_only:
         mains = tuple(m for m in mains if PROFILES[m].overlapped)
     else:
-        wavio.write_flac24(os.path.join(OUT, reference_name(src, fs)), x[:, :1] if mono else x, fs)
+        wavio.write_flac24(os.path.join(out, reference_name(src, fs)), x[:, :1] if mono else x, fs)
     fm = AnalogFM(x[:, 0], fs) if mono and fs == 32000 and not legall_only else None
     xi = wavio.to_pcm24(x)
     for main in mains:
         if not subs:
-            save(sample_name(src, fs, main), wavio.from_pcm24(roundtrip(xi, PROFILES[main])), mono, fs)
+            save(out, sample_name(src, fs, main), wavio.from_pcm24(roundtrip(xi, PROFILES[main])), mono, fs)
         for sub in (paired_sub(main, s) for s in subs):
             for case in cases:
                 cn0 = int(case[len("awgn"):])
                 y, _, _ = channel.link(xi, main, cn0, sub=sub, seed=1)
-                save(sample_name(src, fs, main, case, sub=sub), wavio.from_pcm24(aligned(y, fs)), mono, fs)
+                save(out, sample_name(src, fs, main, case, sub=sub), wavio.from_pcm24(aligned(y, fs)), mono, fs)
         print(f"  {src} {main} done", flush=True)
     if fm is not None:
         for case in CASES:
             cn0 = int(case[len("awgn"):])
             y1 = fm.receive(cn0, np.random.default_rng(1))
-            save(sample_name(src, fs, "FM", case), np.stack([y1, y1], 1), True, fs)
+            save(out, sample_name(src, fs, "FM", case), np.stack([y1, y1], 1), True, fs)
     return src
+
+
+def _material_of(path):
+    return next(m for m, p, _ in MATERIALS if p == path)
 
 
 def main():
@@ -125,8 +132,13 @@ def main():
     ap.add_argument("--source", choices=[m[0] for m in MATERIALS], help="素材を一つだけ作る")
     ap.add_argument("--legall-only", action="store_true", help="-L の試料だけ作る")
     ap.add_argument("--workers", type=int, default=6)
+    ap.add_argument("--out", default=OUT, help="書き出し先 (既定は samples/)")
     args = ap.parse_args()
-    os.makedirs(OUT, exist_ok=True)
+    for _, path, _ in MATERIALS:
+        if path and args.source in (None, _material_of(path)) and not os.path.exists(os.path.join(args.eval_audio, path)):
+            ap.error(f"{os.path.join(args.eval_audio, path)} がありません。"
+                     "python tools/eval/fetch_lossless_benchmark_audio.py で取得してください")
+    os.makedirs(args.out, exist_ok=True)
     tasks = []
     for material, path, start in MATERIALS:
         if args.source and material != args.source:
@@ -135,7 +147,7 @@ def main():
         for fs, form, mains, subs, cases in ALL_SETS:
             if fs not in loaded:
                 loaded[fs] = load_material(material, path, start, args.eval_audio, fs)
-            tasks.append((material, form, fs, mains, subs, cases, to_form(loaded[fs], form), args.legall_only))
+            tasks.append((material, form, fs, mains, subs, cases, to_form(loaded[fs], form), args.legall_only, args.out))
     with ProcessPoolExecutor(max_workers=min(args.workers, len(tasks))) as ex:
         list(ex.map(generate, tasks))
     print("generated; run tools/samples/sample_catalog.py to validate and write the index")

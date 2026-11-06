@@ -55,13 +55,12 @@
 pip install -r requirements.txt
 python tools/sim/codec_wav.py 入力.wav 出力.wav --profile B200
 python tools/sim/sim_link.py 入力.wav 出力.wav --profile B200M --snr 8 --single
-python tools/samples/regenerate_samples.py     # 現行音源・評価値・試聴ページを一括再生成（評価依存が必要）
+python tools/eval/fetch_lossless_benchmark_audio.py  # 原音を eval_audio/lossless/ へ取得（試料の再生成と評価に必要）
+python tools/samples/regenerate_samples.py     # 試聴音源・索引・一覧を一括再生成（評価値は作り直さない）
+python tools/samples/sample_catalog.py --check # 試聴音源が索引と今のコードに一致するかを確認
 python tools/report/profile_matrix.py          # 設定表と計算予算を更新
 python tools/report/profile_matrix.py --check  # 実装との一致を確認
-python tests/test_profiles.py
-python tests/test_gracefm.py
-python tests/test_y.py
-python tests/test_equalizer.py
+python -m pytest                               # テスト
 ```
 
 評価を実行するツールは現行プロファイル名で動作する。各ツールの `--help` を参照。

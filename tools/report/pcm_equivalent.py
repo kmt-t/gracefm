@@ -14,6 +14,7 @@ PCM換算bit = (コーデックだけを通した波形SNR [dB] − 1.76) / 6.02
 
 出力: docs/results/pcm_equivalent.json
 """
+import argparse
 import json
 import sys
 from concurrent.futures import ProcessPoolExecutor
@@ -105,4 +106,5 @@ def main():
 
 
 if __name__ == "__main__":
+    argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter).parse_args()
     main()

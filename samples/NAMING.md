@@ -14,7 +14,6 @@
 | 構成 | プロファイル名。副系つきは `主系+副系`（例：`B200M+SUB50M`、LeGall 5/3 は `B200M-L+SUB50M-L`）。アナログFMは `FM`（モノラル形だけ） |
 | コーデックのみ | `codec`：通信路なし |
 | 白色雑音 | `awgn-cn0-66dBHz`：C/N0が66 dB-Hz。C/NやEs/N0ではない |
-| フェージング | `rayleigh-cn0-60dBHz`、`main-fade-10dB-cn0-66dBHz` |
 
 例：
 
