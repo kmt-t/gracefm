@@ -64,7 +64,7 @@ def extrapolate(hist, n, order):
     return out
 
 
-def conceal(y, valid, fs, order=16, hist_len=128, hold_ms=10, fade_ms=20, xfade=16):
+def conceal(y, valid, fs, order=16, hist_len=128, hold_ms=10, fade_ms=20, xfade=4):
     """y: (n, ch) の整数、valid: (n,) bool → 欠落区間を埋めた y"""
     out = np.asarray(y, np.int64).copy()
     out[~valid] = 0
