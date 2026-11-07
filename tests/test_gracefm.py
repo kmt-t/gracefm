@@ -362,23 +362,6 @@ def test_encryption():
 
 
 
-def test_crossfade_switch_removes_step_only_where_pattern_changes():
-    from gracefm import plc
-    block, nb = 64, 8
-    t = np.arange(block * nb)
-    base = pcm(0.5 * np.sin(2 * np.pi * 440 * t / 32000))
-    y = np.stack([base, base], axis=1)
-    y[4 * block:] += pcm(0.2)                                        # 4 ブロック目の先頭に段差 (情報のある帯域の組が変わる)
-    same = [(True, True)] * nb
-    assert np.array_equal(plc.crossfade_switch(y, same, block), y)          # 組が変わらなければ何もしない
-    changed = same[:4] + [(True, False)] * 4
-    out = plc.crossfade_switch(y, changed, block)
-    jump = lambda z: np.abs(np.diff(z[:, 0]))[4 * block - 1]
-    assert jump(out) < jump(y) / 4                                          # 境界の段差が小さくなる
-    assert np.array_equal(out[:4 * block], y[:4 * block])                  # 過去の出力は変えない (因果的)
-    assert np.array_equal(out[4 * block + 16:], y[4 * block + 16:])        # クロスフェードは先頭16サンプルだけ
-    lost = same[:4] + [(False, False)] * 2 + same[:2]
-    assert np.array_equal(plc.crossfade_switch(y, lost, block), y)         # 全て届かないブロックは PLC に任せる
 
 
 if __name__ == "__main__":

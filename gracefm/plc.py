@@ -91,23 +91,3 @@ def conceal(y, valid, fs, order=16, hist_len=128, hold_ms=10, fade_ms=20, xfade=
                 out[j:j + k, c] = (w * out[j:j + k, c] + ((1 << 15) - w) * pred[L:] + (1 << 14)) >> 15
         i = j
     return out
-
-
-def crossfade_switch(y, patterns, block, order=16, hist_len=128, xfade=16):
-    """
-    情報のある (系統, 成分, 帯域) の組が変わったブロックの先頭 xfade サンプルを、直前の出力の LPC 外挿から
-    新しい出力へクロスフェードでつなぐ。主系が落ちて副系だけになる、高域CRCが不一致で高域が消える、などの
-    切り替えで、波形の段差 (インパルス) が出るのを抑える。先読みを使わないので遅延は増えない。
-    y: (n, ch) の整数。patterns: ブロックごとの組 (全て届かないブロックは all-False)。どちらも届くブロックだけ対象。
-    """
-    out = np.asarray(y, np.int64).copy()
-    nb = min(len(patterns), len(y) // block)
-    for i in range(1, nb):
-        if patterns[i] != patterns[i - 1] and any(patterns[i]) and any(patterns[i - 1]):
-            s = i * block
-            k = min(xfade, len(y) - s)
-            w = (np.arange(1, k + 1) << 15) // (k + 1)
-            for c in range(y.shape[1]):
-                pred = extrapolate(out[max(0, s - hist_len):s, c], k, order)
-                out[s:s + k, c] = (w * out[s:s + k, c] + ((1 << 15) - w) * pred + (1 << 14)) >> 15
-    return out

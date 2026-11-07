@@ -48,9 +48,9 @@
 | [`layout.py`](../gracefm/layout.py)、[`framing.py`](../gracefm/framing.py) | ビット配置、送信（pack）と受信（unpack） |
 | [`encoder.py`](../gracefm/encoder.py) | 送信機（符号化、フレーム化、スクランブル、変調） |
 | [`decoder.py`](../gracefm/decoder.py) | 1系統の受信機（確率による仮数の期待値、誤差分散、Chase 救済、硬判定の再構成） |
-| [`receiver.py`](../gracefm/receiver.py) | 2 系統の合成と出力段（PLC、クロスフェード、IIR 切替） |
+| [`receiver.py`](../gracefm/receiver.py) | 2 系統の合成と出力段（PLC、IIR 切替） |
 | [`fusion.py`](../gracefm/fusion.py) | 2 系統の帯域ごとの融合（逆分散重み、Q15）。`-L` は係数のまま融合する |
-| [`plc.py`](../gracefm/plc.py) | LPC による補間（整数のレビンソン・ダービン）とクロスフェード |
+| [`plc.py`](../gracefm/plc.py) | LPC による補間（整数のレビンソン・ダービン）と復帰時のクロスフェード |
 | [`postfilter.py`](../gracefm/postfilter.py) | 出力段。48 kHz 系は素通し、32 kHz 系は 3/2 の再標本化（95 タップ）。係数は整数の表 |
 | [`iir.py`](../gracefm/iir.py) | 出力の切り替え先の IIR（因果、4 次 Butterworth、4 kHz）。係数は符号つき 18 bit の Q16（固定）。積は 25×18 bit、累積は 48 bit。係数は Q16 の固定（仕様どおり）。浮動小数点の設計との誤差は、振幅 3×10^5 のランダムウォーク入力で 32 kHz 約 70 LSB、48 kHz 約 440 LSB。1 kHz・振幅 2^22 の正弦波では 32 kHz 約 600 LSB、48 kHz 約 4200 LSB（約 −60 dB）。48 kHz の精度は不足（未解決、下の「未実装」を参照） |
 | [`dsp.py`](../gracefm/dsp.py) の `wide_mul` / `wide_matmul` | 広い積（等化器の行列積、係数との積）を 11 bit ずつの片に分けて足す。値は正確な積と同じ。片どうしの積は 22 bit 以内で、乗算器に収まる |

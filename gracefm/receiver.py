@@ -2,7 +2,7 @@
 受信の出力段。2系統の復号結果 (gracefm.decoder.StreamResult) を 1 本の音声にする。
 
   1. 2系統の合成: ブロック単位で、両方届いた区間は帯域ごとに融合 (gracefm/fusion.py) / 片方だけなら片方 / どちらも無ければ欠落
-  2. 欠落の補間 (LPC): 系統の構成が変わる境目のクロスフェード、欠落区間の PLC (gracefm/plc.py)
+  2. 欠落の補間 (LPC): 欠落区間の PLC (gracefm/plc.py)
   3. 出力 IIR 切替: 品質コードに応じて、高域を落とした出力へ切り替える (gracefm/iir.py)
 
 フレームの復号 (decoder) と、出力の決め方 (ここ) は分けてある。出力段は状態を持たない。
@@ -11,7 +11,6 @@ import numpy as np
 
 from . import fusion, plc
 from .decoder import QUALITY_MISSING, Decoder
-from .fusion import INF_LOG
 from .iir import apply_alt
 from .profiles import Profile
 
@@ -33,12 +32,8 @@ def block_quality(profile: Profile, qA, qB, offset_b, n_blocks):
     return out
 
 
-def output_stage(profile: Profile, y, v, quality, traces, plc_order=16):
-    """合成後の音声 y と有効フラグ v を、欠落の補間と出力 IIR 切替にかける。
-    quality: 出力ブロックごとの品質コード、traces: 系統ごとの誤差分散 (n, 2, 帯域数)"""
-    patterns = [tuple(np.concatenate([(rb[i * profile.block] != INF_LOG).ravel() for rb in traces]))
-                for i in range(len(y) // profile.block)]
-    y = plc.crossfade_switch(y, patterns, profile.block, order=plc_order)
+def output_stage(profile: Profile, y, v, quality, plc_order=16):
+    """合成後の音声 y と有効フラグ v を、欠落の補間と出力 IIR 切替にかける。quality: 出力ブロックごとの品質コード"""
     y = plc.conceal(y, v, profile.fs, order=plc_order)
     return apply_alt(y, quality, profile.fs, profile.block)
 
@@ -73,5 +68,4 @@ def receive(profile: Profile, framesA, framesB, n, offset_b, plc_order=16,
     n_blocks = -(-len(y) // profile.block)
     quality = block_quality(profile, A.quality, B.quality if B is not None else None, offset_b, n_blocks)
     stats["quality"] = quality
-    traces = [A.rb] + ([B.rb] if B is not None else [])
-    return output_stage(profile, y, v, quality, traces, plc_order), stats
+    return output_stage(profile, y, v, quality, plc_order), stats
