@@ -41,7 +41,7 @@
 
 高域（H1/H2）とその他は別々のCRC（基本12 bit、高域10 bit）で検査する。基本CRC不一致はフレーム欠落、高域CRCだけの不一致はH1/H2を消去して低中域を採用する。帯域分割はHaarも5/3も整数可逆で、乗算器を使わない。出力段は48 kHz/int32で、48 kHz系は素通し、32 kHz系は95タップの3/2再標本化だけ（幅は docs/FIXED.md）。主系の占有帯域は[測定結果](docs/SPEC.md)を参照。実RF・実時間動作は未実証。
 
-[FM・aptX・HE-AAC・M700系比較](docs/COMPARISON.md)は方式ごとに条件と未測定項目を明示する。Y系の係数配置と伝送予算は[現行仕様](docs/SPEC.md)と[設定マトリクス](docs/PROFILES.md)を参照。シンボルの形式の一覧は[シンボルのレイアウト](docs/SYMBOLS.md)。
+[FM・aptX・HE-AAC・DRM+・M700系比較](docs/COMPARISON.md)は方式ごとに条件と未測定項目を明示する。Y系の係数配置と伝送予算は[現行仕様](docs/SPEC.md)と[設定マトリクス](docs/PROFILES.md)を参照。シンボルの形式の一覧は[シンボルのレイアウト](docs/SYMBOLS.md)。
 
 [固定小数点実装（DSP依存）](docs/FIXED.md)は、Zynq-7010のDSP48E1の幅に合わせた整数コーデックの仕様である。
 
