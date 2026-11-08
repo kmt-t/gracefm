@@ -198,7 +198,8 @@ def band_level(k: int, levels: int) -> int:
 # Standard catalog. All active M/S components have interval attenuation.
 # IDs: 1–4 32kHz main, 5–6 32kHz secondary, 7–10 48kHz main, 11 48kHz secondary. 0 and 12–15 are reserved.
 # Every row has the same fields; bit widths are explicit, never expanded implicitly.
-# Each row also yields a "-L" profile: the same pid and bit tables, LeGall 5/3 instead of Haar, told apart by format_id.
+# Each row also yields a "-L" profile: the same pid, LeGall 5/3 instead of Haar, told apart by format_id.
+# Its bit tables are the row's, except for the fields in LEGALL_OVERRIDES below.
 PROFILE_MATRIX = (
     {
         "pid": 1,
@@ -424,11 +425,29 @@ PROFILE_MATRIX = (
 
 LEGALL_SUFFIX = "-L"
 FORMAT_HAAR, FORMAT_LEGALL = 3, 2
+# The "-L" rows replace these fields of the Haar row. LeGall 5/3 spreads the channel noise less, so these
+# mantissas are 4 bits (one symbol per coefficient) narrower while every test signal keeps a ViSQOL at or
+# above the Haar profile's.
+LEGALL_OVERRIDES = {
+    'B200M': {"bits_m": (10, 7, 7, 7, 7), "base_m": (4, 3, 3, 3, 3)},
+    'B200': {"bits_m": (10, 7, 7, 7, 7), "base_m": (4, 3, 3, 3, 3),
+             "bits_s": (10, 7, 7, 3, 7), "base_s": (4, 3, 3, 1, 3)},
+    'B200MY': {"bits_m": (10, 7, 7, 7, 7), "base_m": (4, 3, 1, 1, 1)},
+    'B200Y': {"bits_m": (10, 7, 7, 7, 7), "base_m": (4, 3, 1, 1, 1),
+              "bits_s": (10, 7, 7, 7, 7), "base_s": (4, 3, 1, 1, 1)},
+    'M700M': {"bits_m": (10, 7, 7, 7, 7), "base_m": (4, 3, 3, 3, 3)},
+    'M700': {"bits_m": (10, 7, 7, 7, 3), "base_m": (4, 3, 3, 3, 1)},
+    'M700MY': {"bits_m": (10, 7, 7, 7, 7), "base_m": (4, 3, 1, 1, 1)},
+    'M700Y': {"bits_m": (10, 7, 7, 7, 7), "base_m": (4, 3, 1, 1, 1),
+              "bits_s": (10, 7, 7, 7, 7), "base_s": (4, 3, 1, 1, 1)},
+}
 PROFILES = {row["name"]: Profile(block=64, levels=levels_for(row["fs"], 64), format_id=FORMAT_HAAR, **row)
             for row in PROFILE_MATRIX}
 PROFILES.update({
     row["name"] + LEGALL_SUFFIX: Profile(block=64, levels=levels_for(row["fs"], 64), format_id=FORMAT_LEGALL,
-                                         transform="legall53", **{**row, "name": row["name"] + LEGALL_SUFFIX})
+                                         transform="legall53",
+                                         **{**row, **LEGALL_OVERRIDES.get(row["name"], {}),
+                                            "name": row["name"] + LEGALL_SUFFIX})
     for row in PROFILE_MATRIX})
 BY_ID = {p.pid: p for p in PROFILES.values() if p.format_id == FORMAT_HAAR}
 BY_HEADER = {(p.pid, p.format_id): p for p in PROFILES.values()}

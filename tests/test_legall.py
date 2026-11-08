@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ブロックをまたぐ帯域分割 (LeGall 5/3) のプロファイル"""
 import sys
+from dataclasses import replace
 from fractions import Fraction
 from pathlib import Path
 
@@ -13,7 +14,7 @@ from gracefm.codec import analyze_stream, encode_block, legall_forward, legall_i
 from gracefm.decoder import OK, Decoder, reconstruct, roundtrip
 from gracefm.encoder import Encoder
 from gracefm.iir import ALT_DELAY
-from gracefm.profiles import PROFILES
+from gracefm.profiles import FORMAT_LEGALL, LEGALL_SUFFIX, PROFILES
 from gracefm.receiver import receive
 from gracefm.timing import min_latency
 
@@ -70,13 +71,21 @@ def test_link_matches_the_codec_for_all_profiles():
 
 def test_roundtrip_is_better_than_haar_on_the_same_bits():
     for name in ("B200M", "B200MY", "M700"):
-        haar, legall = PROFILES[name], PROFILES[f"{name}-L"]
+        haar = PROFILES[name]
+        legall = replace(haar, name=f"{name}-same-bits", transform="legall53", format_id=FORMAT_LEGALL)
         x = _audio(haar, 80)
-        assert haar.payload_bits() == legall.payload_bits()
 
         def error(p):
             return ((x - roundtrip(x, p)).astype(float) ** 2).sum()
         assert error(legall) < error(haar), name
+
+
+def test_legall_profiles_use_no_more_symbols_than_haar():
+    for p in LEGALL:
+        haar = PROFILES[p.name.removesuffix(LEGALL_SUFFIX)]
+        assert p.pid == haar.pid and p.fs == haar.fs and p.modulation == haar.modulation
+        assert Encoder(p).nsym <= Encoder(haar).nsym, p.name
+        assert p.payload_bits() <= haar.payload_bits(), p.name
 
 
 def test_format_identifier_separates_haar_from_legall():
