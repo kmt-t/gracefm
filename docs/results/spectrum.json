@@ -91,6 +91,94 @@
   "rrc_beta": 0.25,
   "rrc_span_symbols": 16
  },
+ "B200M-L": {
+  "occupied_99_kHz": 106.5,
+  "bw_minus30dB_kHz": 120.2,
+  "symbol_rate_ksps": 96.5,
+  "modulation": "qam16h",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
+ },
+ "B200-L": {
+  "occupied_99_kHz": 173.2,
+  "bw_minus30dB_kHz": 187.2,
+  "symbol_rate_ksps": 170.5,
+  "modulation": "qam16h",
+  "rrc_beta": 0.1,
+  "rrc_span_symbols": 32
+ },
+ "B200MY-L": {
+  "occupied_99_kHz": 77.0,
+  "bw_minus30dB_kHz": 86.8,
+  "symbol_rate_ksps": 70.0,
+  "modulation": "qam16h",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
+ },
+ "B200Y-L": {
+  "occupied_99_kHz": 117.8,
+  "bw_minus30dB_kHz": 127.1,
+  "symbol_rate_ksps": 116.0,
+  "modulation": "qam16h",
+  "rrc_beta": 0.1,
+  "rrc_span_symbols": 32
+ },
+ "SUB50M-L": {
+  "occupied_99_kHz": 67.0,
+  "bw_minus30dB_kHz": 75.2,
+  "symbol_rate_ksps": 61.0,
+  "modulation": "qpsk",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
+ },
+ "SUB100-L": {
+  "occupied_99_kHz": 97.3,
+  "bw_minus30dB_kHz": 108.5,
+  "symbol_rate_ksps": 88.0,
+  "modulation": "qpsk",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
+ },
+ "M700M-L": {
+  "occupied_99_kHz": 159.2,
+  "bw_minus30dB_kHz": 180.4,
+  "symbol_rate_ksps": 144.8,
+  "modulation": "qam16h",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
+ },
+ "M700-L": {
+  "occupied_99_kHz": 228.8,
+  "bw_minus30dB_kHz": 258.1,
+  "symbol_rate_ksps": 207.8,
+  "modulation": "qam16h",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
+ },
+ "M700MY-L": {
+  "occupied_99_kHz": 115.9,
+  "bw_minus30dB_kHz": 130.4,
+  "symbol_rate_ksps": 105.0,
+  "modulation": "qam16h",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
+ },
+ "M700Y-L": {
+  "occupied_99_kHz": 191.7,
+  "bw_minus30dB_kHz": 214.8,
+  "symbol_rate_ksps": 174.0,
+  "modulation": "qam16h",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
+ },
+ "SUB100-48K-L": {
+  "occupied_99_kHz": 128.3,
+  "bw_minus30dB_kHz": 144.0,
+  "symbol_rate_ksps": 116.2,
+  "modulation": "qpsk",
+  "rrc_beta": 0.25,
+  "rrc_span_symbols": 16
+ },
  "audio_error_snr_dB": {
   "B200": 59.4,
   "B200Y": 59.4,

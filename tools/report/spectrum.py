@@ -7,6 +7,7 @@
 1. 送信スペクトル (RF、複素ベースバンド): 各プロファイルのフレームを連続で送り、プロファイルで定めたルートレイズドコサインで
    パルス成形した波形の電力スペクトル密度。送信電力を 1 にそろえ、搬送波からの周波数 [kHz] に対する dB/Hz。
    占有帯域 (電力の 99% が入る帯域) と、−30dB 帯域 (ピークから 30dB 下がるところの幅) も求める。
+   -L プロファイルは図に描かず、帯域だけを JSON に書く。
    比較用にアナログFM (モノラル、±75kHz 偏移、50µs プリエンファシス) も同じ素材で。
 2. 音声のスペクトル: 原音と、各プロファイルのコーデックだけを通したときの誤差 (出力 − 原音) の長時間平均スペクトル。
    素材は合成試験信号 demo (全帯域・ステレオ) の M チャンネル。
@@ -33,7 +34,7 @@ from matplotlib import font_manager
 from gracefm import channel
 from gracefm.decoder import roundtrip as codec
 from gracefm.encoder import Encoder
-from gracefm.profiles import PROFILES
+from gracefm.profiles import LEGALL_SUFFIX, PROFILES
 from tools.common import wavio
 from tools.common.analog_fm import AnalogFM
 from tools.common.demo_signal import make_demo
@@ -120,6 +121,14 @@ def main():
         ax.set_title(title, loc="left", fontsize=11, color=INK)
         ax.set_ylabel("電力スペクトル密度 [dB/Hz]\n（送信電力 = 1）", fontsize=9, color=INK2)
         ax.legend(fontsize=8.5, frameon=False, loc="upper right", labelcolor=INK)
+    # -L は図に描かず、帯域だけを測る (Haar と同じ変調・パルスで、シンボル数だけが違う)
+    for n in [k for k in PROFILES if k.endswith(LEGALL_SUFFIX)]:
+        p = PROFILES[n]
+        f, P = rf_psd(p, x48 if p.fs == 48000 else x)
+        obw, b30 = bandwidths(f, P)
+        res[n] = {"occupied_99_kHz": round(obw / 1e3, 1), "bw_minus30dB_kHz": round(b30 / 1e3, 1),
+                  "symbol_rate_ksps": round(channel.symbol_rate(p) / 1e3, 1), "modulation": p.modulation,
+                  "rrc_beta": p.pulse_beta_pct / 100, "rrc_span_symbols": p.pulse_span}
     axs[-1].set_xlabel("搬送波からの周波数 [kHz]", fontsize=9, color=INK2)
     fig.suptitle("送信スペクトル（RRC成形、送信電力を正規化）", fontsize=12, color=INK, x=0.02,
                  ha="left")
