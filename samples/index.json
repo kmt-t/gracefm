@@ -21,7 +21,7 @@
     "gracefm/modem.py": "42996ba05e33e37e3e413866164c4d7a21f5b7fdb434ceb79c95da81aa2ec07a",
     "gracefm/plc.py": "91e850421e863b3d8d36ed7fc127795b4eff4fcd5aa7bdaa851a77c95b6cd5b7",
     "gracefm/postfilter.py": "d00640d0492bc416ef96f8dafee485bb87659f89e07f663f84de1cacf471d071",
-    "gracefm/profiles.py": "cc69d75ed6ef4f00e7e08058b677cbfd742e8e98904b18fa5619ae4f4af7fddd",
+    "gracefm/profiles.py": "e28845f1c5d308def298f3818b99414a29816d0a7ba476b407300d712dd2cc3b",
     "gracefm/receiver.py": "e69116e33374a08ca2df324ba4028beb18d8cfca905d368c6a1efcd4c1a03b3a",
     "gracefm/scrambler.py": "03aa5922e8e971f360f6fac1b39d686c8b4387d5743f8368cab1e6216ced13b3",
     "gracefm/tables.py": "22d26e566d01054bdad767d03d4a1668403a01052fc3545fbe6172a6849a7e6e",
@@ -792,7 +792,7 @@
     },
     {
       "file": "samples/demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-54dBHz.flac",
-      "sha256": "d27fe335b49daf326a2a32ffddbaad6e82788f7558225655f33c203953f4eb87",
+      "sha256": "2d3d636aec808d742a101809fd0148e51ce1d824ff4ad695ee40fff5ea4e5a13",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -811,7 +811,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -837,7 +837,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -938,11 +938,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 20.024556574350147
+      "snr_db": 19.282389114894375
     },
     {
       "file": "samples/demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-57dBHz.flac",
-      "sha256": "7eb5d45246e8b973e30e97f93ab75929e4392a78ebc76560be2d33484d7cceda",
+      "sha256": "93ed6a7dd31429b5d9e783169f5deb3eae6c9685aa4e38a0a041e93fdf31eb38",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -961,7 +961,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -987,7 +987,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -1088,11 +1088,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 32.71429817404734
+      "snr_db": 32.159302168182684
     },
     {
       "file": "samples/demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-60dBHz.flac",
-      "sha256": "b0070d1edaab66e64897a6b64ec8b6a5e7fccf2f6eb93134e24c6d120de8a076",
+      "sha256": "caf12f9af6d27792fd1d35259e1e98d3a2086f763e25be6b26229581379ed6c4",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -1111,7 +1111,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -1137,7 +1137,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -1238,11 +1238,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 40.23240874992943
+      "snr_db": 39.95747734428767
     },
     {
       "file": "samples/demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-66dBHz.flac",
-      "sha256": "c947a2a26d840f2fb88eeac4916540db73744018098df3af673df74eb011c678",
+      "sha256": "22fd8f5cebc099bbb0fff4f3deca1ab3ab741ee5069c4ccf632f9fd62d21f53c",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -1261,7 +1261,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -1287,7 +1287,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -1388,11 +1388,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 42.100984394684
+      "snr_db": 42.025626771909884
     },
     {
       "file": "samples/demo-mono__32k__B200M-L+SUB50M-L__awgn-cn0-80dBHz.flac",
-      "sha256": "e4bcf3e7664531a3cd348d6d1765b34c481259cb32a1d457294cb905a4454f9d",
+      "sha256": "49b818f3d08b8eac48fa5187094e2287e2ca25a0772f5f1994b9e9184ab0510e",
       "material": "demo",
       "form": "mono",
       "reference_file": "samples/demo-mono__32k__reference.flac",
@@ -1411,7 +1411,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -1437,7 +1437,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -1538,7 +1538,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 61.02198237723819
+      "snr_db": 60.86727685515254
     },
     {
       "file": "samples/demo-mono__32k__FM__awgn-cn0-54dBHz.flac",
@@ -1917,7 +1917,7 @@
     },
     {
       "file": "samples/demo-stereo__32k__B200-L+SUB50M-L__awgn-cn0-57dBHz.flac",
-      "sha256": "34b1ccb4e94316f1ac42de3fb1f200d4e0ecb865c20e6ebffc9b4172be090380",
+      "sha256": "99195c4efa6b9f85bf40b4f9eec93753bfa05560cca00a58b90fafbaf4a5c4a1",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -1936,7 +1936,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -1962,7 +1962,7 @@
           "pulse_span": 32,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -2063,11 +2063,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 25.422748405357073
+      "snr_db": 24.74890052511151
     },
     {
       "file": "samples/demo-stereo__32k__B200Y-L+SUB50M-L__awgn-cn0-57dBHz.flac",
-      "sha256": "2a2045d3367835f9cd255a595688a9e858fd23b5a649065669900379f9e9b9a5",
+      "sha256": "a179da1d94608e069d3173dcfdea29cad936e65eaa008ffee294558f3d1ed084",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -2086,14 +2086,14 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
           ],
           "bits_s": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -2112,14 +2112,14 @@
           "pulse_span": 32,
           "base_m": [
             4,
-            5,
+            3,
             1,
             1,
             1
           ],
           "base_s": [
             4,
-            5,
+            3,
             1,
             1,
             1
@@ -2213,7 +2213,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 25.60252127872615
+      "snr_db": 26.6822532460362
     },
     {
       "file": "samples/demo-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac",
@@ -2517,7 +2517,7 @@
     },
     {
       "file": "samples/demo-stereo__48k__M700-L+SUB100-48K-L__awgn-cn0-57dBHz.flac",
-      "sha256": "4f477736c88d9b9e5dec9d09c8581773e44ffc7cc08c17fe144853a404c0a2a2",
+      "sha256": "8cdbe978fc22df90378f905e8c238d87ffa4709b75ba4cd44e770d70c3702e7b",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -2536,10 +2536,10 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
             7,
             7,
-            7
+            7,
+            3
           ],
           "bits_s": [
             10,
@@ -2562,10 +2562,10 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
             3,
             3,
-            3
+            3,
+            1
           ],
           "base_s": [
             4,
@@ -2663,11 +2663,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 17.782556759984075
+      "snr_db": 17.91423345824567
     },
     {
       "file": "samples/demo-stereo__48k__M700Y-L+SUB100-48K-L__awgn-cn0-57dBHz.flac",
-      "sha256": "66c4e72ee522e95483472c345ada82a6b4b5f6ce02a652754fe853207cf464a8",
+      "sha256": "bbe035e33365a65f37822d001642622ec9694603eada6f4e9b146b4620f16520",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -2686,14 +2686,14 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
           ],
           "bits_s": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -2712,14 +2712,14 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             1,
             1,
             1
           ],
           "base_s": [
             4,
-            5,
+            3,
             1,
             1,
             1
@@ -2813,7 +2813,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 18.05738318592874
+      "snr_db": 18.213780179686154
     },
     {
       "file": "samples/demo-stereo__32k__B200__codec.flac",
@@ -2995,7 +2995,7 @@
     },
     {
       "file": "samples/demo-stereo__32k__B200-L__codec.flac",
-      "sha256": "ea4211da2cb914f45c7da09af6c7302f8a7817fdb7c89ba1cb27b718d5e1de13",
+      "sha256": "85156b7b43fffbf76469a718743645e8c80bbf5cfee5d625a2eaaa2878adbeea",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -3014,7 +3014,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -3040,7 +3040,7 @@
           "pulse_span": 32,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -3080,11 +3080,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 59.93793350997709
+      "snr_db": 59.80180605144359
     },
     {
       "file": "samples/demo-stereo__32k__B200Y-L__codec.flac",
-      "sha256": "4c95b56510dabafb29189e0176f85159bb9d0c0a875c0224002d86f25eb99ca0",
+      "sha256": "fd9aab29dd1f893ea65cbe03e1af9ac3da1514e96c26656ccc2d3e8dc475f4f4",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__32k__reference.flac",
@@ -3103,14 +3103,14 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
           ],
           "bits_s": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -3129,14 +3129,14 @@
           "pulse_span": 32,
           "base_m": [
             4,
-            5,
+            3,
             1,
             1,
             1
           ],
           "base_s": [
             4,
-            5,
+            3,
             1,
             1,
             1
@@ -3169,7 +3169,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 59.843302661923715
+      "snr_db": 59.69905433852476
     },
     {
       "file": "samples/demo-stereo__48k__M700__codec.flac",
@@ -3351,7 +3351,7 @@
     },
     {
       "file": "samples/demo-stereo__48k__M700-L__codec.flac",
-      "sha256": "2640cf46e302c02cb8a246bacd85ec2e2613990f58dd5952ed40ca866e43415a",
+      "sha256": "5a2697b6e7ece4259fe3067ff841595c3e994e830ca0566713e41cafdaa93e29",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -3370,10 +3370,10 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
             7,
             7,
-            7
+            7,
+            3
           ],
           "bits_s": [
             10,
@@ -3396,10 +3396,10 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
             3,
             3,
-            3
+            3,
+            1
           ],
           "base_s": [
             4,
@@ -3436,11 +3436,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 39.657636921913316
+      "snr_db": 36.74693026875738
     },
     {
       "file": "samples/demo-stereo__48k__M700Y-L__codec.flac",
-      "sha256": "f62385654803d85c62351b5192f2f2e4f896d1d8210c93cf774d62d86be4a964",
+      "sha256": "d7bdade527a3e955599f5191157ee5740651fe0082f3f683a09c07394a84938a",
       "material": "demo",
       "form": "stereo",
       "reference_file": "samples/demo-stereo__48k__reference.flac",
@@ -3459,14 +3459,14 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
           ],
           "bits_s": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -3485,14 +3485,14 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             1,
             1,
             1
           ],
           "base_s": [
             4,
-            5,
+            3,
             1,
             1,
             1
@@ -3525,7 +3525,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 57.47481276411527
+      "snr_db": 57.41512626793398
     },
     {
       "file": "samples/piano-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac",
@@ -4279,7 +4279,7 @@
     },
     {
       "file": "samples/piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-54dBHz.flac",
-      "sha256": "3bea941e2993f9071b0bb09c990a7f0f2932ade5e9a9780cce21261ae4aef0eb",
+      "sha256": "b1d313a7d03c158f2033289246fa759769a5074be47de1f42b2d8fcc1ed1db76",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -4298,7 +4298,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -4324,7 +4324,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -4425,11 +4425,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 16.641005465775784
+      "snr_db": 16.154467780675287
     },
     {
       "file": "samples/piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-57dBHz.flac",
-      "sha256": "f0392f530177bee364a71e8412ab09ff51b96c96f5742e5bb9b2ac9431276096",
+      "sha256": "73b3ce7122504b77fb2dab4dcc81412cb029fbbfe323337ec0ddc633b8fefe82",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -4448,7 +4448,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -4474,7 +4474,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -4575,11 +4575,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 29.127179555976422
+      "snr_db": 28.227935540954775
     },
     {
       "file": "samples/piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-60dBHz.flac",
-      "sha256": "b64449fe657d617730317067306cc8bc9d86acbf6667ac844b98e9c19ca69371",
+      "sha256": "83c9b7383897b5f306faaacc0459a8326ee0354ec53da75399b7b3e0f3dc5465",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -4598,7 +4598,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -4624,7 +4624,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -4725,11 +4725,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 37.109571227996
+      "snr_db": 36.39880144626404
     },
     {
       "file": "samples/piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-66dBHz.flac",
-      "sha256": "bfd2d2bfc45d11fd8a2b6823fc9d0cbadada3922a4373c461d1bad16b9ca8c2b",
+      "sha256": "3f8e33e06f2482fb802d0450f3267039ce05221467cf9b0366e6eeb86ea01953",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -4748,7 +4748,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -4774,7 +4774,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -4875,11 +4875,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 38.458652771730954
+      "snr_db": 37.431718475139384
     },
     {
       "file": "samples/piano-mono__32k__B200M-L+SUB50M-L__awgn-cn0-80dBHz.flac",
-      "sha256": "99ba52640d90633be5772fbf0106e30863d4e6e3b7ddc35333f1ea5de349a7dd",
+      "sha256": "9a1f37dca0fb3ca62801bdb191c5f3eef377fb561d737d91144ca471a32c4e5c",
       "material": "piano",
       "form": "mono",
       "reference_file": "samples/piano-mono__32k__reference.flac",
@@ -4898,7 +4898,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -4924,7 +4924,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -5025,7 +5025,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 57.49662154687939
+      "snr_db": 53.054385548406124
     },
     {
       "file": "samples/piano-mono__32k__FM__awgn-cn0-54dBHz.flac",
@@ -5404,7 +5404,7 @@
     },
     {
       "file": "samples/piano-stereo__32k__B200-L+SUB50M-L__awgn-cn0-57dBHz.flac",
-      "sha256": "9c75a5caf0422302b84a51039cc5bc3b979da005e009d8b54e1cca4ecaa20b64",
+      "sha256": "7e057d5b714f41abf7b37dbacdaf9abb42a6fc4289d889454dab8d22880c69c4",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -5423,7 +5423,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -5449,7 +5449,7 @@
           "pulse_span": 32,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -5550,11 +5550,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 6.911037914103351
+      "snr_db": 7.046808584717869
     },
     {
       "file": "samples/piano-stereo__32k__B200Y-L+SUB50M-L__awgn-cn0-57dBHz.flac",
-      "sha256": "cec4829bfc1f1e2c5acb1a9654a268a00557254b0d17b569d0e473d566afbdb0",
+      "sha256": "9d365b534385e3b6d3331ae7707e5bf519585100cc00db99b34b6f08a97a0eec",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -5573,14 +5573,14 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
           ],
           "bits_s": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -5599,14 +5599,14 @@
           "pulse_span": 32,
           "base_m": [
             4,
-            5,
+            3,
             1,
             1,
             1
           ],
           "base_s": [
             4,
-            5,
+            3,
             1,
             1,
             1
@@ -5700,7 +5700,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 10.61742281451485
+      "snr_db": 11.149183718259795
     },
     {
       "file": "samples/piano-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac",
@@ -6004,7 +6004,7 @@
     },
     {
       "file": "samples/piano-stereo__48k__M700-L+SUB100-48K-L__awgn-cn0-57dBHz.flac",
-      "sha256": "ac2f2fd8ac931b7c91696a85aa89b72265f47c6d3d5e79074df2df727ee831f3",
+      "sha256": "6b757ddd3176f8a15861097a4af58380c84221e1cb08a8fa5d32360dbefdc5bc",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -6023,10 +6023,10 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
             7,
             7,
-            7
+            7,
+            3
           ],
           "bits_s": [
             10,
@@ -6049,10 +6049,10 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
             3,
             3,
-            3
+            3,
+            1
           ],
           "base_s": [
             4,
@@ -6150,11 +6150,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 16.832895333954546
+      "snr_db": 17.30442361687686
     },
     {
       "file": "samples/piano-stereo__48k__M700Y-L+SUB100-48K-L__awgn-cn0-57dBHz.flac",
-      "sha256": "827b91f60415bb14214559a7d5ab774d1bdfb41822f9c54a10813e35a7302815",
+      "sha256": "cebaca35629ecddaea7992e8ae6e82dce648333fe3e2d96b42fc5d91f7a29122",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -6173,14 +6173,14 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
           ],
           "bits_s": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -6199,14 +6199,14 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             1,
             1,
             1
           ],
           "base_s": [
             4,
-            5,
+            3,
             1,
             1,
             1
@@ -6300,7 +6300,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 17.72004037570854
+      "snr_db": 17.462186112456205
     },
     {
       "file": "samples/piano-stereo__32k__B200__codec.flac",
@@ -6482,7 +6482,7 @@
     },
     {
       "file": "samples/piano-stereo__32k__B200-L__codec.flac",
-      "sha256": "62e818e94a933fc9ec5cc5fa2713bdcfa2d98338b742bb55dbc4e30ba0341d15",
+      "sha256": "76d730ca88ee2ba1147b9be2d9f4b104a676311b174be79755cdc19b7b581e36",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -6501,7 +6501,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -6527,7 +6527,7 @@
           "pulse_span": 32,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -6567,11 +6567,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 55.00205770712273
+      "snr_db": 52.29082714131046
     },
     {
       "file": "samples/piano-stereo__32k__B200Y-L__codec.flac",
-      "sha256": "1ae79dd927cbae5f27cf366cebcb777a03edc46053f3f11a8e805943515b0d4b",
+      "sha256": "3ab717a636fd24cd8995e2a4350c8cb41ef47bdc75c4abe4e51f46385c05a568",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__32k__reference.flac",
@@ -6590,14 +6590,14 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
           ],
           "bits_s": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -6616,14 +6616,14 @@
           "pulse_span": 32,
           "base_m": [
             4,
-            5,
+            3,
             1,
             1,
             1
           ],
           "base_s": [
             4,
-            5,
+            3,
             1,
             1,
             1
@@ -6656,7 +6656,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 57.39184840166285
+      "snr_db": 52.33352146780132
     },
     {
       "file": "samples/piano-stereo__48k__M700__codec.flac",
@@ -6838,7 +6838,7 @@
     },
     {
       "file": "samples/piano-stereo__48k__M700-L__codec.flac",
-      "sha256": "ff2b8f3bf332522c42e2a3ed5636edd3e46af9402477727ba364087e4e832513",
+      "sha256": "1d23c79e8644679b9a5b2e98af90db8aba08f9d2a2ff7e5ed888d4a868d8b0d9",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -6857,10 +6857,10 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
             7,
             7,
-            7
+            7,
+            3
           ],
           "bits_s": [
             10,
@@ -6883,10 +6883,10 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
             3,
             3,
-            3
+            3,
+            1
           ],
           "base_s": [
             4,
@@ -6923,11 +6923,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 57.31410088720462
+      "snr_db": 55.07949381156056
     },
     {
       "file": "samples/piano-stereo__48k__M700Y-L__codec.flac",
-      "sha256": "262e2357b9482635e17cf36cd599ee7e8538fab334139e40f2cc328562226842",
+      "sha256": "d0ab8b506558241bb830ae6b2662929ceca1cbfbfa7f158f6d860b7acf531f50",
       "material": "piano",
       "form": "stereo",
       "reference_file": "samples/piano-stereo__48k__reference.flac",
@@ -6946,14 +6946,14 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
           ],
           "bits_s": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -6972,14 +6972,14 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             1,
             1,
             1
           ],
           "base_s": [
             4,
-            5,
+            3,
             1,
             1,
             1
@@ -7012,7 +7012,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 59.0056596075162
+      "snr_db": 55.76630706872983
     },
     {
       "file": "samples/percussion-mono__32k__B200M+SUB50M__awgn-cn0-54dBHz.flac",
@@ -7766,7 +7766,7 @@
     },
     {
       "file": "samples/percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-54dBHz.flac",
-      "sha256": "8e6180df5c78ef0f39bd952f8ae4caa679bbc4f90ccfd68b082084ef61199b54",
+      "sha256": "caf001cc3cd1f35168592308c505f01682dbce6331c14dbdac7b7092cb091919",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -7785,7 +7785,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -7811,7 +7811,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -7912,11 +7912,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 16.794487681938502
+      "snr_db": 17.908733878906993
     },
     {
       "file": "samples/percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-57dBHz.flac",
-      "sha256": "f91dfe9d227bd37ae9dcf2ae74b892d76d80c7438e4a7e16dd40b8b0a621b268",
+      "sha256": "17f6b192d7c9daec8731ac74e71c9088382a4fcf9ca2e1f94f0eb50a1fc8d82e",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -7935,7 +7935,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -7961,7 +7961,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -8062,11 +8062,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 30.55666581562333
+      "snr_db": 29.914973402117088
     },
     {
       "file": "samples/percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-60dBHz.flac",
-      "sha256": "7b949e35d52e0c9ee9d4f51c0ea9a03f2d038604362c00534edd81198761dee7",
+      "sha256": "fb2e2ebfa8da96aa77201eb2dee1821a0434a48540e21de1ef951e5308167ffe",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -8085,7 +8085,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -8111,7 +8111,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -8212,11 +8212,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 38.5553886700942
+      "snr_db": 38.003757875240005
     },
     {
       "file": "samples/percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-66dBHz.flac",
-      "sha256": "e8f7202041a4c27db38b1418f0b29cae4b194a1aad76a098168233420a3f1af3",
+      "sha256": "de40bbd8356eb63463b8266e6ddc0524731bbad3809b751194fe3afaae1ccaa4",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -8235,7 +8235,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -8261,7 +8261,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -8362,11 +8362,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 39.87040766734327
+      "snr_db": 39.39679615541182
     },
     {
       "file": "samples/percussion-mono__32k__B200M-L+SUB50M-L__awgn-cn0-80dBHz.flac",
-      "sha256": "429b6b7829e716ece3e8d163ce00d28e12af1d6d60b6f077d749a815513fa94f",
+      "sha256": "8a05fca0dc229793d147b4b6bd9b58799adc8539bdf0935193e2dc49011ca859",
       "material": "percussion",
       "form": "mono",
       "reference_file": "samples/percussion-mono__32k__reference.flac",
@@ -8385,7 +8385,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -8411,7 +8411,7 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -8512,7 +8512,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 58.81554855534474
+      "snr_db": 56.82588392554091
     },
     {
       "file": "samples/percussion-mono__32k__FM__awgn-cn0-54dBHz.flac",
@@ -8891,7 +8891,7 @@
     },
     {
       "file": "samples/percussion-stereo__32k__B200-L+SUB50M-L__awgn-cn0-57dBHz.flac",
-      "sha256": "883b3666a29c70bd7c59c59e609888b07984f780618e0558f78d5bd528bb65d5",
+      "sha256": "96f3c28d1451b049a4aa5006982f200d91a58683a026c6f4a8207d1051baddda",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -8910,7 +8910,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -8936,7 +8936,7 @@
           "pulse_span": 32,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -9037,11 +9037,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 16.42857478495447
+      "snr_db": 16.561378930977842
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y-L+SUB50M-L__awgn-cn0-57dBHz.flac",
-      "sha256": "c1fbaec6f7c2c8714a6493bd25743ba024088b1855d0bb9e7255c3eb06bfb527",
+      "sha256": "1f86c443ca5a5733a41a4f10a8b35f076d95ca54b8c2190fa2f382837f24edbe",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -9060,14 +9060,14 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
           ],
           "bits_s": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -9086,14 +9086,14 @@
           "pulse_span": 32,
           "base_m": [
             4,
-            5,
+            3,
             1,
             1,
             1
           ],
           "base_s": [
             4,
-            5,
+            3,
             1,
             1,
             1
@@ -9187,7 +9187,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 19.223553333273124
+      "snr_db": 20.450044468928663
     },
     {
       "file": "samples/percussion-stereo__48k__M700+SUB100-48K__awgn-cn0-57dBHz.flac",
@@ -9491,7 +9491,7 @@
     },
     {
       "file": "samples/percussion-stereo__48k__M700-L+SUB100-48K-L__awgn-cn0-57dBHz.flac",
-      "sha256": "c0deeda1ec961633b0f0c0f2f908c564a129737e5f8d24ca3990e53694b8af95",
+      "sha256": "423ff1fa9e6306f1aea27d82088f27e1ab4ca27bdc7dc92ff729b7cce0eeafcc",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -9510,10 +9510,10 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
             7,
             7,
-            7
+            7,
+            3
           ],
           "bits_s": [
             10,
@@ -9536,10 +9536,10 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
             3,
             3,
-            3
+            3,
+            1
           ],
           "base_s": [
             4,
@@ -9637,11 +9637,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 18.033604732104564
+      "snr_db": 18.550572019270305
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y-L+SUB100-48K-L__awgn-cn0-57dBHz.flac",
-      "sha256": "670bae940afb440aabfbdb7e7968884620cb1b70b06c7f1d6d1fb38687592ee5",
+      "sha256": "19a6f47f1fbae425ee20ba9b0d682bdccedfc9a5d8bbb848f3ba061966395d17",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -9660,14 +9660,14 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
           ],
           "bits_s": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -9686,14 +9686,14 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             1,
             1,
             1
           ],
           "base_s": [
             4,
-            5,
+            3,
             1,
             1,
             1
@@ -9787,7 +9787,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 19.163458426343087
+      "snr_db": 19.245127881448738
     },
     {
       "file": "samples/percussion-stereo__32k__B200__codec.flac",
@@ -9969,7 +9969,7 @@
     },
     {
       "file": "samples/percussion-stereo__32k__B200-L__codec.flac",
-      "sha256": "b335196e64f07552a35827debc413f6f5a3e70ee4c9ad8b0e0db1147f028f8e4",
+      "sha256": "d9b6003fb23ec180471354cefd2806b8a0222338af716b0bdab0e6f7911e0324",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -9988,7 +9988,7 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -10014,7 +10014,7 @@
           "pulse_span": 32,
           "base_m": [
             4,
-            5,
+            3,
             3,
             3,
             3
@@ -10054,11 +10054,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 58.24742842417017
+      "snr_db": 56.2384744452352
     },
     {
       "file": "samples/percussion-stereo__32k__B200Y-L__codec.flac",
-      "sha256": "f48e2015fd13a91aac49979cfe4433aa056f19e431ef5328168d62c1f1af8b40",
+      "sha256": "6b051bc8ae71e42cc48dfcb76b677bcff33798de8c388207f0cc20c8543a6ad9",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__32k__reference.flac",
@@ -10077,14 +10077,14 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
           ],
           "bits_s": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -10103,14 +10103,14 @@
           "pulse_span": 32,
           "base_m": [
             4,
-            5,
+            3,
             1,
             1,
             1
           ],
           "base_s": [
             4,
-            5,
+            3,
             1,
             1,
             1
@@ -10143,7 +10143,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 58.80888011882378
+      "snr_db": 56.41400669720491
     },
     {
       "file": "samples/percussion-stereo__48k__M700__codec.flac",
@@ -10325,7 +10325,7 @@
     },
     {
       "file": "samples/percussion-stereo__48k__M700-L__codec.flac",
-      "sha256": "34def51d89bd8192019c9819764775885232bb9c8f4745e064e8dddb900a8204",
+      "sha256": "a02a06940d2130890207d22fec4c608747b139dc68ee5c9a9653ae6a95c2eb11",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -10344,10 +10344,10 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
             7,
             7,
-            7
+            7,
+            3
           ],
           "bits_s": [
             10,
@@ -10370,10 +10370,10 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
             3,
             3,
-            3
+            3,
+            1
           ],
           "base_s": [
             4,
@@ -10410,11 +10410,11 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 57.518355257023984
+      "snr_db": 53.55716134937238
     },
     {
       "file": "samples/percussion-stereo__48k__M700Y-L__codec.flac",
-      "sha256": "4ad36868dec41935d63a2c0b832a9826b06a7ac229ac898def20500b7fe6591e",
+      "sha256": "63ee2680c1fae598e48dc6dc9514be428a29023d296164721f44ee8b99059fcd",
       "material": "percussion",
       "form": "stereo",
       "reference_file": "samples/percussion-stereo__48k__reference.flac",
@@ -10433,14 +10433,14 @@
           "levels": 4,
           "bits_m": [
             10,
-            11,
+            7,
             7,
             7,
             7
           ],
           "bits_s": [
             10,
-            11,
+            7,
             7,
             7,
             7
@@ -10459,14 +10459,14 @@
           "pulse_span": 16,
           "base_m": [
             4,
-            5,
+            3,
             1,
             1,
             1
           ],
           "base_s": [
             4,
-            5,
+            3,
             1,
             1,
             1
@@ -10499,7 +10499,7 @@
           "transform": "legall53"
         }
       ],
-      "snr_db": 59.815577234282394
+      "snr_db": 58.09456397254668
     }
   ]
 }
