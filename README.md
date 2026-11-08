@@ -82,3 +82,8 @@ python -m pytest                               # テスト
 | ソースコード（`gracefm/`、`tools/`、`tests/`） | [PolyForm Noncommercial License 1.0.0](LICENSE)。`NOTICE` の表示を残すこと |
 | 文書・図・評価結果 | CC BY-NC 4.0 |
 | 加工サンプル音声 | CC BY-NC 4.0。原曲のライセンス・出典は[samples/README.md](samples/README.md)を参照 |
+
+
+## 強化計画
+
+多角的な検証・実用化に向けた10段階の項目は [docs/HARDENING.md](docs/HARDENING.md) を参照。CI は Python の回帰試験とプロファイル表の整合性を確認する。
