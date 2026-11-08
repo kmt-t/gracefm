@@ -430,8 +430,7 @@ FORMAT_HAAR, FORMAT_LEGALL = 3, 2
 # above the Haar profile's.
 LEGALL_OVERRIDES = {
     'B200M': {"bits_m": (10, 7, 7, 7, 7), "base_m": (4, 3, 3, 3, 3)},
-    'B200': {"bits_m": (10, 7, 7, 7, 7), "base_m": (4, 3, 3, 3, 3),
-             "bits_s": (10, 7, 7, 3, 7), "base_s": (4, 3, 3, 1, 3)},
+    'B200': {"bits_m": (10, 7, 7, 7, 7), "base_m": (4, 3, 3, 3, 3)},
     'B200MY': {"bits_m": (10, 7, 7, 7, 7), "base_m": (4, 3, 1, 1, 1)},
     'B200Y': {"bits_m": (10, 7, 7, 7, 7), "base_m": (4, 3, 1, 1, 1),
               "bits_s": (10, 7, 7, 7, 7), "base_s": (4, 3, 1, 1, 1)},

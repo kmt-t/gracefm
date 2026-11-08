@@ -1122,7 +1122,7 @@
           10,
           7,
           7,
-          3,
+          7,
           7
         ],
         "exp_bits": 4,
@@ -1148,7 +1148,7 @@
           4,
           3,
           3,
-          1,
+          3,
           3
         ],
         "attn_group_m": [
@@ -1191,13 +1191,13 @@
         1
       ],
       "fec_bits": 380,
-      "coefficient_part_bits": 856,
-      "strong_positions": 618,
-      "weak_positions": 618,
-      "symbols_per_frame": 325,
-      "symbol_rate": 162500,
-      "audio_kbps": 460.0,
-      "theoretical_bandwidth_hz": 178750.0
+      "coefficient_part_bits": 920,
+      "strong_positions": 650,
+      "weak_positions": 650,
+      "symbols_per_frame": 341,
+      "symbol_rate": 170500,
+      "audio_kbps": 492.0,
+      "theoretical_bandwidth_hz": 187550.0
     },
     {
       "profile": {
