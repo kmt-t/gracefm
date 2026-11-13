@@ -48,7 +48,7 @@ def postfilter(y, fs, out_fs=OUT_FS):
 def select_by_quality(y, alt, quality, block, use_alt=(1, 2), fade=16):
     """ブロックごとの品質コード (0 正常, 1 高域欠落, 2 欠落) に応じて、y と alt を切り替える。
     use_alt に入るコードのブロックでは alt を使う。切り替えは、そのブロックの先頭から fade サンプルの直線で行う (因果的)。
-    重みは Q15 の整数。fade は 2 のべき乗にする。既定の出力には使わない (呼び出し側が選ぶ)。"""
+    重みは Q15 の整数。受信の既定出力では gracefm.iir.apply_alt から使われる。"""
     y = np.asarray(y, np.int64)
     alt = np.asarray(alt, np.int64)
     n = len(y)

@@ -12,31 +12,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def sigmoid_q15(llr_bits=8, llr_frac=2):
-    """整数 LLR (正 = 0 らしい) → ビットが 1 である確率 (Q15)。LLR の実数値 = 整数 / 2^llr_frac"""
-    lim = (1 << (llr_bits - 1)) - 1
-    return [round(32768 / (1 + math.exp(l / (1 << llr_frac)))) for l in range(-lim, lim + 1)]
-
-
-def log2_frac_q8():
-    """x = 1 + i/256 (i = 0..255) の log2(x) (Q8)"""
-    return [round(256 * math.log2(1 + i / 256)) for i in range(256)]
-
-
-def pow2_neg_q15():
-    """2^(-i/16) (Q15), i = 0..15"""
-    return [round(32768 * 2 ** (-i / 16)) for i in range(16)]
-
-
 def hann128_q15():
     """np.hanning(128) (Q15)"""
     n = 128
     return [round(32768 * 0.5 * (1 - math.cos(2 * math.pi * i / (n - 1)))) for i in range(n)]
-
-
-def lpc_bandwidth_q15(order=16):
-    """0.998^i (Q15), i = 0..order"""
-    return [round(32768 * 0.998 ** i) for i in range(order + 1)]
 
 
 def resample_3_2_q16(taps=95, beta=7.0):

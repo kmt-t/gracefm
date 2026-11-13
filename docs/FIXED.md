@@ -2,23 +2,33 @@
 
 `gracefm/` は整数だけで動く。ハードウェアに載せるための参照実装で、**この文書の幅と演算は、想定する DSP（Zynq-7010 の DSP48E1）に依存する**。ハードウェアが変わるときは、DSP に依存する演算を集めた [`gracefm/dsp.py`](../gracefm/dsp.py) の幅と関数を差し替える。
 
-**float は使わない。** `gracefm/` のモジュールには、float のリテラル、float 型、真の除算、浮動小数点の関数を書かない。`tests/test_fixed.py` が検査する。例外は、アナログの通信路を模擬する [`gracefm/channel.py`](../gracefm/channel.py) と、評価の道具 `tools/` で、ハードウェアではない。定数表（フィルタ係数、確率のテーブルなど）は、設計時に [`tools/gen/gen_tables.py`](../tools/gen/gen_tables.py) が浮動小数点で計算して整数にし、[`gracefm/tables.py`](../gracefm/tables.py) に書き出す（ハードウェアでは ROM になる）。
+**float は使わない。** `gracefm/` のモジュールには、float のリテラル、float 型、真の除算、浮動小数点の関数を書かない。`tests/test_fixed.py` が検査する。例外は、アナログの通信路を模擬する [`gracefm/channel.py`](../gracefm/channel.py) と、評価の道具 `tools/` で、ハードウェアではない。定数表（窓関数やフィルタ係数）は、設計時に [`tools/gen/gen_tables.py`](../tools/gen/gen_tables.py) が浮動小数点で計算して整数にし、[`gracefm/tables.py`](../gracefm/tables.py) に書き出す（ハードウェアでは ROM になる）。
 
 ## 1. 想定ハードウェアと制約
 
+想定する実装は、HamGeek の Zynq-7010 ボードと AD9363 の組み合わせである。以下はデータシートの値で、本書は実機で動かしていない。
+
 | 項目 | 値 | 出典 |
 |---|---|---|
-| DSP スライス | DSP48E1。Zynq-7010 に 80 スライス | [UG953](https://docs.amd.com/r/2021.1-English/ug953-vivado-7series-libraries/DSP48E1)、[UG479 の写し](https://gitea.federationhq.de/csander/Dissertation/raw/branch/main/bibliography/documents/ug479_7Series_DSP48E1.pdf) |
+| DSP スライス | DSP48E1。Zynq-7010 に 80 スライス（18×25 乗算） | [Zynq-7000 概要（DS190）](https://ranger.uta.edu/~jlosh/Xilinx/Zynq-7000_SoC_Overview.pdf)、[UG953](https://docs.amd.com/r/2021.1-English/ug953-vivado-7series-libraries/DSP48E1)、[UG479 の写し](https://gitea.federationhq.de/csander/Dissertation/raw/branch/main/bibliography/documents/ug479_7Series_DSP48E1.pdf) |
 | 乗算器 | 25 bit × 18 bit の符号つき（A ポート下位 25 bit、B ポート 18 bit） | 同上 |
 | プリアダー | 25 bit | 同上 |
 | アキュムレータ | 48 bit | 同上 |
-| ADC/DAC | I・Q とも 12 bit（AD9363） | [AD9363 データシート](https://www.analog.com:443/media/en/technical-documentation/data-sheets/AD9363.pdf) |
+| Zynq-7010 論理 | 28K ロジックセル、LUT 17,600、FF 35,200 | DS190 |
+| Zynq-7010 ブロック RAM | 約 2.1 Mb（36 Kb × 60） | DS190 |
+| AD9363 ADC/DAC | I・Q とも 12 bit | [AD9363 データシート](https://www.analog.com:443/media/en/technical-documentation/data-sheets/AD9363.pdf) |
+| AD9363 同調範囲 | 325 MHz〜3.8 GHz（別資料の 380 MHz ではなくデータシート値を採用） | 同上 |
+| AD9363 チャンネル帯域幅 | 200 kHz 未満〜20 MHz | 同上 |
 
-`gracefm/dsp.py` はこの値を `MULT_BITS = 25`、`CONST_BITS = 18`、`ACC_BITS = 48` として持ち、演算（`round_shift`、`shift_signed`、`saturate`、`sq_err_sum` など）はこの幅を前提にする。
+`gracefm/dsp.py` は乗算・累積の幅を `MULT_BITS = 25`、`CONST_BITS = 18`、`ACC_BITS = 48` として持ち、演算（`round_shift`、`shift_signed`、`saturate`、`sq_err_sum` など）はこの幅を前提にする。
+
+- **運用周波数帯**: 日本の FM 放送帯（76〜108 MHz）と DAB 帯（174〜240 MHz）は AD9363 の同調範囲外であり、この構成で運用できる周波数は 325 MHz 以上となる。
+- **回路規模と演算量**: B200+SUB100 受信側の積み上げ見積もりは約 48 MMAC/s、ビタビ約 11.7 M ACS/s、メモリ約 58 kbit、論理は約 1,800 LUT・約 1,400 FF・DSP 8 個・ブロック RAM 13 個（Zynq-7010 の各約 10%・4%・10%・11%、誤差 0.5〜2 倍、同期・AD9363 I/F 等を含まず、合成未実施）。内訳は [方式間比較](COMPARISON.md#回路規模桁の目安) と [`tools/report/circuit_estimate.py`](../tools/report/circuit_estimate.py) を参照。
+- **ADC 量子化雑音の見積もり**: 12 bit ADC で平均電力をフルスケールの 1/4 程度に置いた場合、量子化雑音は信号に対して −60 dB 程度と見積もり、通信路の雑音（$`E_s/N_0`$ が 2〜14 dB）より十分小さい（ADC を入れた実機確認や隣接チャンネル強妨害波時の AGC 余裕は未評価）。
 
 ## 2. 数値形式
 
-**方針。** 値は 0〜1 の範囲で、固定小数点のフルレンジは約 20 bit（[SPEC](SPEC.md) 6.1）なので、PCM は符号つき 24 bit（±1 = 2^23）、IQ と Haar の係数は **小数 22 bit**（±1 = 2^22）の固定小数点で扱う。帯域分割の係数は 25 bit に飽和させる。詳細帯域は振幅が最大で約 2 倍になる。IQ は受け取った段階（12 bit の ADC 出力）で小数 22 bit に変換する。**DSP の都合で精度が下がることは容認する**。参照実装は numpy の int64 で計算する。ハードでは、乗算の入力と積和の幅（25×18 bit、48 bit）に収まる必要がある。収まることを確かめた箇所は、テストで検査する（`tests/test_fixed.py`）。確かめていない箇所は、下の表に残りとして示す。
+**方針。** 値は 0〜1 の範囲で、固定小数点のフルレンジは約 20 bit（[評価結果 2節](EVALUATION.md#2-16-bit-pcm-との比較とダイナミックレンジ)）なので、PCM は符号つき 24 bit（±1 = 2^23）、IQ と Haar の係数は **小数 22 bit**（±1 = 2^22）の固定小数点で扱う。帯域分割の係数は 25 bit に飽和させる。詳細帯域は振幅が最大で約 2 倍になる。IQ は受け取った段階（12 bit の ADC 出力）で小数 22 bit に変換する。**DSP の都合で精度が下がることは容認する**。参照実装は numpy の int64 で計算する。ハードでは、乗算の入力と積和の幅（25×18 bit、48 bit）に収まる必要がある。収まることを確かめた箇所は、テストで検査する（`tests/test_fixed.py`）。確かめていない箇所は、下の表に残りとして示す。
 
 | 量 | 形式 |
 |---|---|
@@ -28,9 +38,9 @@
 | シンボル（IQ） | 小数 22 bit の整数（±1 = 2^22）、配列の形は (n, 2)。ADC の 12 bit は左へ 12 bit シフトして変換 |
 | LLR | 符号つき 8 bit の整数（小数 2 bit、±31.75）。正 = 0 らしい |
 | ビタビの経路メトリック | 符号つき 14 bit。毎ステップで最大値を引いて正規化し、範囲に飽和させる |
-| 確率 | Q15 の整数。LLR から 255 エントリのテーブルで引く |
-| 誤差分散 | 対数領域の整数（log2 × 2^8）。融合の重みは 2^(−d/16) の 16 エントリのテーブルで作る |
-| フィルタ係数 | 符号つき 18 bit（Q14〜Q17） |
+| 確率 | Q15 の整数。LLR からテーブルを使わず `dsp.sigmoid_q15`（7 項マクローリン展開）で計算 |
+| 誤差分散 | 対数領域の整数（log2 × 2^8、`dsp.log2_q8`）。融合の重みもテーブルを使わず `dsp.inv1p2pow_q15` で計算 |
+| フィルタ係数 | 符号つき 18 bit（Q16） |
 
 - **帯域分割は乗算なし**: Haar（S 変換）と LeGall 5/3 はどちらも整数可逆のリフティングで、加算とシフトだけで書く。各段の結果を 25 bit に飽和させる。飽和しない範囲で、逆変換は入力と 1 LSB も違わない（`tests/test_fixed.py`）。低域は入力の範囲にほぼ収まるが、5/3 の最低域の分析の利得は最悪で 6.79/4 ≈ 1.7 倍あるので、指数の上端は振幅 2 までとして、それを超える信号は仮数で切る。
 - **刻みの下限**: アッテネータの半刻みを整数にするため、共有指数の刻みは s ≥ 1 に制限する。デコーダは s ≤ 0 の値が来ても、右シフトで復号する。
